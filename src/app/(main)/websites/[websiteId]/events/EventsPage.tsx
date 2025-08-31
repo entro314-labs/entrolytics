@@ -1,5 +1,5 @@
 'use client';
-import { TabList, Tab, Tabs, TabPanel, Column } from '@entrolytics/react-zen';
+import { TabList, Tab, Tabs, TabPanel, Column } from '@umami/react-zen';
 import { MetricsTable } from '@/components/metrics/MetricsTable';
 import { useState, Key } from 'react';
 import { EventsDataTable } from './EventsDataTable';

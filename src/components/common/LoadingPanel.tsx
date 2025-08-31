@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Loading, Column, type ColumnProps } from '@entrolytics/react-zen';
+import { Loading, Column, type ColumnProps } from '@umami/react-zen';
 import { ErrorMessage } from '@/components/common/ErrorMessage';
 import { Empty } from '@/components/common/Empty';
 

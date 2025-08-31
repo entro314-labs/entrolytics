@@ -10,7 +10,7 @@ import {
   DialogTrigger,
   Popover,
   Dialog,
-} from '@entrolytics/react-zen';
+} from '@umami/react-zen';
 import { LoadingPanel } from '@/components/common/LoadingPanel';
 import { Bolt, Eye, FileText } from '@/components/icons';
 import { useMessages, useSessionActivityQuery, useTimezone } from '@/components/hooks';

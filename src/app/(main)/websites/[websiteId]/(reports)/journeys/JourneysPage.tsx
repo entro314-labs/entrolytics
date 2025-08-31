@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { ListItem, Select, Column, Grid, SearchField } from '@entrolytics/react-zen';
+import { ListItem, Select, Column, Grid, SearchField } from '@umami/react-zen';
 import { useDateRange, useMessages } from '@/components/hooks';
 import { Panel } from '@/components/common/Panel';
 import { Journey } from './Journey';

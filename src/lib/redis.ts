@@ -1,10 +1,10 @@
-import { EntrolyticsRedisClient } from '@entrolytics/redis-client';
+import { UmamiRedisClient } from '@umami/redis-client';
 
 const REDIS = 'redis';
 const enabled = !!process.env.REDIS_URL;
 
 function getClient() {
-  const redis = new EntrolyticsRedisClient(process.env.REDIS_URL);
+  const redis = new UmamiRedisClient(process.env.REDIS_URL);
 
   if (process.env.NODE_ENV !== 'production') {
     globalThis[REDIS] = redis;

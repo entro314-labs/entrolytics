@@ -9,7 +9,7 @@ import {
   Column,
   NavMenuGroup,
   NavMenuProps,
-} from '@entrolytics/react-zen';
+} from '@umami/react-zen';
 import Link from 'next/link';
 
 export interface SideMenuProps extends NavMenuProps {

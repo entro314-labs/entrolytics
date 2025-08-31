@@ -9,7 +9,7 @@ import {
   Loading,
   Column,
   Grid,
-} from '@entrolytics/react-zen';
+} from '@umami/react-zen';
 import { useMessages, useUpdateQuery, useWebsiteCohortQuery } from '@/components/hooks';
 import { DateFilter } from '@/components/input/DateFilter';
 import { FieldFilters } from '@/components/input/FieldFilters';

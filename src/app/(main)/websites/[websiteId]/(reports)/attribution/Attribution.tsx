@@ -1,4 +1,4 @@
-import { Grid, Column } from '@entrolytics/react-zen';
+import { Grid, Column } from '@umami/react-zen';
 import { useMessages, useResultQuery } from '@/components/hooks';
 import { Panel } from '@/components/common/Panel';
 import { LoadingPanel } from '@/components/common/LoadingPanel';

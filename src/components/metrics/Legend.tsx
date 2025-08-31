@@ -1,4 +1,4 @@
-import { Row, StatusLight, Text } from '@entrolytics/react-zen';
+import { Row, StatusLight, Text } from '@umami/react-zen';
 import { colord } from 'colord';
 import { LegendItem } from 'chart.js/auto';
 

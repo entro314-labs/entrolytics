@@ -1,4 +1,4 @@
-import { Column, Tabs, Tab, TabList, TabPanel } from '@entrolytics/react-zen';
+import { Column, Tabs, Tab, TabList, TabPanel } from '@umami/react-zen';
 import { UserEditForm } from './UserEditForm';
 import { useMessages } from '@/components/hooks';
 import { UserWebsites } from './UserWebsites';

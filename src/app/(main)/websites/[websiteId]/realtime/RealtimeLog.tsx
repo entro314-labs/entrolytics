@@ -12,7 +12,7 @@ import { Eye, Visitor, Bolt } from '@/components/icons';
 import { BROWSERS, OS_NAMES } from '@/lib/constants';
 import { stringToColor } from '@/lib/format';
 import { useMemo, useState } from 'react';
-import { Icon, SearchField, StatusLight, Text } from '@entrolytics/react-zen';
+import { Icon, SearchField, StatusLight, Text } from '@umami/react-zen';
 import { FixedSizeList } from 'react-window';
 import styles from './RealtimeLog.module.css';
 

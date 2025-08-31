@@ -1,4 +1,4 @@
-import { Grid, Column } from '@entrolytics/react-zen';
+import { Grid, Column } from '@umami/react-zen';
 import { useMessages, useNavigation } from '@/components/hooks';
 import { MetricsExpandedTable } from '@/components/metrics/MetricsExpandedTable';
 import { SideMenu } from '@/components/common/SideMenu';

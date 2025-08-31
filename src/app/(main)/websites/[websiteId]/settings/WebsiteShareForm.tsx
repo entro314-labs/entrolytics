@@ -8,7 +8,7 @@ import {
   Column,
   Label,
   Row,
-} from '@entrolytics/react-zen';
+} from '@umami/react-zen';
 import { useState } from 'react';
 import { getRandomChars } from '@/lib/crypto';
 import { useMessages, useUpdateQuery } from '@/components/hooks';

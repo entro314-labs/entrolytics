@@ -42,3 +42,6 @@ yarn-error.log*
 *.dev.yml
 
 .vercel
+CLERK_MIGRATION_COMPLETE.md
+FINAL_CLERK_MIGRATION_REPORT.md
+clerk.txt

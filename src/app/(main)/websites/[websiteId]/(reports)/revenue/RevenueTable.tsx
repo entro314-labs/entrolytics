@@ -1,4 +1,4 @@
-import { DataColumn, DataTable } from '@entrolytics/react-zen';
+import { DataColumn, DataTable } from '@umami/react-zen';
 import { useMessages } from '@/components/hooks';
 import { formatLongCurrency } from '@/lib/format';
 

@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { Column, Grid, Select, ListItem, SearchField } from '@entrolytics/react-zen';
+import { Column, Grid, Select, ListItem, SearchField } from '@umami/react-zen';
 import { Attribution } from './Attribution';
 import { WebsiteControls } from '@/app/(main)/websites/[websiteId]/WebsiteControls';
 import { useDateRange, useMessages } from '@/components/hooks';

@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import { useTheme } from '@entrolytics/react-zen';
+import { useTheme } from '@umami/react-zen';
 import { BarChart, BarChartProps } from '@/components/charts/BarChart';
 import { useLocale, useMessages } from '@/components/hooks';
 import { renderDateLabels } from '@/lib/charts';

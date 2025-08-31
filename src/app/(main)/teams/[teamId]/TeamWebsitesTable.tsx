@@ -1,4 +1,4 @@
-import { DataColumn, DataTable } from '@entrolytics/react-zen';
+import { DataColumn, DataTable } from '@umami/react-zen';
 import { useMessages } from '@/components/hooks';
 import Link from 'next/link';
 
@@ -12,7 +12,7 @@ export function TeamWebsitesTable({ teamId, data = [] }: { teamId: string; data:
       </DataColumn>
       <DataColumn id="domain" label={formatMessage(labels.domain)} />
       <DataColumn id="createdBy" label={formatMessage(labels.createdBy)}>
-        {(row: any) => row?.createUser?.username}
+        {(row: any) => row?.createUser?.displayName || row?.createUser?.email}
       </DataColumn>
     </DataTable>
   );

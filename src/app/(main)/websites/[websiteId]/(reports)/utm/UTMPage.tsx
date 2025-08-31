@@ -1,5 +1,5 @@
 'use client';
-import { Column } from '@entrolytics/react-zen';
+import { Column } from '@umami/react-zen';
 import { useDateRange } from '@/components/hooks';
 import { UTM } from './UTM';
 import { WebsiteControls } from '@/app/(main)/websites/[websiteId]/WebsiteControls';

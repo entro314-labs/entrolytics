@@ -29,7 +29,12 @@ export async function getReports(
       { type: 'contains' },
       {
         user: {
-          username: 'contains',
+          displayName: 'contains',
+        },
+      },
+      {
+        user: {
+          email: 'contains',
         },
       },
       {

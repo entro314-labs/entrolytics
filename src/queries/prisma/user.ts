@@ -6,7 +6,6 @@ import { getRandomChars } from '@/lib/crypto';
 import UserFindManyArgs = Prisma.UserFindManyArgs;
 
 export interface GetUserOptions {
-  includePassword?: boolean;
   showDeleted?: boolean;
 }
 
@@ -14,7 +13,7 @@ async function findUser(
   criteria: Prisma.UserFindUniqueArgs,
   options: GetUserOptions = {},
 ): Promise<User> {
-  const { includePassword = false, showDeleted = false } = options;
+  const { showDeleted = false } = options;
 
   return prisma.client.user.findUnique({
     ...criteria,
@@ -24,10 +23,15 @@ async function findUser(
     },
     select: {
       id: true,
-      username: true,
-      password: includePassword,
+      clerkId: true,
+      email: true,
+      firstName: true,
+      lastName: true,
+      imageUrl: true,
+      displayName: true,
       role: true,
       createdAt: true,
+      updatedAt: true,
     },
   });
 }
@@ -43,8 +47,31 @@ export async function getUser(userId: string, options: GetUserOptions = {}) {
   );
 }
 
-export async function getUserByUsername(username: string, options: GetUserOptions = {}) {
-  return findUser({ where: { username } }, options);
+export async function getUserByEmail(email: string, options: GetUserOptions = {}) {
+  const { showDeleted = false } = options;
+  
+  return prisma.client.user.findFirst({
+    where: {
+      email,
+      ...(showDeleted && { deletedAt: null }),
+    },
+    select: {
+      id: true,
+      clerkId: true,
+      email: true,
+      firstName: true,
+      lastName: true,
+      imageUrl: true,
+      displayName: true,
+      role: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  });
+}
+
+export async function getUserByClerkId(clerkId: string, options: GetUserOptions = {}) {
+  return findUser({ where: { clerkId } }, options);
 }
 
 export async function getUsers(
@@ -55,7 +82,12 @@ export async function getUsers(
 
   const where: Prisma.UserWhereInput = {
     ...criteria.where,
-    ...prisma.getSearchParameters(search, [{ username: 'contains' }]),
+    ...prisma.getSearchParameters(search, [
+      { email: 'contains' },
+      { firstName: 'contains' },
+      { lastName: 'contains' },
+      { displayName: 'contains' }
+    ]),
     deletedAt: null,
   };
 
@@ -75,19 +107,27 @@ export async function getUsers(
 
 export async function createUser(data: {
   id: string;
-  username: string;
-  password: string;
+  clerkId: string;
+  email: string;
+  firstName?: string;
+  lastName?: string;
+  imageUrl?: string;
+  displayName?: string;
   role: Role;
 }): Promise<{
   id: string;
-  username: string;
+  clerkId: string;
+  email: string;
+  displayName: string;
   role: string;
 }> {
   return prisma.client.user.create({
     data,
     select: {
       id: true,
-      username: true,
+      clerkId: true,
+      email: true,
+      displayName: true,
       role: true,
     },
   });
@@ -101,7 +141,12 @@ export async function updateUser(userId: string, data: Prisma.UserUpdateInput): 
     data,
     select: {
       id: true,
-      username: true,
+      clerkId: true,
+      email: true,
+      firstName: true,
+      lastName: true,
+      imageUrl: true,
+      displayName: true,
       role: true,
       createdAt: true,
     },
@@ -157,7 +202,6 @@ export async function deleteUser(
       }),
       client.user.update({
         data: {
-          username: getRandomChars(32),
           deletedAt: new Date(),
         },
         where: {

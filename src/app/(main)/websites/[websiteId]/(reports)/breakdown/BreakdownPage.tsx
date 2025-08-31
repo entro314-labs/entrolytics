@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { Button, Column, Box, Text, Icon, DialogTrigger, Modal, Dialog } from '@entrolytics/react-zen';
+import { Button, Column, Box, Text, Icon, DialogTrigger, Modal, Dialog } from '@umami/react-zen';
 import { useDateRange, useMessages } from '@/components/hooks';
 import { ListCheck } from '@/components/icons';
 import { Panel } from '@/components/common/Panel';

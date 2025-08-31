@@ -1,7 +1,7 @@
 'use client';
 import { createContext, ReactNode } from 'react';
 import { useTeamQuery } from '@/components/hooks';
-import { Loading } from '@entrolytics/react-zen';
+import { Loading } from '@umami/react-zen';
 
 export const TeamContext = createContext(null);
 

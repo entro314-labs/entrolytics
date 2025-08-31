@@ -5,7 +5,7 @@ import {
   PasswordField,
   Button,
   FormSubmitButton,
-} from '@entrolytics/react-zen';
+} from '@umami/react-zen';
 import { useMessages, useUpdateQuery } from '@/components/hooks';
 
 export function PasswordEditForm({ onSave, onClose }) {

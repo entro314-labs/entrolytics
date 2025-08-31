@@ -1,8 +1,7 @@
 import { z } from 'zod';
 import { canUpdateUser, canViewUser, canDeleteUser } from '@/validations';
-import { getUser, getUserByUsername, updateUser, deleteUser } from '@/queries';
+import { getUser, getUserByEmail, updateUser, deleteUser } from '@/queries';
 import { json, unauthorized, badRequest, ok } from '@/lib/response';
-import { hashPassword } from '@/lib/auth';
 import { parseRequest } from '@/lib/request';
 import { userRoleParam } from '@/lib/schema';
 
@@ -26,9 +25,10 @@ export async function GET(request: Request, { params }: { params: Promise<{ user
 
 export async function POST(request: Request, { params }: { params: Promise<{ userId: string }> }) {
   const schema = z.object({
-    username: z.string().max(255),
-    password: z.string().max(255).optional(),
-    role: userRoleParam,
+    firstName: z.string().max(255).optional(),
+    lastName: z.string().max(255).optional(),
+    displayName: z.string().max(255).optional(),
+    role: userRoleParam.optional(),
   });
 
   const { auth, body, error } = await parseRequest(request, schema);
@@ -43,32 +43,25 @@ export async function POST(request: Request, { params }: { params: Promise<{ use
     return unauthorized();
   }
 
-  const { username, password, role } = body;
-
-  const user = await getUser(userId);
+  const { firstName, lastName, displayName, role } = body;
 
   const data: any = {};
 
-  if (password) {
-    data.password = hashPassword(password);
+  if (firstName !== undefined) {
+    data.firstName = firstName;
   }
 
-  // Only admin can change these fields
+  if (lastName !== undefined) {
+    data.lastName = lastName;
+  }
+
+  if (displayName !== undefined) {
+    data.displayName = displayName;
+  }
+
+  // Only admin can change role
   if (role && auth.user.isAdmin) {
     data.role = role;
-  }
-
-  if (username && auth.user.isAdmin) {
-    data.username = username;
-  }
-
-  // Check when username changes
-  if (data.username && user.username !== data.username) {
-    const user = await getUserByUsername(username);
-
-    if (user) {
-      return badRequest('User already exists');
-    }
   }
 
   const updated = await updateUser(userId, data);

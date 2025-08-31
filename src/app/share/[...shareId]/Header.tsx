@@ -1,4 +1,4 @@
-import { Row, Icon, Text, ThemeButton } from '@entrolytics/react-zen';
+import { Row, Icon, Text, ThemeButton } from '@umami/react-zen';
 import Link from 'next/link';
 import { LanguageButton } from '@/components/input/LanguageButton';
 import { SettingsButton } from '@/components/input/SettingsButton';

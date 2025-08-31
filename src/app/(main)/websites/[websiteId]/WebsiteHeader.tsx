@@ -1,4 +1,4 @@
-import { Button, Icon, Text, Row, DialogTrigger, Dialog, Modal } from '@entrolytics/react-zen';
+import { Button, Icon, Text, Row, DialogTrigger, Dialog, Modal } from '@umami/react-zen';
 import { PageHeader } from '@/components/common/PageHeader';
 import { Share, Edit } from '@/components/icons';
 import { Favicon } from '@/components/common/Favicon';

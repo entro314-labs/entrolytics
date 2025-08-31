@@ -1,5 +1,5 @@
 'use client';
-import { Flexbox } from '@entrolytics/react-zen';
+import { Flexbox } from '@umami/react-zen';
 import { useMessages } from '@/components/hooks';
 
 export default function () {

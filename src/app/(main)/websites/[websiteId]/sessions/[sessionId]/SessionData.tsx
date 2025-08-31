@@ -1,4 +1,4 @@
-import { Text, Column, Row, Label, Box } from '@entrolytics/react-zen';
+import { Text, Column, Row, Label, Box } from '@umami/react-zen';
 import { useSessionDataQuery } from '@/components/hooks';
 import { Empty } from '@/components/common/Empty';
 import { DATA_TYPES } from '@/lib/constants';

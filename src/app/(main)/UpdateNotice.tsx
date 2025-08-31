@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useState } from 'react';
-import { Button, AlertBanner, Flexbox } from '@entrolytics/react-zen';
+import { Button, AlertBanner, Flexbox } from '@umami/react-zen';
 import { setItem } from '@/lib/storage';
 import { useVersion, checkVersion } from '@/store/version';
 import { REPO_URL, VERSION_CHECK } from '@/lib/constants';

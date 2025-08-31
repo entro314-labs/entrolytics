@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Button, Icon, Modal, Text, DialogTrigger } from '@entrolytics/react-zen';
+import { Button, Icon, Modal, Text, DialogTrigger } from '@umami/react-zen';
 
 export function ActionButton({
   onClick,

@@ -6,7 +6,7 @@ import {
   FormField,
   FormSubmitButton,
   TextField,
-} from '@entrolytics/react-zen';
+} from '@umami/react-zen';
 
 export function TeamAddForm({ onSave, onClose }: { onSave: () => void; onClose: () => void }) {
   const { formatMessage, labels } = useMessages();

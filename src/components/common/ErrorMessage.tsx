@@ -1,4 +1,4 @@
-import { Icon, Text, Row } from '@entrolytics/react-zen';
+import { Icon, Text, Row } from '@umami/react-zen';
 import { useMessages } from '@/components/hooks';
 import { Alert } from '@/components/icons';
 

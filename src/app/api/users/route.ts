@@ -1,17 +1,20 @@
 import { z } from 'zod';
-import { hashPassword } from '@/lib/auth';
 import { canCreateUser } from '@/validations';
 import { ROLES } from '@/lib/constants';
 import { uuid } from '@/lib/crypto';
 import { parseRequest } from '@/lib/request';
 import { unauthorized, json, badRequest } from '@/lib/response';
-import { createUser, getUserByUsername } from '@/queries';
+import { createUser, getUserByEmail } from '@/queries';
 
 export async function POST(request: Request) {
   const schema = z.object({
     id: z.string().uuid().optional(),
-    username: z.string().max(255),
-    password: z.string(),
+    clerkId: z.string(),
+    email: z.string().email(),
+    firstName: z.string().optional(),
+    lastName: z.string().optional(),
+    imageUrl: z.string().url().optional(),
+    displayName: z.string().optional(),
     role: z.string().regex(/admin|user|view-only/i),
   });
 
@@ -25,9 +28,9 @@ export async function POST(request: Request) {
     return unauthorized();
   }
 
-  const { id, username, password, role } = body;
+  const { id, clerkId, email, firstName, lastName, imageUrl, displayName, role } = body;
 
-  const existingUser = await getUserByUsername(username, { showDeleted: true });
+  const existingUser = await getUserByEmail(email, { showDeleted: true });
 
   if (existingUser) {
     return badRequest('User already exists');
@@ -35,8 +38,12 @@ export async function POST(request: Request) {
 
   const user = await createUser({
     id: id || uuid(),
-    username,
-    password: hashPassword(password),
+    clerkId,
+    email,
+    firstName,
+    lastName,
+    imageUrl,
+    displayName,
     role: role ?? ROLES.user,
   });
 

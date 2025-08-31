@@ -1,4 +1,4 @@
-import { LoadingButton, Icon, Tooltip, TooltipTrigger } from '@entrolytics/react-zen';
+import { LoadingButton, Icon, Tooltip, TooltipTrigger } from '@umami/react-zen';
 import { setWebsiteDateRange } from '@/store/websites';
 import { useDateRange } from '@/components/hooks';
 import { Refresh } from '@/components/icons';

@@ -25,7 +25,10 @@ export async function getTeamUsers(
 
   const where: Prisma.TeamUserWhereInput = {
     ...criteria.where,
-    ...prisma.getSearchParameters(search, [{ user: { username: 'contains' } }]),
+    ...prisma.getSearchParameters(search, [
+      { user: { displayName: 'contains' } },
+      { user: { email: 'contains' } },
+    ]),
   };
 
   return prisma.pagedQuery(

@@ -1,4 +1,4 @@
-import { Button, Icon, ButtonProps } from '@entrolytics/react-zen';
+import { Button, Icon, ButtonProps } from '@umami/react-zen';
 import { PanelLeft } from '@/components/icons';
 import { useGlobalState } from '@/components/hooks';
 

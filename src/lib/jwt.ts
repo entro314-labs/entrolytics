@@ -25,12 +25,4 @@ export function parseSecureToken(token: string, secret: any) {
   }
 }
 
-export async function parseAuthToken(req: Request, secret: string) {
-  try {
-    const token = req.headers.get('authorization')?.split(' ')?.[1];
-
-    return parseSecureToken(token as string, secret);
-  } catch {
-    return null;
-  }
-}
+// Legacy parseAuthToken removed - Clerk handles all user authentication

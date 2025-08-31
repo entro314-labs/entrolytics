@@ -12,7 +12,7 @@ import {
   Popover,
   Text,
   Row,
-} from '@entrolytics/react-zen';
+} from '@umami/react-zen';
 import { Edit, More, Trash } from '@/components/icons';
 
 export function ReportEditButton({

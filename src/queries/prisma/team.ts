@@ -57,7 +57,8 @@ export async function getUserTeams(userId: string, filters: QueryFilters) {
             user: {
               select: {
                 id: true,
-                username: true,
+                displayName: true,
+                email: true,
               },
             },
           },

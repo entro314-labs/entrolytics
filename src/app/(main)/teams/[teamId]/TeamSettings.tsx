@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Column, Tabs, TabList, Tab, TabPanel } from '@entrolytics/react-zen';
+import { Column, Tabs, TabList, Tab, TabPanel } from '@umami/react-zen';
 import { useLoginQuery, useMessages, useNavigation, useTeam } from '@/components/hooks';
 
 import { ROLES } from '@/lib/constants';

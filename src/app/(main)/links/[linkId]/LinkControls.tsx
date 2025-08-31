@@ -1,4 +1,4 @@
-import { Column, Row } from '@entrolytics/react-zen';
+import { Column, Row } from '@umami/react-zen';
 import { WebsiteFilterButton } from '@/app/(main)/websites/[websiteId]/WebsiteFilterButton';
 import { WebsiteDateFilter } from '@/components/input/WebsiteDateFilter';
 import { FilterBar } from '@/components/input/FilterBar';

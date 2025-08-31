@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Icon, Tooltip, TooltipTrigger, LoadingButton } from '@entrolytics/react-zen';
+import { Icon, Tooltip, TooltipTrigger, LoadingButton } from '@umami/react-zen';
 import { Download } from '@/components/icons';
 import { useMessages, useApi } from '@/components/hooks';
 import { useSearchParams } from 'next/navigation';

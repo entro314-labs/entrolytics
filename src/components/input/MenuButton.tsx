@@ -1,5 +1,5 @@
 import { ReactNode, Key } from 'react';
-import { DialogTrigger, Button, Menu, Popover, Icon } from '@entrolytics/react-zen';
+import { DialogTrigger, Button, Menu, Popover, Icon } from '@umami/react-zen';
 import { Ellipsis } from '@/components/icons';
 
 export function MenuButton({

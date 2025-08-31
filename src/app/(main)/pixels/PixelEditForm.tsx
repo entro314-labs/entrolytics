@@ -9,7 +9,7 @@ import {
   Column,
   Icon,
   Loading,
-} from '@entrolytics/react-zen';
+} from '@umami/react-zen';
 import { useConfig, usePixelQuery } from '@/components/hooks';
 import { useMessages } from '@/components/hooks';
 import { Refresh } from '@/components/icons';

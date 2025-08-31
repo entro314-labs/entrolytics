@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
-import { Row, Text, Icon, DataTable, DataColumn, MenuItem, Modal, Dialog } from '@entrolytics/react-zen';
+import { Row, Text, Icon, DataTable, DataColumn, MenuItem, Modal, Dialog } from '@umami/react-zen';
 import { Trash, Users } from '@/components/icons';
 import { useMessages } from '@/components/hooks';
 import { Edit } from '@/components/icons';

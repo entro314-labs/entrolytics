@@ -1,6 +1,6 @@
 'use client';
 import { PageBody } from '@/components/common/PageBody';
-import { Column } from '@entrolytics/react-zen';
+import { Column } from '@umami/react-zen';
 import { PageHeader } from '@/components/common/PageHeader';
 import { LinkAddButton } from './LinkAddButton';
 import { useMessages, useNavigation } from '@/components/hooks';

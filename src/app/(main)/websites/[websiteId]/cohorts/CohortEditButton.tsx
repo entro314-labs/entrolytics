@@ -1,6 +1,6 @@
 import { ActionButton } from '@/components/input/ActionButton';
 import { Edit } from '@/components/icons';
-import { Dialog } from '@entrolytics/react-zen';
+import { Dialog } from '@umami/react-zen';
 import { CohortEditForm } from '@/app/(main)/websites/[websiteId]/cohorts/CohortEditForm';
 import { useMessages } from '@/components/hooks';
 import { Filter } from '@/lib/types';

@@ -1,4 +1,4 @@
-import { Dialog } from '@entrolytics/react-zen';
+import { Dialog } from '@umami/react-zen';
 import { ActionButton } from '@/components/input/ActionButton';
 import { Trash } from '@/components/icons';
 import { ConfirmationForm } from '@/components/common/ConfirmationForm';

@@ -1,5 +1,5 @@
 import { useMessages, useModified } from '@/components/hooks';
-import { Button, Icon, Modal, Dialog, DialogTrigger, Text, useToast } from '@entrolytics/react-zen';
+import { Button, Icon, Modal, Dialog, DialogTrigger, Text, useToast } from '@umami/react-zen';
 import { Plus } from '@/components/icons';
 import { PixelEditForm } from './PixelEditForm';
 

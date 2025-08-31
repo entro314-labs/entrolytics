@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Icon, Row, Text } from '@entrolytics/react-zen';
+import { Icon, Row, Text } from '@umami/react-zen';
 import { ExternalLink as LinkIcon } from '@/components/icons';
 
 export function ExternalLink({ href, children, ...props }) {

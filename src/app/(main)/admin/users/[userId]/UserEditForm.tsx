@@ -7,7 +7,7 @@ import {
   TextField,
   FormSubmitButton,
   PasswordField,
-} from '@entrolytics/react-zen';
+} from '@umami/react-zen';
 import { useLoginQuery, useMessages, useUpdateQuery, useUser } from '@/components/hooks';
 import { ROLES } from '@/lib/constants';
 

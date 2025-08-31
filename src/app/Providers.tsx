@@ -2,7 +2,8 @@
 import { useEffect } from 'react';
 import { IntlProvider } from 'react-intl';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ZenProvider, RouterProvider } from '@entrolytics/react-zen';
+import { ZenProvider, RouterProvider } from '@umami/react-zen';
+import { ClerkProvider } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import { ErrorBoundary } from '@/components/common/ErrorBoundary';
 import { useLocale } from '@/components/hooks';
@@ -37,14 +38,16 @@ export function Providers({ children }) {
   const router = useRouter();
 
   return (
-    <ZenProvider>
-      <RouterProvider navigate={router.push}>
-        <MessagesProvider>
-          <QueryClientProvider client={client}>
-            <ErrorBoundary>{children}</ErrorBoundary>
-          </QueryClientProvider>
-        </MessagesProvider>
-      </RouterProvider>
-    </ZenProvider>
+    <ClerkProvider>
+      <ZenProvider>
+        <RouterProvider navigate={router.push}>
+          <MessagesProvider>
+            <QueryClientProvider client={client}>
+              <ErrorBoundary>{children}</ErrorBoundary>
+            </QueryClientProvider>
+          </MessagesProvider>
+        </RouterProvider>
+      </ZenProvider>
+    </ClerkProvider>
   );
 }

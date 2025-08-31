@@ -1,4 +1,4 @@
-import { Grid } from '@entrolytics/react-zen';
+import { Grid } from '@umami/react-zen';
 
 const LAYOUTS = {
   one: { columns: '1fr' },

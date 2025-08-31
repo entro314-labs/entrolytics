@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import * as reactQuery from '@tanstack/react-query';
-import { getClientAuthToken } from '@/lib/client';
+import { useAuth } from '@clerk/nextjs';
 import { SHARE_TOKEN_HEADER } from '@/lib/constants';
 import { httpGet, httpPost, httpPut, httpDelete, FetchResponse } from '@/lib/fetch';
 import { useApp } from '@/store/app';
@@ -20,11 +20,15 @@ function handleError(err: Error | string) {
 }
 
 export function useApi() {
+  const { getToken } = useAuth();
   const shareToken = useApp(selector);
 
-  const defaultHeaders = {
-    authorization: `Bearer ${getClientAuthToken()}`,
-    [SHARE_TOKEN_HEADER]: shareToken?.token,
+  const getDefaultHeaders = async () => {
+    const token = await getToken();
+    return {
+      ...(token && { authorization: `Bearer ${token}` }),
+      [SHARE_TOKEN_HEADER]: shareToken?.token,
+    };
   };
   const basePath = process.env.basePath;
 
@@ -32,14 +36,16 @@ export function useApi() {
     return url.startsWith('http') ? url : `${basePath || ''}/api${url}`;
   };
 
-  const getHeaders = (headers: any = {}) => {
+  const getHeaders = async (headers: any = {}) => {
+    const defaultHeaders = await getDefaultHeaders();
     return { ...defaultHeaders, ...headers };
   };
 
   return {
     get: useCallback(
       async (url: string, params: object = {}, headers: object = {}) => {
-        return httpGet(getUrl(url), params, getHeaders(headers))
+        const requestHeaders = await getHeaders(headers);
+        return httpGet(getUrl(url), params, requestHeaders)
           .then(handleResponse)
           .catch(handleError);
       },
@@ -48,7 +54,8 @@ export function useApi() {
 
     post: useCallback(
       async (url: string, params: object = {}, headers: object = {}) => {
-        return httpPost(getUrl(url), params, getHeaders(headers))
+        const requestHeaders = await getHeaders(headers);
+        return httpPost(getUrl(url), params, requestHeaders)
           .then(handleResponse)
           .catch(handleError);
       },
@@ -57,7 +64,8 @@ export function useApi() {
 
     put: useCallback(
       async (url: string, params: object = {}, headers: object = {}) => {
-        return httpPut(getUrl(url), params, getHeaders(headers))
+        const requestHeaders = await getHeaders(headers);
+        return httpPut(getUrl(url), params, requestHeaders)
           .then(handleResponse)
           .catch(handleError);
       },
@@ -66,7 +74,8 @@ export function useApi() {
 
     del: useCallback(
       async (url: string, params: object = {}, headers: object = {}) => {
-        return httpDelete(getUrl(url), params, getHeaders(headers))
+        const requestHeaders = await getHeaders(headers);
+        return httpDelete(getUrl(url), params, requestHeaders)
           .then(handleResponse)
           .catch(handleError);
       },

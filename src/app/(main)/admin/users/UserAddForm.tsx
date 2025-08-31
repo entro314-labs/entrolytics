@@ -8,7 +8,7 @@ import {
   TextField,
   PasswordField,
   Button,
-} from '@entrolytics/react-zen';
+} from '@umami/react-zen';
 import { useMessages, useUpdateQuery } from '@/components/hooks';
 import { ROLES } from '@/lib/constants';
 

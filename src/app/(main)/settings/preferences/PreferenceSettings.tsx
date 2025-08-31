@@ -1,4 +1,4 @@
-import { Column, Label } from '@entrolytics/react-zen';
+import { Column, Label } from '@umami/react-zen';
 import { useLoginQuery, useMessages } from '@/components/hooks';
 import { TimezoneSetting } from './TimezoneSetting';
 import { DateRangeSetting } from './DateRangeSetting';

@@ -1,4 +1,4 @@
-import { Select, ListItem } from '@entrolytics/react-zen';
+import { Select, ListItem } from '@umami/react-zen';
 import { useMessages } from '@/components/hooks';
 
 export interface ActionSelectProps {

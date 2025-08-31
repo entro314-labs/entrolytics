@@ -1,5 +1,5 @@
 'use client';
-import { Grid, Column } from '@entrolytics/react-zen';
+import { Grid, Column } from '@umami/react-zen';
 import { SectionHeader } from '@/components/common/SectionHeader';
 import { Funnel } from './Funnel';
 import { FunnelAddButton } from './FunnelAddButton';

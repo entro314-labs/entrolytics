@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Heading, Icon, Row, RowProps, Text, Column } from '@entrolytics/react-zen';
+import { Heading, Icon, Row, RowProps, Text, Column } from '@umami/react-zen';
 
 export function PageHeader({
   title,

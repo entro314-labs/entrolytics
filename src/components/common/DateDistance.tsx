@@ -1,4 +1,4 @@
-import { Text } from '@entrolytics/react-zen';
+import { Text } from '@umami/react-zen';
 import { formatDistanceToNow } from 'date-fns';
 import { useLocale, useTimezone } from '@/components/hooks';
 

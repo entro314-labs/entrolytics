@@ -1,5 +1,5 @@
 'use client';
-import { Grid, Row, Column, Tabs, TabList, Tab, TabPanel } from '@entrolytics/react-zen';
+import { Grid, Row, Column, Tabs, TabList, Tab, TabPanel } from '@umami/react-zen';
 import { Avatar } from '@/components/common/Avatar';
 import { LoadingPanel } from '@/components/common/LoadingPanel';
 import { useMessages, useWebsiteSessionQuery } from '@/components/hooks';

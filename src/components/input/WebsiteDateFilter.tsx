@@ -1,4 +1,4 @@
-import { Button, Icon, Row, Text, Select, ListItem } from '@entrolytics/react-zen';
+import { Button, Icon, Row, Text, Select, ListItem } from '@umami/react-zen';
 import { isAfter } from 'date-fns';
 import { Chevron } from '@/components/icons';
 import { useDateRange, useMessages, useNavigation } from '@/components/hooks';

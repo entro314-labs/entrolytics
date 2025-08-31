@@ -1,6 +1,6 @@
 import { ActionButton } from '@/components/input/ActionButton';
 import { Edit } from '@/components/icons';
-import { Dialog } from '@entrolytics/react-zen';
+import { Dialog } from '@umami/react-zen';
 import { PixelEditForm } from './PixelEditForm';
 import { useMessages } from '@/components/hooks';
 

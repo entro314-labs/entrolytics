@@ -1,5 +1,5 @@
 'use client';
-import { Column } from '@entrolytics/react-zen';
+import { Column } from '@umami/react-zen';
 import { CompareTables } from './CompareTables';
 import { WebsiteControls } from '@/app/(main)/websites/[websiteId]/WebsiteControls';
 import { WebsiteMetricsBar } from '@/app/(main)/websites/[websiteId]/WebsiteMetricsBar';

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Text, StatusLight } from '@entrolytics/react-zen';
+import { Text, StatusLight } from '@umami/react-zen';
 import { useMessages, useActyiveUsersQuery } from '@/components/hooks';
 
 export function ActiveUsers({

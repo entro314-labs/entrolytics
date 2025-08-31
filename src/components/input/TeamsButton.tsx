@@ -13,7 +13,7 @@ import {
   Box,
   SidebarItem,
   Pressable,
-} from '@entrolytics/react-zen';
+} from '@umami/react-zen';
 import { useLoginQuery, useMessages, useUserTeamsQuery, useNavigation } from '@/components/hooks';
 import { Chevron, User, Users } from '@/components/icons';
 

@@ -100,7 +100,8 @@ export async function getUserWebsites(
       include: {
         user: {
           select: {
-            username: true,
+            displayName: true,
+            email: true,
             id: true,
           },
         },
@@ -126,7 +127,8 @@ export async function getTeamWebsites(
         createUser: {
           select: {
             id: true,
-            username: true,
+            displayName: true,
+            email: true,
           },
         },
       },

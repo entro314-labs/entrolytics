@@ -1,0 +1,13 @@
+{
+  "functions": {
+    "src/**/*.js": {
+      "maxDuration": 30
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/script.js",
+      "destination": "/api/scripts/tracker"
+    }
+  ]
+}

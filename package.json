@@ -78,6 +78,7 @@
     "@hello-pangea/dnd": "^17.0.0",
     "@prisma/adapter-pg": "^6.15.0",
     "@prisma/client": "^6.15.0",
+    "@prisma/extension-accelerate": "^2.0.2",
     "@prisma/extension-read-replicas": "^0.4.1",
     "@react-spring/web": "^10.0.1",
     "@svgr/cli": "^8.1.0",

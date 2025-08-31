@@ -1,6 +1,9 @@
 {
   "functions": {
-    "src/**/*.js": {
+    "pages/api/**/*.js": {
+      "maxDuration": 30
+    },
+    "pages/api/**/*.ts": {
       "maxDuration": 30
     }
   },
@@ -9,5 +12,8 @@
       "source": "/script.js",
       "destination": "/api/scripts/tracker"
     }
-  ]
+  ],
+  "env": {
+    "SKIP_ENV_VALIDATION": "1"
+  }
 }

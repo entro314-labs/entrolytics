@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Row, Text, Icon, DataTable, DataColumn, MenuItem } from '@umami/react-zen';
+import { Row, Text, Icon, DataTable, DataColumn, MenuItem } from '@entrolytics/react-zen';
 import { useMessages, useNavigation } from '@/components/hooks';
 import { MenuButton } from '@/components/input/MenuButton';
 import { Eye, SquarePen } from '@/components/icons';

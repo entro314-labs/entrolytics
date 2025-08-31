@@ -1,4 +1,4 @@
-import { Button, DialogTrigger, Modal, Text, Icon, Dialog } from '@umami/react-zen';
+import { Button, DialogTrigger, Modal, Text, Icon, Dialog } from '@entrolytics/react-zen';
 import { useMessages } from '@/components/hooks';
 import { Plus } from '@/components/icons';
 import { SegmentEditForm } from '@/app/(main)/websites/[websiteId]/segments/SegmentEditForm';

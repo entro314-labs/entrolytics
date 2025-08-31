@@ -7,7 +7,7 @@ import {
   Row,
   SidebarProps,
   ThemeButton,
-} from '@umami/react-zen';
+} from '@entrolytics/react-zen';
 import {
   Globe,
   LayoutDashboard,
@@ -71,7 +71,7 @@ export function SideNav(props: SidebarProps) {
       <Sidebar {...props} isCollapsed={isCollapsed || hasNav} muteItems={false} showBorder={false}>
         <SidebarSection onClick={() => setIsCollapsed(false)}>
           <SidebarHeader
-            label="umami"
+            label="entrolytics"
             icon={isCollapsed && !hasNav ? <PanelLeft /> : <Logo />}
             style={{ maxHeight: 40 }}
           >

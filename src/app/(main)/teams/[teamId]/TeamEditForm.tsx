@@ -5,7 +5,7 @@ import {
   FormSubmitButton,
   TextField,
   Button,
-} from '@umami/react-zen';
+} from '@entrolytics/react-zen';
 import { getRandomChars } from '@/lib/crypto';
 import { useMessages, useTeam, useUpdateQuery } from '@/components/hooks';
 

@@ -1,4 +1,4 @@
-import { FloatingTooltip, Column, useTheme, ColumnProps } from '@umami/react-zen';
+import { FloatingTooltip, Column, useTheme, ColumnProps } from '@entrolytics/react-zen';
 import { useState, useMemo } from 'react';
 import { ComposableMap, Geographies, Geography, ZoomableGroup } from 'react-simple-maps';
 import classNames from 'classnames';

@@ -1,6 +1,6 @@
 'use client';
 import { Key, useState } from 'react';
-import { TabList, Tab, Tabs, TabPanel, Column } from '@umami/react-zen';
+import { TabList, Tab, Tabs, TabPanel, Column } from '@entrolytics/react-zen';
 import { SessionsDataTable } from './SessionsDataTable';
 import { SessionProperties } from './SessionProperties';
 import { useMessages } from '@/components/hooks';
@@ -8,7 +8,7 @@ import { Panel } from '@/components/common/Panel';
 import { WebsiteControls } from '@/app/(main)/websites/[websiteId]/WebsiteControls';
 import { getItem, setItem } from '@/lib/storage';
 
-const KEY_NAME = 'umami.sessions.tab';
+const KEY_NAME = 'entrolytics.sessions.tab';
 
 export function SessionsPage({ websiteId }) {
   const [tab, setTab] = useState(getItem(KEY_NAME) || 'activity');

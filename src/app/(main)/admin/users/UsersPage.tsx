@@ -1,6 +1,6 @@
 'use client';
 import { UsersDataTable } from './UsersDataTable';
-import { Column } from '@umami/react-zen';
+import { Column } from '@entrolytics/react-zen';
 import { useMessages } from '@/components/hooks';
 import { UserAddButton } from './UserAddButton';
 import { PageHeader } from '@/components/common/PageHeader';

@@ -1,5 +1,5 @@
 'use client';
-import { TabList, Tab, Tabs, TabPanel, Column } from '@umami/react-zen';
+import { TabList, Tab, Tabs, TabPanel, Column } from '@entrolytics/react-zen';
 import { MetricsTable } from '@/components/metrics/MetricsTable';
 import { useState, Key } from 'react';
 import { EventsDataTable } from './EventsDataTable';
@@ -10,7 +10,7 @@ import { EventProperties } from './EventProperties';
 import { WebsiteControls } from '@/app/(main)/websites/[websiteId]/WebsiteControls';
 import { getItem, setItem } from '@/lib/storage';
 
-const KEY_NAME = 'umami.events.tab';
+const KEY_NAME = 'entrolytics.events.tab';
 
 export function EventsPage({ websiteId }) {
   const [tab, setTab] = useState(getItem(KEY_NAME) || 'chart');

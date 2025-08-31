@@ -1,4 +1,4 @@
-import { DataColumn, DataTable, Row } from '@umami/react-zen';
+import { DataColumn, DataTable, Row } from '@entrolytics/react-zen';
 import { useMessages } from '@/components/hooks';
 import { ROLES } from '@/lib/constants';
 import { TeamMemberRemoveButton } from './TeamMemberRemoveButton';

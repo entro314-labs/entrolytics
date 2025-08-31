@@ -14,7 +14,7 @@ import {
   Icon,
   Row,
   Loading,
-} from '@umami/react-zen';
+} from '@entrolytics/react-zen';
 import { useMessages, useReportQuery, useUpdateQuery } from '@/components/hooks';
 import { File, Lightning, Close, Plus } from '@/components/icons';
 

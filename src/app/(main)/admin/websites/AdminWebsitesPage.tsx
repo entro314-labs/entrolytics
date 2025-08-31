@@ -1,6 +1,6 @@
 'use client';
 import { AdminWebsitesDataTable } from './AdminWebsitesDataTable';
-import { Column } from '@umami/react-zen';
+import { Column } from '@entrolytics/react-zen';
 import { useMessages } from '@/components/hooks';
 import { PageHeader } from '@/components/common/PageHeader';
 import { Panel } from '@/components/common/Panel';

@@ -1,4 +1,4 @@
-import { Button, Icon, Modal, DialogTrigger, Dialog, Text, useToast } from '@umami/react-zen';
+import { Button, Icon, Modal, DialogTrigger, Dialog, Text, useToast } from '@entrolytics/react-zen';
 import { Plus } from '@/components/icons';
 import { useMessages, useModified } from '@/components/hooks';
 import { TeamAddForm } from './TeamAddForm';

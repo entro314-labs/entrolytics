@@ -1,4 +1,4 @@
-import { Row, Button, Icon, useTheme } from '@umami/react-zen';
+import { Row, Button, Icon, useTheme } from '@entrolytics/react-zen';
 import { Sun, Moon } from '@/components/icons';
 
 export function ThemeSetting() {

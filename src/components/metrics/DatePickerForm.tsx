@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Row, Column, Calendar, ToggleGroup, ToggleGroupItem } from '@umami/react-zen';
+import { Button, Row, Column, Calendar, ToggleGroup, ToggleGroupItem } from '@entrolytics/react-zen';
 import { isAfter, isBefore, isSameDay, startOfDay, endOfDay } from 'date-fns';
 import { useMessages } from '@/components/hooks';
 

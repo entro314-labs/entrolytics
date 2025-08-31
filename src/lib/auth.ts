@@ -7,7 +7,7 @@ import { createSecureToken, parseSecureToken, parseToken } from '@/lib/jwt';
 import { ensureArray } from '@/lib/utils';
 import { getUser } from '@/queries';
 
-const log = debug('umami:auth');
+const log = debug('entrolytics:auth');
 const SALT_ROUNDS = 10;
 
 export function hashPassword(password: string, rounds = SALT_ROUNDS) {

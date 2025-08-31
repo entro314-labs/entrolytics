@@ -44,10 +44,10 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.85.6
         version: 5.85.6(react@19.1.1)
-      '@umami/react-zen':
+      '@entrolytics/react-zen':
         specifier: ^0.171.0
         version: 0.171.0(@babel/core@7.28.3)(@types/react@19.1.12)(babel-plugin-react-compiler@19.1.0-rc.3)(immer@10.1.1)(use-sync-external-store@1.5.0(react@19.1.1))
-      '@umami/redis-client':
+      '@entrolytics/redis-client':
         specifier: ^0.27.0
         version: 0.27.0
       bcryptjs:
@@ -2643,10 +2643,10 @@ packages:
     resolution: {integrity: sha512-+GeGMebMCy0elMNg67LRNoVnUFPIm37iu5CmHESVx56/9Jsfdpsvbv605DQ81Pi/x11IdKUsS5nzgTYbCQU9fg==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@umami/react-zen@0.171.0':
+  '@entrolytics/react-zen@0.171.0':
     resolution: {integrity: sha512-FlVgvJBZHTQRAJyWFy6cQrf/jo0Qx62SBqUAeZA8Ly1lYrRublJZ1J0JS/qsM6BLEbOWTBQenuN52jmAOMBYYw==}
 
-  '@umami/redis-client@0.27.0':
+  '@entrolytics/redis-client@0.27.0':
     resolution: {integrity: sha512-SbHTpxhgeZyTBUSp2zdZM+XUtpsaSL4Tad8QXIEhEtjWhvvfoornyT5kLuyYCVtzSAT4daALeGmOO1z6EE1KcA==}
 
   '@unrs/resolver-binding-android-arm-eabi@1.11.1':
@@ -10012,7 +10012,7 @@ snapshots:
       '@typescript-eslint/types': 8.41.0
       eslint-visitor-keys: 4.2.1
 
-  '@umami/react-zen@0.171.0(@babel/core@7.28.3)(@types/react@19.1.12)(babel-plugin-react-compiler@19.1.0-rc.3)(immer@10.1.1)(use-sync-external-store@1.5.0(react@19.1.1))':
+  '@entrolytics/react-zen@0.171.0(@babel/core@7.28.3)(@types/react@19.1.12)(babel-plugin-react-compiler@19.1.0-rc.3)(immer@10.1.1)(use-sync-external-store@1.5.0(react@19.1.1))':
     dependencies:
       '@fontsource/jetbrains-mono': 5.2.6
       '@internationalized/date': 3.9.0
@@ -10041,7 +10041,7 @@ snapshots:
       - sass
       - use-sync-external-store
 
-  '@umami/redis-client@0.27.0':
+  '@entrolytics/redis-client@0.27.0':
     dependencies:
       debug: 4.4.1(supports-color@8.1.1)
       redis: 4.7.1

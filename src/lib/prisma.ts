@@ -6,7 +6,7 @@ import { SESSION_COLUMNS, OPERATORS, DEFAULT_PAGE_SIZE, FILTER_COLUMNS } from '.
 import { QueryOptions, QueryFilters, Operator } from './types';
 import { filtersObjectToArray } from './params';
 
-const log = debug('umami:prisma');
+const log = debug('entrolytics:prisma');
 
 const PRISMA = 'prisma';
 const PRISMA_LOG_OPTIONS = {

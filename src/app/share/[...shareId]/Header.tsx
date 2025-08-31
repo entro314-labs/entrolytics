@@ -1,4 +1,4 @@
-import { Row, Icon, Text, ThemeButton } from '@umami/react-zen';
+import { Row, Icon, Text, ThemeButton } from '@entrolytics/react-zen';
 import Link from 'next/link';
 import { LanguageButton } from '@/components/input/LanguageButton';
 import { SettingsButton } from '@/components/input/SettingsButton';
@@ -8,11 +8,11 @@ export function Header() {
   return (
     <Row as="header">
       <Row gap>
-        <Link href="https://umami.is" target="_blank">
+        <Link href="https://entrolytics.click" target="_blank">
           <Icon size="lg">
             <Logo />
           </Icon>
-          <Text>umami</Text>
+          <Text>entrolytics</Text>
         </Link>
       </Row>
       <Row alignItems="center" gap>

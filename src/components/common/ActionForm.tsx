@@ -1,4 +1,4 @@
-import { Row, Column, Text } from '@umami/react-zen';
+import { Row, Column, Text } from '@entrolytics/react-zen';
 
 export function ActionForm({ label, description, children }) {
   return (

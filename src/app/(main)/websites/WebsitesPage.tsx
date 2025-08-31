@@ -2,7 +2,7 @@
 import { WebsitesDataTable } from './WebsitesDataTable';
 import { WebsiteAddButton } from './WebsiteAddButton';
 import { useMessages, useNavigation } from '@/components/hooks';
-import { Column } from '@umami/react-zen';
+import { Column } from '@entrolytics/react-zen';
 import { PageHeader } from '@/components/common/PageHeader';
 import { Panel } from '@/components/common/Panel';
 import { PageBody } from '@/components/common/PageBody';

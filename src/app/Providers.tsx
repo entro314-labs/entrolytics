@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import { IntlProvider } from 'react-intl';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ZenProvider, RouterProvider } from '@umami/react-zen';
+import { ZenProvider, RouterProvider } from '@entrolytics/react-zen';
 import { useRouter } from 'next/navigation';
 import { ErrorBoundary } from '@/components/common/ErrorBoundary';
 import { useLocale } from '@/components/hooks';

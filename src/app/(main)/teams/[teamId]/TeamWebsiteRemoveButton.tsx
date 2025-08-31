@@ -1,5 +1,5 @@
 import { useDeleteQuery, useMessages } from '@/components/hooks';
-import { Icon, LoadingButton, Text } from '@umami/react-zen';
+import { Icon, LoadingButton, Text } from '@entrolytics/react-zen';
 import { Close } from '@/components/icons';
 
 export function TeamWebsiteRemoveButton({ teamId, websiteId, onSave }) {

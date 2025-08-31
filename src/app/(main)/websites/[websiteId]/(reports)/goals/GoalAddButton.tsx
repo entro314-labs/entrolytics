@@ -1,4 +1,4 @@
-import { Button, DialogTrigger, Dialog, Icon, Text, Modal } from '@umami/react-zen';
+import { Button, DialogTrigger, Dialog, Icon, Text, Modal } from '@entrolytics/react-zen';
 import { useMessages } from '@/components/hooks';
 import { GoalEditForm } from './GoalEditForm';
 import { Plus } from '@/components/icons';

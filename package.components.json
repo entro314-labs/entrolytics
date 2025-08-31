@@ -1,7 +1,7 @@
 {
-  "name": "@umami/components",
+  "name": "@entrolytics/components",
   "version": "0.1.0",
-  "description": "Umami React components.",
+  "description": "Entrolytics React components.",
   "author": "Mike Cao <mike@mikecao.com>",
   "license": "MIT",
   "type": "module",

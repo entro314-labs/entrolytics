@@ -8,7 +8,7 @@ import {
   FormField,
   ListItem,
   FormSubmitButton,
-} from '@umami/react-zen';
+} from '@entrolytics/react-zen';
 
 export function TeamMemberEditForm({
   teamId,

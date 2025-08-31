@@ -1,4 +1,4 @@
-import { Text, Column } from '@umami/react-zen';
+import { Text, Column } from '@entrolytics/react-zen';
 import { useSpring } from '@react-spring/web';
 import { formatNumber } from '@/lib/format';
 import { AnimatedDiv } from '@/components/common/AnimatedDiv';

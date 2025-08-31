@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Grid, Column, TextField, Label, Select, Icon, Button, ListItem } from '@umami/react-zen';
+import { Grid, Column, TextField, Label, Select, Icon, Button, ListItem } from '@entrolytics/react-zen';
 import { useFilters, useFormat, useWebsiteValuesQuery } from '@/components/hooks';
 import { Close } from '@/components/icons';
 import { isSearchOperator } from '@/lib/params';

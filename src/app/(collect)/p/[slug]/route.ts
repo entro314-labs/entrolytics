@@ -39,7 +39,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ slug
     headers: {
       'Content-Type': 'image/gif',
       'Content-Length': image.length.toString(),
-      'x-umami-collect': JSON.stringify(res),
+      'x-entrolytics-collect': JSON.stringify(res),
     },
   });
 }

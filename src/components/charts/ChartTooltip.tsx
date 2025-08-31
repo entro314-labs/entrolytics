@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Column, Row, StatusLight, FloatingTooltip } from '@umami/react-zen';
+import { Column, Row, StatusLight, FloatingTooltip } from '@entrolytics/react-zen';
 
 export function ChartTooltip({
   title,

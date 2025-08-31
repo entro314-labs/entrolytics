@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Icon, TextField, Column, Row, Label, Text } from '@umami/react-zen';
+import { Icon, TextField, Column, Row, Label, Text } from '@entrolytics/react-zen';
 import { useFormat, useLocale, useMessages, useRegionNames } from '@/components/hooks';
 import { TypeIcon } from '@/components/common/TypeIcon';
 import { Location, KeyRound, Calendar } from '@/components/icons';

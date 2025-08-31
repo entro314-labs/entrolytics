@@ -1,5 +1,5 @@
 import { createContext, ReactNode } from 'react';
-import { Loading } from '@umami/react-zen';
+import { Loading } from '@entrolytics/react-zen';
 import { useUserQuery } from '@/components/hooks';
 
 export const UserContext = createContext(null);

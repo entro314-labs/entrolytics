@@ -1,5 +1,5 @@
 'use client';
-import { Column } from '@umami/react-zen';
+import { Column } from '@entrolytics/react-zen';
 import { LoginForm } from './LoginForm';
 
 export function LoginPage() {

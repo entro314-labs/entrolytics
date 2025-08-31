@@ -1,7 +1,7 @@
 'use client';
 import { createContext, ReactNode } from 'react';
 import { usePixelQuery } from '@/components/hooks';
-import { Loading } from '@umami/react-zen';
+import { Loading } from '@entrolytics/react-zen';
 
 export const PixelContext = createContext(null);
 

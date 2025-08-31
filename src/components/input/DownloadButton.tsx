@@ -1,5 +1,5 @@
 import Papa from 'papaparse';
-import { Button, Icon, TooltipTrigger, Tooltip } from '@umami/react-zen';
+import { Button, Icon, TooltipTrigger, Tooltip } from '@entrolytics/react-zen';
 import { Download } from '@/components/icons';
 import { useMessages } from '@/components/hooks';
 

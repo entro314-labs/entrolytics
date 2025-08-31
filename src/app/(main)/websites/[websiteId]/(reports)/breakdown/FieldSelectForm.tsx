@@ -1,4 +1,4 @@
-import { Column, List, ListItem, Grid, Button } from '@umami/react-zen';
+import { Column, List, ListItem, Grid, Button } from '@entrolytics/react-zen';
 import { useFields, useMessages } from '@/components/hooks';
 import { useState } from 'react';
 

@@ -1,6 +1,6 @@
 import { usePixel, useMessages, useSlug } from '@/components/hooks';
 import { PageHeader } from '@/components/common/PageHeader';
-import { Icon, Text } from '@umami/react-zen';
+import { Icon, Text } from '@entrolytics/react-zen';
 import { ExternalLink, Pixel } from '@/components/icons';
 import { LinkButton } from '@/components/common/LinkButton';
 

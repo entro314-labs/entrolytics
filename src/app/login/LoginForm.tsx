@@ -8,7 +8,7 @@ import {
   Icon,
   Column,
   Heading,
-} from '@umami/react-zen';
+} from '@entrolytics/react-zen';
 import { useRouter } from 'next/navigation';
 import { useMessages, useUpdateQuery } from '@/components/hooks';
 import { setUser } from '@/store/app';
@@ -36,7 +36,7 @@ export function LoginForm() {
       <Icon size="lg">
         <Logo />
       </Icon>
-      <Heading>umami</Heading>
+      <Heading>entrolytics</Heading>
       <Form onSubmit={handleSubmit} error={getMessage(error)}>
         <FormField
           label={formatMessage(labels.username)}

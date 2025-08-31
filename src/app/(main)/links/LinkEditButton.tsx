@@ -1,6 +1,6 @@
 import { ActionButton } from '@/components/input/ActionButton';
 import { Edit } from '@/components/icons';
-import { Dialog } from '@umami/react-zen';
+import { Dialog } from '@entrolytics/react-zen';
 import { LinkEditForm } from './LinkEditForm';
 import { useMessages } from '@/components/hooks';
 

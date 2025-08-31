@@ -1,4 +1,4 @@
-import { Button, Icon } from '@umami/react-zen';
+import { Button, Icon } from '@entrolytics/react-zen';
 import { useState } from 'react';
 import { Close, Menu } from '@/components/icons';
 import { MobileMenu } from './MobileMenu';

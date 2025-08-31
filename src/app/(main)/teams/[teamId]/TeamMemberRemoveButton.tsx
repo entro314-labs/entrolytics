@@ -2,7 +2,7 @@ import { ConfirmationForm } from '@/components/common/ConfirmationForm';
 import { useDeleteQuery, useMessages, useModified } from '@/components/hooks';
 import { messages } from '@/components/messages';
 import { Trash } from '@/components/icons';
-import { Dialog } from '@umami/react-zen';
+import { Dialog } from '@entrolytics/react-zen';
 import { ActionButton } from '@/components/input/ActionButton';
 
 export function TeamMemberRemoveButton({

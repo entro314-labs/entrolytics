@@ -1,4 +1,4 @@
-import { Text, DataTable, DataColumn } from '@umami/react-zen';
+import { Text, DataTable, DataColumn } from '@entrolytics/react-zen';
 import { useMessages, useResultQuery, useFormat, useFields } from '@/components/hooks';
 import { LoadingPanel } from '@/components/common/LoadingPanel';
 import { formatShortTime } from '@/lib/format';

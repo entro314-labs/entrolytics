@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Row, Button, FormSubmitButton, Form, FormButtons } from '@umami/react-zen';
+import { Row, Button, FormSubmitButton, Form, FormButtons } from '@entrolytics/react-zen';
 import { useMessages } from '@/components/hooks';
 
 export interface ConfirmationFormProps {

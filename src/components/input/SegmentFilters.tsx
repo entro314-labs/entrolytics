@@ -1,4 +1,4 @@
-import { List, ListItem } from '@umami/react-zen';
+import { List, ListItem } from '@entrolytics/react-zen';
 import { useWebsiteSegmentsQuery } from '@/components/hooks';
 import { LoadingPanel } from '@/components/common/LoadingPanel';
 

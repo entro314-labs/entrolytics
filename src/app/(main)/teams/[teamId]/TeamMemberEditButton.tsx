@@ -1,5 +1,5 @@
 import { useMessages, useModified } from '@/components/hooks';
-import { Dialog, useToast } from '@umami/react-zen';
+import { Dialog, useToast } from '@entrolytics/react-zen';
 import { TeamMemberEditForm } from './TeamMemberEditForm';
 import { ActionButton } from '@/components/input/ActionButton';
 import { Edit } from '@/components/icons';

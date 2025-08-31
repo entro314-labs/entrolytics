@@ -1,6 +1,6 @@
 import { SetStateAction, useMemo, useState } from 'react';
 import { endOfDay, subMonths } from 'date-fns';
-import { ComboBox, ListItem, Loading, useDebounce, ComboBoxProps } from '@umami/react-zen';
+import { ComboBox, ListItem, Loading, useDebounce, ComboBoxProps } from '@entrolytics/react-zen';
 import { Empty } from '@/components/common/Empty';
 import { useMessages, useWebsiteValuesQuery } from '@/components/hooks';
 

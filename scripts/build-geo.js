@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import https from 'https';
 import zlib from 'zlib';
-import tar from 'tar';
+import * as tar from 'tar';
 
 if (process.env.VERCEL) {
   console.log('Vercel environment detected. Skipping geo setup.');

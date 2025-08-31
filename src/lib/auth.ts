@@ -9,21 +9,56 @@ import { getUserByClerkId, createUser } from '@/queries';
 const log = debug('entrolytics:auth');
 
 /**
- * Entrolytics Authentication Check
+ * Get current authenticated user
  * 
- * Built on Clerk for modern, secure authentication.
- * Automatically syncs users from Clerk to our database.
+ * Uses Clerk's auth() function and syncs user to local database.
+ * This function assumes the route is already protected by middleware.
  * 
- * @param request - The incoming request
+ * @returns User object or null if not authenticated
+ */
+export async function getCurrentUser() {
+  try {
+    const { userId: clerkUserId } = await auth();
+    
+    if (!clerkUserId) {
+      return null;
+    }
+
+    // Get user from database by Clerk ID
+    let user = await getUserByClerkId(clerkUserId);
+    
+    // If user doesn't exist in our database, sync from Clerk
+    if (!user) {
+      const clerkUser = await currentUser();
+      if (clerkUser) {
+        user = await syncUserFromClerk(clerkUser);
+      }
+    }
+    
+    if (user) {
+      user.isAdmin = user.role === ROLES.admin;
+    }
+
+    return user;
+  } catch (error) {
+    log('getCurrentUser error:', error);
+    return null;
+  }
+}
+
+/**
+ * Legacy checkAuth function for backward compatibility
+ * 
+ * @param request - The incoming request (optional, for share token parsing)
  * @returns Authentication object with user, shareToken, and clerk data
  */
-export async function checkAuth(request: Request) {
+export async function checkAuth(request?: Request) {
   try {
     const { userId: clerkUserId, orgId } = await auth();
-    const shareToken = await parseShareToken(request.headers);
+    const shareToken = request ? await parseShareToken(request.headers) : null;
     
     if (process.env.NODE_ENV === 'development') {
-      log('checkAuth:', { clerkUserId, orgId, shareToken });
+      console.log('checkAuth:', { clerkUserId, orgId, shareToken, url: request?.url });
     }
 
     // If no Clerk user and no share token, return null
@@ -32,23 +67,7 @@ export async function checkAuth(request: Request) {
       return null;
     }
 
-    let user = null;
-    if (clerkUserId) {
-      // Get user from database by Clerk ID
-      user = await getUserByClerkId(clerkUserId);
-      
-      // If user doesn't exist in our database, sync from Clerk
-      if (!user) {
-        const clerkUser = await currentUser();
-        if (clerkUser) {
-          user = await syncUserFromClerk(clerkUser);
-        }
-      }
-      
-      if (user) {
-        user.isAdmin = user.role === ROLES.admin;
-      }
-    }
+    const user = clerkUserId ? await getCurrentUser() : null;
 
     return {
       user,

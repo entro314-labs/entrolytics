@@ -14,7 +14,7 @@ export function LogoutPage() {
       if (!disabled) {
         setUser(null);
         await signOut();
-        router.push('/login');
+        router.push('/sign-in');
       }
     }
 

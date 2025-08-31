@@ -16,7 +16,7 @@ export function App({ children }) {
   }
 
   if (error) {
-    window.location.href = `${process.env.basePath || ''}/login`;
+    window.location.href = `${process.env.basePath || ''}/sign-in`;
     return null;
   }
 

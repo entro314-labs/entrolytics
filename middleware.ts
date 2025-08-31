@@ -4,22 +4,18 @@ import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
  * Entrolytics Authentication Middleware
  * 
  * Built on Clerk for secure, modern authentication.
- * Protects application routes and API endpoints.
- * 
- * Protected routes:
- * - /dashboard/* - Main application dashboard and analytics
- * - /admin/* - Administrative functions 
- * - /settings/* - User and team settings
- * - /teams/* - Team management pages
- * - /api/* - API routes (with some exceptions)
+ * By default, all routes are public. We explicitly protect routes that need authentication.
  */
 
-// Define route matchers for different protection levels
+// Define protected routes that require authentication
 const isProtectedRoute = createRouteMatcher([
-  '/dashboard(.*)',
-  '/admin(.*)',
-  '/settings(.*)',
-  '/teams(.*)',
+  '/',               // Root/dashboard
+  '/dashboard(.*)',  // Dashboard routes
+  '/admin(.*)',      // Admin functions
+  '/settings(.*)',   // User and team settings
+  '/teams(.*)',      // Team management
+  '/websites(.*)',   // Website management
+  '/reports(.*)',    // Reports
 ]);
 
 // API routes that require authentication
@@ -30,32 +26,15 @@ const isProtectedApiRoute = createRouteMatcher([
   '/api/websites(.*)',
   '/api/admin(.*)',
   '/api/reports(.*)',
-]);
-
-// Public API routes that don't need authentication
-const isPublicApiRoute = createRouteMatcher([
-  '/api/send(.*)',       // Analytics collection endpoint
-  '/api/heartbeat',      // Health check
-  '/api/batch',          // Batch analytics
-  '/api/webhooks/(.*)',  // Webhook endpoints
-]);
-
-// Public routes that should remain accessible
-const isPublicRoute = createRouteMatcher([
-  '/sign-in(.*)',
-  '/sign-up(.*)',
-  '/login(.*)',
-  '/share/(.*)',  // Shared dashboard access
+  '/api/links(.*)',
+  '/api/pixels(.*)',
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
-  // Allow public routes and public API routes
-  if (isPublicRoute(req) || isPublicApiRoute(req)) {
-    return;
+  // Protect specific routes
+  if (isProtectedRoute(req) || isProtectedApiRoute(req)) {
+    await auth.protect();
   }
-
-  // Protect root route and all other routes by default
-  await auth.protect();
 });
 
 export const config = {

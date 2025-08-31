@@ -42,9 +42,9 @@ const isPublicApiRoute = createRouteMatcher([
 
 // Public routes that should remain accessible
 const isPublicRoute = createRouteMatcher([
-  '/',
   '/sign-in(.*)',
   '/sign-up(.*)',
+  '/login(.*)',
   '/share/(.*)',  // Shared dashboard access
 ]);
 
@@ -54,15 +54,8 @@ export default clerkMiddleware(async (auth, req) => {
     return;
   }
 
-  // Protect main application routes
-  if (isProtectedRoute(req)) {
-    await auth.protect();
-  }
-
-  // Protect API routes
-  if (isProtectedApiRoute(req)) {
-    await auth.protect();
-  }
+  // Protect root route and all other routes by default
+  await auth.protect();
 });
 
 export const config = {

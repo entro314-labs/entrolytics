@@ -38,7 +38,7 @@ export function Providers({ children }) {
   const router = useRouter();
 
   return (
-    <ClerkProvider>
+    <ClerkProvider dynamic>
       <ZenProvider>
         <RouterProvider navigate={router.push}>
           <MessagesProvider>

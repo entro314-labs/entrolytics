@@ -1,30 +1,25 @@
 'use client';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useApi } from '@/components/hooks';
+import { useClerk } from '@clerk/nextjs';
 import { setUser } from '@/store/app';
-import { removeClientAuthToken } from '@/lib/client';
 
 export function LogoutPage() {
   const router = useRouter();
-  const { post } = useApi();
+  const { signOut } = useClerk();
   const disabled = process.env.cloudMode;
 
   useEffect(() => {
     async function logout() {
-      await post('/auth/logout');
+      if (!disabled) {
+        setUser(null);
+        await signOut();
+        router.push('/login');
+      }
     }
 
-    if (!disabled) {
-      removeClientAuthToken();
-
-      logout();
-
-      router.push('/login');
-
-      return () => setUser(null);
-    }
-  }, [disabled, router, post]);
+    logout();
+  }, [disabled, router, signOut]);
 
   return null;
 }

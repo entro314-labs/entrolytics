@@ -21,10 +21,13 @@ const trackerScriptURL = process.env.TRACKER_SCRIPT_URL;
 const contentSecurityPolicy = [
   `default-src 'self'`,
   `img-src * data:`,
-  `script-src 'self' 'unsafe-eval' 'unsafe-inline'`,
-  `style-src 'self' 'unsafe-inline'`,
-  `connect-src 'self' api.entrolytics.click cloud.entrolytics.click`,
+  `script-src 'self' 'unsafe-eval' 'unsafe-inline' https://clerk.entrolytics.click https://*.clerk.accounts.dev https://*.clerk.com https://challenges.cloudflare.com https://*.cloudflare.com`,
+  `script-src-elem 'self' 'unsafe-inline' https://clerk.entrolytics.click https://*.clerk.accounts.dev https://*.clerk.com https://challenges.cloudflare.com https://*.cloudflare.com`,
+  `style-src 'self' 'unsafe-inline' https://clerk.entrolytics.click https://*.clerk.accounts.dev https://*.clerk.com`,
+  `connect-src 'self' api.entrolytics.click cloud.entrolytics.click https://clerk.entrolytics.click https://*.clerk.accounts.dev https://*.clerk.com https://api.clerk.com wss://*.clerk.com`,
+  `frame-src 'self' https://clerk.entrolytics.click https://*.clerk.accounts.dev https://*.clerk.com https://challenges.cloudflare.com https://*.cloudflare.com`,
   `frame-ancestors 'self' ${frameAncestors}`,
+  `worker-src 'self' blob:`,
 ];
 
 const defaultHeaders = [

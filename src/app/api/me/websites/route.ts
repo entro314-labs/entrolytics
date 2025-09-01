@@ -15,6 +15,10 @@ export async function GET(request: Request) {
     return error();
   }
 
+  if (!auth.user) {
+    return json({ error: 'User not found in database' }, { status: 500 });
+  }
+
   const filters = await getQueryFilters(query);
 
   const websites = await getUserWebsites(auth.user.id, filters);

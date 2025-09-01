@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { canUpdateUser, canViewUser, canDeleteUser } from '@/validations';
-import { getUser, getUserByEmail, updateUser, deleteUser } from '@/queries';
-import { json, unauthorized, badRequest, ok } from '@/lib/response';
+import { getUser, getUserByEmail, updateUser, deleteUser, getUserByClerkId } from '@/queries';
+import { json, unauthorized, badRequest, ok, notFound } from '@/lib/response';
 import { parseRequest } from '@/lib/request';
 import { userRoleParam } from '@/lib/schema';
 
@@ -18,7 +18,19 @@ export async function GET(request: Request, { params }: { params: Promise<{ user
     return unauthorized();
   }
 
-  const user = await getUser(userId);
+  // Convert Clerk ID to internal ID if needed
+  const isClerkId = userId.startsWith('user_');
+  let user;
+  
+  if (isClerkId) {
+    user = await getUserByClerkId(userId);
+  } else {
+    user = await getUser(userId);
+  }
+
+  if (!user) {
+    return notFound();
+  }
 
   return json(user);
 }
@@ -64,7 +76,21 @@ export async function POST(request: Request, { params }: { params: Promise<{ use
     data.role = role;
   }
 
-  const updated = await updateUser(userId, data);
+  // Convert Clerk ID to internal ID if needed
+  const isClerkId = userId.startsWith('user_');
+  let internalUserId;
+  
+  if (isClerkId) {
+    const user = await getUserByClerkId(userId);
+    if (!user) {
+      return notFound();
+    }
+    internalUserId = user.id;
+  } else {
+    internalUserId = userId;
+  }
+
+  const updated = await updateUser(internalUserId, data);
 
   return json(updated);
 }
@@ -85,11 +111,25 @@ export async function DELETE(
     return unauthorized();
   }
 
-  if (userId === auth.user.id) {
+  // Convert Clerk ID to internal ID if needed
+  const isClerkId = userId.startsWith('user_');
+  let internalUserId;
+  
+  if (isClerkId) {
+    const user = await getUserByClerkId(userId);
+    if (!user) {
+      return notFound();
+    }
+    internalUserId = user.id;
+  } else {
+    internalUserId = userId;
+  }
+
+  if (internalUserId === auth.user.id) {
     return badRequest('You cannot delete yourself.');
   }
 
-  await deleteUser(userId);
+  await deleteUser(internalUserId);
 
   return ok();
 }

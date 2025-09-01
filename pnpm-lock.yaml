@@ -24,8 +24,8 @@ importers:
         specifier: ^9.2.4
         version: 9.2.4
       '@entro314labs/entro-zen':
-        specifier: ^0.174.0
-        version: 0.174.0(@babel/core@7.28.3)(@types/react@19.1.12)(babel-plugin-react-compiler@19.1.0-rc.3)(immer@10.1.1)(use-sync-external-store@1.5.0(react@19.1.1))
+        specifier: ^0.175.1
+        version: 0.175.1(@babel/core@7.28.3)(@types/react@19.1.12)(babel-plugin-react-compiler@19.1.0-rc.3)(immer@10.1.1)(use-sync-external-store@1.5.0(react@19.1.1))
       '@fontsource/inter':
         specifier: ^5.2.6
         version: 5.2.6
@@ -914,8 +914,8 @@ packages:
   '@emnapi/wasi-threads@1.1.0':
     resolution: {integrity: sha512-WI0DdZ8xFSbgMjR1sFsKABJ/C5OnRrjT06JXbZKexJGrDuPTzZdDYfFlsgcCXCyf+suG5QU2e/y1Wo2V/OapLQ==}
 
-  '@entro314labs/entro-zen@0.174.0':
-    resolution: {integrity: sha512-k1pURCdBNfdSxHtV+byfhsugIw6f+T+s/3ZnsmLqW1C4CThCJI83U+uOiWBdhkhddBYoupL/o4SS05Lq/sCN3g==}
+  '@entro314labs/entro-zen@0.175.1':
+    resolution: {integrity: sha512-hFIh3OPqZfLnCqi4bbVqFGQHwz1I3ANG6dXFOdKZGaQNsOrgLgHGc9w65nw7PXNmQch+v7u3dRRGSmRI4e6JtQ==}
 
   '@epic-web/invariant@1.0.0':
     resolution: {integrity: sha512-lrTPqgvfFQtR/eY/qkIzp98OGdNJu0m5ji3q/nJI8v3SXkRKEnWiOxMmbvcSoAIzv/cGiuvRy57k4suKQSAdwA==}
@@ -7799,7 +7799,7 @@ snapshots:
       tslib: 2.8.1
     optional: true
 
-  '@entro314labs/entro-zen@0.174.0(@babel/core@7.28.3)(@types/react@19.1.12)(babel-plugin-react-compiler@19.1.0-rc.3)(immer@10.1.1)(use-sync-external-store@1.5.0(react@19.1.1))':
+  '@entro314labs/entro-zen@0.175.1(@babel/core@7.28.3)(@types/react@19.1.12)(babel-plugin-react-compiler@19.1.0-rc.3)(immer@10.1.1)(use-sync-external-store@1.5.0(react@19.1.1))':
     dependencies:
       '@fontsource/jetbrains-mono': 5.2.6
       '@internationalized/date': 3.9.0

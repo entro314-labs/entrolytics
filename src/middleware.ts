@@ -1,35 +1,54 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 
+// Define public routes that don't require authentication
+const isPublicRoute = createRouteMatcher([
+  '/sign-in(.*)',
+  '/sign-up(.*)',
+  '/api/send',
+  '/api/scripts/(.*)',
+  '/api/heartbeat',
+  '/api/webhooks/(.*)',
+  '/script.js',
+  '/telemetry.js'
+])
+
+// Define protected routes that require authentication
+const isProtectedRoute = createRouteMatcher([
+  '/',
+  '/dashboard(.*)',
+  '/admin(.*)',
+  '/settings(.*)',
+  '/teams(.*)',
+  '/websites(.*)',
+  '/reports(.*)',
+])
+
+const isProtectedApiRoute = createRouteMatcher([
+  '/api/me(.*)',
+  '/api/users(.*)',
+  '/api/teams(.*)',
+  '/api/websites(.*)',
+  '/api/admin(.*)',
+  '/api/reports(.*)',
+  '/api/links(.*)',
+  '/api/pixels(.*)',
+])
+
 export default clerkMiddleware(async (auth, req) => {
-  // Define routes that require authentication
-  const protectedRoutes = createRouteMatcher([
-    '/',
-    '/dashboard(.*)',
-    '/admin(.*)',
-    '/settings(.*)',
-    '/teams(.*)',
-    '/websites(.*)',
-    '/reports(.*)',
-  ])
-
-  const protectedApiRoutes = createRouteMatcher([
-    '/api/me(.*)',
-    '/api/users(.*)',
-    '/api/teams(.*)',
-    '/api/websites(.*)',
-    '/api/admin(.*)',
-    '/api/reports(.*)',
-    '/api/links(.*)',
-    '/api/pixels(.*)',
-  ])
-
-  // Protect page routes (redirect to sign-in)
-  if (protectedRoutes(req)) {
-    auth.protect()
+  // Allow public routes to proceed without authentication
+  if (isPublicRoute(req)) {
+    return
   }
 
-  // For API routes, let the route handlers handle auth validation
-  // The middleware will still process the auth, but won't redirect
+  // Protect page routes (redirect to sign-in)
+  if (isProtectedRoute(req)) {
+    await auth.protect()
+  }
+
+  // Protect API routes (return 401 for unauthenticated requests)
+  if (isProtectedApiRoute(req)) {
+    await auth.protect()
+  }
 })
 
 export const config = {

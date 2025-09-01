@@ -4,7 +4,7 @@ import { ROLE_PERMISSIONS, ROLES, SHARE_TOKEN_HEADER } from '@/lib/constants';
 import { parseToken } from '@/lib/jwt';
 import { secret } from '@/lib/crypto';
 import { ensureArray } from '@/lib/utils';
-import { getUserByClerkId, createUser } from '@/queries';
+import { getUser, createUser } from '@/queries';
 
 const log = debug('entrolytics:auth');
 
@@ -24,8 +24,8 @@ export async function getCurrentUser() {
       return null;
     }
 
-    // Get user from database by Clerk ID
-    let user = await getUserByClerkId(clerkUserId);
+    // Get user from database using Clerk ID directly as primary key
+    let user = await getUser(clerkUserId);
     
     // If user doesn't exist in our database, sync from Clerk
     if (!user) {
@@ -83,13 +83,12 @@ export async function checkAuth(request?: Request) {
 
 /**
  * Sync user data from Clerk to our database
- * Creates a new user record with Clerk data
+ * Creates a new user record with Clerk data using Clerk ID as primary key
  */
 async function syncUserFromClerk(clerkUser: any) {
   try {
     const userData = {
-      id: crypto.randomUUID(),
-      clerkId: clerkUser.id,
+      id: clerkUser.id, // Use Clerk ID directly as primary key
       email: clerkUser.emailAddresses[0]?.emailAddress || '',
       firstName: clerkUser.firstName,
       lastName: clerkUser.lastName,

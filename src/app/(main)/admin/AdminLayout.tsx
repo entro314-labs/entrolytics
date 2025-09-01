@@ -32,9 +32,9 @@ export function AdminLayout({ children }: { children: ReactNode }) {
           icon: <Globe />,
         },
         {
-          id: 'teams',
-          label: formatMessage(labels.teams),
-          path: '/admin/teams',
+          id: 'orgs',
+          label: formatMessage(labels.orgs),
+          path: '/admin/orgs',
           icon: <Users />,
         },
       ],

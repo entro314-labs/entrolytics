@@ -293,7 +293,7 @@
       "value": "Crear informe"
     }
   ],
-  "label.create-team": [
+  "label.create-org": [
     {
       "type": 0,
       "value": "Crear equipo"
@@ -389,7 +389,7 @@
       "value": "Eliminar reporte"
     }
   ],
-  "label.delete-team": [
+  "label.delete-org": [
     {
       "type": 0,
       "value": "Eliminar equipo"
@@ -743,7 +743,7 @@
       "value": "Unir"
     }
   ],
-  "label.join-team": [
+  "label.join-org": [
     {
       "type": 0,
       "value": "Unirse al equipo"
@@ -845,7 +845,7 @@
       "value": "Abandonar"
     }
   ],
-  "label.leave-team": [
+  "label.leave-org": [
     {
       "type": 0,
       "value": "Abandonar equipo"
@@ -1495,61 +1495,61 @@
       "value": "Etiquetas"
     }
   ],
-  "label.team": [
+  "label.org": [
     {
       "type": 0,
       "value": "Equipo"
     }
   ],
-  "label.team-id": [
+  "label.org-id": [
     {
       "type": 0,
       "value": "ID del equipo"
     }
   ],
-  "label.team-manager": [
+  "label.org-manager": [
     {
       "type": 0,
       "value": "Jefe de equipo"
     }
   ],
-  "label.team-member": [
+  "label.org-member": [
     {
       "type": 0,
       "value": "Miembro del equipo"
     }
   ],
-  "label.team-name": [
+  "label.org-name": [
     {
       "type": 0,
       "value": "Nombre del equipo"
     }
   ],
-  "label.team-owner": [
+  "label.org-owner": [
     {
       "type": 0,
       "value": "Admin. del equipo"
     }
   ],
-  "label.team-settings": [
+  "label.org-settings": [
     {
       "type": 0,
       "value": "Configuración del equipo"
     }
   ],
-  "label.team-view-only": [
+  "label.org-view-only": [
     {
       "type": 0,
       "value": "Vista solo del equipo"
     }
   ],
-  "label.team-websites": [
+  "label.org-websites": [
     {
       "type": 0,
       "value": "Sitios web del equipo"
     }
   ],
-  "label.teams": [
+  "label.orgs": [
     {
       "type": 0,
       "value": "Equipos"
@@ -1923,7 +1923,7 @@
       "value": "?"
     }
   ],
-  "message.delete-team-warning": [
+  "message.delete-org-warning": [
     {
       "type": 0,
       "value": "Al eliminar un equipo, también se eliminarán todos los sitios web del equipo."
@@ -2031,13 +2031,13 @@
       "value": "No se encontraron resultados."
     }
   ],
-  "message.no-team-websites": [
+  "message.no-org-websites": [
     {
       "type": 0,
       "value": "Este equipo no tiene ningún sitio web configurado."
     }
   ],
-  "message.no-teams": [
+  "message.no-orgs": [
     {
       "type": 0,
       "value": "No has creado ningún equipo."
@@ -2119,19 +2119,19 @@
       "value": "."
     }
   ],
-  "message.team-already-member": [
+  "message.org-already-member": [
     {
       "type": 0,
       "value": "Ya eres miembro de este equipo."
     }
   ],
-  "message.team-not-found": [
+  "message.org-not-found": [
     {
       "type": 0,
       "value": "Equipo no encontrado."
     }
   ],
-  "message.team-websites-info": [
+  "message.org-websites-info": [
     {
       "type": 0,
       "value": "Las analíticas de tus sitios web pueden ser vistas por cualquier miembro del equipo."
@@ -2143,13 +2143,13 @@
       "value": "Código de rastreo"
     }
   ],
-  "message.transfer-team-website-to-user": [
+  "message.transfer-org-website-to-user": [
     {
       "type": 0,
       "value": "¿Transferir este sitio web a su cuenta?"
     }
   ],
-  "message.transfer-user-website-to-team": [
+  "message.transfer-user-website-to-org": [
     {
       "type": 0,
       "value": "Seleccione el equipo al que transferir este sitio web."

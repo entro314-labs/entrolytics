@@ -293,10 +293,10 @@
       "value": "Opprett rapport"
     }
   ],
-  "label.create-team": [
+  "label.create-org": [
     {
       "type": 0,
-      "value": "Opprett team"
+      "value": "Opprett org"
     }
   ],
   "label.create-user": [
@@ -389,10 +389,10 @@
       "value": "Slett rapport"
     }
   ],
-  "label.delete-team": [
+  "label.delete-org": [
     {
       "type": 0,
-      "value": "Slett team"
+      "value": "Slett org"
     }
   ],
   "label.delete-user": [
@@ -743,10 +743,10 @@
       "value": "Bli med"
     }
   ],
-  "label.join-team": [
+  "label.join-org": [
     {
       "type": 0,
-      "value": "Bli med i teamet"
+      "value": "Bli med i orget"
     }
   ],
   "label.journey": [
@@ -845,10 +845,10 @@
       "value": "Forlat"
     }
   ],
-  "label.leave-team": [
+  "label.leave-org": [
     {
       "type": 0,
-      "value": "Forlat team"
+      "value": "Forlat org"
     }
   ],
   "label.less-than": [
@@ -1495,64 +1495,64 @@
       "value": "Tagger"
     }
   ],
-  "label.team": [
+  "label.org": [
     {
       "type": 0,
-      "value": "Team"
+      "value": "Org"
     }
   ],
-  "label.team-id": [
+  "label.org-id": [
     {
       "type": 0,
-      "value": "Team-ID"
+      "value": "Org-ID"
     }
   ],
-  "label.team-manager": [
+  "label.org-manager": [
     {
       "type": 0,
-      "value": "Teamadministrator"
+      "value": "Orgadministrator"
     }
   ],
-  "label.team-member": [
+  "label.org-member": [
     {
       "type": 0,
-      "value": "Teammedlem"
+      "value": "Orgmedlem"
     }
   ],
-  "label.team-name": [
+  "label.org-name": [
     {
       "type": 0,
-      "value": "Teamnavn"
+      "value": "Orgnavn"
     }
   ],
-  "label.team-owner": [
+  "label.org-owner": [
     {
       "type": 0,
-      "value": "Teameier"
+      "value": "Orgeier"
     }
   ],
-  "label.team-settings": [
+  "label.org-settings": [
     {
       "type": 0,
-      "value": "Teaminnstillinger"
+      "value": "Orginnstillinger"
     }
   ],
-  "label.team-view-only": [
+  "label.org-view-only": [
     {
       "type": 0,
-      "value": "Team (kun visning)"
+      "value": "Org (kun visning)"
     }
   ],
-  "label.team-websites": [
+  "label.org-websites": [
     {
       "type": 0,
-      "value": "Team-nettsteder"
+      "value": "Org-nettsteder"
     }
   ],
-  "label.teams": [
+  "label.orgs": [
     {
       "type": 0,
-      "value": "Team"
+      "value": "Org"
     }
   ],
   "label.terms": [
@@ -1927,10 +1927,10 @@
       "value": "?"
     }
   ],
-  "message.delete-team-warning": [
+  "message.delete-org-warning": [
     {
       "type": 0,
-      "value": "Å slette et team vil også slette alle teamets nettsteder."
+      "value": "Å slette et org vil også slette alle orgets nettsteder."
     }
   ],
   "message.delete-website-warning": [
@@ -2035,16 +2035,16 @@
       "value": "Ingen resultater funnet."
     }
   ],
-  "message.no-team-websites": [
+  "message.no-org-websites": [
     {
       "type": 0,
-      "value": "Dette teamet har ingen nettsteder."
+      "value": "Dette orget har ingen nettsteder."
     }
   ],
-  "message.no-teams": [
+  "message.no-orgs": [
     {
       "type": 0,
-      "value": "Du har ikke opprettet noen team."
+      "value": "Du har ikke opprettet noen org."
     }
   ],
   "message.no-users": [
@@ -2123,22 +2123,22 @@
       "value": "."
     }
   ],
-  "message.team-already-member": [
+  "message.org-already-member": [
     {
       "type": 0,
-      "value": "Du er allerede medlem av teamet."
+      "value": "Du er allerede medlem av orget."
     }
   ],
-  "message.team-not-found": [
+  "message.org-not-found": [
     {
       "type": 0,
-      "value": "Teamet ble ikke funnet."
+      "value": "Orget ble ikke funnet."
     }
   ],
-  "message.team-websites-info": [
+  "message.org-websites-info": [
     {
       "type": 0,
-      "value": "Nettsteder kan vises av alle på teamet."
+      "value": "Nettsteder kan vises av alle på orget."
     }
   ],
   "message.tracking-code": [
@@ -2147,22 +2147,22 @@
       "value": "Sporingskode"
     }
   ],
-  "message.transfer-team-website-to-user": [
+  "message.transfer-org-website-to-user": [
     {
       "type": 0,
       "value": "Overfør dette nettstedet til kontoen din?"
     }
   ],
-  "message.transfer-user-website-to-team": [
+  "message.transfer-user-website-to-org": [
     {
       "type": 0,
-      "value": "Velg teamet du vil overføre dette nettstedet til."
+      "value": "Velg orget du vil overføre dette nettstedet til."
     }
   ],
   "message.transfer-website": [
     {
       "type": 0,
-      "value": "Overfør eierskapet til nettstedet til din konto eller et annet team."
+      "value": "Overfør eierskapet til nettstedet til din konto eller et annet org."
     }
   ],
   "message.triggered-event": [

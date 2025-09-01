@@ -93,10 +93,10 @@ Cypress.Commands.add('deleteUser', (userId: string) => {
   });
 });
 
-Cypress.Commands.add('addTeam', (name: string) => {
+Cypress.Commands.add('addOrg', (name: string) => {
   cy.request({
     method: 'POST',
-    url: '/api/teams',
+    url: '/api/orgs',
     headers: {
       'Content-Type': 'application/json',
       Authorization: Cypress.env('authorization'),
@@ -109,10 +109,10 @@ Cypress.Commands.add('addTeam', (name: string) => {
   });
 });
 
-Cypress.Commands.add('deleteTeam', (teamId: string) => {
+Cypress.Commands.add('deleteOrg', (orgId: string) => {
   cy.request({
     method: 'DELETE',
-    url: `/api/teams/${teamId}`,
+    url: `/api/orgs/${orgId}`,
     headers: {
       'Content-Type': 'application/json',
       Authorization: Cypress.env('authorization'),

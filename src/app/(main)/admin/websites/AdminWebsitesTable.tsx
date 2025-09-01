@@ -27,14 +27,14 @@ export function AdminWebsitesTable({ data = [] }: { data: any[] }) {
         </DataColumn>
         <DataColumn id="owner" label={formatMessage(labels.owner)}>
           {(row: any) => {
-            if (row?.team) {
+            if (row?.org) {
               return (
                 <Row alignItems="center" gap>
                   <Icon>
                     <Users />
                   </Icon>
                   <Text truncate>
-                    <Link href={`/admin/teams/${row?.team?.id}`}>{row?.team?.name}</Link>
+                    <Link href={`/admin/orgs/${row?.org?.id}`}>{row?.org?.name}</Link>
                   </Text>
                 </Row>
               );

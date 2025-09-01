@@ -3,23 +3,23 @@ import { DataGrid } from '@/components/common/DataGrid';
 import { useUserWebsitesQuery } from '@/components/hooks';
 
 export function WebsitesDataTable({
-  teamId,
+  orgId,
   allowEdit = true,
   allowView = true,
   showActions = true,
 }: {
-  teamId?: string;
+  orgId?: string;
   allowEdit?: boolean;
   allowView?: boolean;
   showActions?: boolean;
 }) {
-  const queryResult = useUserWebsitesQuery({ teamId });
+  const queryResult = useUserWebsitesQuery({ orgId });
 
   return (
     <DataGrid query={queryResult} allowSearch allowPaging>
       {({ data }) => (
         <WebsitesTable
-          teamId={teamId}
+          orgId={orgId}
           data={data}
           showActions={showActions}
           allowEdit={allowEdit}

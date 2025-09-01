@@ -128,13 +128,13 @@ const redirects = [
     permanent: true,
   },
   {
-    source: '/teams/:id',
-    destination: '/teams/:id/websites',
+    source: '/orgs/:id',
+    destination: '/orgs/:id/websites',
     permanent: true,
   },
   {
-    source: '/teams/:id/settings',
-    destination: '/teams/:id/settings/preferences',
+    source: '/orgs/:id/settings',
+    destination: '/orgs/:id/settings/preferences',
     permanent: true,
   },
   {
@@ -208,7 +208,7 @@ export default {
         destination: '/api/scripts/telemetry',
       },
       {
-        source: '/teams/:teamId/:path*',
+        source: '/orgs/:orgId/:path*',
         destination: '/:path*',
       },
     ];

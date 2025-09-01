@@ -1,5 +1,5 @@
 import { Auth } from '@/lib/types';
-import { getLink, getTeamUser } from '@/queries';
+import { getLink, getOrgUser } from '@/queries';
 import { hasPermission } from '@/lib/auth';
 import { PERMISSIONS } from '@/lib/constants';
 
@@ -14,10 +14,10 @@ export async function canViewLink({ user }: Auth, linkId: string) {
     return user.id === link.userId;
   }
 
-  if (link.teamId) {
-    const teamUser = await getTeamUser(link.teamId, user.id);
+  if (link.orgId) {
+    const orgUser = await getOrgUser(link.orgId, user.id);
 
-    return !!teamUser;
+    return !!orgUser;
   }
 
   return false;
@@ -34,10 +34,10 @@ export async function canUpdateLink({ user }: Auth, linkId: string) {
     return user.id === link.userId;
   }
 
-  if (link.teamId) {
-    const teamUser = await getTeamUser(link.teamId, user.id);
+  if (link.orgId) {
+    const orgUser = await getOrgUser(link.orgId, user.id);
 
-    return teamUser && hasPermission(teamUser.role, PERMISSIONS.websiteUpdate);
+    return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteUpdate);
   }
 
   return false;
@@ -54,10 +54,10 @@ export async function canDeleteLink({ user }: Auth, linkId: string) {
     return user.id === link.userId;
   }
 
-  if (link.teamId) {
-    const teamUser = await getTeamUser(link.teamId, user.id);
+  if (link.orgId) {
+    const orgUser = await getOrgUser(link.orgId, user.id);
 
-    return teamUser && hasPermission(teamUser.role, PERMISSIONS.websiteDelete);
+    return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteDelete);
   }
 
   return false;

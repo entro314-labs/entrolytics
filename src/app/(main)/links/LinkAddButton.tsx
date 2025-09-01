@@ -3,7 +3,7 @@ import { Button, Icon, Modal, Dialog, DialogTrigger, Text, useToast } from '@ent
 import { Plus } from '@/components/icons';
 import { LinkEditForm } from './LinkEditForm';
 
-export function LinkAddButton({ teamId }: { teamId?: string }) {
+export function LinkAddButton({ orgId }: { orgId?: string }) {
   const { formatMessage, labels, messages } = useMessages();
   const { toast } = useToast();
   const { touch } = useModified();
@@ -23,7 +23,7 @@ export function LinkAddButton({ teamId }: { teamId?: string }) {
       </Button>
       <Modal>
         <Dialog title={formatMessage(labels.addLink)} style={{ width: 600 }}>
-          {({ close }) => <LinkEditForm teamId={teamId} onSave={handleSave} onClose={close} />}
+          {({ close }) => <LinkEditForm orgId={orgId} onSave={handleSave} onClose={close} />}
         </Dialog>
       </Modal>
     </DialogTrigger>

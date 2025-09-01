@@ -13,7 +13,7 @@ import { BROWSERS, OS_NAMES } from '@/lib/constants';
 import { stringToColor } from '@/lib/format';
 import { useMemo, useState } from 'react';
 import { Icon, SearchField, StatusLight, Text } from '@entro314labs/entro-zen';
-import { FixedSizeList } from 'react-window';
+import { List as List } from 'react-window';
 import styles from './RealtimeLog.module.css';
 
 const TYPE_ALL = 'all';
@@ -170,9 +170,9 @@ export function RealtimeLog({ data }: { data: any }) {
       <div className={styles.body}>
         {logs?.length === 0 && <Empty />}
         {logs?.length > 0 && (
-          <FixedSizeList width="100%" height={500} itemCount={logs.length} itemSize={50}>
+          <List width="100%" height={500} itemCount={logs.length} itemSize={50}>
             {Row}
-          </FixedSizeList>
+          </List>
         )}
       </div>
     </div>

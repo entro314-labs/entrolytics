@@ -23,7 +23,6 @@ async function findUser(
     },
     select: {
       id: true,
-      clerkId: true,
       email: true,
       firstName: true,
       lastName: true,
@@ -57,7 +56,6 @@ export async function getUserByEmail(email: string, options: GetUserOptions = {}
     },
     select: {
       id: true,
-      clerkId: true,
       email: true,
       firstName: true,
       lastName: true,
@@ -70,9 +68,6 @@ export async function getUserByEmail(email: string, options: GetUserOptions = {}
   });
 }
 
-export async function getUserByClerkId(clerkId: string, options: GetUserOptions = {}) {
-  return findUser({ where: { clerkId } }, options);
-}
 
 export async function getUsers(
   criteria: UserFindManyArgs,
@@ -107,7 +102,6 @@ export async function getUsers(
 
 export async function createUser(data: {
   id: string;
-  clerkId: string;
   email: string;
   firstName?: string;
   lastName?: string;
@@ -116,7 +110,6 @@ export async function createUser(data: {
   role: Role;
 }): Promise<{
   id: string;
-  clerkId: string;
   email: string;
   displayName: string;
   role: string;
@@ -125,7 +118,6 @@ export async function createUser(data: {
     data,
     select: {
       id: true,
-      clerkId: true,
       email: true,
       displayName: true,
       role: true,
@@ -141,7 +133,6 @@ export async function updateUser(userId: string, data: Prisma.UserUpdateInput): 
     data,
     select: {
       id: true,
-      clerkId: true,
       email: true,
       firstName: true,
       lastName: true,
@@ -179,18 +170,18 @@ export async function deleteUser(
     websiteIds = websites.map(a => a.id);
   }
 
-  const teams = await client.team.findMany({
+  const orgs = await client.org.findMany({
     where: {
-      teamUser: {
+      orgUser: {
         some: {
           userId,
-          role: ROLES.teamOwner,
+          role: ROLES.orgOwner,
         },
       },
     },
   });
 
-  const teamIds = teams.map(a => a.id);
+  const orgIds = orgs.map(a => a.id);
 
   if (cloudMode) {
     return transaction([
@@ -224,12 +215,12 @@ export async function deleteUser(
     client.session.deleteMany({
       where: { websiteId: { in: websiteIds } },
     }),
-    client.teamUser.deleteMany({
+    client.orgUser.deleteMany({
       where: {
         OR: [
           {
-            teamId: {
-              in: teamIds,
+            orgId: {
+              in: orgIds,
             },
           },
           {
@@ -238,10 +229,10 @@ export async function deleteUser(
         ],
       },
     }),
-    client.team.deleteMany({
+    client.org.deleteMany({
       where: {
         id: {
-          in: teamIds,
+          in: orgIds,
         },
       },
     }),

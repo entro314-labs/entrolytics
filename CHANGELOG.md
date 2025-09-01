@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Initial independent release as @entro314labs/entrolytics
 - Privacy-focused web analytics with GDPR compliance
 - Real-time dashboard with WebSocket support
-- Team collaboration with role-based access control
+- Org collaboration with role-based access control
 - Revenue tracking and e-commerce analytics
 - Custom event tracking with flexible data structure
 - Geolocation analytics with privacy protection
@@ -105,7 +105,7 @@ This version represents a complete rebranding and enhancement of the original an
 1. **Authentication**: Migrated from Supabase Auth to Clerk
 2. **UI Components**: Now uses @entro314labs/entro-zen component library
 3. **Branding**: Updated all references to Entrolytics and Entro314 Labs
-4. **Enhanced Features**: Added team collaboration, revenue tracking, and advanced analytics
+4. **Enhanced Features**: Added org collaboration, revenue tracking, and advanced analytics
 
 ### Environment Variables
 Update your environment variables to use Clerk authentication:

@@ -1,7 +1,7 @@
 import { Auth } from '@/lib/types';
 import { PERMISSIONS } from '@/lib/constants';
 import { hasPermission } from '@/lib/auth';
-import { getTeamUser, getWebsite } from '@/queries';
+import { getOrgUser, getWebsite } from '@/queries';
 
 const cloudMode = !!process.env.CLOUD_MODE;
 
@@ -20,10 +20,10 @@ export async function canViewWebsite({ user, shareToken }: Auth, websiteId: stri
     return user.id === website.userId;
   }
 
-  if (website.teamId) {
-    const teamUser = await getTeamUser(website.teamId, user.id);
+  if (website.orgId) {
+    const orgUser = await getOrgUser(website.orgId, user.id);
 
-    return !!teamUser;
+    return !!orgUser;
   }
 
   return false;
@@ -56,10 +56,10 @@ export async function canUpdateWebsite({ user }: Auth, websiteId: string) {
     return user.id === website.userId;
   }
 
-  if (website.teamId) {
-    const teamUser = await getTeamUser(website.teamId, user.id);
+  if (website.orgId) {
+    const orgUser = await getOrgUser(website.orgId, user.id);
 
-    return teamUser && hasPermission(teamUser.role, PERMISSIONS.websiteUpdate);
+    return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteUpdate);
   }
 
   return false;
@@ -76,10 +76,10 @@ export async function canDeleteWebsite({ user }: Auth, websiteId: string) {
     return user.id === website.userId;
   }
 
-  if (website.teamId) {
-    const teamUser = await getTeamUser(website.teamId, user.id);
+  if (website.orgId) {
+    const orgUser = await getOrgUser(website.orgId, user.id);
 
-    return teamUser && hasPermission(teamUser.role, PERMISSIONS.websiteDelete);
+    return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteDelete);
   }
 
   return false;
@@ -88,22 +88,22 @@ export async function canDeleteWebsite({ user }: Auth, websiteId: string) {
 export async function canTransferWebsiteToUser({ user }: Auth, websiteId: string, userId: string) {
   const website = await getWebsite(websiteId);
 
-  if (website.teamId && user.id === userId) {
-    const teamUser = await getTeamUser(website.teamId, userId);
+  if (website.orgId && user.id === userId) {
+    const orgUser = await getOrgUser(website.orgId, userId);
 
-    return teamUser && hasPermission(teamUser.role, PERMISSIONS.websiteTransferToUser);
+    return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteTransferToUser);
   }
 
   return false;
 }
 
-export async function canTransferWebsiteToTeam({ user }: Auth, websiteId: string, teamId: string) {
+export async function canTransferWebsiteToOrg({ user }: Auth, websiteId: string, orgId: string) {
   const website = await getWebsite(websiteId);
 
   if (website.userId && website.userId === user.id) {
-    const teamUser = await getTeamUser(teamId, user.id);
+    const orgUser = await getOrgUser(orgId, user.id);
 
-    return teamUser && hasPermission(teamUser.role, PERMISSIONS.websiteTransferToTeam);
+    return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteTransferToOrg);
   }
 
   return false;

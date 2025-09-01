@@ -43,14 +43,14 @@ declare namespace Cypress {
      */
     deleteUser(userId: string): Chainable<JQuery<HTMLElement>>;
     /**
-     * Custom command to create a team
-     * @example cy.addTeam('cypressTeam')
+     * Custom command to create a org
+     * @example cy.addOrg('cypressOrg')
      */
-    addTeam(name: string): Chainable<JQuery<HTMLElement>>;
+    addOrg(name: string): Chainable<JQuery<HTMLElement>>;
     /**
      * Custom command to create a website
-     * @example cy.deleteTeam('02d89813-7a72-41e1-87f0-8d668f85008b')
+     * @example cy.deleteOrg('02d89813-7a72-41e1-87f0-8d668f85008b')
      */
-    deleteTeam(teamId: string): Chainable<JQuery<HTMLElement>>;
+    deleteOrg(orgId: string): Chainable<JQuery<HTMLElement>>;
   }
 }

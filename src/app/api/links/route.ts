@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { canCreateTeamWebsite, canCreateWebsite } from '@/validations';
+import { canCreateOrgWebsite, canCreateWebsite } from '@/validations';
 import { json, unauthorized } from '@/lib/response';
 import { uuid } from '@/lib/crypto';
 import { getQueryFilters, parseRequest } from '@/lib/request';
@@ -30,7 +30,7 @@ export async function POST(request: Request) {
     name: z.string().max(100),
     url: z.string().max(500),
     slug: z.string().max(100),
-    teamId: z.string().nullable().optional(),
+    orgId: z.string().nullable().optional(),
     id: z.string().uuid().nullable().optional(),
   });
 
@@ -40,9 +40,9 @@ export async function POST(request: Request) {
     return error();
   }
 
-  const { id, name, url, slug, teamId } = body;
+  const { id, name, url, slug, orgId } = body;
 
-  if ((teamId && !(await canCreateTeamWebsite(auth, teamId))) || !(await canCreateWebsite(auth))) {
+  if ((orgId && !(await canCreateOrgWebsite(auth, orgId))) || !(await canCreateWebsite(auth))) {
     return unauthorized();
   }
 
@@ -51,10 +51,10 @@ export async function POST(request: Request) {
     name,
     url,
     slug,
-    teamId,
+    orgId,
   };
 
-  if (!teamId) {
+  if (!orgId) {
     data.userId = auth.user.id;
   }
 

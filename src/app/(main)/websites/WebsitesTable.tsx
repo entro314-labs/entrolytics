@@ -10,7 +10,7 @@ export interface WebsitesTableProps {
   showActions?: boolean;
   allowEdit?: boolean;
   allowView?: boolean;
-  teamId?: string;
+  orgId?: string;
   children?: ReactNode;
 }
 

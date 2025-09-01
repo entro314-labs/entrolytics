@@ -21,7 +21,7 @@ import { WebsiteSelect } from '@/components/input/WebsiteSelect';
 
 export function WebsiteNav({ websiteId }: { websiteId: string }) {
   const { formatMessage, labels } = useMessages();
-  const { pathname, renderUrl, teamId } = useNavigation();
+  const { pathname, renderUrl, orgId } = useNavigation();
 
   const renderPath = (path: string) =>
     renderUrl(`/websites/${websiteId}${path}`, {
@@ -149,7 +149,7 @@ export function WebsiteNav({ websiteId }: { websiteId: string }) {
 
   return (
     <SideMenu items={items} selectedKey={selectedKey} allowMinimize={false}>
-      <WebsiteSelect websiteId={websiteId} teamId={teamId} />
+      <WebsiteSelect websiteId={websiteId} orgId={orgId} />
     </SideMenu>
   );
 }

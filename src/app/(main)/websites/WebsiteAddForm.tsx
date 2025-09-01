@@ -4,16 +4,16 @@ import { DOMAIN_REGEX } from '@/lib/constants';
 import { useMessages } from '@/components/hooks';
 
 export function WebsiteAddForm({
-  teamId,
+  orgId,
   onSave,
   onClose,
 }: {
-  teamId?: string;
+  orgId?: string;
   onSave?: () => void;
   onClose?: () => void;
 }) {
   const { formatMessage, labels, messages } = useMessages();
-  const { mutate, error, isPending } = useUpdateQuery('/websites', { teamId });
+  const { mutate, error, isPending } = useUpdateQuery('/websites', { orgId });
 
   const handleSubmit = async (data: any) => {
     mutate(data, {

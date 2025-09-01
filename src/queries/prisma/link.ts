@@ -48,14 +48,14 @@ export async function getUserLinks(
   );
 }
 
-export async function getTeamLinks(
-  teamId: string,
+export async function getOrgLinks(
+  orgId: string,
   filters?: QueryFilters,
 ): Promise<PageResult<Link[]>> {
   return getLinks(
     {
       where: {
-        teamId,
+        orgId,
       },
     },
     filters,

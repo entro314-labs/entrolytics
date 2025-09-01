@@ -55,7 +55,7 @@ export const sortingParams = {
 
 export const userRoleParam = z.enum(['admin', 'user', 'view-only']);
 
-export const teamRoleParam = z.enum(['team-member', 'team-view-only', 'team-manager']);
+export const orgRoleParam = z.enum(['org-member', 'org-view-only', 'org-manager']);
 
 export const anyObjectParam = z.object({}).passthrough();
 

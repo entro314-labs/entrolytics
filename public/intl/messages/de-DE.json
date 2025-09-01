@@ -293,10 +293,10 @@
       "value": "Bericht erstellen"
     }
   ],
-  "label.create-team": [
+  "label.create-org": [
     {
       "type": 0,
-      "value": "Team erstellen"
+      "value": "Org erstellen"
     }
   ],
   "label.create-user": [
@@ -389,10 +389,10 @@
       "value": "Bericht löschen"
     }
   ],
-  "label.delete-team": [
+  "label.delete-org": [
     {
       "type": 0,
-      "value": "Team löschen"
+      "value": "Org löschen"
     }
   ],
   "label.delete-user": [
@@ -743,10 +743,10 @@
       "value": "Beitreten"
     }
   ],
-  "label.join-team": [
+  "label.join-org": [
     {
       "type": 0,
-      "value": "Team beitreten"
+      "value": "Org beitreten"
     }
   ],
   "label.journey": [
@@ -845,10 +845,10 @@
       "value": "Verlassen"
     }
   ],
-  "label.leave-team": [
+  "label.leave-org": [
     {
       "type": 0,
-      "value": "Team verlassen"
+      "value": "Org verlassen"
     }
   ],
   "label.less-than": [
@@ -1495,64 +1495,64 @@
       "value": "Stichworte"
     }
   ],
-  "label.team": [
+  "label.org": [
     {
       "type": 0,
-      "value": "Team"
+      "value": "Org"
     }
   ],
-  "label.team-id": [
+  "label.org-id": [
     {
       "type": 0,
-      "value": "Team-ID"
+      "value": "Org-ID"
     }
   ],
-  "label.team-manager": [
+  "label.org-manager": [
     {
       "type": 0,
-      "value": "Team-Manager"
+      "value": "Org-Manager"
     }
   ],
-  "label.team-member": [
+  "label.org-member": [
     {
       "type": 0,
-      "value": "Team-Mitglied"
+      "value": "Org-Mitglied"
     }
   ],
-  "label.team-name": [
+  "label.org-name": [
     {
       "type": 0,
-      "value": "Name des Teams"
+      "value": "Name des Orgs"
     }
   ],
-  "label.team-owner": [
+  "label.org-owner": [
     {
       "type": 0,
-      "value": "Team-Eigentümer"
+      "value": "Org-Eigentümer"
     }
   ],
-  "label.team-settings": [
+  "label.org-settings": [
     {
       "type": 0,
-      "value": "Team-Einstellungen"
+      "value": "Org-Einstellungen"
     }
   ],
-  "label.team-view-only": [
+  "label.org-view-only": [
     {
       "type": 0,
-      "value": "Nur für Team-Mitglieder sichtbar"
+      "value": "Nur für Org-Mitglieder sichtbar"
     }
   ],
-  "label.team-websites": [
+  "label.org-websites": [
     {
       "type": 0,
-      "value": "Team-Websites"
+      "value": "Org-Websites"
     }
   ],
-  "label.teams": [
+  "label.orgs": [
     {
       "type": 0,
-      "value": "Teams"
+      "value": "Orgs"
     }
   ],
   "label.terms": [
@@ -1923,10 +1923,10 @@
       "value": " zurücksetzen wollen?"
     }
   ],
-  "message.delete-team-warning": [
+  "message.delete-org-warning": [
     {
       "type": 0,
-      "value": "Ein Team zu löschen, wird auch alle Team-Websites löschen."
+      "value": "Ein Org zu löschen, wird auch alle Org-Websites löschen."
     }
   ],
   "message.delete-website-warning": [
@@ -2027,16 +2027,16 @@
       "value": "Keine Ergebnisse gefunden."
     }
   ],
-  "message.no-team-websites": [
+  "message.no-org-websites": [
     {
       "type": 0,
-      "value": "Diesem Team sind keine Websites zugeordnet."
+      "value": "Diesem Org sind keine Websites zugeordnet."
     }
   ],
-  "message.no-teams": [
+  "message.no-orgs": [
     {
       "type": 0,
-      "value": "Bisher wurden keine Teams erstellt."
+      "value": "Bisher wurden keine Orgs erstellt."
     }
   ],
   "message.no-users": [
@@ -2107,22 +2107,22 @@
       "value": "Die Statistiken Ihrer Website sind unter folgender URL öffentlich zugänglich:"
     }
   ],
-  "message.team-already-member": [
+  "message.org-already-member": [
     {
       "type": 0,
-      "value": "Sie sind bereits Mitglied des Teams."
+      "value": "Sie sind bereits Mitglied des Orgs."
     }
   ],
-  "message.team-not-found": [
+  "message.org-not-found": [
     {
       "type": 0,
-      "value": "Team nicht gefunden."
+      "value": "Org nicht gefunden."
     }
   ],
-  "message.team-websites-info": [
+  "message.org-websites-info": [
     {
       "type": 0,
-      "value": "Websites können von jedem im Team eingesehen werden."
+      "value": "Websites können von jedem im Org eingesehen werden."
     }
   ],
   "message.tracking-code": [
@@ -2131,22 +2131,22 @@
       "value": "Tracking Code"
     }
   ],
-  "message.transfer-team-website-to-user": [
+  "message.transfer-org-website-to-user": [
     {
       "type": 0,
       "value": "Diese Website zu Ihrem Account transferieren?"
     }
   ],
-  "message.transfer-user-website-to-team": [
+  "message.transfer-user-website-to-org": [
     {
       "type": 0,
-      "value": "Wählen Sie ein Team aus, zu dem die Website transferiert werden soll."
+      "value": "Wählen Sie ein Org aus, zu dem die Website transferiert werden soll."
     }
   ],
   "message.transfer-website": [
     {
       "type": 0,
-      "value": "Übertragen Sie die Eigentümerrechte zu Ihrem Account oder einem anderen Team."
+      "value": "Übertragen Sie die Eigentümerrechte zu Ihrem Account oder einem anderen Org."
     }
   ],
   "message.triggered-event": [

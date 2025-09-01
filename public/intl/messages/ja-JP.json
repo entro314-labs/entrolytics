@@ -293,7 +293,7 @@
       "value": "レポートの作成"
     }
   ],
-  "label.create-team": [
+  "label.create-org": [
     {
       "type": 0,
       "value": "チームの作成"
@@ -389,7 +389,7 @@
       "value": "レポートの削除"
     }
   ],
-  "label.delete-team": [
+  "label.delete-org": [
     {
       "type": 0,
       "value": "チームの削除"
@@ -743,7 +743,7 @@
       "value": "参加"
     }
   ],
-  "label.join-team": [
+  "label.join-org": [
     {
       "type": 0,
       "value": "チームに参加"
@@ -845,7 +845,7 @@
       "value": "離脱"
     }
   ],
-  "label.leave-team": [
+  "label.leave-org": [
     {
       "type": 0,
       "value": "チームを離脱"
@@ -1495,61 +1495,61 @@
       "value": "タグ"
     }
   ],
-  "label.team": [
+  "label.org": [
     {
       "type": 0,
       "value": "チーム"
     }
   ],
-  "label.team-id": [
+  "label.org-id": [
     {
       "type": 0,
       "value": "チームID"
     }
   ],
-  "label.team-manager": [
+  "label.org-manager": [
     {
       "type": 0,
       "value": "チーム管理者"
     }
   ],
-  "label.team-member": [
+  "label.org-member": [
     {
       "type": 0,
       "value": "チームメンバー"
     }
   ],
-  "label.team-name": [
+  "label.org-name": [
     {
       "type": 0,
       "value": "チーム名"
     }
   ],
-  "label.team-owner": [
+  "label.org-owner": [
     {
       "type": 0,
       "value": "チームオーナー"
     }
   ],
-  "label.team-settings": [
+  "label.org-settings": [
     {
       "type": 0,
       "value": "チーム設定"
     }
   ],
-  "label.team-view-only": [
+  "label.org-view-only": [
     {
       "type": 0,
       "value": "チーム表示のみ"
     }
   ],
-  "label.team-websites": [
+  "label.org-websites": [
     {
       "type": 0,
       "value": "チームのWebサイト"
     }
   ],
-  "label.teams": [
+  "label.orgs": [
     {
       "type": 0,
       "value": "チーム"
@@ -1907,7 +1907,7 @@
       "value": "をリセットしてもよろしいですか？"
     }
   ],
-  "message.delete-team-warning": [
+  "message.delete-org-warning": [
     {
       "type": 0,
       "value": "チームを削除すると、そのチームが管理しているWebサイトもすべて削除されます。"
@@ -2015,13 +2015,13 @@
       "value": "結果が見つかりません。"
     }
   ],
-  "message.no-team-websites": [
+  "message.no-org-websites": [
     {
       "type": 0,
       "value": "このチームにはWebサイトがありません。"
     }
   ],
-  "message.no-teams": [
+  "message.no-orgs": [
     {
       "type": 0,
       "value": "チームを作成していません。"
@@ -2095,19 +2095,19 @@
       "value": "あなたのWebサイトの統計情報は次のURLで公開されています："
     }
   ],
-  "message.team-already-member": [
+  "message.org-already-member": [
     {
       "type": 0,
       "value": "あなたはすでにチームのメンバーです。"
     }
   ],
-  "message.team-not-found": [
+  "message.org-not-found": [
     {
       "type": 0,
       "value": "チームが見つかりません。"
     }
   ],
-  "message.team-websites-info": [
+  "message.org-websites-info": [
     {
       "type": 0,
       "value": "Webサイトはチーム内の誰でも見ることができます。"
@@ -2133,13 +2133,13 @@
       "value": "セクションに以下のコードを記述します。"
     }
   ],
-  "message.transfer-team-website-to-user": [
+  "message.transfer-org-website-to-user": [
     {
       "type": 0,
       "value": "このWebサイトをあなたのアカウントに移管しますか？"
     }
   ],
-  "message.transfer-user-website-to-team": [
+  "message.transfer-user-website-to-org": [
     {
       "type": 0,
       "value": "このWebサイトを移管するチームを選択してください。"

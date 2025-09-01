@@ -1,8 +1,8 @@
 {
-  "teamCreate": {
+  "orgCreate": {
     "name": "cypress"
   },
-  "teamUpdate": {
+  "orgUpdate": {
     "name": "cypressUpdate"
   }
 }

@@ -34,14 +34,14 @@ export async function GET(request: Request) {
             id: true,
           },
         },
-        team: {
+        org: {
           where: {
             deletedAt: null,
           },
           include: {
             members: {
               where: {
-                role: ROLES.teamOwner,
+                role: ROLES.orgOwner,
               },
             },
           },

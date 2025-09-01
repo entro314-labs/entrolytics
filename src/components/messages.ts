@@ -24,7 +24,7 @@ export const labels = defineMessages({
   website: { id: 'label.website', defaultMessage: 'Website' },
   websites: { id: 'label.websites', defaultMessage: 'Websites' },
   myWebsites: { id: 'label.my-websites', defaultMessage: 'My websites' },
-  teamWebsites: { id: 'label.team-websites', defaultMessage: 'Team websites' },
+  orgWebsites: { id: 'label.org-websites', defaultMessage: 'Org websites' },
   created: { id: 'label.created', defaultMessage: 'Created' },
   createdBy: { id: 'label.created-by', defaultMessage: 'Created By' },
   edit: { id: 'label.edit', defaultMessage: 'Edit' },
@@ -33,20 +33,20 @@ export const labels = defineMessages({
   member: { id: 'label.member', defaultMessage: 'Member' },
   members: { id: 'label.members', defaultMessage: 'Members' },
   accessCode: { id: 'label.access-code', defaultMessage: 'Access code' },
-  teamId: { id: 'label.team-id', defaultMessage: 'Team ID' },
-  team: { id: 'label.team', defaultMessage: 'Team' },
-  teamName: { id: 'label.team-name', defaultMessage: 'Team name' },
+  orgId: { id: 'label.org-id', defaultMessage: 'Org ID' },
+  org: { id: 'label.org', defaultMessage: 'Org' },
+  orgName: { id: 'label.org-name', defaultMessage: 'Org name' },
   regenerate: { id: 'label.regenerate', defaultMessage: 'Regenerate' },
   remove: { id: 'label.remove', defaultMessage: 'Remove' },
   join: { id: 'label.join', defaultMessage: 'Join' },
-  createTeam: { id: 'label.create-team', defaultMessage: 'Create team' },
-  joinTeam: { id: 'label.join-team', defaultMessage: 'Join team' },
+  createOrg: { id: 'label.create-org', defaultMessage: 'Create org' },
+  joinOrg: { id: 'label.join-org', defaultMessage: 'Join org' },
   settings: { id: 'label.settings', defaultMessage: 'Settings' },
   owner: { id: 'label.owner', defaultMessage: 'Owner' },
-  teamOwner: { id: 'label.team-owner', defaultMessage: 'Team owner' },
-  teamManager: { id: 'label.team-manager', defaultMessage: 'Team manager' },
-  teamMember: { id: 'label.team-member', defaultMessage: 'Team member' },
-  teamViewOnly: { id: 'label.team-view-only', defaultMessage: 'Team view only' },
+  orgOwner: { id: 'label.org-owner', defaultMessage: 'Org owner' },
+  orgManager: { id: 'label.org-manager', defaultMessage: 'Org manager' },
+  orgMember: { id: 'label.org-member', defaultMessage: 'Org member' },
+  orgViewOnly: { id: 'label.org-view-only', defaultMessage: 'Org view only' },
   enableShareUrl: { id: 'label.enable-share-url', defaultMessage: 'Enable share URL' },
   data: { id: 'label.data', defaultMessage: 'Data' },
   trackingCode: { id: 'label.tracking-code', defaultMessage: 'Tracking code' },
@@ -79,16 +79,16 @@ export const labels = defineMessages({
   more: { id: 'label.more', defaultMessage: 'More' },
   realtime: { id: 'label.realtime', defaultMessage: 'Realtime' },
   queries: { id: 'label.queries', defaultMessage: 'Queries' },
-  teams: { id: 'label.teams', defaultMessage: 'Teams' },
-  teamSettings: { id: 'label.team-settings', defaultMessage: 'Team settings' },
+  orgs: { id: 'label.orgs', defaultMessage: 'Orgs' },
+  orgSettings: { id: 'label.org-settings', defaultMessage: 'Org settings' },
   analytics: { id: 'label.analytics', defaultMessage: 'Analytics' },
   login: { id: 'label.login', defaultMessage: 'Login' },
   logout: { id: 'label.logout', defaultMessage: 'Logout' },
   singleDay: { id: 'label.single-day', defaultMessage: 'Single day' },
   dateRange: { id: 'label.date-range', defaultMessage: 'Date range' },
   viewDetails: { id: 'label.view-details', defaultMessage: 'View details' },
-  deleteTeam: { id: 'label.delete-team', defaultMessage: 'Delete team' },
-  leaveTeam: { id: 'label.leave-team', defaultMessage: 'Leave team' },
+  deleteOrg: { id: 'label.delete-org', defaultMessage: 'Delete org' },
+  leaveOrg: { id: 'label.leave-org', defaultMessage: 'Leave org' },
   refresh: { id: 'label.refresh', defaultMessage: 'Refresh' },
   page: { id: 'label.page', defaultMessage: 'Page' },
   pages: { id: 'label.pages', defaultMessage: 'Pages' },
@@ -388,9 +388,9 @@ export const messages = defineMessages({
     id: 'message.min-password-length',
     defaultMessage: 'Minimum length of {n} characters',
   },
-  noTeams: {
-    id: 'message.no-teams',
-    defaultMessage: 'You have not created any teams.',
+  noOrgs: {
+    id: 'message.no-orgs',
+    defaultMessage: 'You have not created any orgs.',
   },
   shareUrl: {
     id: 'message.share-url',
@@ -401,9 +401,9 @@ export const messages = defineMessages({
     defaultMessage:
       'To track stats for this website, place the following code in the <head>...</head> section of your HTML.',
   },
-  joinTeamWarning: {
-    id: 'message.team-already-member',
-    defaultMessage: 'You are already a member of the team.',
+  joinOrgWarning: {
+    id: 'message.org-already-member',
+    defaultMessage: 'You are already a member of the org.',
   },
   actionConfirmation: {
     id: 'message.action-confirmation',
@@ -426,9 +426,9 @@ export const messages = defineMessages({
     id: 'message.delete-website-warning',
     defaultMessage: 'All website data will be deleted.',
   },
-  deleteTeamWarning: {
-    id: 'message.delete-team-warning',
-    defaultMessage: 'Deleting a team will also delete all team websites.',
+  deleteOrgWarning: {
+    id: 'message.delete-org-warning',
+    defaultMessage: 'Deleting a org will also delete all org websites.',
   },
   noResultsFound: {
     id: 'message.no-results-found',
@@ -438,13 +438,13 @@ export const messages = defineMessages({
     id: 'message.no-websites-configured',
     defaultMessage: 'You do not have any websites configured.',
   },
-  noTeamWebsites: {
-    id: 'message.no-team-websites',
-    defaultMessage: 'This team does not have any websites.',
+  noOrgWebsites: {
+    id: 'message.no-org-websites',
+    defaultMessage: 'This org does not have any websites.',
   },
-  teamWebsitesInfo: {
-    id: 'message.team-websites-info',
-    defaultMessage: 'Websites can be viewed by anyone on the team.',
+  orgWebsitesInfo: {
+    id: 'message.org-websites-info',
+    defaultMessage: 'Websites can be viewed by anyone on the org.',
   },
   noMatchPassword: { id: 'message.no-match-password', defaultMessage: 'Passwords do not match.' },
   goToSettings: {
@@ -455,9 +455,9 @@ export const messages = defineMessages({
     id: 'message.active-users',
     defaultMessage: '{x} current {x, plural, one {visitor} other {visitors}}',
   },
-  teamNotFound: {
-    id: 'message.team-not-found',
-    defaultMessage: 'Team not found.',
+  orgNotFound: {
+    id: 'message.org-not-found',
+    defaultMessage: 'Org not found.',
   },
   visitorLog: {
     id: 'message.visitor-log',
@@ -481,15 +481,15 @@ export const messages = defineMessages({
   },
   transferWebsite: {
     id: 'message.transfer-website',
-    defaultMessage: 'Transfer website ownership to your account or another team.',
+    defaultMessage: 'Transfer website ownership to your account or another org.',
   },
-  transferTeamWebsiteToUser: {
-    id: 'message.transfer-team-website-to-user',
+  transferOrgWebsiteToUser: {
+    id: 'message.transfer-org-website-to-user',
     defaultMessage: 'Transfer this website to your account?',
   },
-  transferUserWebsiteToTeam: {
-    id: 'message.transfer-user-website-to-team',
-    defaultMessage: 'Select the team to transfer this website to.',
+  transferUserWebsiteToOrg: {
+    id: 'message.transfer-user-website-to-org',
+    defaultMessage: 'Select the org to transfer this website to.',
   },
   unauthorized: {
     id: 'message.unauthorized',

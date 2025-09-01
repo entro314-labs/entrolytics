@@ -8,17 +8,17 @@ import { Panel } from '@/components/common/Panel';
 import { PageBody } from '@/components/common/PageBody';
 
 export function WebsitesPage() {
-  const { teamId } = useNavigation();
+  const { orgId } = useNavigation();
   const { formatMessage, labels } = useMessages();
 
   return (
     <PageBody>
       <Column gap="6" margin="2">
         <PageHeader title={formatMessage(labels.websites)}>
-          <WebsiteAddButton teamId={teamId} />
+          <WebsiteAddButton orgId={orgId} />
         </PageHeader>
         <Panel>
-          <WebsitesDataTable teamId={teamId} />
+          <WebsitesDataTable orgId={orgId} />
         </Panel>
       </Column>
     </PageBody>

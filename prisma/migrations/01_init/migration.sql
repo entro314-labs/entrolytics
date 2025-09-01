@@ -82,36 +82,36 @@ CREATE TABLE "event_data" (
 );
 
 -- CreateTable
-CREATE TABLE "team" (
-    "team_id" UUID NOT NULL,
+CREATE TABLE "org" (
+    "org_id" UUID NOT NULL,
     "name" VARCHAR(50) NOT NULL,
     "access_code" VARCHAR(50),
     "created_at" TIMESTAMPTZ(6) DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ(6),
 
-    CONSTRAINT "team_pkey" PRIMARY KEY ("team_id")
+    CONSTRAINT "org_pkey" PRIMARY KEY ("org_id")
 );
 
 -- CreateTable
-CREATE TABLE "team_user" (
-    "team_user_id" UUID NOT NULL,
-    "team_id" UUID NOT NULL,
+CREATE TABLE "org_user" (
+    "org_user_id" UUID NOT NULL,
+    "org_id" UUID NOT NULL,
     "user_id" UUID NOT NULL,
     "role" VARCHAR(50) NOT NULL,
     "created_at" TIMESTAMPTZ(6) DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ(6),
 
-    CONSTRAINT "team_user_pkey" PRIMARY KEY ("team_user_id")
+    CONSTRAINT "org_user_pkey" PRIMARY KEY ("org_user_id")
 );
 
 -- CreateTable
-CREATE TABLE "team_website" (
-    "team_website_id" UUID NOT NULL,
-    "team_id" UUID NOT NULL,
+CREATE TABLE "org_website" (
+    "org_website_id" UUID NOT NULL,
+    "org_id" UUID NOT NULL,
     "website_id" UUID NOT NULL,
     "created_at" TIMESTAMPTZ(6) DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "team_website_pkey" PRIMARY KEY ("team_website_id")
+    CONSTRAINT "org_website_pkey" PRIMARY KEY ("org_website_id")
 );
 
 -- CreateIndex
@@ -169,31 +169,31 @@ CREATE INDEX "event_data_website_id_idx" ON "event_data"("website_id");
 CREATE INDEX "event_data_website_event_id_idx" ON "event_data"("website_event_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "team_team_id_key" ON "team"("team_id");
+CREATE UNIQUE INDEX "org_org_id_key" ON "org"("org_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "team_access_code_key" ON "team"("access_code");
+CREATE UNIQUE INDEX "org_access_code_key" ON "org"("access_code");
 
 -- CreateIndex
-CREATE INDEX "team_access_code_idx" ON "team"("access_code");
+CREATE INDEX "org_access_code_idx" ON "org"("access_code");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "team_user_team_user_id_key" ON "team_user"("team_user_id");
+CREATE UNIQUE INDEX "org_user_org_user_id_key" ON "org_user"("org_user_id");
 
 -- CreateIndex
-CREATE INDEX "team_user_team_id_idx" ON "team_user"("team_id");
+CREATE INDEX "org_user_org_id_idx" ON "org_user"("org_id");
 
 -- CreateIndex
-CREATE INDEX "team_user_user_id_idx" ON "team_user"("user_id");
+CREATE INDEX "org_user_user_id_idx" ON "org_user"("user_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "team_website_team_website_id_key" ON "team_website"("team_website_id");
+CREATE UNIQUE INDEX "org_website_org_website_id_key" ON "org_website"("org_website_id");
 
 -- CreateIndex
-CREATE INDEX "team_website_team_id_idx" ON "team_website"("team_id");
+CREATE INDEX "org_website_org_id_idx" ON "org_website"("org_id");
 
 -- CreateIndex
-CREATE INDEX "team_website_website_id_idx" ON "team_website"("website_id");
+CREATE INDEX "org_website_website_id_idx" ON "org_website"("website_id");
 
 -- AddSystemUser
 INSERT INTO "user" (user_id, username, role, password) VALUES ('41e2b680-648e-4b09-bcd7-3e2b10c06264' , 'admin', 'admin', '$2b$10$BUli0c.muyCW1ErNJc3jL.vFRFtFJWrT8/GcR4A.sUdCznaXiqFXa');

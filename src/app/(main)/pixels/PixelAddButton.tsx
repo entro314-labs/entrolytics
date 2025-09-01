@@ -3,7 +3,7 @@ import { Button, Icon, Modal, Dialog, DialogTrigger, Text, useToast } from '@ent
 import { Plus } from '@/components/icons';
 import { PixelEditForm } from './PixelEditForm';
 
-export function PixelAddButton({ teamId }: { teamId?: string }) {
+export function PixelAddButton({ orgId }: { orgId?: string }) {
   const { formatMessage, labels, messages } = useMessages();
   const { toast } = useToast();
   const { touch } = useModified();
@@ -23,7 +23,7 @@ export function PixelAddButton({ teamId }: { teamId?: string }) {
       </Button>
       <Modal>
         <Dialog title={formatMessage(labels.addPixel)} style={{ width: 600 }}>
-          {({ close }) => <PixelEditForm teamId={teamId} onSave={handleSave} onClose={close} />}
+          {({ close }) => <PixelEditForm orgId={orgId} onSave={handleSave} onClose={close} />}
         </Dialog>
       </Modal>
     </DialogTrigger>

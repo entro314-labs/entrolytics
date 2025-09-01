@@ -293,7 +293,7 @@
       "value": "Kurti ataskaitą"
     }
   ],
-  "label.create-team": [
+  "label.create-org": [
     {
       "type": 0,
       "value": "Sukurti komandą"
@@ -389,7 +389,7 @@
       "value": "Ištrinti ataskaitą"
     }
   ],
-  "label.delete-team": [
+  "label.delete-org": [
     {
       "type": 0,
       "value": "Ištrinti komandą"
@@ -743,7 +743,7 @@
       "value": "Prisijungti"
     }
   ],
-  "label.join-team": [
+  "label.join-org": [
     {
       "type": 0,
       "value": "Prisijungti į komandą"
@@ -950,7 +950,7 @@
       "value": "Išeiti"
     }
   ],
-  "label.leave-team": [
+  "label.leave-org": [
     {
       "type": 0,
       "value": "Išeiti iš komandos"
@@ -1600,61 +1600,61 @@
       "value": "Žymos"
     }
   ],
-  "label.team": [
+  "label.org": [
     {
       "type": 0,
       "value": "Komanda"
     }
   ],
-  "label.team-id": [
+  "label.org-id": [
     {
       "type": 0,
       "value": "Komandos ID"
     }
   ],
-  "label.team-manager": [
+  "label.org-manager": [
     {
       "type": 0,
       "value": "Komandos vadovas"
     }
   ],
-  "label.team-member": [
+  "label.org-member": [
     {
       "type": 0,
       "value": "Komandos narys"
     }
   ],
-  "label.team-name": [
+  "label.org-name": [
     {
       "type": 0,
       "value": "Komandos pavadinimas"
     }
   ],
-  "label.team-owner": [
+  "label.org-owner": [
     {
       "type": 0,
       "value": "Komandos savininkas"
     }
   ],
-  "label.team-settings": [
+  "label.org-settings": [
     {
       "type": 0,
       "value": "Komandos nustatymai"
     }
   ],
-  "label.team-view-only": [
+  "label.org-view-only": [
     {
       "type": 0,
       "value": "Tik peržiūra"
     }
   ],
-  "label.team-websites": [
+  "label.org-websites": [
     {
       "type": 0,
       "value": "Komandos svetainės"
     }
   ],
-  "label.teams": [
+  "label.orgs": [
     {
       "type": 0,
       "value": "Komandos"
@@ -2048,7 +2048,7 @@
       "value": " statistikos duomenis?"
     }
   ],
-  "message.delete-team-warning": [
+  "message.delete-org-warning": [
     {
       "type": 0,
       "value": "Ištrinant komandą bus ištrintos ir visos komandos svetainės."
@@ -2156,13 +2156,13 @@
       "value": "Jokių rezultatų nerasta."
     }
   ],
-  "message.no-team-websites": [
+  "message.no-org-websites": [
     {
       "type": 0,
       "value": "Ši komanda neturi jokių svetainių."
     }
   ],
-  "message.no-teams": [
+  "message.no-orgs": [
     {
       "type": 0,
       "value": "Jūs nesate sukūrę jokių komandų."
@@ -2244,19 +2244,19 @@
       "value": " nuoroda (URL)."
     }
   ],
-  "message.team-already-member": [
+  "message.org-already-member": [
     {
       "type": 0,
       "value": "Jūs jau esate šios komandos narys."
     }
   ],
-  "message.team-not-found": [
+  "message.org-not-found": [
     {
       "type": 0,
       "value": "Komanda nerasta."
     }
   ],
-  "message.team-websites-info": [
+  "message.org-websites-info": [
     {
       "type": 0,
       "value": "Svetaines gali peržiūrėti bet kas iš šios komandos."
@@ -2268,13 +2268,13 @@
       "value": "Sekimo kodas"
     }
   ],
-  "message.transfer-team-website-to-user": [
+  "message.transfer-org-website-to-user": [
     {
       "type": 0,
       "value": "Perduoti šią svetainę į jūsų paskyrą?"
     }
   ],
-  "message.transfer-user-website-to-team": [
+  "message.transfer-user-website-to-org": [
     {
       "type": 0,
       "value": "Pasirinkite komandą, kuriai norite perduoti šią svetainę."

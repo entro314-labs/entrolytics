@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { json, unauthorized } from '@/lib/response';
-import { getAllUserWebsitesIncludingTeamOwner } from '@/queries/prisma/website';
+import { getAllUserWebsitesIncludingOrgOwner } from '@/queries/prisma/website';
 import { getEventUsage } from '@/queries/sql/events/getEventUsage';
 import { getEventDataUsage } from '@/queries/sql/events/getEventDataUsage';
 import { parseRequest, getQueryFilters } from '@/lib/request';
@@ -24,7 +24,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ user
   const { userId } = await params;
   const filters = await getQueryFilters(query);
 
-  const websites = await getAllUserWebsitesIncludingTeamOwner(userId);
+  const websites = await getAllUserWebsitesIncludingOrgOwner(userId);
 
   const websiteIds = websites.map(a => a.id);
 

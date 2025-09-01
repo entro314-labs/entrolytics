@@ -3,7 +3,7 @@
 // Context hooks
 export * from './context/useLink';
 export * from './context/usePixel';
-export * from './context/useTeam';
+export * from './context/useOrg';
 export * from './context/useUser';
 export * from './context/useWebsite';
 
@@ -28,13 +28,13 @@ export * from './queries/useSessionDataPropertiesQuery';
 export * from './queries/useSessionDataQuery';
 export * from './queries/useSessionDataValuesQuery';
 export * from './queries/useShareTokenQuery';
-export * from './queries/useTeamMembersQuery';
-export * from './queries/useTeamQuery';
-export * from './queries/useTeamWebsitesQuery';
-export * from './queries/useTeamsQuery';
+export * from './queries/useOrgMembersQuery';
+export * from './queries/useOrgQuery';
+export * from './queries/useOrgWebsitesQuery';
+export * from './queries/useOrgsQuery';
 export * from './queries/useUpdateQuery';
 export * from './queries/useUserQuery';
-export * from './queries/useUserTeamsQuery';
+export * from './queries/useUserOrgsQuery';
 export * from './queries/useUserWebsitesQuery';
 export * from './queries/useUsersQuery';
 export * from './queries/useWebsiteCohortQuery';

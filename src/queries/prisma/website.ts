@@ -52,9 +52,9 @@ export async function getAllWebsites(userId: string) {
       OR: [
         { userId },
         {
-          team: {
+          org: {
             deletedAt: null,
-            teamUser: {
+            orgUser: {
               some: {
                 userId,
               },
@@ -67,17 +67,17 @@ export async function getAllWebsites(userId: string) {
   });
 }
 
-export async function getAllUserWebsitesIncludingTeamOwner(userId: string) {
+export async function getAllUserWebsitesIncludingOrgOwner(userId: string) {
   return prisma.client.website.findMany({
     where: {
       OR: [
         { userId },
         {
-          team: {
+          org: {
             deletedAt: null,
-            teamUser: {
+            orgUser: {
               some: {
-                role: ROLES.teamOwner,
+                role: ROLES.orgOwner,
                 userId,
               },
             },
@@ -114,14 +114,14 @@ export async function getUserWebsites(
   );
 }
 
-export async function getTeamWebsites(
-  teamId: string,
+export async function getOrgWebsites(
+  orgId: string,
   filters?: QueryFilters,
 ): Promise<PageResult<Website[]>> {
   return getWebsites(
     {
       where: {
-        teamId,
+        orgId,
       },
       include: {
         createUser: {

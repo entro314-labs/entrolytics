@@ -42,14 +42,14 @@ export async function getUserPixels(
   );
 }
 
-export async function getTeamPixels(
-  teamId: string,
+export async function getOrgPixels(
+  orgId: string,
   filters?: QueryFilters,
 ): Promise<PageResult<Pixel[]>> {
   return getPixels(
     {
       where: {
-        teamId,
+        orgId,
       },
     },
     filters,

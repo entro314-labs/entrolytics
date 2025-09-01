@@ -18,7 +18,7 @@ const isProtectedRoute = createRouteMatcher([
   '/dashboard(.*)',
   '/admin(.*)',
   '/settings(.*)',
-  '/teams(.*)',
+  '/orgs(.*)',
   '/websites(.*)',
   '/reports(.*)',
 ])
@@ -26,7 +26,7 @@ const isProtectedRoute = createRouteMatcher([
 const isProtectedApiRoute = createRouteMatcher([
   '/api/me(.*)',
   '/api/users(.*)',
-  '/api/teams(.*)',
+  '/api/orgs(.*)',
   '/api/websites(.*)',
   '/api/admin(.*)',
   '/api/reports(.*)',

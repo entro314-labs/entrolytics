@@ -1,5 +1,5 @@
 import { Auth } from '@/lib/types';
-import { getPixel, getTeamUser } from '@/queries';
+import { getPixel, getOrgUser } from '@/queries';
 import { hasPermission } from '@/lib/auth';
 import { PERMISSIONS } from '@/lib/constants';
 
@@ -14,10 +14,10 @@ export async function canViewPixel({ user }: Auth, pixelId: string) {
     return user.id === pixel.userId;
   }
 
-  if (pixel.teamId) {
-    const teamUser = await getTeamUser(pixel.teamId, user.id);
+  if (pixel.orgId) {
+    const orgUser = await getOrgUser(pixel.orgId, user.id);
 
-    return !!teamUser;
+    return !!orgUser;
   }
 
   return false;
@@ -34,10 +34,10 @@ export async function canUpdatePixel({ user }: Auth, pixelId: string) {
     return user.id === pixel.userId;
   }
 
-  if (pixel.teamId) {
-    const teamUser = await getTeamUser(pixel.teamId, user.id);
+  if (pixel.orgId) {
+    const orgUser = await getOrgUser(pixel.orgId, user.id);
 
-    return teamUser && hasPermission(teamUser.role, PERMISSIONS.websiteUpdate);
+    return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteUpdate);
   }
 
   return false;
@@ -54,10 +54,10 @@ export async function canDeletePixel({ user }: Auth, pixelId: string) {
     return user.id === pixel.userId;
   }
 
-  if (pixel.teamId) {
-    const teamUser = await getTeamUser(pixel.teamId, user.id);
+  if (pixel.orgId) {
+    const orgUser = await getOrgUser(pixel.orgId, user.id);
 
-    return teamUser && hasPermission(teamUser.role, PERMISSIONS.websiteDelete);
+    return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteDelete);
   }
 
   return false;

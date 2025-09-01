@@ -18,7 +18,7 @@ import {
   PanelLeft,
 } from '@/components/icons';
 import { useMessages, useNavigation, useGlobalState } from '@/components/hooks';
-import { TeamsButton } from '@/components/input/TeamsButton';
+import { OrgsButton } from '@/components/input/OrgsButton';
 import { PanelButton } from '@/components/input/PanelButton';
 import { ProfileButton } from '@/components/input/ProfileButton';
 import { LanguageButton } from '@/components/input/LanguageButton';
@@ -79,7 +79,7 @@ export function SideNav(props: SidebarProps) {
           </SidebarHeader>
         </SidebarSection>
         <SidebarSection style={{ paddingTop: 0, paddingBottom: 0 }}>
-          <TeamsButton showText={!hasNav && !isCollapsed} />
+          <OrgsButton showText={!hasNav && !isCollapsed} />
         </SidebarSection>
         <SidebarSection flexGrow={1}>
           {links.map(({ id, path, label, icon }) => {

@@ -109,10 +109,10 @@ describe('User API tests', () => {
     });
   });
 
-  it('Gets all teams that belong to a user.', () => {
+  it('Gets all orgs that belong to a user.', () => {
     cy.request({
       method: 'GET',
-      url: `/api/users/${userId}/teams`,
+      url: `/api/users/${userId}/orgs`,
       headers: {
         'Content-Type': 'application/json',
         Authorization: Cypress.env('authorization'),

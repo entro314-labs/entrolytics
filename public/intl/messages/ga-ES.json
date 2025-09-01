@@ -293,7 +293,7 @@
       "value": "Crear informe"
     }
   ],
-  "label.create-team": [
+  "label.create-org": [
     {
       "type": 0,
       "value": "Crear equipo"
@@ -389,7 +389,7 @@
       "value": "Eliminar reporte"
     }
   ],
-  "label.delete-team": [
+  "label.delete-org": [
     {
       "type": 0,
       "value": "Eliminar equipo"
@@ -743,7 +743,7 @@
       "value": "Unirse"
     }
   ],
-  "label.join-team": [
+  "label.join-org": [
     {
       "type": 0,
       "value": "Unirse ao equipo"
@@ -845,7 +845,7 @@
       "value": "Deixar"
     }
   ],
-  "label.leave-team": [
+  "label.leave-org": [
     {
       "type": 0,
       "value": "Deixar o equipo"
@@ -1503,61 +1503,61 @@
       "value": "Etiquetas"
     }
   ],
-  "label.team": [
+  "label.org": [
     {
       "type": 0,
       "value": "Equipo"
     }
   ],
-  "label.team-id": [
+  "label.org-id": [
     {
       "type": 0,
       "value": "ID do equipo"
     }
   ],
-  "label.team-manager": [
+  "label.org-manager": [
     {
       "type": 0,
       "value": "Xestor do equipo"
     }
   ],
-  "label.team-member": [
+  "label.org-member": [
     {
       "type": 0,
       "value": "Membro do equipo"
     }
   ],
-  "label.team-name": [
+  "label.org-name": [
     {
       "type": 0,
       "value": "Nome do equipo"
     }
   ],
-  "label.team-owner": [
+  "label.org-owner": [
     {
       "type": 0,
       "value": "Propietario do equipo"
     }
   ],
-  "label.team-settings": [
+  "label.org-settings": [
     {
       "type": 0,
       "value": "Axustes do equipo"
     }
   ],
-  "label.team-view-only": [
+  "label.org-view-only": [
     {
       "type": 0,
       "value": "Equipo de só lectura"
     }
   ],
-  "label.team-websites": [
+  "label.org-websites": [
     {
       "type": 0,
       "value": "Sitios web do equipo"
     }
   ],
-  "label.teams": [
+  "label.orgs": [
     {
       "type": 0,
       "value": "Equipos"
@@ -1931,7 +1931,7 @@
       "value": "?"
     }
   ],
-  "message.delete-team-warning": [
+  "message.delete-org-warning": [
     {
       "type": 0,
       "value": "Eliminar un equipo tamén eliminará tódolos sitios web do equipo."
@@ -2039,13 +2039,13 @@
       "value": "Non se atoparon resultados."
     }
   ],
-  "message.no-team-websites": [
+  "message.no-org-websites": [
     {
       "type": 0,
       "value": "Este equipo non ten ningún sitio web."
     }
   ],
-  "message.no-teams": [
+  "message.no-orgs": [
     {
       "type": 0,
       "value": "Non creaches ningún equipo."
@@ -2127,19 +2127,19 @@
       "value": "."
     }
   ],
-  "message.team-already-member": [
+  "message.org-already-member": [
     {
       "type": 0,
       "value": "Xa es membro do equipo."
     }
   ],
-  "message.team-not-found": [
+  "message.org-not-found": [
     {
       "type": 0,
       "value": "Equipo non atopado."
     }
   ],
-  "message.team-websites-info": [
+  "message.org-websites-info": [
     {
       "type": 0,
       "value": "Os sitios web poden ser vistos por calquera membro do equipo."
@@ -2151,13 +2151,13 @@
       "value": "Código de seguimento"
     }
   ],
-  "message.transfer-team-website-to-user": [
+  "message.transfer-org-website-to-user": [
     {
       "type": 0,
       "value": "Transferir este sitio web á túa conta?"
     }
   ],
-  "message.transfer-user-website-to-team": [
+  "message.transfer-user-website-to-org": [
     {
       "type": 0,
       "value": "Selecciona o equipo ao que transferir este sitio web."

@@ -32,9 +32,9 @@ export function SettingsLayout({ children }: { children: ReactNode }) {
           icon: <UserCircle />,
         },
         {
-          id: 'teams',
-          label: formatMessage(labels.teams),
-          path: renderUrl('/settings/teams'),
+          id: 'orgs',
+          label: formatMessage(labels.orgs),
+          path: renderUrl('/settings/orgs'),
           icon: <Users />,
         },
       ],

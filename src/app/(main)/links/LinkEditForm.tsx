@@ -23,12 +23,12 @@ const generateId = () => getRandomChars(9);
 
 export function LinkEditForm({
   linkId,
-  teamId,
+  orgId,
   onSave,
   onClose,
 }: {
   linkId?: string;
-  teamId?: string;
+  orgId?: string;
   onSave?: () => void;
   onClose?: () => void;
 }) {
@@ -37,7 +37,7 @@ export function LinkEditForm({
     linkId ? `/links/${linkId}` : '/links',
     {
       id: linkId,
-      teamId,
+      orgId,
     },
   );
   const { linksUrl } = useConfig();

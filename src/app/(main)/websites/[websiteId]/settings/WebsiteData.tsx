@@ -3,7 +3,7 @@ import {
   useLoginQuery,
   useMessages,
   useModified,
-  useUserTeamsQuery,
+  useUserOrgsQuery,
   useNavigation,
 } from '@/components/hooks';
 import { WebsiteDeleteForm } from './WebsiteDeleteForm';
@@ -16,25 +16,25 @@ export function WebsiteData({ websiteId, onSave }: { websiteId: string; onSave?:
   const { formatMessage, labels, messages } = useMessages();
   const { user } = useLoginQuery();
   const { touch } = useModified();
-  const { router, pathname, teamId, renderUrl } = useNavigation();
-  const { data: teams } = useUserTeamsQuery(user.id);
+  const { router, pathname, orgId, renderUrl } = useNavigation();
+  const { data: orgs } = useUserOrgsQuery(user.id);
   const isAdmin = pathname.startsWith('/admin');
 
   const canTransferWebsite =
     (
-      (!teamId &&
-        teams?.data?.filter(({ members }) =>
+      (!orgId &&
+        orgs?.data?.filter(({ members }) =>
           members.find(
             ({ role, userId }) =>
-              [ROLES.teamOwner, ROLES.teamManager].includes(role) && userId === user.id,
+              [ROLES.orgOwner, ROLES.orgManager].includes(role) && userId === user.id,
           ),
         )) ||
       []
     ).length > 0 ||
-    (teamId &&
-      !!teams?.data
-        ?.find(({ id }) => id === teamId)
-        ?.members.find(({ role, userId }) => role === ROLES.teamOwner && userId === user.id));
+    (orgId &&
+      !!orgs?.data
+        ?.find(({ id }) => id === orgId)
+        ?.members.find(({ role, userId }) => role === ROLES.orgOwner && userId === user.id));
 
   const handleSave = () => {
     touch('websites');

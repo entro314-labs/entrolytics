@@ -16,7 +16,7 @@ model User {
   updatedAt   DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   deletedAt   DateTime? @map("deleted_at") @db.Timestamptz(6)
   displayName String?   @map("display_name") @db.VarChar(255)
-  clerkId     String    @unique @map("clerk_id") @db.VarChar(255)
+  clerk_id    String    @unique @db.VarChar(255)
   email       String    @map("email") @db.VarChar(255)
   firstName   String?   @map("first_name") @db.VarChar(255)
   lastName    String?   @map("last_name") @db.VarChar(255)
@@ -65,13 +65,13 @@ model Website {
   updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
   createdBy String?   @map("created_by") @db.Uuid
-  teamId    String?   @map("team_id") @db.Uuid
+  team_id   String?   @db.Uuid
 
   @@index([userId])
-  @@index([teamId])
   @@index([createdAt])
   @@index([shareId])
   @@index([createdBy])
+  @@index([team_id])
   @@map("website")
 }
 
@@ -159,32 +159,6 @@ model SessionData {
   @@map("session_data")
 }
 
-model Team {
-  id         String    @id @unique @map("team_id") @db.Uuid
-  name       String    @db.VarChar(50)
-  accessCode String?   @unique @map("access_code") @db.VarChar(50)
-  createdAt  DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt  DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
-  deletedAt  DateTime? @map("deleted_at") @db.Timestamptz(6)
-  logoUrl    String?   @map("logo_url") @db.VarChar(2183)
-
-  @@index([accessCode])
-  @@map("team")
-}
-
-model TeamUser {
-  id        String    @id @unique @map("team_user_id") @db.Uuid
-  teamId    String    @map("team_id") @db.Uuid
-  userId    String    @map("user_id") @db.Uuid
-  role      String    @db.VarChar(50)
-  createdAt DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
-
-  @@index([teamId])
-  @@index([userId])
-  @@map("team_user")
-}
-
 model Report {
   id          String    @id @unique @map("report_id") @db.Uuid
   userId      String    @map("user_id") @db.Uuid
@@ -239,15 +213,15 @@ model Link {
   url       String    @db.VarChar(500)
   slug      String    @unique @db.VarChar(100)
   userId    String?   @map("user_id") @db.Uuid
-  teamId    String?   @map("team_id") @db.Uuid
+  team_id   String?   @db.Uuid
   createdAt DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
 
   @@index([slug])
   @@index([userId])
-  @@index([teamId])
   @@index([createdAt])
+  @@index([team_id])
   @@map("link")
 }
 
@@ -256,14 +230,38 @@ model Pixel {
   name      String    @db.VarChar(100)
   slug      String    @unique @db.VarChar(100)
   userId    String?   @map("user_id") @db.Uuid
-  teamId    String?   @map("team_id") @db.Uuid
+  team_id   String?   @db.Uuid
   createdAt DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime? @updatedAt @map("updated_at") @db.Timestamptz(6)
   deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
 
   @@index([slug])
   @@index([userId])
-  @@index([teamId])
   @@index([createdAt])
+  @@index([team_id])
   @@map("pixel")
+}
+
+model team {
+  team_id     String    @id @unique @db.Uuid
+  name        String    @db.VarChar(50)
+  access_code String?   @unique @db.VarChar(50)
+  created_at  DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at  DateTime? @db.Timestamptz(6)
+  deleted_at  DateTime? @db.Timestamptz(6)
+  logo_url    String?   @db.VarChar(2183)
+
+  @@index([access_code])
+}
+
+model team_user {
+  team_user_id String    @id @unique @db.Uuid
+  team_id      String    @db.Uuid
+  user_id      String    @db.Uuid
+  role         String    @db.VarChar(50)
+  created_at   DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at   DateTime? @db.Timestamptz(6)
+
+  @@index([team_id])
+  @@index([user_id])
 }

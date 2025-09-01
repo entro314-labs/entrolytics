@@ -293,7 +293,7 @@
       "value": "ایجاد گزارش"
     }
   ],
-  "label.create-team": [
+  "label.create-org": [
     {
       "type": 0,
       "value": "ایجاد تیم"
@@ -389,7 +389,7 @@
       "value": "حذف گزارش"
     }
   ],
-  "label.delete-team": [
+  "label.delete-org": [
     {
       "type": 0,
       "value": "حذف تیم"
@@ -743,7 +743,7 @@
       "value": "پیوستن"
     }
   ],
-  "label.join-team": [
+  "label.join-org": [
     {
       "type": 0,
       "value": "پیوستن به تیم"
@@ -833,7 +833,7 @@
       "value": "ترک کردن"
     }
   ],
-  "label.leave-team": [
+  "label.leave-org": [
     {
       "type": 0,
       "value": "ترک تیم"
@@ -1483,61 +1483,61 @@
       "value": "برچسب‌ها"
     }
   ],
-  "label.team": [
+  "label.org": [
     {
       "type": 0,
       "value": "تیم"
     }
   ],
-  "label.team-id": [
+  "label.org-id": [
     {
       "type": 0,
       "value": "شناسه تیم"
     }
   ],
-  "label.team-manager": [
+  "label.org-manager": [
     {
       "type": 0,
       "value": "مدیر تیم"
     }
   ],
-  "label.team-member": [
+  "label.org-member": [
     {
       "type": 0,
       "value": "عضو تیم"
     }
   ],
-  "label.team-name": [
+  "label.org-name": [
     {
       "type": 0,
       "value": "نام تیم"
     }
   ],
-  "label.team-owner": [
+  "label.org-owner": [
     {
       "type": 0,
       "value": "مالک تیم"
     }
   ],
-  "label.team-settings": [
+  "label.org-settings": [
     {
       "type": 0,
       "value": "تنظیمات تیم"
     }
   ],
-  "label.team-view-only": [
+  "label.org-view-only": [
     {
       "type": 0,
       "value": "فقط مشاهده‌ی تیم"
     }
   ],
-  "label.team-websites": [
+  "label.org-websites": [
     {
       "type": 0,
       "value": "وب‌سایت‌های تیم"
     }
   ],
-  "label.teams": [
+  "label.orgs": [
     {
       "type": 0,
       "value": "تیم‌ها"
@@ -1911,7 +1911,7 @@
       "value": " را بازنشانی کنید؟"
     }
   ],
-  "message.delete-team-warning": [
+  "message.delete-org-warning": [
     {
       "type": 0,
       "value": "با حذف تیم، تمامی وب‌سایت‌های تیم هم حذف خواهند شد."
@@ -2019,13 +2019,13 @@
       "value": "نتیجه‌ای یافت نشد."
     }
   ],
-  "message.no-team-websites": [
+  "message.no-org-websites": [
     {
       "type": 0,
       "value": "هیچ وب‌سایتی برای این تیم وجود ندارد."
     }
   ],
-  "message.no-teams": [
+  "message.no-orgs": [
     {
       "type": 0,
       "value": "شما هیچ تیمی را ایجاد نکرده‌اید."
@@ -2099,19 +2099,19 @@
       "value": "آمار وب‌سایت شما به صورت عمومی در آدرس زیر قابل مشاهده است."
     }
   ],
-  "message.team-already-member": [
+  "message.org-already-member": [
     {
       "type": 0,
       "value": "شما از قبل عضو این تیم هستید."
     }
   ],
-  "message.team-not-found": [
+  "message.org-not-found": [
     {
       "type": 0,
       "value": "تیم یافت نشد."
     }
   ],
-  "message.team-websites-info": [
+  "message.org-websites-info": [
     {
       "type": 0,
       "value": "وب‌سایت‌ها توسط تمامی اعضای تیم قابل مشاهده هستند."
@@ -2123,13 +2123,13 @@
       "value": "کد رهگیری"
     }
   ],
-  "message.transfer-team-website-to-user": [
+  "message.transfer-org-website-to-user": [
     {
       "type": 0,
       "value": "آیا می‌خواهید این وب‌سایت را به حساب خود منتقل کنید؟"
     }
   ],
-  "message.transfer-user-website-to-team": [
+  "message.transfer-user-website-to-org": [
     {
       "type": 0,
       "value": "تیم مورد نظر را برای انتقال وب‌سایت انتخاب کنید."

@@ -209,7 +209,7 @@
       "value": "Tạo báo cáo"
     }
   ],
-  "label.create-team": [
+  "label.create-org": [
     {
       "type": 0,
       "value": "Tạo nhóm"
@@ -299,7 +299,7 @@
       "value": "Xóa báo cáo"
     }
   ],
-  "label.delete-team": [
+  "label.delete-org": [
     {
       "type": 0,
       "value": "Xóa nhóm"
@@ -575,7 +575,7 @@
       "value": "Tham gia"
     }
   ],
-  "label.join-team": [
+  "label.join-org": [
     {
       "type": 0,
       "value": "Tham gia nhóm"
@@ -653,7 +653,7 @@
       "value": "Rời khỏi"
     }
   ],
-  "label.leave-team": [
+  "label.leave-org": [
     {
       "type": 0,
       "value": "Rời nhóm"
@@ -1153,55 +1153,55 @@
       "value": "Máy tính bảng"
     }
   ],
-  "label.team": [
+  "label.org": [
     {
       "type": 0,
       "value": "Nhóm"
     }
   ],
-  "label.team-id": [
+  "label.org-id": [
     {
       "type": 0,
       "value": "ID nhóm"
     }
   ],
-  "label.team-manager": [
+  "label.org-manager": [
     {
       "type": 0,
       "value": "Quản lý nhóm"
     }
   ],
-  "label.team-member": [
+  "label.org-member": [
     {
       "type": 0,
       "value": "Thành viên nhóm"
     }
   ],
-  "label.team-name": [
+  "label.org-name": [
     {
       "type": 0,
       "value": "Tên nhóm"
     }
   ],
-  "label.team-owner": [
+  "label.org-owner": [
     {
       "type": 0,
       "value": "Chủ sở hữu nhóm"
     }
   ],
-  "label.team-view-only": [
+  "label.org-view-only": [
     {
       "type": 0,
       "value": "Chỉ xem nhóm"
     }
   ],
-  "label.team-websites": [
+  "label.org-websites": [
     {
       "type": 0,
       "value": "Các website của nhóm"
     }
   ],
-  "label.teams": [
+  "label.orgs": [
     {
       "type": 0,
       "value": "Các nhóm"
@@ -1585,7 +1585,7 @@
       "value": "?"
     }
   ],
-  "message.delete-team-warning": [
+  "message.delete-org-warning": [
     {
       "type": 0,
       "value": "Việc xóa một nhóm cũng sẽ xóa tất cả các website của nhóm."
@@ -1687,13 +1687,13 @@
       "value": "Không tìm thấy kết quả nào."
     }
   ],
-  "message.no-team-websites": [
+  "message.no-org-websites": [
     {
       "type": 0,
       "value": "Nhóm này không có bất kỳ website nào."
     }
   ],
-  "message.no-teams": [
+  "message.no-orgs": [
     {
       "type": 0,
       "value": "Bạn chưa tạo nhóm nào."
@@ -1757,19 +1757,19 @@
       "value": "."
     }
   ],
-  "message.team-already-member": [
+  "message.org-already-member": [
     {
       "type": 0,
       "value": "Bạn đã là thành viên của nhóm."
     }
   ],
-  "message.team-not-found": [
+  "message.org-not-found": [
     {
       "type": 0,
       "value": "Không tìm thấy nhóm."
     }
   ],
-  "message.team-websites-info": [
+  "message.org-websites-info": [
     {
       "type": 0,
       "value": "Bất kỳ ai trong nhóm đều có thể xem các website."
@@ -1781,13 +1781,13 @@
       "value": "Mã theo dõi"
     }
   ],
-  "message.transfer-team-website-to-user": [
+  "message.transfer-org-website-to-user": [
     {
       "type": 0,
       "value": "Chuyển website này sang tài khoản của bạn?"
     }
   ],
-  "message.transfer-user-website-to-team": [
+  "message.transfer-user-website-to-org": [
     {
       "type": 0,
       "value": "Chọn nhóm để chuyển website này đến."

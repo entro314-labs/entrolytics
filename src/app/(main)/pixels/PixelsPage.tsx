@@ -9,13 +9,13 @@ import { Panel } from '@/components/common/Panel';
 
 export function PixelsPage() {
   const { formatMessage, labels } = useMessages();
-  const { teamId } = useNavigation();
+  const { orgId } = useNavigation();
 
   return (
     <PageBody>
       <Column gap="6" margin="2">
         <PageHeader title={formatMessage(labels.pixels)}>
-          <PixelAddButton teamId={teamId} />
+          <PixelAddButton orgId={orgId} />
         </PageHeader>
         <Panel>
           <PixelsDataTable />

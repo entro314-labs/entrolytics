@@ -1,7 +1,7 @@
 import { headers } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { Webhook } from 'svix';
-import { createUser, updateUser, deleteUser, getUserByClerkId } from '@/queries';
+import { createUser, updateUser, getUser } from '@/queries';
 import { ROLES } from '@/lib/constants';
 
 /**
@@ -91,8 +91,7 @@ export async function POST(request: Request) {
 async function handleUserCreated(data: any) {
   try {
     const userData = {
-      id: crypto.randomUUID(),
-      clerkId: data.id,
+      id: data.id, // Use Clerk ID directly as primary key
       email: data.email_addresses[0]?.email_address || '',
       firstName: data.first_name,
       lastName: data.last_name,
@@ -116,7 +115,7 @@ async function handleUserCreated(data: any) {
  */
 async function handleUserUpdated(data: any) {
   try {
-    const existingUser = await getUserByClerkId(data.id);
+    const existingUser = await getUser(data.id);
     
     if (!existingUser) {
       console.warn(`User with Clerk ID ${data.id} not found for update`);
@@ -135,8 +134,8 @@ async function handleUserUpdated(data: any) {
                    existingUser.displayName,
     };
 
-    await updateUser(existingUser.id, updateData);
-    console.log(`User updated in database: ${existingUser.id}`);
+    await updateUser(data.id, updateData);
+    console.log(`User updated in database: ${data.id}`);
   } catch (error) {
     console.error('Error updating user:', error);
     throw error;
@@ -148,7 +147,7 @@ async function handleUserUpdated(data: any) {
  */
 async function handleUserDeleted(data: any) {
   try {
-    const existingUser = await getUserByClerkId(data.id);
+    const existingUser = await getUser(data.id);
     
     if (!existingUser) {
       console.warn(`User with Clerk ID ${data.id} not found for deletion`);
@@ -156,11 +155,11 @@ async function handleUserDeleted(data: any) {
     }
 
     // Soft delete the user (set deletedAt timestamp)
-    await updateUser(existingUser.id, {
+    await updateUser(data.id, {
       deletedAt: new Date(),
     });
     
-    console.log(`User soft deleted in database: ${existingUser.id}`);
+    console.log(`User soft deleted in database: ${data.id}`);
   } catch (error) {
     console.error('Error deleting user:', error);
     throw error;

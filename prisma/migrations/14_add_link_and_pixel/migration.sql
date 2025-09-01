@@ -14,7 +14,7 @@ CREATE TABLE "link" (
     "url" VARCHAR(500) NOT NULL,
     "slug" VARCHAR(100) NOT NULL,
     "user_id" UUID,
-    "team_id" UUID,
+    "org_id" UUID,
     "created_at" TIMESTAMPTZ(6) DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ(6),
     "deleted_at" TIMESTAMPTZ(6),
@@ -28,7 +28,7 @@ CREATE TABLE "pixel" (
     "name" VARCHAR(100) NOT NULL,
     "slug" VARCHAR(100) NOT NULL,
     "user_id" UUID,
-    "team_id" UUID,
+    "org_id" UUID,
     "created_at" TIMESTAMPTZ(6) DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ(6),
     "deleted_at" TIMESTAMPTZ(6),
@@ -49,7 +49,7 @@ CREATE INDEX "link_slug_idx" ON "link"("slug");
 CREATE INDEX "link_user_id_idx" ON "link"("user_id");
 
 -- CreateIndex
-CREATE INDEX "link_team_id_idx" ON "link"("team_id");
+CREATE INDEX "link_org_id_idx" ON "link"("org_id");
 
 -- CreateIndex
 CREATE INDEX "link_created_at_idx" ON "link"("created_at");
@@ -67,7 +67,7 @@ CREATE INDEX "pixel_slug_idx" ON "pixel"("slug");
 CREATE INDEX "pixel_user_id_idx" ON "pixel"("user_id");
 
 -- CreateIndex
-CREATE INDEX "pixel_team_id_idx" ON "pixel"("team_id");
+CREATE INDEX "pixel_org_id_idx" ON "pixel"("org_id");
 
 -- CreateIndex
 CREATE INDEX "pixel_created_at_idx" ON "pixel"("created_at");

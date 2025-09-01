@@ -22,12 +22,12 @@ const generateId = () => getRandomChars(9);
 
 export function PixelEditForm({
   pixelId,
-  teamId,
+  orgId,
   onSave,
   onClose,
 }: {
   pixelId?: string;
-  teamId?: string;
+  orgId?: string;
   onSave?: () => void;
   onClose?: () => void;
 }) {
@@ -36,7 +36,7 @@ export function PixelEditForm({
     pixelId ? `/pixels/${pixelId}` : '/pixels',
     {
       id: pixelId,
-      teamId,
+      orgId,
     },
   );
   const { pixelsUrl } = useConfig();

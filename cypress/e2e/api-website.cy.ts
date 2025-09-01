@@ -4,25 +4,25 @@ describe('Website API tests', () => {
   Cypress.session.clearAllSavedSessions();
 
   let websiteId;
-  let teamId;
+  let orgId;
 
   before(() => {
     cy.login(Cypress.env('entrolytics_user'), Cypress.env('entrolytics_password'));
-    cy.fixture('teams').then(data => {
-      const teamCreate = data.teamCreate;
+    cy.fixture('orgs').then(data => {
+      const orgCreate = data.orgCreate;
       cy.request({
         method: 'POST',
-        url: '/api/teams',
+        url: '/api/orgs',
         headers: {
           'Content-Type': 'application/json',
           Authorization: Cypress.env('authorization'),
         },
-        body: teamCreate,
+        body: orgCreate,
       }).then(response => {
-        teamId = response.body[0].id;
+        orgId = response.body[0].id;
         expect(response.status).to.eq(200);
         expect(response.body[0]).to.have.property('name', 'cypress');
-        expect(response.body[1]).to.have.property('role', 'team-owner');
+        expect(response.body[1]).to.have.property('role', 'org-owner');
       });
     });
   });
@@ -47,7 +47,7 @@ describe('Website API tests', () => {
     });
   });
 
-  it('Creates a website for team.', () => {
+  it('Creates a website for org.', () => {
     cy.request({
       method: 'POST',
       url: '/api/websites',
@@ -56,14 +56,14 @@ describe('Website API tests', () => {
         Authorization: Cypress.env('authorization'),
       },
       body: {
-        name: 'Team Website',
-        domain: 'teamwebsite.com',
-        teamId: teamId,
+        name: 'Org Website',
+        domain: 'orgwebsite.com',
+        orgId: orgId,
       },
     }).then(response => {
       expect(response.status).to.eq(200);
-      expect(response.body).to.have.property('name', 'Team Website');
-      expect(response.body).to.have.property('domain', 'teamwebsite.com');
+      expect(response.body).to.have.property('name', 'Org Website');
+      expect(response.body).to.have.property('domain', 'orgwebsite.com');
     });
   });
 
@@ -178,6 +178,6 @@ describe('Website API tests', () => {
   });
 
   after(() => {
-    cy.deleteTeam(teamId);
+    cy.deleteOrg(orgId);
   });
 });

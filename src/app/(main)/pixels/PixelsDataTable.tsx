@@ -3,8 +3,8 @@ import { PixelsTable } from './PixelsTable';
 import { DataGrid } from '@/components/common/DataGrid';
 
 export function PixelsDataTable() {
-  const { teamId } = useNavigation();
-  const query = usePixelsQuery({ teamId });
+  const { orgId } = useNavigation();
+  const query = usePixelsQuery({ orgId });
 
   return (
     <DataGrid query={query} allowSearch={true} autoFocus={false} allowPaging={true}>

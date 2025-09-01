@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { FixedSizeList } from 'react-window';
+import { List as List } from 'react-window';
 import { useSpring, config } from '@react-spring/web';
 import { Grid, Row, Column, Text } from '@entro314labs/entro-zen';
 import { AnimatedDiv } from '@/components/common/AnimatedDiv';
@@ -75,14 +75,14 @@ export function ListTable({
       <Column gap="1">
         {data?.length === 0 && <Empty />}
         {virtualize && data.length > 0 ? (
-          <FixedSizeList
+          <List
             width="100%"
             height={itemCount * ITEM_SIZE}
             itemCount={data.length}
             itemSize={ITEM_SIZE}
           >
             {ListTableRow}
-          </FixedSizeList>
+          </List>
         ) : (
           data.map(getRow)
         )}

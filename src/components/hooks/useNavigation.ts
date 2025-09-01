@@ -6,7 +6,7 @@ export function useNavigation() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [, teamId] = pathname.match(/\/teams\/([a-f0-9-]+)/) || [];
+  const [, orgId] = pathname.match(/\/orgs\/([a-f0-9-]+)/) || [];
   const [, websiteId] = pathname.match(/\/websites\/([a-f0-9-]+)/) || [];
   const [queryParams, setQueryParams] = useState(Object.fromEntries(searchParams));
 
@@ -20,7 +20,7 @@ export function useNavigation() {
 
   const renderUrl = (path: string, params?: Record<string, string | number> | false) => {
     return buildUrl(
-      teamId ? `/teams/${teamId}${path}` : path,
+      orgId ? `/orgs/${orgId}${path}` : path,
       params === false ? {} : { ...queryParams, ...params },
     );
   };
@@ -34,7 +34,7 @@ export function useNavigation() {
     pathname,
     searchParams,
     query: queryParams,
-    teamId,
+    orgId,
     websiteId,
     updateParams,
     replaceParams,

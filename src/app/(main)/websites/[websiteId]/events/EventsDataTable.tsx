@@ -9,7 +9,7 @@ export function EventsDataTable({
   websiteId,
 }: {
   websiteId?: string;
-  teamId?: string;
+  orgId?: string;
   children?: ReactNode;
 }) {
   const { formatMessage, labels } = useMessages();

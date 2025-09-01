@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { canCreateTeamWebsite, canCreateWebsite } from '@/validations';
+import { canCreateOrgWebsite, canCreateWebsite } from '@/validations';
 import { json, unauthorized } from '@/lib/response';
 import { uuid } from '@/lib/crypto';
 import { parseRequest } from '@/lib/request';
@@ -12,7 +12,7 @@ export async function POST(request: Request) {
     name: z.string().max(100),
     domain: z.string().max(500),
     shareId: z.string().max(50).nullable().optional(),
-    teamId: z.string().nullable().optional(),
+    orgId: z.string().nullable().optional(),
     id: z.string().uuid().nullable().optional(),
   });
 
@@ -22,9 +22,9 @@ export async function POST(request: Request) {
     return error();
   }
 
-  const { id, name, domain, shareId, teamId } = body;
+  const { id, name, domain, shareId, orgId } = body;
 
-  if ((teamId && !(await canCreateTeamWebsite(auth, teamId))) || !(await canCreateWebsite(auth))) {
+  if ((orgId && !(await canCreateOrgWebsite(auth, orgId))) || !(await canCreateWebsite(auth))) {
     return unauthorized();
   }
 
@@ -34,10 +34,10 @@ export async function POST(request: Request) {
     name,
     domain,
     shareId,
-    teamId,
+    orgId,
   };
 
-  if (!teamId) {
+  if (!orgId) {
     data.userId = auth.user.id;
   }
 

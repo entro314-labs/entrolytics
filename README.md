@@ -9,7 +9,7 @@
 
 - 🔒 **Privacy-focused** - GDPR compliant, no cookies required, respects Do Not Track
 - 📊 **Real-time analytics** - Live dashboard updates with WebSocket support
-- 🏢 **Team collaboration** - Multi-user support with role-based access control
+- 🏢 **Org collaboration** - Multi-user support with role-based access control
 - 💰 **Revenue tracking** - Built-in e-commerce and conversion tracking
 - 🎯 **Custom events** - Track any user interaction or business metric
 - 🌍 **Geolocation** - Country and region analytics with privacy protection
@@ -193,7 +193,7 @@ curl -X POST https://your-domain.com/api/send \
 Entrolytics uses Clerk for authentication with the following features:
 
 - **User Management**: Automatic user synchronization to local database
-- **Organizations**: Team-based access control and data isolation
+- **Organizations**: Org-based access control and data isolation
 - **Roles**: Admin, user, and view-only permissions
 - **Security**: JWT-based API authentication with middleware protection
 
@@ -278,7 +278,7 @@ pnpm run dev
 | Privacy-focused | ✅ | ❌ | ✅ | ✅ |
 | Self-hosted | ✅ | ❌ | ✅ | ✅ |
 | Real-time data | ✅ | ❌ | ❌ | ✅ |
-| Team collaboration | ✅ | ✅ | ❌ | ✅ |
+| Org collaboration | ✅ | ✅ | ❌ | ✅ |
 | Custom events | ✅ | ✅ | ❌ | ✅ |
 | Revenue tracking | ✅ | ✅ | ❌ | ✅ |
 | No cookie required | ✅ | ❌ | ✅ | ✅ |

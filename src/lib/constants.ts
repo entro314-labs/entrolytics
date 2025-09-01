@@ -128,10 +128,10 @@ export const ROLES = {
   admin: 'admin',
   user: 'user',
   viewOnly: 'view-only',
-  teamOwner: 'team-owner',
-  teamManager: 'team-manager',
-  teamMember: 'team-member',
-  teamViewOnly: 'team-view-only',
+  orgOwner: 'org-owner',
+  orgManager: 'org-manager',
+  orgMember: 'org-member',
+  orgViewOnly: 'org-view-only',
 } as const;
 
 export const PERMISSIONS = {
@@ -139,11 +139,11 @@ export const PERMISSIONS = {
   websiteCreate: 'website:create',
   websiteUpdate: 'website:update',
   websiteDelete: 'website:delete',
-  websiteTransferToTeam: 'website:transfer-to-team',
+  websiteTransferToOrg: 'website:transfer-to-org',
   websiteTransferToUser: 'website:transfer-to-user',
-  teamCreate: 'team:create',
-  teamUpdate: 'team:update',
-  teamDelete: 'team:delete',
+  orgCreate: 'org:create',
+  orgUpdate: 'org:update',
+  orgDelete: 'org:delete',
 } as const;
 
 export const ROLE_PERMISSIONS = {
@@ -152,31 +152,31 @@ export const ROLE_PERMISSIONS = {
     PERMISSIONS.websiteCreate,
     PERMISSIONS.websiteUpdate,
     PERMISSIONS.websiteDelete,
-    PERMISSIONS.teamCreate,
+    PERMISSIONS.orgCreate,
   ],
   [ROLES.viewOnly]: [],
-  [ROLES.teamOwner]: [
-    PERMISSIONS.teamUpdate,
-    PERMISSIONS.teamDelete,
+  [ROLES.orgOwner]: [
+    PERMISSIONS.orgUpdate,
+    PERMISSIONS.orgDelete,
     PERMISSIONS.websiteCreate,
     PERMISSIONS.websiteUpdate,
     PERMISSIONS.websiteDelete,
-    PERMISSIONS.websiteTransferToTeam,
+    PERMISSIONS.websiteTransferToOrg,
     PERMISSIONS.websiteTransferToUser,
   ],
-  [ROLES.teamManager]: [
-    PERMISSIONS.teamUpdate,
+  [ROLES.orgManager]: [
+    PERMISSIONS.orgUpdate,
     PERMISSIONS.websiteCreate,
     PERMISSIONS.websiteUpdate,
     PERMISSIONS.websiteDelete,
-    PERMISSIONS.websiteTransferToTeam,
+    PERMISSIONS.websiteTransferToOrg,
   ],
-  [ROLES.teamMember]: [
+  [ROLES.orgMember]: [
     PERMISSIONS.websiteCreate,
     PERMISSIONS.websiteUpdate,
     PERMISSIONS.websiteDelete,
   ],
-  [ROLES.teamViewOnly]: [],
+  [ROLES.orgViewOnly]: [],
 } as const;
 
 export const THEME_COLORS = {

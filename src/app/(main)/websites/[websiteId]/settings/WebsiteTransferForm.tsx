@@ -14,7 +14,7 @@ import {
   useLoginQuery,
   useMessages,
   useUpdateQuery,
-  useUserTeamsQuery,
+  useUserOrgsQuery,
   useWebsite,
 } from '@/components/hooks';
 import { ROLES } from '@/lib/constants';
@@ -30,25 +30,25 @@ export function WebsiteTransferForm({
 }) {
   const { user } = useLoginQuery();
   const website = useWebsite();
-  const [teamId, setTeamId] = useState<string>(null);
+  const [orgId, setOrgId] = useState<string>(null);
   const { formatMessage, labels, messages } = useMessages();
   const { mutate, error, isPending } = useUpdateQuery(`/websites/${websiteId}/transfer`);
-  const { data: teams, isLoading } = useUserTeamsQuery(user.id);
-  const isTeamWebsite = !!website?.teamId;
+  const { data: orgs, isLoading } = useUserOrgsQuery(user.id);
+  const isOrgWebsite = !!website?.orgId;
 
   const items =
-    teams?.data?.filter(({ teamUser }) =>
-      teamUser.find(
+    orgs?.data?.filter(({ orgUser }) =>
+      orgUser.find(
         ({ role, userId }) =>
-          [ROLES.teamOwner, ROLES.teamManager].includes(role) && userId === user.id,
+          [ROLES.orgOwner, ROLES.orgManager].includes(role) && userId === user.id,
       ),
     ) || [];
 
   const handleSubmit = async () => {
     mutate(
       {
-        userId: website.teamId ? user.id : undefined,
-        teamId: website.userId ? teamId : undefined,
+        userId: website.orgId ? user.id : undefined,
+        orgId: website.userId ? orgId : undefined,
       },
       {
         onSuccess: async () => {
@@ -60,7 +60,7 @@ export function WebsiteTransferForm({
   };
 
   const handleChange = (key: Key) => {
-    setTeamId(key as string);
+    setOrgId(key as string);
   };
 
   if (isLoading) {
@@ -68,15 +68,15 @@ export function WebsiteTransferForm({
   }
 
   return (
-    <Form onSubmit={handleSubmit} error={error} values={{ teamId }}>
+    <Form onSubmit={handleSubmit} error={error} values={{ orgId }}>
       <Text>
         {formatMessage(
-          isTeamWebsite ? messages.transferTeamWebsiteToUser : messages.transferUserWebsiteToTeam,
+          isOrgWebsite ? messages.transferOrgWebsiteToUser : messages.transferUserWebsiteToOrg,
         )}
       </Text>
-      <FormField name="teamId">
-        {!isTeamWebsite && (
-          <Select onSelectionChange={handleChange} selectedKey={teamId}>
+      <FormField name="orgId">
+        {!isOrgWebsite && (
+          <Select onSelectionChange={handleChange} selectedKey={orgId}>
             {items.map(({ id, name }) => {
               return (
                 <ListItem key={`${id}!!!!`} id={`${id}????`}>
@@ -92,7 +92,7 @@ export function WebsiteTransferForm({
         <FormSubmitButton
           variant="primary"
           isPending={isPending}
-          isDisabled={!isTeamWebsite && !teamId}
+          isDisabled={!isOrgWebsite && !orgId}
         >
           {formatMessage(labels.transfer)}
         </FormSubmitButton>

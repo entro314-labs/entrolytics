@@ -293,10 +293,10 @@
       "value": "ရီပို့လုပ်မည်"
     }
   ],
-  "label.create-team": [
+  "label.create-org": [
     {
       "type": 0,
-      "value": "Team ပြုလုပ်မည်"
+      "value": "Org ပြုလုပ်မည်"
     }
   ],
   "label.create-user": [
@@ -389,10 +389,10 @@
       "value": "Delete report"
     }
   ],
-  "label.delete-team": [
+  "label.delete-org": [
     {
       "type": 0,
-      "value": "Team ကိုဖျက်မည်"
+      "value": "Org ကိုဖျက်မည်"
     }
   ],
   "label.delete-user": [
@@ -743,7 +743,7 @@
       "value": "ဝင်မည်"
     }
   ],
-  "label.join-team": [
+  "label.join-org": [
     {
       "type": 0,
       "value": "အသင်းဝင်မည်"
@@ -845,7 +845,7 @@
       "value": "ထွက်မည်"
     }
   ],
-  "label.leave-team": [
+  "label.leave-org": [
     {
       "type": 0,
       "value": "အသင်းမှထွက်မည်"
@@ -1495,61 +1495,61 @@
       "value": "Tags"
     }
   ],
-  "label.team": [
+  "label.org": [
     {
       "type": 0,
       "value": "အသင်း"
     }
   ],
-  "label.team-id": [
+  "label.org-id": [
     {
       "type": 0,
       "value": "အသင်း အိုင်ဒီ"
     }
   ],
-  "label.team-manager": [
+  "label.org-manager": [
     {
       "type": 0,
-      "value": "Team manager"
+      "value": "Org manager"
     }
   ],
-  "label.team-member": [
+  "label.org-member": [
     {
       "type": 0,
       "value": "အသင်းဝင်"
     }
   ],
-  "label.team-name": [
+  "label.org-name": [
     {
       "type": 0,
-      "value": "Team name"
+      "value": "Org name"
     }
   ],
-  "label.team-owner": [
+  "label.org-owner": [
     {
       "type": 0,
       "value": "အသင်းကိုပိုင်ဆိုင်သူ"
     }
   ],
-  "label.team-settings": [
+  "label.org-settings": [
     {
       "type": 0,
-      "value": "Team settings"
+      "value": "Org settings"
     }
   ],
-  "label.team-view-only": [
+  "label.org-view-only": [
     {
       "type": 0,
-      "value": "Team view only"
+      "value": "Org view only"
     }
   ],
-  "label.team-websites": [
+  "label.org-websites": [
     {
       "type": 0,
-      "value": "Team websites"
+      "value": "Org websites"
     }
   ],
-  "label.teams": [
+  "label.orgs": [
     {
       "type": 0,
       "value": "အသင်းများ"
@@ -1911,10 +1911,10 @@
       "value": " ကို ဖျက်၍ပြန်စလုပ်ရန် သေချာပါသလား?"
     }
   ],
-  "message.delete-team-warning": [
+  "message.delete-org-warning": [
     {
       "type": 0,
-      "value": "Deleting a team will also delete all team websites."
+      "value": "Deleting a org will also delete all org websites."
     }
   ],
   "message.delete-website-warning": [
@@ -2019,13 +2019,13 @@
       "value": "ရလဒ်မရှိပါ"
     }
   ],
-  "message.no-team-websites": [
+  "message.no-org-websites": [
     {
       "type": 0,
       "value": "ဤအသင်းတွင် ဝက်ဘ်ဆိုက်မရှိသေးပါ"
     }
   ],
-  "message.no-teams": [
+  "message.no-orgs": [
     {
       "type": 0,
       "value": "အသင်း မပြုလုပ်ရသေးပါ"
@@ -2099,19 +2099,19 @@
       "value": "သင့်ဝက်ဆိုဒ်ဘ်၏ စာရင်းအချက်အလက်များကို အောက်ပါ URL တွင် ဝင်ရောက်ကြည့်ရှုနိုင်သည်"
     }
   ],
-  "message.team-already-member": [
+  "message.org-already-member": [
     {
       "type": 0,
       "value": "ဤအသင်းတွင် ဝင်ပြီးသားဖြစ်နေသည်"
     }
   ],
-  "message.team-not-found": [
+  "message.org-not-found": [
     {
       "type": 0,
       "value": "အသင်း မရှိပါ"
     }
   ],
-  "message.team-websites-info": [
+  "message.org-websites-info": [
     {
       "type": 0,
       "value": "ဤဝက်ဘ်ဆိုဒ်များကို အသင်းထဲမှ လူတိုင်းဝင်ကြည့်နိုင်သည်"
@@ -2123,22 +2123,22 @@
       "value": "ဤဝက်ဘ်ဆိုဒ်၏ ဒေတာကိုကောက်ခံရန် အောက်ပါ code ကို သင်၏ HTML တွင်ထည့်ပါ"
     }
   ],
-  "message.transfer-team-website-to-user": [
+  "message.transfer-org-website-to-user": [
     {
       "type": 0,
       "value": "Transfer this website to your account?"
     }
   ],
-  "message.transfer-user-website-to-team": [
+  "message.transfer-user-website-to-org": [
     {
       "type": 0,
-      "value": "Select the team to transfer this website to."
+      "value": "Select the org to transfer this website to."
     }
   ],
   "message.transfer-website": [
     {
       "type": 0,
-      "value": "Transfer website ownership to your account or another team."
+      "value": "Transfer website ownership to your account or another org."
     }
   ],
   "message.triggered-event": [

@@ -1,28 +1,28 @@
 export * from '@/components/hooks';
 
-export * from '@/app/(main)/teams/[teamId]/TeamMemberEditButton';
-export * from '@/app/(main)/teams/[teamId]/TeamMemberEditForm';
-export * from '@/app/(main)/teams/[teamId]/TeamMemberRemoveButton';
-export * from '@/app/(main)/teams/[teamId]/TeamMembersDataTable';
-export * from '@/app/(main)/teams/[teamId]/TeamMembersTable';
-export * from '@/app/(main)/teams/[teamId]/TeamDeleteForm';
-export * from '@/app/(main)/teams/[teamId]/TeamSettings';
-export * from '@/app/(main)/teams/[teamId]/TeamEditForm';
-export * from '@/app/(main)/teams/[teamId]/TeamManage';
-export * from '@/app/(main)/teams/[teamId]/TeamWebsiteRemoveButton';
-export * from '@/app/(main)/teams/[teamId]/TeamWebsitesDataTable';
-export * from '@/app/(main)/teams/[teamId]/TeamWebsitesTable';
+export * from '@/app/(main)/orgs/[orgId]/OrgMemberEditButton';
+export * from '@/app/(main)/orgs/[orgId]/OrgMemberEditForm';
+export * from '@/app/(main)/orgs/[orgId]/OrgMemberRemoveButton';
+export * from '@/app/(main)/orgs/[orgId]/OrgMembersDataTable';
+export * from '@/app/(main)/orgs/[orgId]/OrgMembersTable';
+export * from '@/app/(main)/orgs/[orgId]/OrgDeleteForm';
+export * from '@/app/(main)/orgs/[orgId]/OrgSettings';
+export * from '@/app/(main)/orgs/[orgId]/OrgEditForm';
+export * from '@/app/(main)/orgs/[orgId]/OrgManage';
+export * from '@/app/(main)/orgs/[orgId]/OrgWebsiteRemoveButton';
+export * from '@/app/(main)/orgs/[orgId]/OrgWebsitesDataTable';
+export * from '@/app/(main)/orgs/[orgId]/OrgWebsitesTable';
 
-export * from '@/app/(main)/teams/TeamAddForm';
-export * from '@/app/(main)/teams/TeamJoinForm';
-export * from '@/app/(main)/teams/TeamLeaveButton';
-export * from '@/app/(main)/teams/TeamLeaveForm';
-export * from '@/app/(main)/teams/TeamProvider';
-export * from '@/app/(main)/teams/TeamsAddButton';
-export * from '@/app/(main)/teams/TeamsDataTable';
-export * from '@/app/(main)/teams/TeamsHeader';
-export * from '@/app/(main)/teams/TeamsJoinButton';
-export * from '@/app/(main)/teams/TeamsTable';
+export * from '@/app/(main)/orgs/OrgAddForm';
+export * from '@/app/(main)/orgs/OrgJoinForm';
+export * from '@/app/(main)/orgs/OrgLeaveButton';
+export * from '@/app/(main)/orgs/OrgLeaveForm';
+export * from '@/app/(main)/orgs/OrgProvider';
+export * from '@/app/(main)/orgs/OrgsAddButton';
+export * from '@/app/(main)/orgs/OrgsDataTable';
+export * from '@/app/(main)/orgs/OrgsHeader';
+export * from '@/app/(main)/orgs/OrgsJoinButton';
+export * from '@/app/(main)/orgs/OrgsTable';
 
 export * from '@/app/(main)/websites/[websiteId]/settings/WebsiteShareForm';
 export * from '@/app/(main)/websites/[websiteId]/settings/WebsiteTrackingCode';
@@ -54,6 +54,6 @@ export * from '@/components/common/MobileMenu';
 export * from '@/components/common/Pager';
 export * from '@/components/common/TypeConfirmationForm';
 
-export * from '@/components/input/TeamsButton';
+export * from '@/components/input/OrgsButton';
 
 export { ROLES } from '@/lib/constants';

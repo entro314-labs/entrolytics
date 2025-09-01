@@ -293,7 +293,7 @@
       "value": "Стварыць справаздачу"
     }
   ],
-  "label.create-team": [
+  "label.create-org": [
     {
       "type": 0,
       "value": "Стварыць каманду"
@@ -389,7 +389,7 @@
       "value": "Выдаліць справаздачу"
     }
   ],
-  "label.delete-team": [
+  "label.delete-org": [
     {
       "type": 0,
       "value": "Выдаліць каманду"
@@ -743,7 +743,7 @@
       "value": "Далучыцца"
     }
   ],
-  "label.join-team": [
+  "label.join-org": [
     {
       "type": 0,
       "value": "Далучыцца да каманды"
@@ -845,7 +845,7 @@
       "value": "Пакінуць"
     }
   ],
-  "label.leave-team": [
+  "label.leave-org": [
     {
       "type": 0,
       "value": "Пакінуць каманду"
@@ -1495,61 +1495,61 @@
       "value": "Tags"
     }
   ],
-  "label.team": [
+  "label.org": [
     {
       "type": 0,
       "value": "Каманда"
     }
   ],
-  "label.team-id": [
+  "label.org-id": [
     {
       "type": 0,
       "value": "Ідэнтыфікатар каманды"
     }
   ],
-  "label.team-manager": [
+  "label.org-manager": [
     {
       "type": 0,
       "value": "Кіраўнік каманды"
     }
   ],
-  "label.team-member": [
+  "label.org-member": [
     {
       "type": 0,
       "value": "Удзельнік каманды"
     }
   ],
-  "label.team-name": [
+  "label.org-name": [
     {
       "type": 0,
       "value": "Назва каманды"
     }
   ],
-  "label.team-owner": [
+  "label.org-owner": [
     {
       "type": 0,
       "value": "Уласнік каманды"
     }
   ],
-  "label.team-settings": [
+  "label.org-settings": [
     {
       "type": 0,
       "value": "Налады каманды"
     }
   ],
-  "label.team-view-only": [
+  "label.org-view-only": [
     {
       "type": 0,
       "value": "Толькі для каманднага прагляду"
     }
   ],
-  "label.team-websites": [
+  "label.org-websites": [
     {
       "type": 0,
       "value": "Сайты каманды"
     }
   ],
-  "label.teams": [
+  "label.orgs": [
     {
       "type": 0,
       "value": "Каманды"
@@ -1923,7 +1923,7 @@
       "value": " статыстыку?"
     }
   ],
-  "message.delete-team-warning": [
+  "message.delete-org-warning": [
     {
       "type": 0,
       "value": "Выдаленне каманды таксама выдаліць усе сайты каманды."
@@ -2031,13 +2031,13 @@
       "value": "Вынікаў не знойдзена."
     }
   ],
-  "message.no-team-websites": [
+  "message.no-org-websites": [
     {
       "type": 0,
       "value": "Гэтая каманда не мае ніводнага сайта."
     }
   ],
-  "message.no-teams": [
+  "message.no-orgs": [
     {
       "type": 0,
       "value": "Вы не стварылі ніводнай каманды."
@@ -2119,19 +2119,19 @@
       "value": "."
     }
   ],
-  "message.team-already-member": [
+  "message.org-already-member": [
     {
       "type": 0,
       "value": "Вы ўжо ўдзельнік каманды."
     }
   ],
-  "message.team-not-found": [
+  "message.org-not-found": [
     {
       "type": 0,
       "value": "Каманда не знойдзена."
     }
   ],
-  "message.team-websites-info": [
+  "message.org-websites-info": [
     {
       "type": 0,
       "value": "Сайты могуць быць праглядацца любым удзельнікам каманды."
@@ -2143,13 +2143,13 @@
       "value": "Код адсочвання"
     }
   ],
-  "message.transfer-team-website-to-user": [
+  "message.transfer-org-website-to-user": [
     {
       "type": 0,
       "value": "Перадаць гэты сайт на ваш уліковы запіс?"
     }
   ],
-  "message.transfer-user-website-to-team": [
+  "message.transfer-user-website-to-org": [
     {
       "type": 0,
       "value": "Выберыце каманду для перадачы гэтага сайта."

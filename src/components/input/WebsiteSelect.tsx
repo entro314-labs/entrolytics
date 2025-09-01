@@ -10,17 +10,17 @@ import { Empty } from '@/components/common/Empty';
 
 export function WebsiteSelect({
   websiteId,
-  teamId,
+  orgId,
   ...props
 }: {
   websiteId?: string;
-  teamId?: string;
+  orgId?: string;
 } & SelectProps) {
   const { formatMessage, messages } = useMessages();
   const { router, renderUrl } = useNavigation();
   const [search, setSearch] = useState('');
   const { data: website } = useWebsiteQuery(websiteId);
-  const { data, isLoading } = useUserWebsitesQuery({ teamId }, { search, pageSize: 5 });
+  const { data, isLoading } = useUserWebsitesQuery({ orgId }, { search, pageSize: 5 });
 
   const handleSelect = (value: any) => {
     router.push(renderUrl(`/websites/${value}`));

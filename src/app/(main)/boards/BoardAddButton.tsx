@@ -7,7 +7,7 @@ export function BoardAddButton() {
   const { formatMessage, labels, messages } = useMessages();
   const { toast } = useToast();
   const { touch } = useModified();
-  const { teamId } = useNavigation();
+  const { orgId } = useNavigation();
 
   const handleSave = async () => {
     toast(formatMessage(messages.saved));
@@ -24,7 +24,7 @@ export function BoardAddButton() {
       </Button>
       <Modal>
         <Dialog title={formatMessage(labels.addBoard)} style={{ width: 400 }}>
-          {({ close }) => <BoardAddForm teamId={teamId} onSave={handleSave} onClose={close} />}
+          {({ close }) => <BoardAddForm orgId={orgId} onSave={handleSave} onClose={close} />}
         </Dialog>
       </Modal>
     </DialogTrigger>

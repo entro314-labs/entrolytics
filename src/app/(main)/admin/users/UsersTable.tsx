@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Row, Text, Icon, DataTable, DataColumn, MenuItem, Modal } from '@umami/react-zen';
+import { Row, Text, Icon, DataTable, DataColumn, MenuItem, Modal } from '@entro314labs/entro-zen';
 import Link from 'next/link';
 import { ROLES } from '@/lib/constants';
 import { Trash } from '@/components/icons';

@@ -4,7 +4,7 @@ import { Panel } from '@/components/common/Panel';
 import { useMessages, useResultQuery } from '@/components/hooks';
 import { ListTable } from '@/components/metrics/ListTable';
 import { CHART_COLORS, UTM_PARAMS } from '@/lib/constants';
-import { Column, Grid, Heading, Text } from '@umami/react-zen';
+import { Column, Grid, Heading, Text } from '@entro314labs/entro-zen';
 
 export interface UTMProps {
   websiteId: string;

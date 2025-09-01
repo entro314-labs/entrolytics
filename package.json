@@ -1,8 +1,8 @@
 {
-  "name": "entrolytics",
+  "name": "@entro314labs/entrolytics",
   "version": "1.0.0",
-  "description": "A modern, privacy-focused alternative to Google Analytics.",
-  "author": "Entrolytics. <hey@entrolytics.click>",
+  "description": "Privacy-focused web analytics platform - an independent fork with modern features and enhanced user experience.",
+  "author": "Entro314 Labs <hey@entrolytics.click>",
   "license": "MIT",
   "homepage": "https://entrolytics.click",
   "repository": {
@@ -83,7 +83,7 @@
     "@react-spring/web": "^10.0.1",
     "@svgr/cli": "^8.1.0",
     "@tanstack/react-query": "^5.85.6",
-    "@umami/react-zen": "^0.174.0",
+    "@entro314labs/entro-zen": "^0.174.0",
     "@umami/redis-client": "^0.27.0",
     "bcryptjs": "^3.0.2",
     "chalk": "^5.6.0",

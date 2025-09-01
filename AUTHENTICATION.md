@@ -34,7 +34,7 @@ NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL="/dashboard"
 NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL="/dashboard"
 
 # Webhooks
-CLERK_WEBHOOK_SECRET="whsec_..."
+CLERK_WEBHOOK_SECRET="whsec_Dj/nvzAxUDqCuoQ8Zd5VMG5WT2m6UVe1"
 ```
 
 ### 2. Database Schema

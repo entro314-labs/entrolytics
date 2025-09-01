@@ -1,6 +1,6 @@
 'use client';
 import { firstBy } from 'thenby';
-import { Grid } from '@umami/react-zen';
+import { Grid } from '@entro314labs/entro-zen';
 import { GridRow } from '@/components/common/GridRow';
 import { PageBody } from '@/components/common/PageBody';
 import { Panel } from '@/components/common/Panel';

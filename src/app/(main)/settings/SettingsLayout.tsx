@@ -1,6 +1,6 @@
 'use client';
 import { ReactNode } from 'react';
-import { Grid, Column } from '@umami/react-zen';
+import { Grid, Column } from '@entro314labs/entro-zen';
 import { useMessages, useNavigation } from '@/components/hooks';
 import { PageBody } from '@/components/common/PageBody';
 import { SideMenu } from '@/components/common/SideMenu';

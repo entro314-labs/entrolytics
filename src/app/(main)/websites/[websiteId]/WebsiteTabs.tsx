@@ -1,4 +1,4 @@
-import { Tabs, TabList, Tab, Icon, Text, Row } from '@umami/react-zen';
+import { Tabs, TabList, Tab, Icon, Text, Row } from '@entro314labs/entro-zen';
 import { useMessages, useNavigation, useWebsite } from '@/components/hooks';
 import { Clock, Eye, Lightning, User, ChartPie } from '@/components/icons';
 

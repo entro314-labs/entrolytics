@@ -9,7 +9,7 @@ import {
   Loading,
   Column,
   Label,
-} from '@umami/react-zen';
+} from '@entro314labs/entro-zen';
 import { useMessages, useReportQuery, useUpdateQuery } from '@/components/hooks';
 import { LookupField } from '@/components/input/LookupField';
 import { ActionSelect } from '@/components/input/ActionSelect';

@@ -8,7 +8,7 @@ import {
   Modal,
   Dialog,
   DialogTrigger,
-} from '@umami/react-zen';
+} from '@entro314labs/entro-zen';
 import {
   useNavigation,
   useMessages,

@@ -7,7 +7,7 @@ import {
   Row,
   SidebarProps,
   ThemeButton,
-} from '@umami/react-zen';
+} from '@entro314labs/entro-zen';
 import {
   Globe,
   LayoutDashboard,

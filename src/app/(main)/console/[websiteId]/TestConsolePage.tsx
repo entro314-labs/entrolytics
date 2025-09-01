@@ -1,5 +1,5 @@
 'use client';
-import { Button, Grid, Column, Heading } from '@umami/react-zen';
+import { Button, Grid, Column, Heading } from '@entro314labs/entro-zen';
 import Link from 'next/link';
 import Script from 'next/script';
 import { Panel } from '@/components/common/Panel';

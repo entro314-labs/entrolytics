@@ -3,7 +3,7 @@ import { TeamMembersDataTable } from './TeamMembersDataTable';
 import { SectionHeader } from '@/components/common/SectionHeader';
 import { useLoginQuery, useMessages, useTeam } from '@/components/hooks';
 import { ROLES } from '@/lib/constants';
-import { Column } from '@umami/react-zen';
+import { Column } from '@entro314labs/entro-zen';
 
 export function TeamMembersPage({ teamId }: { teamId: string }) {
   const team = useTeam();

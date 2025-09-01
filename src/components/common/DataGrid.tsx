@@ -1,5 +1,5 @@
 import { ReactNode, useState, useCallback } from 'react';
-import { SearchField, Row, Column } from '@umami/react-zen';
+import { SearchField, Row, Column } from '@entro314labs/entro-zen';
 import { UseQueryResult } from '@tanstack/react-query';
 import { useMessages, useNavigation } from '@/components/hooks';
 import { Pager } from '@/components/common/Pager';

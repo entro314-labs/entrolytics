@@ -1,4 +1,4 @@
-import { Tabs, TabList, Tab, TabPanel } from '@umami/react-zen';
+import { Tabs, TabList, Tab, TabPanel } from '@entro314labs/entro-zen';
 import { useMessages, useWebsite } from '@/components/hooks';
 import { WebsiteShareForm } from './WebsiteShareForm';
 import { WebsiteTrackingCode } from './WebsiteTrackingCode';

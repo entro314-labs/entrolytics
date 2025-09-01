@@ -1,6 +1,6 @@
 'use client';
 import { ReactNode } from 'react';
-import { AlertBanner, Loading, Column, ColumnProps } from '@umami/react-zen';
+import { AlertBanner, Loading, Column, ColumnProps } from '@entro314labs/entro-zen';
 import { useMessages } from '@/components/hooks';
 
 export function PageBody({

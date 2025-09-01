@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { DataColumn, DataTable } from '@umami/react-zen';
+import { DataColumn, DataTable } from '@entro314labs/entro-zen';
 import { useFormat, useMessages } from '@/components/hooks';
 import { Avatar } from '@/components/common/Avatar';
 import { TypeIcon } from '@/components/common/TypeIcon';

@@ -1,153 +1,306 @@
-<p align="center">
-  <img src="https://content.entrolytics.click/website/images/entrolytics-logo.png" alt="Entrolytics Logo" width="100">
-</p>
+# Entrolytics
 
-<h1 align="center">Entrolytics</h1>
+**Entrolytics** is a privacy-focused web analytics platform that provides powerful insights while respecting user privacy. Built as an independent fork with modern features, enhanced performance, and improved developer experience.
 
-<p align="center">
-  <i>Entrolytics is a simple, fast, privacy-focused alternative to Google Analytics.</i>
-</p>
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.18-brightgreen.svg)](https://nodejs.org/)
 
-<p align="center">
-  <a href="https://github.com/entrolytics-software/entrolytics/releases">
-    <img src="https://img.shields.io/github/release/entrolytics-software/entrolytics.svg" alt="GitHub Release" />
-  </a>
-  <a href="https://github.com/entrolytics-software/entrolytics/blob/master/LICENSE">
-    <img src="https://img.shields.io/github/license/entrolytics-software/entrolytics.svg" alt="MIT License" />
-  </a>
-  <a href="https://github.com/entrolytics-software/entrolytics/actions">
-    <img src="https://img.shields.io/github/actions/workflow/status/entrolytics-software/entrolytics/ci.yml" alt="Build Status" />
-  </a>
-  <a href="https://analytics.entrolytics.click/share/LGazGOecbDtaIwDr/entrolytics.click" style="text-decoration: none;">
-    <img src="https://img.shields.io/badge/Try%20Demo%20Now-Click%20Here-brightgreen" alt="Entrolytics Demo" />
-  </a>
-</p>
+## ✨ Features
 
----
+- 🔒 **Privacy-focused** - GDPR compliant, no cookies required, respects Do Not Track
+- 📊 **Real-time analytics** - Live dashboard updates with WebSocket support
+- 🏢 **Team collaboration** - Multi-user support with role-based access control
+- 💰 **Revenue tracking** - Built-in e-commerce and conversion tracking
+- 🎯 **Custom events** - Track any user interaction or business metric
+- 🌍 **Geolocation** - Country and region analytics with privacy protection
+- 📱 **Device insights** - Browser, OS, and device analytics
+- 🔧 **Self-hosted** - Full control over your data and infrastructure
+- ⚡ **High performance** - Optimized for high-traffic websites
+- 🌐 **Multi-language** - Support for 40+ languages
 
-## 🚀 Getting Started
+## 🚀 Quick Start
 
-A detailed getting started guide can be found at [entrolytics.click/docs](https://entrolytics.click/docs/).
+### Prerequisites
 
----
+- Node.js 18.18 or higher
+- PostgreSQL database
+- pnpm package manager
 
-## 🛠 Installing from Source
-
-### Requirements
-
-- A server with Node.js version 18.18 or newer
-- A database. Entrolytics supports [MariaDB](https://www.mariadb.org/) (minimum v10.5), [MySQL](https://www.mysql.com/) (minimum v8.0) and [PostgreSQL](https://www.postgresql.org/) (minimum v12.14) databases.
-
-### Get the Source Code and Install Packages
+### Installation
 
 ```bash
-git clone https://github.com/entrolytics-software/entrolytics.git
+# Clone the repository
+git clone https://github.com/entro314-labs/entrolytics.git
 cd entrolytics
-npm install
+
+# Install dependencies
+pnpm install
+
+# Set up environment variables
+cp .env.example .env.local
+# Edit .env.local with your configuration
+
+# Set up the database
+pnpm run build-db
+
+# Start development server
+pnpm run dev
 ```
 
-### Configure Entrolytics
+Visit [http://localhost:3000](http://localhost:3000) to access your Entrolytics dashboard.
 
-Create an `.env` file with the following:
+## 🛠 Development
+
+### Available Commands
 
 ```bash
-DATABASE_URL=connection-url
+# Development
+pnpm dev                     # Start development server (port 3000)
+pnpm dev-turbo              # Start with Turbopack (port 3001)
+
+# Building
+pnpm build                  # Full production build
+pnpm build-turbo           # Build with Turbopack
+pnpm build-docker          # Docker-specific build
+
+# Database
+pnpm build-db              # Generate Prisma client and setup
+pnpm update-db             # Deploy database migrations
+pnpm check-db              # Verify database connection
+
+# Components & Assets
+pnpm build-tracker         # Build analytics tracking script
+pnpm build-geo             # Build geolocation database
+pnpm build-lang            # Process internationalization files
+
+# Testing
+pnpm test                  # Run Jest unit tests
+pnpm lint                  # Run ESLint
+pnpm cypress-open          # Interactive E2E testing
+pnpm cypress-run           # Headless E2E tests
 ```
 
-The connection URL format:
+### Project Structure
+
+```
+src/
+├── app/                   # Next.js app router pages and layouts
+├── components/            # React components
+│   ├── common/           # Shared components
+│   ├── forms/           # Form components
+│   └── charts/          # Chart components
+├── lib/                  # Core utilities and business logic
+├── queries/             # Database query functions
+├── styles/              # CSS modules and global styles
+└── types/               # TypeScript type definitions
+
+prisma/
+├── schema.prisma        # Database schema
+└── migrations/          # Database migrations
+
+scripts/                 # Build and utility scripts
+public/                  # Static assets and tracking script
+```
+
+## ⚙️ Configuration
+
+### Environment Variables
+
+Create a `.env.local` file with the following required variables:
 
 ```bash
-postgresql://username:mypassword@localhost:5432/mydb
-mysql://username:mypassword@localhost:3306/mydb
+# Database
+DATABASE_URL=postgresql://username:password@localhost:5432/entrolytics
+
+# Authentication (Clerk)
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_...
+CLERK_SECRET_KEY=sk_live_...
+
+# Optional: Application settings
+BASE_PATH=/analytics
+CLOUD_MODE=1
+COLLECT_API_ENDPOINT=/api/send
+TRACKER_SCRIPT_NAME=script.js
+FORCE_SSL=1
 ```
 
-### Build the Application
+### Database Setup
+
+Entrolytics uses PostgreSQL with Prisma ORM. The system supports:
+
+- **Primary database** for metadata and user management
+- **Read replicas** for improved dashboard performance
+- **ClickHouse** integration for high-volume analytics (optional)
+
+## 📈 Analytics Integration
+
+### Adding the Tracking Script
+
+Add the tracking script to your website:
+
+```html
+<script async src="https://your-entrolytics-domain.com/script.js" data-website-id="your-website-id"></script>
+```
+
+### Custom Event Tracking
+
+Track custom events with the JavaScript API:
+
+```javascript
+// Track page views (automatic)
+entrolytics.track('pageview');
+
+// Track custom events
+entrolytics.track('button-click', { button: 'signup' });
+
+// Track with custom data
+entrolytics.track('purchase', {
+  revenue: 29.99,
+  currency: 'USD',
+  product: 'Pro Plan'
+});
+```
+
+### API Integration
+
+Use the REST API for server-side tracking:
 
 ```bash
-npm run build
+curl -X POST https://your-domain.com/api/send \
+  -H "Content-Type: application/json" \
+  -d '{
+    "website": "website-id",
+    "url": "/page-path",
+    "event": "pageview"
+  }'
 ```
 
-_The build step will create tables in your database if you are installing for the first time. It will also create a login user with username **admin** and password **entrolytics**._
+## 🏗 Architecture
 
-### Start the Application
+### Technology Stack
+
+- **Framework**: Next.js 15.5 with App Router
+- **Database**: PostgreSQL with Prisma ORM
+- **Authentication**: Clerk with organization support
+- **Styling**: CSS Modules with PostCSS
+- **Charts**: Chart.js with date-fns adapter
+- **State**: Zustand + TanStack React Query
+- **Analytics**: Custom tracking engine
+- **UI Components**: [@entro314labs/entro-zen](https://npmjs.com/package/@entro314labs/entro-zen)
+
+### Authentication System
+
+Entrolytics uses Clerk for authentication with the following features:
+
+- **User Management**: Automatic user synchronization to local database
+- **Organizations**: Team-based access control and data isolation
+- **Roles**: Admin, user, and view-only permissions
+- **Security**: JWT-based API authentication with middleware protection
+
+### Analytics Engine
+
+- **Privacy-first**: No PII storage, IP address hashing, GDPR compliant
+- **Real-time**: WebSocket connections for live dashboard updates
+- **Scalable**: Supports both PostgreSQL and ClickHouse for high-volume sites
+- **Accurate**: Advanced bot detection and session management
+
+## 🚢 Deployment
+
+### Docker Deployment
 
 ```bash
-npm run start
+# Build Docker image
+docker build -t entrolytics .
+
+# Run with Docker Compose
+docker-compose up -d
 ```
 
-_By default, this will launch the application on `http://localhost:3000`. You will need to either [proxy](https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/) requests from your web server or change the [port](https://nextjs.org/docs/api-reference/cli#production) to serve the application directly._
+### Environment Deployment
+
+Entrolytics supports deployment on:
+
+- **Vercel** - Serverless deployment with edge functions
+- **Railway** - Container-based deployment with PostgreSQL
+- **DigitalOcean** - VPS deployment with managed databases
+- **Self-hosted** - Complete control with Docker or direct installation
+
+### Production Checklist
+
+- [ ] Set all required environment variables
+- [ ] Configure PostgreSQL database with proper indexing
+- [ ] Run database migrations (`pnpm run update-db`)
+- [ ] Build application (`pnpm run build`)
+- [ ] Configure domain and SSL certificates
+- [ ] Set up database backups
+- [ ] Configure monitoring and alerting
+- [ ] Test analytics tracking script accessibility
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+### Development Setup
+
+```bash
+# Install dependencies
+pnpm install
+
+# Start development database (PostgreSQL required)
+# Update DATABASE_URL in .env.local
+
+# Run initial setup
+pnpm run build-db
+pnpm run check-db
+
+# Start development server
+pnpm run dev
+```
+
+## 📚 Documentation
+
+- [Installation Guide](docs/installation.md)
+- [Configuration Reference](docs/configuration.md)
+- [API Documentation](docs/api.md)
+- [Deployment Guide](docs/deployment.md)
+- [Contributing Guide](CONTRIBUTING.md)
+
+## 🆚 Comparison
+
+| Feature | Entrolytics | Google Analytics | Plausible | Matomo |
+|---------|-------------|------------------|-----------|--------|
+| Privacy-focused | ✅ | ❌ | ✅ | ✅ |
+| Self-hosted | ✅ | ❌ | ✅ | ✅ |
+| Real-time data | ✅ | ❌ | ❌ | ✅ |
+| Team collaboration | ✅ | ✅ | ❌ | ✅ |
+| Custom events | ✅ | ✅ | ❌ | ✅ |
+| Revenue tracking | ✅ | ✅ | ❌ | ✅ |
+| No cookie required | ✅ | ❌ | ✅ | ✅ |
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Built with [Next.js](https://nextjs.org/) and [React](https://reactjs.org/)
+- UI components from [@entro314labs/entro-zen](https://npmjs.com/package/@entro314labs/entro-zen)
+- Authentication by [Clerk](https://clerk.com/)
+- Charts powered by [Chart.js](https://www.chartjs.org/)
+- Database ORM by [Prisma](https://prisma.io/)
+
+## 📞 Support
+
+- [GitHub Issues](https://github.com/entro314-labs/entrolytics/issues)
+- [Documentation](https://entrolytics.click/docs)
+- [Email Support](mailto:hello@entrolytics.click)
 
 ---
 
-## 🐳 Installing with Docker
-
-To build the Entrolytics container and start up a Postgres database, run:
-
-```bash
-docker compose up -d
-```
-
-Alternatively, to pull just the Entrolytics Docker image with PostgreSQL support:
-
-```bash
-docker pull docker.entrolytics.click/entrolytics-software/entrolytics:postgresql-latest
-```
-
-Or with MySQL support:
-
-```bash
-docker pull docker.entrolytics.click/entrolytics-software/entrolytics:mysql-latest
-```
-
----
-
-## 🔄 Getting Updates
-
-To get the latest features, simply do a pull, install any new dependencies, and rebuild:
-
-```bash
-git pull
-npm install
-npm run build
-```
-
-To update the Docker image, simply pull the new images and rebuild:
-
-```bash
-docker compose pull
-docker compose up --force-recreate -d
-```
-
----
-
-## 🛟 Support
-
-<p align="center">
-  <a href="https://github.com/entrolytics-software/entrolytics">
-    <img src="https://img.shields.io/badge/GitHub--blue?style=social&logo=github" alt="GitHub" />
-  </a>
-  <a href="https://twitter.com/entrolytics_software">
-    <img src="https://img.shields.io/badge/Twitter--blue?style=social&logo=twitter" alt="Twitter" />
-  </a>
-  <a href="https://linkedin.com/company/entrolytics-software">
-    <img src="https://img.shields.io/badge/LinkedIn--blue?style=social&logo=linkedin" alt="LinkedIn" />
-  </a>
-  <a href="https://entrolytics.click/discord">
-    <img src="https://img.shields.io/badge/Discord--blue?style=social&logo=discord" alt="Discord" />
-  </a>
-</p>
-
-[release-shield]: https://img.shields.io/github/release/entrolytics-software/entrolytics.svg
-[releases-url]: https://github.com/entrolytics-software/entrolytics/releases
-[license-shield]: https://img.shields.io/github/license/entrolytics-software/entrolytics.svg
-[license-url]: https://github.com/entrolytics-software/entrolytics/blob/master/LICENSE
-[build-shield]: https://img.shields.io/github/actions/workflow/status/entrolytics-software/entrolytics/ci.yml
-[build-url]: https://github.com/entrolytics-software/entrolytics/actions
-[github-shield]: https://img.shields.io/badge/GitHub--blue?style=social&logo=github
-[github-url]: https://github.com/entrolytics-software/entrolytics
-[twitter-shield]: https://img.shields.io/badge/Twitter--blue?style=social&logo=twitter
-[twitter-url]: https://twitter.com/entrolytics_software
-[linkedin-shield]: https://img.shields.io/badge/LinkedIn--blue?style=social&logo=linkedin
-[linkedin-url]: https://linkedin.com/company/entrolytics-software
-[discord-shield]: https://img.shields.io/badge/Discord--blue?style=social&logo=discord
-[discord-url]: https://discord.com/invite/4dz4zcXYrQ
+**Entrolytics** - Privacy-focused analytics that respect your users and grow your business.

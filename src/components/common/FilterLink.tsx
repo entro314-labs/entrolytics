@@ -1,6 +1,6 @@
 import { HTMLAttributes, ReactNode, useState } from 'react';
 import Link from 'next/link';
-import { Icon, Row, Text } from '@umami/react-zen';
+import { Icon, Row, Text } from '@entro314labs/entro-zen';
 import { useMessages, useNavigation } from '@/components/hooks';
 import { ExternalLink } from '@/components/icons';
 

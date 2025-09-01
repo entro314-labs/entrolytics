@@ -1,6 +1,6 @@
 'use client';
 import { PageBody } from '@/components/common/PageBody';
-import { Column } from '@umami/react-zen';
+import { Column } from '@entro314labs/entro-zen';
 import { PageHeader } from '@/components/common/PageHeader';
 import { PixelAddButton } from './PixelAddButton';
 import { useMessages, useNavigation } from '@/components/hooks';

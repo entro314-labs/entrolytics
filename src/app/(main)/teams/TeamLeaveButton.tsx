@@ -1,6 +1,6 @@
 import { useLoginQuery, useMessages, useModified } from '@/components/hooks';
 import { useRouter } from 'next/navigation';
-import { Button, Icon, Modal, DialogTrigger, Dialog, Text } from '@umami/react-zen';
+import { Button, Icon, Modal, DialogTrigger, Dialog, Text } from '@entro314labs/entro-zen';
 import { LogOut } from '@/components/icons';
 import { TeamLeaveForm } from './TeamLeaveForm';
 

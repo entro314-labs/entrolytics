@@ -1,4 +1,4 @@
-import { Button, Modal, DialogTrigger, Dialog, Column } from '@umami/react-zen';
+import { Button, Modal, DialogTrigger, Dialog, Column } from '@entro314labs/entro-zen';
 import {
   useLoginQuery,
   useMessages,

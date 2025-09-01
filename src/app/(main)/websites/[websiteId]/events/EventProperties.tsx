@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Select, ListItem, Grid } from '@umami/react-zen';
+import { Select, ListItem, Grid } from '@entro314labs/entro-zen';
 import {
   useEventDataPropertiesQuery,
   useEventDataValuesQuery,

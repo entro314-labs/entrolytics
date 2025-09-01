@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Heading, Icon, Row, Text, RowProps } from '@umami/react-zen';
+import { Heading, Icon, Row, Text, RowProps } from '@entro314labs/entro-zen';
 
 export function SectionHeader({
   title,

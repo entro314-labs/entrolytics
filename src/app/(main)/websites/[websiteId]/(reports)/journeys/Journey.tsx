@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { TooltipTrigger, Tooltip, Focusable, Icon, Text, Row, Column } from '@umami/react-zen';
+import { TooltipTrigger, Tooltip, Focusable, Icon, Text, Row, Column } from '@entro314labs/entro-zen';
 import { firstBy } from 'thenby';
 import classNames from 'classnames';
 import { useEscapeKey, useMessages, useResultQuery } from '@/components/hooks';

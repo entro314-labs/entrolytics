@@ -1,5 +1,5 @@
 'use client';
-import { Column } from '@umami/react-zen';
+import { Column } from '@entro314labs/entro-zen';
 import { PageHeader } from '@/components/common/PageHeader';
 import { PageBody } from '@/components/common/PageBody';
 import { BoardAddButton } from './BoardAddButton';

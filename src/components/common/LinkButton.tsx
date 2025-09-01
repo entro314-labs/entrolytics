@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import Link from 'next/link';
-import { Button, ButtonProps } from '@umami/react-zen';
+import { Button, ButtonProps } from '@entro314labs/entro-zen';
 import { useLocale } from '@/components/hooks';
 
 export interface LinkButtonProps extends ButtonProps {

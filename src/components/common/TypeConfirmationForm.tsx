@@ -5,7 +5,7 @@ import {
   FormField,
   TextField,
   FormSubmitButton,
-} from '@umami/react-zen';
+} from '@entro314labs/entro-zen';
 import { useMessages } from '@/components/hooks';
 
 export function TypeConfirmationForm({

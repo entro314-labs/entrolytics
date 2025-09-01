@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Grid, Heading, Column, Row, Select, ListItem } from '@umami/react-zen';
+import { Grid, Heading, Column, Row, Select, ListItem } from '@entro314labs/entro-zen';
 import { useDateRange, useMessages, useNavigation } from '@/components/hooks';
 import { MetricsTable } from '@/components/metrics/MetricsTable';
 import { Panel } from '@/components/common/Panel';

@@ -1,4 +1,4 @@
-import { Button, Icon, Text, useToast, DialogTrigger, Dialog, Modal } from '@umami/react-zen';
+import { Button, Icon, Text, useToast, DialogTrigger, Dialog, Modal } from '@entro314labs/entro-zen';
 import { PasswordEditForm } from './PasswordEditForm';
 import { LockKeyhole } from '@/components/icons';
 import { useMessages } from '@/components/hooks';

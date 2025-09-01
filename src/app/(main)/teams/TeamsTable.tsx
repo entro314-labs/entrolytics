@@ -1,4 +1,4 @@
-import { DataColumn, DataTable, Icon, MenuItem, Text, Row } from '@umami/react-zen';
+import { DataColumn, DataTable, Icon, MenuItem, Text, Row } from '@entro314labs/entro-zen';
 import { useMessages, useNavigation } from '@/components/hooks';
 import { Eye, Edit } from '@/components/icons';
 import { ROLES } from '@/lib/constants';

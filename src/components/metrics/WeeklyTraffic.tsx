@@ -1,9 +1,9 @@
-import { Row, Grid, Text } from '@umami/react-zen';
+import { Row, Grid, Text } from '@entro314labs/entro-zen';
 import { format, startOfDay, addHours } from 'date-fns';
 import { useLocale, useMessages, useWeeklyTrafficQuery } from '@/components/hooks';
 import { LoadingPanel } from '@/components/common/LoadingPanel';
 import { getDayOfWeekAsDate } from '@/lib/date';
-import { Focusable, Tooltip, TooltipTrigger } from '@umami/react-zen';
+import { Focusable, Tooltip, TooltipTrigger } from '@entro314labs/entro-zen';
 
 export function WeeklyTraffic({ websiteId }: { websiteId: string }) {
   const { data, isLoading, error } = useWeeklyTrafficQuery(websiteId);

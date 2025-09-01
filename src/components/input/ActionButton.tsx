@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Button, Icon, Modal, Text, DialogTrigger } from '@umami/react-zen';
+import { Button, Icon, Modal, Text, DialogTrigger } from '@entro314labs/entro-zen';
 
 export function ActionButton({
   onClick,

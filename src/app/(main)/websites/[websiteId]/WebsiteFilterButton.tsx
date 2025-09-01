@@ -1,4 +1,4 @@
-import { Button, Icon, DialogTrigger, Dialog, Modal, Text } from '@umami/react-zen';
+import { Button, Icon, DialogTrigger, Dialog, Modal, Text } from '@entro314labs/entro-zen';
 import { ListFilter } from '@/components/icons';
 import { FilterEditForm } from '@/components/input/FilterEditForm';
 import { useMessages, useNavigation } from '@/components/hooks';

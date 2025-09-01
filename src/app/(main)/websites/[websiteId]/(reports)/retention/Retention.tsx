@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Grid, Row, Column, Text, Icon } from '@umami/react-zen';
+import { Grid, Row, Column, Text, Icon } from '@entro314labs/entro-zen';
 import { Users } from '@/components/icons';
 import { useMessages, useLocale, useResultQuery } from '@/components/hooks';
 import { formatDate } from '@/lib/date';

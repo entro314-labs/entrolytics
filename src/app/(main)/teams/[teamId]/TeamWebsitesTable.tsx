@@ -1,4 +1,4 @@
-import { DataColumn, DataTable } from '@umami/react-zen';
+import { DataColumn, DataTable } from '@entro314labs/entro-zen';
 import { useMessages } from '@/components/hooks';
 import Link from 'next/link';
 

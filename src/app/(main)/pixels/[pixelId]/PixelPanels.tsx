@@ -1,4 +1,4 @@
-import { Grid, Tabs, Tab, TabList, TabPanel, Heading } from '@umami/react-zen';
+import { Grid, Tabs, Tab, TabList, TabPanel, Heading } from '@entro314labs/entro-zen';
 import { GridRow } from '@/components/common/GridRow';
 import { Panel } from '@/components/common/Panel';
 import { WorldMap } from '@/components/metrics/WorldMap';

@@ -1,5 +1,5 @@
 'use client';
-import { Column } from '@umami/react-zen';
+import { Column } from '@entro314labs/entro-zen';
 import { UserSettings } from './UserSettings';
 import { UserProvider } from './UserProvider';
 import { UserHeader } from '@/app/(main)/admin/users/[userId]/UserHeader';

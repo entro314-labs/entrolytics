@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Column, Tabs, TabList, Tab, TabPanel, Row, Button } from '@umami/react-zen';
+import { Column, Tabs, TabList, Tab, TabPanel, Row, Button } from '@entro314labs/entro-zen';
 import { useFilters, useMessages, useNavigation } from '@/components/hooks';
 import { FieldFilters } from '@/components/input/FieldFilters';
 import { SegmentFilters } from '@/components/input/SegmentFilters';

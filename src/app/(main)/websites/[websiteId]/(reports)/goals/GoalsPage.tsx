@@ -1,5 +1,5 @@
 'use client';
-import { Grid, Column } from '@umami/react-zen';
+import { Grid, Column } from '@entro314labs/entro-zen';
 import { SectionHeader } from '@/components/common/SectionHeader';
 import { Goal } from './Goal';
 import { GoalAddButton } from './GoalAddButton';

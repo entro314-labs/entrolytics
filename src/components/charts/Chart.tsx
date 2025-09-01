@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
-import { Box, Column, BoxProps } from '@umami/react-zen';
+import { Box, Column, BoxProps } from '@entro314labs/entro-zen';
 import ChartJS, { LegendItem, ChartOptions, ChartData, UpdateMode } from 'chart.js/auto';
 import { Legend } from '@/components/metrics/Legend';
 import { DEFAULT_ANIMATION_DURATION } from '@/lib/constants';

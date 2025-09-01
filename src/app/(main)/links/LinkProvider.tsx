@@ -1,7 +1,7 @@
 'use client';
 import { createContext, ReactNode } from 'react';
 import { useLinkQuery } from '@/components/hooks';
-import { Loading } from '@umami/react-zen';
+import { Loading } from '@entro314labs/entro-zen';
 
 export const LinkContext = createContext(null);
 

@@ -1,6 +1,6 @@
 import { useApi } from '../useApi';
 import { useModified } from '../useModified';
-import { useToast } from '@umami/react-zen';
+import { useToast } from '@entro314labs/entro-zen';
 
 export function useUpdateQuery(path: string, params?: Record<string, any>) {
   const { post, useMutation } = useApi();

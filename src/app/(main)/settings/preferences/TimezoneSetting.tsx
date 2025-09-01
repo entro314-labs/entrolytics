@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Row, Select, ListItem, Button } from '@umami/react-zen';
+import { Row, Select, ListItem, Button } from '@entro314labs/entro-zen';
 import { useTimezone, useMessages } from '@/components/hooks';
 import { getTimezone } from '@/lib/date';
 

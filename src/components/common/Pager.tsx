@@ -1,4 +1,4 @@
-import { Button, Icon, Row, Text } from '@umami/react-zen';
+import { Button, Icon, Row, Text } from '@entro314labs/entro-zen';
 import { useMessages } from '@/components/hooks';
 import { Chevron } from '@/components/icons';
 

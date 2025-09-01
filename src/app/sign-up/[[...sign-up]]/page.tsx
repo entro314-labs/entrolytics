@@ -1,5 +1,5 @@
 import { SignUp } from '@clerk/nextjs';
-import { Column, Heading, Icon } from '@umami/react-zen';
+import { Column, Heading, Icon } from '@entro314labs/entro-zen';
 import { Logo } from '@/components/icons';
 
 /**

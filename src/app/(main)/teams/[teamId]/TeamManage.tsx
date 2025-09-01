@@ -1,6 +1,6 @@
 import { useMessages, useModified } from '@/components/hooks';
 import { useRouter } from 'next/navigation';
-import { Button, Modal, DialogTrigger, Dialog } from '@umami/react-zen';
+import { Button, Modal, DialogTrigger, Dialog } from '@entro314labs/entro-zen';
 import { ActionForm } from '@/components/common/ActionForm';
 import { TeamDeleteForm } from './TeamDeleteForm';
 

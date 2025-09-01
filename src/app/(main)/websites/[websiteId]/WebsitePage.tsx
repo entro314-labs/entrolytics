@@ -1,5 +1,5 @@
 'use client';
-import { Column, Modal, Dialog } from '@umami/react-zen';
+import { Column, Modal, Dialog } from '@entro314labs/entro-zen';
 import { useNavigation } from '@/components/hooks';
 import { Panel } from '@/components/common/Panel';
 import { WebsiteChart } from './WebsiteChart';

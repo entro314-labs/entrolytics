@@ -1,4 +1,4 @@
-import { Row, Text } from '@umami/react-zen';
+import { Row, Text } from '@entro314labs/entro-zen';
 import { CURRENT_VERSION, HOMEPAGE_URL } from '@/lib/constants';
 
 export function Footer() {

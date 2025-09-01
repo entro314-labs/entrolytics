@@ -9,7 +9,7 @@ import {
   Select,
   ListItem,
   Text,
-} from '@umami/react-zen';
+} from '@entro314labs/entro-zen';
 import {
   useLoginQuery,
   useMessages,

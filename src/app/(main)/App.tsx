@@ -1,5 +1,5 @@
 'use client';
-import { Grid, Loading, Column } from '@umami/react-zen';
+import { Grid, Loading, Column } from '@entro314labs/entro-zen';
 import Script from 'next/script';
 import { usePathname } from 'next/navigation';
 import { UpdateNotice } from './UpdateNotice';

@@ -1,4 +1,4 @@
-import { Grid, Row, Column, Text, Icon, ProgressBar, Dialog } from '@umami/react-zen';
+import { Grid, Row, Column, Text, Icon, ProgressBar, Dialog } from '@entro314labs/entro-zen';
 import { ReportEditButton } from '@/components/input/ReportEditButton';
 import { useMessages, useResultQuery } from '@/components/hooks';
 import { File, Lightning, User } from '@/components/icons';

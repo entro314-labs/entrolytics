@@ -1,4 +1,4 @@
-import { Icon, Row, Text } from '@umami/react-zen';
+import { Icon, Row, Text } from '@entro314labs/entro-zen';
 import { differenceInDays, isSameDay } from 'date-fns';
 import { useLocale } from '@/components/hooks';
 import { Calendar } from '@/components/icons';

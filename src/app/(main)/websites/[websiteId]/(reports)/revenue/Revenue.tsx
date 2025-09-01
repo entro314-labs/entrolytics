@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Grid, Row, Text } from '@umami/react-zen';
+import { Grid, Row, Text } from '@entro314labs/entro-zen';
 import classNames from 'classnames';
 import { colord } from 'colord';
 import { BarChart } from '@/components/charts/BarChart';
@@ -13,7 +13,7 @@ import { CHART_COLORS } from '@/lib/constants';
 import { formatLongCurrency, formatLongNumber } from '@/lib/format';
 import { useCallback, useMemo } from 'react';
 import { Panel } from '@/components/common/Panel';
-import { Column } from '@umami/react-zen';
+import { Column } from '@entro314labs/entro-zen';
 import { LoadingPanel } from '@/components/common/LoadingPanel';
 import { getMinimumUnit } from '@/lib/date';
 import { CurrencySelect } from '@/components/input/CurrencySelect';

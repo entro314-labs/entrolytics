@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useTheme } from '@umami/react-zen';
+import { useTheme } from '@entro314labs/entro-zen';
 import { ChartTooltip } from '@/components/charts/ChartTooltip';
 import { Chart, ChartProps } from '@/components/charts/Chart';
 import { useLocale } from '@/components/hooks';

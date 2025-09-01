@@ -1,4 +1,4 @@
-import { DataTable, DataColumn, Icon, Row, Text } from '@umami/react-zen';
+import { DataTable, DataColumn, Icon, Row, Text } from '@entro314labs/entro-zen';
 import { useFormat, useMessages, useNavigation } from '@/components/hooks';
 import { Empty } from '@/components/common/Empty';
 import { Avatar } from '@/components/common/Avatar';

@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { Icon, Text } from '@umami/react-zen';
+import { Icon, Text } from '@entro314labs/entro-zen';
 import { HTMLAttributes, ReactNode } from 'react';
 import { Arrow } from '@/components/icons';
 import styles from './ChangeLabel.module.css';

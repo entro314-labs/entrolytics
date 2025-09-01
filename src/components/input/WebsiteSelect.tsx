@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Select, SelectProps, ListItem, Text } from '@umami/react-zen';
+import { Select, SelectProps, ListItem, Text } from '@entro314labs/entro-zen';
 import {
   useUserWebsitesQuery,
   useWebsiteQuery,

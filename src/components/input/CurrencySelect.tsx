@@ -1,5 +1,5 @@
 import { CURRENCIES } from '@/lib/constants';
-import { ListItem, Select } from '@umami/react-zen';
+import { ListItem, Select } from '@entro314labs/entro-zen';
 import { useState } from 'react';
 import { useMessages } from '@/components/hooks';
 

@@ -5,7 +5,7 @@ import {
   TextField,
   Button,
   FormSubmitButton,
-} from '@umami/react-zen';
+} from '@entro314labs/entro-zen';
 import { useMessages, useModified, useUpdateQuery } from '@/components/hooks';
 
 export function TeamJoinForm({ onSave, onClose }: { onSave: () => void; onClose: () => void }) {

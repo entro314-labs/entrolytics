@@ -1,25 +1,25 @@
-import { canViewWebsite } from '@/validations';
-import { getWebsiteDateRange } from '@/queries';
-import { json, unauthorized } from '@/lib/response';
-import { parseRequest } from '@/lib/request';
+import { canViewWebsite } from '@/validations'
+import { getWebsiteDateRange } from '@/queries'
+import { json, unauthorized } from '@/lib/response'
+import { parseRequest } from '@/lib/request'
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ websiteId: string }> },
+  { params }: { params: Promise<{ websiteId: string }> }
 ) {
-  const { auth, error } = await parseRequest(request);
+  const { auth, error } = await parseRequest(request)
 
   if (error) {
-    return error();
+    return error()
   }
 
-  const { websiteId } = await params;
+  const { websiteId } = await params
 
   if (!(await canViewWebsite(auth, websiteId))) {
-    return unauthorized();
+    return unauthorized()
   }
 
-  const dateRange = await getWebsiteDateRange(websiteId);
+  const dateRange = await getWebsiteDateRange(websiteId)
 
-  return json(dateRange);
+  return json(dateRange)
 }

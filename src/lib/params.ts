@@ -1,40 +1,40 @@
-import { FILTER_COLUMNS, OPERATORS } from '@/lib/constants';
-import { Filter, QueryFilters, QueryOptions } from '@/lib/types';
+import { FILTER_COLUMNS, OPERATORS } from '@/lib/constants'
+import { Filter, QueryFilters, QueryOptions } from '@/lib/types'
 
 export function parseFilterValue(param: any) {
   if (typeof param === 'string') {
-    const [, operator, value] = param.match(/^([a-z]+)\.(.*)/) || [];
+    const [, operator, value] = param.match(/^([a-z]+)\.(.*)/) || []
 
-    return { operator: operator || OPERATORS.equals, value: value || param };
+    return { operator: operator || OPERATORS.equals, value: value || param }
   }
-  return { operator: OPERATORS.equals, value: param };
+  return { operator: OPERATORS.equals, value: param }
 }
 
 export function isEqualsOperator(operator: any) {
-  return [OPERATORS.equals, OPERATORS.notEquals].includes(operator);
+  return [OPERATORS.equals, OPERATORS.notEquals].includes(operator)
 }
 
 export function isSearchOperator(operator: any) {
-  return [OPERATORS.contains, OPERATORS.doesNotContain].includes(operator);
+  return [OPERATORS.contains, OPERATORS.doesNotContain].includes(operator)
 }
 
 export function filtersObjectToArray(filters: QueryFilters, options: QueryOptions = {}): Filter[] {
   if (!filters) {
-    return [];
+    return []
   }
 
   return Object.keys(filters).reduce((arr, key) => {
-    const filter = filters[key];
+    const filter = filters[key]
 
     if (filter === undefined || filter === null) {
-      return arr;
+      return arr
     }
 
     if (filter?.name && filter?.value !== undefined) {
-      return arr.concat({ ...filter, column: options?.columns?.[key] ?? FILTER_COLUMNS[key] });
+      return arr.concat({ ...filter, column: options?.columns?.[key] ?? FILTER_COLUMNS[key] })
     }
 
-    const { operator, value } = parseFilterValue(filter);
+    const { operator, value } = parseFilterValue(filter)
 
     return arr.concat({
       name: key,
@@ -42,16 +42,16 @@ export function filtersObjectToArray(filters: QueryFilters, options: QueryOption
       operator,
       value,
       prefix: options?.prefix,
-    });
-  }, []);
+    })
+  }, [])
 }
 
 export function filtersArrayToObject(filters: Filter[]) {
   return filters.reduce((obj, filter: Filter) => {
-    const { name, operator, value } = filter;
+    const { name, operator, value } = filter
 
-    obj[name] = `${operator}.${value}`;
+    obj[name] = `${operator}.${value}`
 
-    return obj;
-  }, {});
+    return obj
+  }, {})
 }

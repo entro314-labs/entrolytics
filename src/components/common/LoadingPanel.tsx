@@ -1,18 +1,18 @@
-import { ReactNode } from 'react';
-import { Loading, Column, type ColumnProps } from '@entro314labs/entro-zen';
-import { ErrorMessage } from '@/components/common/ErrorMessage';
-import { Empty } from '@/components/common/Empty';
+import { ReactNode } from 'react'
+import { Loading, Column, type ColumnProps } from '@entro314labs/entro-zen'
+import { ErrorMessage } from '@/components/common/ErrorMessage'
+import { Empty } from '@/components/common/Empty'
 
 export interface LoadingPanelProps extends ColumnProps {
-  data?: any;
-  error?: Error;
-  isEmpty?: boolean;
-  isLoading?: boolean;
-  isFetching?: boolean;
-  loadingIcon?: 'dots' | 'spinner';
-  loadingPosition?: 'center' | 'page' | 'inline';
-  renderEmpty?: () => ReactNode;
-  children: ReactNode;
+  data?: any
+  error?: Error
+  isEmpty?: boolean
+  isLoading?: boolean
+  isFetching?: boolean
+  loadingIcon?: 'dots' | 'spinner'
+  loadingPosition?: 'center' | 'page' | 'inline'
+  renderEmpty?: () => ReactNode
+  children: ReactNode
 }
 
 export function LoadingPanel({
@@ -27,7 +27,7 @@ export function LoadingPanel({
   children,
   ...props
 }: LoadingPanelProps) {
-  const empty = isEmpty ?? checkEmpty(data);
+  const empty = isEmpty ?? checkEmpty(data)
 
   return (
     <>
@@ -47,19 +47,19 @@ export function LoadingPanel({
       {/* Show main content when data exists */}
       {!isLoading && !isFetching && !error && !empty && children}
     </>
-  );
+  )
 }
 
 function checkEmpty(data: any) {
-  if (!data) return false;
+  if (!data) return false
 
   if (Array.isArray(data)) {
-    return data.length <= 0;
+    return data.length <= 0
   }
 
   if (typeof data === 'object') {
-    return Object.keys(data).length <= 0;
+    return Object.keys(data).length <= 0
   }
 
-  return !!data;
+  return !!data
 }

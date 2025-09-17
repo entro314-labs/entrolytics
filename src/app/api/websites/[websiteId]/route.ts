@@ -1,84 +1,84 @@
-import { z } from 'zod';
-import { canUpdateWebsite, canDeleteWebsite, canViewWebsite } from '@/validations';
-import { SHARE_ID_REGEX } from '@/lib/constants';
-import { parseRequest } from '@/lib/request';
-import { ok, json, unauthorized, serverError, badRequest } from '@/lib/response';
-import { deleteWebsite, getWebsite, updateWebsite } from '@/queries';
+import { z } from 'zod'
+import { canUpdateWebsite, canDeleteWebsite, canViewWebsite } from '@/validations'
+import { SHARE_ID_REGEX } from '@/lib/constants'
+import { parseRequest } from '@/lib/request'
+import { ok, json, unauthorized, serverError, badRequest } from '@/lib/response'
+import { deleteWebsite, getWebsite, updateWebsite } from '@/queries'
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ websiteId: string }> },
+  { params }: { params: Promise<{ websiteId: string }> }
 ) {
-  const { auth, error } = await parseRequest(request);
+  const { auth, error } = await parseRequest(request)
 
   if (error) {
-    return error();
+    return error()
   }
 
-  const { websiteId } = await params;
+  const { websiteId } = await params
 
   if (!(await canViewWebsite(auth, websiteId))) {
-    return unauthorized();
+    return unauthorized()
   }
 
-  const website = await getWebsite(websiteId);
+  const website = await getWebsite(websiteId)
 
-  return json(website);
+  return json(website)
 }
 
 export async function POST(
   request: Request,
-  { params }: { params: Promise<{ websiteId: string }> },
+  { params }: { params: Promise<{ websiteId: string }> }
 ) {
   const schema = z.object({
     name: z.string().optional(),
     domain: z.string().optional(),
     shareId: z.string().regex(SHARE_ID_REGEX).nullable().optional(),
-  });
+  })
 
-  const { auth, body, error } = await parseRequest(request, schema);
+  const { auth, body, error } = await parseRequest(request, schema)
 
   if (error) {
-    return error();
+    return error()
   }
 
-  const { websiteId } = await params;
-  const { name, domain, shareId } = body;
+  const { websiteId } = await params
+  const { name, domain, shareId } = body
 
   if (!(await canUpdateWebsite(auth, websiteId))) {
-    return unauthorized();
+    return unauthorized()
   }
 
   try {
-    const website = await updateWebsite(websiteId, { name, domain, shareId });
+    const website = await updateWebsite(websiteId, { name, domain, shareId })
 
-    return Response.json(website);
+    return Response.json(website)
   } catch (e: any) {
     if (e.message.toLowerCase().includes('unique constraint') && e.message.includes('share_id')) {
-      return badRequest('That share ID is already taken.');
+      return badRequest('That share ID is already taken.')
     }
 
-    return serverError(e);
+    return serverError(e)
   }
 }
 
 export async function DELETE(
   request: Request,
-  { params }: { params: Promise<{ websiteId: string }> },
+  { params }: { params: Promise<{ websiteId: string }> }
 ) {
-  const { auth, error } = await parseRequest(request);
+  const { auth, error } = await parseRequest(request)
 
   if (error) {
-    return error();
+    return error()
   }
 
-  const { websiteId } = await params;
+  const { websiteId } = await params
 
   if (!(await canDeleteWebsite(auth, websiteId))) {
-    return unauthorized();
+    return unauthorized()
   }
 
-  await deleteWebsite(websiteId);
+  await deleteWebsite(websiteId)
 
-  return ok();
+  return ok()
 }

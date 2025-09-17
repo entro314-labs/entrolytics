@@ -1,13 +1,13 @@
-import { Tabs, TabList, Tab, TabPanel } from '@entro314labs/entro-zen';
-import { useMessages, useWebsite } from '@/components/hooks';
-import { WebsiteShareForm } from './WebsiteShareForm';
-import { WebsiteTrackingCode } from './WebsiteTrackingCode';
-import { WebsiteData } from './WebsiteData';
-import { WebsiteEditForm } from './WebsiteEditForm';
+import { Tabs, TabList, Tab, TabPanel } from '@entro314labs/entro-zen'
+import { useMessages, useWebsite } from '@/components/hooks'
+import { WebsiteShareForm } from './WebsiteShareForm'
+import { WebsiteTrackingCode } from './WebsiteTrackingCode'
+import { WebsiteData } from './WebsiteData'
+import { WebsiteEditForm } from './WebsiteEditForm'
 
 export function WebsiteSettings({ websiteId }: { websiteId: string; openExternal?: boolean }) {
-  const website = useWebsite();
-  const { formatMessage, labels } = useMessages();
+  const website = useWebsite()
+  const { formatMessage, labels } = useMessages()
 
   return (
     <Tabs>
@@ -30,5 +30,5 @@ export function WebsiteSettings({ websiteId }: { websiteId: string; openExternal
         <WebsiteData websiteId={websiteId} />
       </TabPanel>
     </Tabs>
-  );
+  )
 }

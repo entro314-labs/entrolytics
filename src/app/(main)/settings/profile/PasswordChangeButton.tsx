@@ -1,15 +1,15 @@
-import { Button, Icon, Text, useToast, DialogTrigger, Dialog, Modal } from '@entro314labs/entro-zen';
-import { PasswordEditForm } from './PasswordEditForm';
-import { LockKeyhole } from '@/components/icons';
-import { useMessages } from '@/components/hooks';
+import { Button, Icon, Text, useToast, DialogTrigger, Dialog, Modal } from '@entro314labs/entro-zen'
+import { PasswordEditForm } from './PasswordEditForm'
+import { LockKeyhole } from '@/components/icons'
+import { useMessages } from '@/components/hooks'
 
 export function PasswordChangeButton() {
-  const { formatMessage, labels, messages } = useMessages();
-  const { toast } = useToast();
+  const { formatMessage, labels, messages } = useMessages()
+  const { toast } = useToast()
 
   const handleSave = () => {
-    toast(formatMessage(messages.saved));
-  };
+    toast(formatMessage(messages.saved))
+  }
 
   return (
     <DialogTrigger>
@@ -25,5 +25,5 @@ export function PasswordChangeButton() {
         </Dialog>
       </Modal>
     </DialogTrigger>
-  );
+  )
 }

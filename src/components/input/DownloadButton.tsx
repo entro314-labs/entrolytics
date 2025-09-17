@@ -1,21 +1,21 @@
-import Papa from 'papaparse';
-import { Button, Icon, TooltipTrigger, Tooltip } from '@entro314labs/entro-zen';
-import { Download } from '@/components/icons';
-import { useMessages } from '@/components/hooks';
+import Papa from 'papaparse'
+import { Button, Icon, TooltipTrigger, Tooltip } from '@entro314labs/entro-zen'
+import { Download } from '@/components/icons'
+import { useMessages } from '@/components/hooks'
 
 export function DownloadButton({
   filename = 'data',
   data,
 }: {
-  filename?: string;
-  data?: any;
-  onClick?: () => void;
+  filename?: string
+  data?: any
+  onClick?: () => void
 }) {
-  const { formatMessage, labels } = useMessages();
+  const { formatMessage, labels } = useMessages()
 
   const handleClick = async () => {
-    downloadCsv(`${filename}.csv`, Papa.unparse(data));
-  };
+    downloadCsv(`${filename}.csv`, Papa.unparse(data))
+  }
 
   return (
     <TooltipTrigger delay={0}>
@@ -26,17 +26,17 @@ export function DownloadButton({
       </Button>
       <Tooltip>{formatMessage(labels.download)}</Tooltip>
     </TooltipTrigger>
-  );
+  )
 }
 
 function downloadCsv(filename: string, data: any) {
-  const blob = new Blob([data], { type: 'text/csv' });
-  const url = URL.createObjectURL(blob);
+  const blob = new Blob([data], { type: 'text/csv' })
+  const url = URL.createObjectURL(blob)
 
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  a.click();
+  const a = document.createElement('a')
+  a.href = url
+  a.download = filename
+  a.click()
 
-  URL.revokeObjectURL(url);
+  URL.revokeObjectURL(url)
 }

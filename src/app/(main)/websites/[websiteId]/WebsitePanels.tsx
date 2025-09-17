@@ -1,21 +1,21 @@
-import { Grid, Tabs, Tab, TabList, TabPanel, Heading, Row } from '@entro314labs/entro-zen';
-import { GridRow } from '@/components/common/GridRow';
-import { Panel } from '@/components/common/Panel';
-import { WorldMap } from '@/components/metrics/WorldMap';
-import { MetricsTable } from '@/components/metrics/MetricsTable';
-import { WeeklyTraffic } from '@/components/metrics/WeeklyTraffic';
-import { useMessages } from '@/components/hooks';
+import { Grid, Tabs, Tab, TabList, TabPanel, Heading, Row } from '@entro314labs/entro-zen'
+import { GridRow } from '@/components/common/GridRow'
+import { Panel } from '@/components/common/Panel'
+import { WorldMap } from '@/components/metrics/WorldMap'
+import { MetricsTable } from '@/components/metrics/MetricsTable'
+import { WeeklyTraffic } from '@/components/metrics/WeeklyTraffic'
+import { useMessages } from '@/components/hooks'
 
 export function WebsitePanels({ websiteId }: { websiteId: string }) {
-  const { formatMessage, labels } = useMessages();
+  const { formatMessage, labels } = useMessages()
   const tableProps = {
     websiteId,
     limit: 10,
     allowDownload: false,
     showMore: true,
     metric: formatMessage(labels.visitors),
-  };
-  const rowProps = { minHeight: '570px' };
+  }
+  const rowProps = { minHeight: '570px' }
 
   return (
     <Grid gap="3">
@@ -114,5 +114,5 @@ export function WebsitePanels({ websiteId }: { websiteId: string }) {
         </Panel>
       </GridRow>
     </Grid>
-  );
+  )
 }

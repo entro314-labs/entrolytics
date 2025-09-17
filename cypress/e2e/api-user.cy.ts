@@ -1,15 +1,15 @@
 describe('User API tests', () => {
-  Cypress.session.clearAllSavedSessions();
+  Cypress.session.clearAllSavedSessions()
 
   before(() => {
-    cy.login(Cypress.env('entrolytics_user'), Cypress.env('entrolytics_password'));
-  });
+    cy.login(Cypress.env('entrolytics_user'), Cypress.env('entrolytics_password'))
+  })
 
-  let userId;
+  let userId
 
   it('Creates a user.', () => {
-    cy.fixture('users').then(data => {
-      const userCreate = data.userCreate;
+    cy.fixture('users').then((data) => {
+      const userCreate = data.userCreate
       cy.request({
         method: 'POST',
         url: '/api/users',
@@ -18,14 +18,14 @@ describe('User API tests', () => {
           Authorization: Cypress.env('authorization'),
         },
         body: userCreate,
-      }).then(response => {
-        userId = response.body.id;
-        expect(response.status).to.eq(200);
-        expect(response.body).to.have.property('username', 'cypress1');
-        expect(response.body).to.have.property('role', 'user');
-      });
-    });
-  });
+      }).then((response) => {
+        userId = response.body.id
+        expect(response.status).to.eq(200)
+        expect(response.body).to.have.property('username', 'cypress1')
+        expect(response.body).to.have.property('role', 'user')
+      })
+    })
+  })
 
   it('Returns all users. Admin access is required.', () => {
     cy.request({
@@ -35,18 +35,18 @@ describe('User API tests', () => {
         'Content-Type': 'application/json',
         Authorization: Cypress.env('authorization'),
       },
-    }).then(response => {
-      expect(response.status).to.eq(200);
-      expect(response.body.data[0]).to.have.property('id');
-      expect(response.body.data[0]).to.have.property('username');
-      expect(response.body.data[0]).to.have.property('password');
-      expect(response.body.data[0]).to.have.property('role');
-    });
-  });
+    }).then((response) => {
+      expect(response.status).to.eq(200)
+      expect(response.body.data[0]).to.have.property('id')
+      expect(response.body.data[0]).to.have.property('username')
+      expect(response.body.data[0]).to.have.property('password')
+      expect(response.body.data[0]).to.have.property('role')
+    })
+  })
 
   it('Updates a user.', () => {
-    cy.fixture('users').then(data => {
-      const userUpdate = data.userUpdate;
+    cy.fixture('users').then((data) => {
+      const userUpdate = data.userUpdate
       cy.request({
         method: 'POST',
         url: `/api/users/${userId}`,
@@ -55,15 +55,15 @@ describe('User API tests', () => {
           Authorization: Cypress.env('authorization'),
         },
         body: userUpdate,
-      }).then(response => {
-        userId = response.body.id;
-        expect(response.status).to.eq(200);
-        expect(response.body).to.have.property('id', userId);
-        expect(response.body).to.have.property('username', 'cypress1');
-        expect(response.body).to.have.property('role', 'view-only');
-      });
-    });
-  });
+      }).then((response) => {
+        userId = response.body.id
+        expect(response.status).to.eq(200)
+        expect(response.body).to.have.property('id', userId)
+        expect(response.body).to.have.property('username', 'cypress1')
+        expect(response.body).to.have.property('role', 'view-only')
+      })
+    })
+  })
 
   it('Gets a user by ID.', () => {
     cy.request({
@@ -73,13 +73,13 @@ describe('User API tests', () => {
         'Content-Type': 'application/json',
         Authorization: Cypress.env('authorization'),
       },
-    }).then(response => {
-      expect(response.status).to.eq(200);
-      expect(response.body).to.have.property('id', userId);
-      expect(response.body).to.have.property('username', 'cypress1');
-      expect(response.body).to.have.property('role', 'view-only');
-    });
-  });
+    }).then((response) => {
+      expect(response.status).to.eq(200)
+      expect(response.body).to.have.property('id', userId)
+      expect(response.body).to.have.property('username', 'cypress1')
+      expect(response.body).to.have.property('role', 'view-only')
+    })
+  })
 
   it('Deletes a user.', () => {
     cy.request({
@@ -89,11 +89,11 @@ describe('User API tests', () => {
         'Content-Type': 'application/json',
         Authorization: Cypress.env('authorization'),
       },
-    }).then(response => {
-      expect(response.status).to.eq(200);
-      expect(response.body).to.have.property('ok', true);
-    });
-  });
+    }).then((response) => {
+      expect(response.status).to.eq(200)
+      expect(response.body).to.have.property('ok', true)
+    })
+  })
 
   it('Gets all websites that belong to a user.', () => {
     cy.request({
@@ -103,11 +103,11 @@ describe('User API tests', () => {
         'Content-Type': 'application/json',
         Authorization: Cypress.env('authorization'),
       },
-    }).then(response => {
-      expect(response.status).to.eq(200);
-      expect(response.body).to.have.property('data');
-    });
-  });
+    }).then((response) => {
+      expect(response.status).to.eq(200)
+      expect(response.body).to.have.property('data')
+    })
+  })
 
   it('Gets all orgs that belong to a user.', () => {
     cy.request({
@@ -117,9 +117,9 @@ describe('User API tests', () => {
         'Content-Type': 'application/json',
         Authorization: Cypress.env('authorization'),
       },
-    }).then(response => {
-      expect(response.status).to.eq(200);
-      expect(response.body).to.have.property('data');
-    });
-  });
-});
+    }).then((response) => {
+      expect(response.status).to.eq(200)
+      expect(response.body).to.have.property('data')
+    })
+  })
+})

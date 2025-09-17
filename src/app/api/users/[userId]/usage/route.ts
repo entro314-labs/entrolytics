@@ -1,60 +1,60 @@
-import { z } from 'zod';
-import { json, unauthorized } from '@/lib/response';
-import { getAllUserWebsitesIncludingOrgOwner } from '@/queries/prisma/website';
-import { getEventUsage } from '@/queries/sql/events/getEventUsage';
-import { getEventDataUsage } from '@/queries/sql/events/getEventDataUsage';
-import { parseRequest, getQueryFilters } from '@/lib/request';
+import { z } from 'zod'
+import { json, unauthorized } from '@/lib/response'
+import { getAllUserWebsitesIncludingOrgOwner } from '@/queries/prisma/website'
+import { getEventUsage } from '@/queries/sql/events/getEventUsage'
+import { getEventDataUsage } from '@/queries/sql/events/getEventDataUsage'
+import { parseRequest, getQueryFilters } from '@/lib/request'
 
 export async function GET(request: Request, { params }: { params: Promise<{ userId: string }> }) {
   const schema = z.object({
     startAt: z.coerce.number().int(),
     endAt: z.coerce.number().int(),
-  });
+  })
 
-  const { auth, query, error } = await parseRequest(request, schema);
+  const { auth, query, error } = await parseRequest(request, schema)
 
   if (error) {
-    return error();
+    return error()
   }
 
   if (!auth.user.isAdmin) {
-    return unauthorized();
+    return unauthorized()
   }
 
-  const { userId } = await params;
-  const filters = await getQueryFilters(query);
+  const { userId } = await params
+  const filters = await getQueryFilters(query)
 
-  const websites = await getAllUserWebsitesIncludingOrgOwner(userId);
+  const websites = await getAllUserWebsitesIncludingOrgOwner(userId)
 
-  const websiteIds = websites.map(a => a.id);
+  const websiteIds = websites.map((a) => a.id)
 
-  const websiteEventUsage = await getEventUsage(websiteIds, filters);
-  const eventDataUsage = await getEventDataUsage(websiteIds, filters);
+  const websiteEventUsage = await getEventUsage(websiteIds, filters)
+  const eventDataUsage = await getEventDataUsage(websiteIds, filters)
 
-  const websiteUsage = websites.map(a => ({
+  const websiteUsage = websites.map((a) => ({
     websiteId: a.id,
     websiteName: a.name,
-    websiteEventUsage: websiteEventUsage.find(b => a.id === b.websiteId)?.count || 0,
-    eventDataUsage: eventDataUsage.find(b => a.id === b.websiteId)?.count || 0,
+    websiteEventUsage: websiteEventUsage.find((b) => a.id === b.websiteId)?.count || 0,
+    eventDataUsage: eventDataUsage.find((b) => a.id === b.websiteId)?.count || 0,
     deletedAt: a.deletedAt,
-  }));
+  }))
 
   const usage = websiteUsage.reduce(
     (acc, cv) => {
-      acc.websiteEventUsage += cv.websiteEventUsage;
-      acc.eventDataUsage += cv.eventDataUsage;
+      acc.websiteEventUsage += cv.websiteEventUsage
+      acc.eventDataUsage += cv.eventDataUsage
 
-      return acc;
+      return acc
     },
-    { websiteEventUsage: 0, eventDataUsage: 0 },
-  );
+    { websiteEventUsage: 0, eventDataUsage: 0 }
+  )
 
   const filteredWebsiteUsage = websiteUsage.filter(
-    a => !a.deletedAt && (a.websiteEventUsage > 0 || a.eventDataUsage > 0),
-  );
+    (a) => !a.deletedAt && (a.websiteEventUsage > 0 || a.eventDataUsage > 0)
+  )
 
   return json({
     ...usage,
     websites: filteredWebsiteUsage,
-  });
+  })
 }

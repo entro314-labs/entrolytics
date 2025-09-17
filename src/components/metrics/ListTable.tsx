@@ -1,32 +1,32 @@
-import { ReactNode } from 'react';
-import { List as List } from 'react-window';
-import { useSpring, config } from '@react-spring/web';
-import { Grid, Row, Column, Text } from '@entro314labs/entro-zen';
-import { AnimatedDiv } from '@/components/common/AnimatedDiv';
-import { Empty } from '@/components/common/Empty';
-import { useMessages } from '@/components/hooks';
-import { formatLongCurrency, formatLongNumber } from '@/lib/format';
+import { ReactNode } from 'react'
+import { List as List } from 'react-window'
+import { useSpring, config } from '@react-spring/web'
+import { Grid, Row, Column, Text } from '@entro314labs/entro-zen'
+import { AnimatedDiv } from '@/components/common/AnimatedDiv'
+import { Empty } from '@/components/common/Empty'
+import { useMessages } from '@/components/hooks'
+import { formatLongCurrency, formatLongNumber } from '@/lib/format'
 
-const ITEM_SIZE = 30;
+const ITEM_SIZE = 30
 
 interface ListData {
-  label: string;
-  count: number;
-  percent: number;
+  label: string
+  count: number
+  percent: number
 }
 
 export interface ListTableProps {
-  data?: ListData[];
-  title?: string;
-  metric?: string;
-  className?: string;
-  renderLabel?: (data: ListData, index: number) => ReactNode;
-  renderChange?: (data: ListData, index: number) => ReactNode;
-  animate?: boolean;
-  virtualize?: boolean;
-  showPercentage?: boolean;
-  itemCount?: number;
-  currency?: string;
+  data?: ListData[]
+  title?: string
+  metric?: string
+  className?: string
+  renderLabel?: (data: ListData, index: number) => ReactNode
+  renderChange?: (data: ListData, index: number) => ReactNode
+  animate?: boolean
+  virtualize?: boolean
+  showPercentage?: boolean
+  itemCount?: number
+  currency?: string
 }
 
 export function ListTable({
@@ -41,10 +41,10 @@ export function ListTable({
   itemCount = 10,
   currency,
 }: ListTableProps) {
-  const { formatMessage, labels } = useMessages();
+  const { formatMessage, labels } = useMessages()
 
   const getRow = (row: ListData, index: number) => {
-    const { label, count, percent } = row;
+    const { label, count, percent } = row
 
     return (
       <AnimatedRow
@@ -57,12 +57,12 @@ export function ListTable({
         change={renderChange ? renderChange(row, index) : null}
         currency={currency}
       />
-    );
-  };
+    )
+  }
 
   const ListTableRow = ({ index, style }) => {
-    return <div style={style}>{getRow(data[index], index)}</div>;
-  };
+    return <div style={style}>{getRow(data[index], index)}</div>
+  }
 
   return (
     <Column gap>
@@ -88,7 +88,7 @@ export function ListTable({
         )}
       </Column>
     </Column>
-  );
+  )
 }
 
 const AnimatedRow = ({
@@ -105,7 +105,7 @@ const AnimatedRow = ({
     y: !isNaN(value) ? value : 0,
     from: { width: 0, y: 0 },
     config: animate ? config.default : { duration: 0 },
-  });
+  })
 
   return (
     <Grid
@@ -124,7 +124,7 @@ const AnimatedRow = ({
         <Text weight="bold">
           <AnimatedDiv title={props?.y as any}>
             {currency
-              ? props.y?.to(n => formatLongCurrency(n, currency))
+              ? props.y?.to((n) => formatLongCurrency(n, currency))
               : props.y?.to(formatLongNumber)}
           </AnimatedDiv>
         </Text>
@@ -139,9 +139,9 @@ const AnimatedRow = ({
           color="muted"
           paddingLeft="3"
         >
-          <AnimatedDiv>{props.width.to(n => `${n?.toFixed?.(0)}%`)}</AnimatedDiv>
+          <AnimatedDiv>{props.width.to((n) => `${n?.toFixed?.(0)}%`)}</AnimatedDiv>
         </Row>
       )}
     </Grid>
-  );
-};
+  )
+}

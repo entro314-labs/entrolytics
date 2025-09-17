@@ -1,16 +1,16 @@
-import prisma from '@/lib/prisma';
-import clickhouse from '@/lib/clickhouse';
-import { runQuery, PRISMA, CLICKHOUSE } from '@/lib/db';
+import prisma from '@/lib/prisma'
+import clickhouse from '@/lib/clickhouse'
+import { runQuery, PRISMA, CLICKHOUSE } from '@/lib/db'
 
 export async function getSessionData(...args: [websiteId: string, sessionId: string]) {
   return runQuery({
     [PRISMA]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  });
+  })
 }
 
 async function relationalQuery(websiteId: string, sessionId: string) {
-  const { rawQuery } = prisma;
+  const { rawQuery } = prisma
 
   return rawQuery(
     `
@@ -28,12 +28,12 @@ async function relationalQuery(websiteId: string, sessionId: string) {
       and session_id = {{sessionId::uuid}}
     order by data_key asc
     `,
-    { websiteId, sessionId },
-  );
+    { websiteId, sessionId }
+  )
 }
 
 async function clickhouseQuery(websiteId: string, sessionId: string) {
-  const { rawQuery } = clickhouse;
+  const { rawQuery } = clickhouse
 
   return rawQuery(
     `
@@ -51,6 +51,6 @@ async function clickhouseQuery(websiteId: string, sessionId: string) {
     and session_id = {sessionId:UUID}
     order by data_key asc
     `,
-    { websiteId, sessionId },
-  );
+    { websiteId, sessionId }
+  )
 }

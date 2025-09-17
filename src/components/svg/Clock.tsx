@@ -1,5 +1,5 @@
-import * as React from 'react';
-import type { SVGProps } from 'react';
+import * as React from 'react'
+import type { SVGProps } from 'react'
 const SvgClock = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={512} height={512} viewBox="0 0 24 24" {...props}>
     <g clipRule="evenodd">
@@ -8,5 +8,5 @@ const SvgClock = (props: SVGProps<SVGSVGElement>) => (
       <path d="M12 6a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0V7a1 1 0 0 1 1-1" />
     </g>
   </svg>
-);
-export default SvgClock;
+)
+export default SvgClock

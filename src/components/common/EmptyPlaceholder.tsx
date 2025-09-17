@@ -1,11 +1,11 @@
-import { ReactNode } from 'react';
-import { Icon, Text, Column } from '@entro314labs/entro-zen';
+import { ReactNode } from 'react'
+import { Icon, Text, Column } from '@entro314labs/entro-zen'
 
 export interface EmptyPlaceholderProps {
-  title?: string;
-  description?: string;
-  icon?: ReactNode;
-  children?: ReactNode;
+  title?: string
+  description?: string
+  icon?: ReactNode
+  children?: ReactNode
 }
 
 export function EmptyPlaceholder({ title, description, icon, children }: EmptyPlaceholderProps) {
@@ -24,5 +24,5 @@ export function EmptyPlaceholder({ title, description, icon, children }: EmptyPl
       {description && <Text color="muted">{description}</Text>}
       {children}
     </Column>
-  );
+  )
 }

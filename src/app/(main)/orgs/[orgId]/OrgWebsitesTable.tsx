@@ -1,9 +1,9 @@
-import { DataColumn, DataTable } from '@entro314labs/entro-zen';
-import { useMessages } from '@/components/hooks';
-import Link from 'next/link';
+import { DataColumn, DataTable } from '@entro314labs/entro-zen'
+import { useMessages } from '@/components/hooks'
+import Link from 'next/link'
 
 export function OrgWebsitesTable({ orgId, data = [] }: { orgId: string; data: any[] }) {
-  const { formatMessage, labels } = useMessages();
+  const { formatMessage, labels } = useMessages()
 
   return (
     <DataTable data={data}>
@@ -15,5 +15,5 @@ export function OrgWebsitesTable({ orgId, data = [] }: { orgId: string; data: an
         {(row: any) => row?.createUser?.displayName || row?.createUser?.email}
       </DataColumn>
     </DataTable>
-  );
+  )
 }

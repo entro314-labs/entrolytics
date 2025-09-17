@@ -1,17 +1,17 @@
-import { useApi } from '../useApi';
-import { useFilterParameters } from '../useFilterParameters';
-import { useDateParameters } from '../useDateParameters';
-import { ReactQueryOptions } from '@/lib/types';
+import { useApi } from '../useApi'
+import { useFilterParameters } from '../useFilterParameters'
+import { useDateParameters } from '../useDateParameters'
+import { ReactQueryOptions } from '@/lib/types'
 
 export function useEventDataValuesQuery(
   websiteId: string,
   eventName: string,
   propertyName: string,
-  options?: ReactQueryOptions,
+  options?: ReactQueryOptions
 ) {
-  const { get, useQuery } = useApi();
-  const date = useDateParameters(websiteId);
-  const filters = useFilterParameters();
+  const { get, useQuery } = useApi()
+  const date = useDateParameters(websiteId)
+  const filters = useFilterParameters()
 
   return useQuery<any>({
     queryKey: [
@@ -27,5 +27,5 @@ export function useEventDataValuesQuery(
       }),
     enabled: !!(websiteId && propertyName),
     ...options,
-  });
+  })
 }

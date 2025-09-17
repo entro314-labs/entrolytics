@@ -1,25 +1,25 @@
-import { useState } from 'react';
-import { Row, Select, ListItem, Button } from '@entro314labs/entro-zen';
-import { useTimezone, useMessages } from '@/components/hooks';
-import { getTimezone } from '@/lib/date';
+import { useState } from 'react'
+import { Row, Select, ListItem, Button } from '@entro314labs/entro-zen'
+import { useTimezone, useMessages } from '@/components/hooks'
+import { getTimezone } from '@/lib/date'
 
-const timezones = Intl.supportedValuesOf('timeZone');
+const timezones = Intl.supportedValuesOf('timeZone')
 
 export function TimezoneSetting() {
-  const [search, setSearch] = useState('');
-  const { formatMessage, labels } = useMessages();
-  const { timezone, saveTimezone } = useTimezone();
+  const [search, setSearch] = useState('')
+  const { formatMessage, labels } = useMessages()
+  const { timezone, saveTimezone } = useTimezone()
   const items = search
-    ? timezones.filter(n => n.toLowerCase().includes(search.toLowerCase()))
-    : timezones;
+    ? timezones.filter((n) => n.toLowerCase().includes(search.toLowerCase()))
+    : timezones
 
-  const handleReset = () => saveTimezone(getTimezone());
+  const handleReset = () => saveTimezone(getTimezone())
 
-  const handleOpen = isOpen => {
+  const handleOpen = (isOpen) => {
     if (isOpen) {
-      setSearch('');
+      setSearch('')
     }
-  };
+  }
 
   return (
     <Row gap="3">
@@ -40,5 +40,5 @@ export function TimezoneSetting() {
       </Select>
       <Button onPress={handleReset}>{formatMessage(labels.reset)}</Button>
     </Row>
-  );
+  )
 }

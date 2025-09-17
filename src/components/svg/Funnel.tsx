@@ -1,5 +1,5 @@
-import * as React from 'react';
-import type { SVGProps } from 'react';
+import * as React from 'react'
+import type { SVGProps } from 'react'
 const SvgFunnel = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -14,5 +14,5 @@ const SvgFunnel = (props: SVGProps<SVGSVGElement>) => (
     <path d="M22 23H10a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1m-11-2h10v-4H11z" />
     <path d="M19 29h-6a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1m-5-2h4v-4h-4z" />
   </svg>
-);
-export default SvgFunnel;
+)
+export default SvgFunnel

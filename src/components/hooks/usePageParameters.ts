@@ -1,16 +1,16 @@
-import { useMemo } from 'react';
-import { useNavigation } from './useNavigation';
+import { useMemo } from 'react'
+import { useNavigation } from './useNavigation'
 
 export function usePageParameters() {
   const {
     query: { page, pageSize, search },
-  } = useNavigation();
+  } = useNavigation()
 
   return useMemo(() => {
     return {
       page,
       pageSize,
       search,
-    };
-  }, [page, pageSize, search]);
+    }
+  }, [page, pageSize, search])
 }

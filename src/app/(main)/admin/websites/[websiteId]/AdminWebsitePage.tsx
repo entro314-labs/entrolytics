@@ -1,7 +1,7 @@
-'use client';
-import { WebsiteSettings } from '@/app/(main)/websites/[websiteId]/settings/WebsiteSettings';
-import { WebsiteProvider } from '@/app/(main)/websites/WebsiteProvider';
-import { Panel } from '@/components/common/Panel';
+'use client'
+import { WebsiteSettings } from '@/app/(main)/websites/[websiteId]/settings/WebsiteSettings'
+import { WebsiteProvider } from '@/app/(main)/websites/WebsiteProvider'
+import { Panel } from '@/components/common/Panel'
 
 export function AdminWebsitePage({ websiteId }: { websiteId: string }) {
   return (
@@ -10,5 +10,5 @@ export function AdminWebsitePage({ websiteId }: { websiteId: string }) {
         <WebsiteSettings websiteId={websiteId} />
       </Panel>
     </WebsiteProvider>
-  );
+  )
 }

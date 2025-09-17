@@ -1,12 +1,12 @@
-'use client';
-import { AdminWebsitesDataTable } from './AdminWebsitesDataTable';
-import { Column } from '@entro314labs/entro-zen';
-import { useMessages } from '@/components/hooks';
-import { PageHeader } from '@/components/common/PageHeader';
-import { Panel } from '@/components/common/Panel';
+'use client'
+import { AdminWebsitesDataTable } from './AdminWebsitesDataTable'
+import { Column } from '@entro314labs/entro-zen'
+import { useMessages } from '@/components/hooks'
+import { PageHeader } from '@/components/common/PageHeader'
+import { Panel } from '@/components/common/Panel'
 
 export function AdminWebsitesPage() {
-  const { formatMessage, labels } = useMessages();
+  const { formatMessage, labels } = useMessages()
 
   return (
     <Column gap="6">
@@ -15,5 +15,5 @@ export function AdminWebsitesPage() {
         <AdminWebsitesDataTable />
       </Panel>
     </Column>
-  );
+  )
 }

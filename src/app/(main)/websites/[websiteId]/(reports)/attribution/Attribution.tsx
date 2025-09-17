@@ -1,22 +1,22 @@
-import { Grid, Column } from '@entro314labs/entro-zen';
-import { useMessages, useResultQuery } from '@/components/hooks';
-import { Panel } from '@/components/common/Panel';
-import { LoadingPanel } from '@/components/common/LoadingPanel';
-import { ListTable } from '@/components/metrics/ListTable';
-import { MetricCard } from '@/components/metrics/MetricCard';
-import { MetricsBar } from '@/components/metrics/MetricsBar';
-import { SectionHeader } from '@/components/common/SectionHeader';
-import { formatLongNumber } from '@/lib/format';
-import { percentFilter } from '@/lib/filters';
+import { Grid, Column } from '@entro314labs/entro-zen'
+import { useMessages, useResultQuery } from '@/components/hooks'
+import { Panel } from '@/components/common/Panel'
+import { LoadingPanel } from '@/components/common/LoadingPanel'
+import { ListTable } from '@/components/metrics/ListTable'
+import { MetricCard } from '@/components/metrics/MetricCard'
+import { MetricsBar } from '@/components/metrics/MetricsBar'
+import { SectionHeader } from '@/components/common/SectionHeader'
+import { formatLongNumber } from '@/lib/format'
+import { percentFilter } from '@/lib/filters'
 
 export interface AttributionProps {
-  websiteId: string;
-  startDate: Date;
-  endDate: Date;
-  model: string;
-  type: string;
-  step: string;
-  currency?: string;
+  websiteId: string
+  startDate: Date
+  endDate: Date
+  model: string
+  type: string
+  step: string
+  currency?: string
 }
 
 export function Attribution({
@@ -35,11 +35,11 @@ export function Attribution({
     model,
     type,
     step,
-  });
+  })
 
-  const { formatMessage, labels } = useMessages();
+  const { formatMessage, labels } = useMessages()
 
-  const { pageviews, visitors, visits } = data?.total || {};
+  const { pageviews, visitors, visits } = data?.total || {}
 
   const metrics = data
     ? [
@@ -59,7 +59,7 @@ export function Attribution({
           formatValue: formatLongNumber,
         },
       ]
-    : [];
+    : []
 
   function UTMTable({ data = [], title }: { data: any; title: string }) {
     return (
@@ -71,10 +71,10 @@ export function Attribution({
           data.map(({ name, value }) => ({
             x: name,
             y: Number(value),
-          })),
+          }))
         )}
       />
-    );
+    )
   }
 
   return (
@@ -85,7 +85,7 @@ export function Attribution({
             {metrics?.map(({ label, value, formatValue }) => {
               return (
                 <MetricCard key={label} value={value} label={label} formatValue={formatValue} />
-              );
+              )
             })}
           </MetricsBar>
           <SectionHeader title={formatMessage(labels.sources)} />
@@ -99,7 +99,7 @@ export function Attribution({
                   data?.['referrer']?.map(({ name, value }) => ({
                     x: name,
                     y: Number(value),
-                  })),
+                  }))
                 )}
               />
             </Panel>
@@ -112,7 +112,7 @@ export function Attribution({
                   data?.['paidAds']?.map(({ name, value }) => ({
                     x: name,
                     y: Number(value),
-                  })),
+                  }))
                 )}
               />
             </Panel>
@@ -138,5 +138,5 @@ export function Attribution({
         </Column>
       )}
     </LoadingPanel>
-  );
+  )
 }

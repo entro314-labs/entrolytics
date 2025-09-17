@@ -1,39 +1,39 @@
-import { z } from 'zod';
-import { canCreateOrgWebsite, canCreateWebsite } from '@/validations';
-import { json, unauthorized } from '@/lib/response';
-import { uuid } from '@/lib/crypto';
-import { getQueryFilters, parseRequest } from '@/lib/request';
-import { pagingParams, searchParams } from '@/lib/schema';
-import { createLink, getUserLinks } from '@/queries';
+import { z } from 'zod'
+import { canCreateOrgWebsite, canCreateWebsite } from '@/validations'
+import { json, unauthorized } from '@/lib/response'
+import { uuid } from '@/lib/crypto'
+import { getQueryFilters, parseRequest } from '@/lib/request'
+import { pagingParams, searchParams } from '@/lib/schema'
+import { createLink, getUserLinks } from '@/queries'
 
 export async function GET(request: Request) {
   // Check if we're in a build context
   if (!request || typeof request !== 'object' || !('url' in request)) {
-    return new Response('Build time', { status: 200 });
+    return new Response('Build time', { status: 200 })
   }
 
   const schema = z.object({
     ...pagingParams,
     ...searchParams,
-  });
+  })
 
-  const { auth, query, error } = (await parseRequest(request, schema)) || {};
+  const { auth, query, error } = (await parseRequest(request, schema)) || {}
 
   if (error) {
-    return error();
+    return error()
   }
 
-  const filters = await getQueryFilters(query);
+  const filters = await getQueryFilters(query)
 
-  const links = await getUserLinks(auth?.user.id, filters);
+  const links = await getUserLinks(auth?.user.id, filters)
 
-  return json(links);
+  return json(links)
 }
 
 export async function POST(request: Request) {
   // Check if we're in a build context
   if (!request || typeof request !== 'object' || !('url' in request)) {
-    return new Response('Build time', { status: 200 });
+    return new Response('Build time', { status: 200 })
   }
 
   const schema = z.object({
@@ -42,18 +42,18 @@ export async function POST(request: Request) {
     slug: z.string().max(100),
     orgId: z.string().nullable().optional(),
     id: z.string().uuid().nullable().optional(),
-  });
+  })
 
-  const { auth, body, error } = (await parseRequest(request, schema)) || {};
+  const { auth, body, error } = (await parseRequest(request, schema)) || {}
 
   if (error) {
-    return error();
+    return error()
   }
 
-  const { id, name, url, slug, orgId } = body || {};
+  const { id, name, url, slug, orgId } = body || {}
 
   if ((orgId && !(await canCreateOrgWebsite(auth, orgId))) || !(await canCreateWebsite(auth))) {
-    return unauthorized();
+    return unauthorized()
   }
 
   const data: any = {
@@ -62,13 +62,13 @@ export async function POST(request: Request) {
     url,
     slug,
     orgId,
-  };
-
-  if (!orgId) {
-    data.userId = auth?.user.id;
   }
 
-  const result = await createLink(data);
+  if (!orgId) {
+    data.userId = auth?.user.id
+  }
 
-  return json(result);
+  const result = await createLink(data)
+
+  return json(result)
 }

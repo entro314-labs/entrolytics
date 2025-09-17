@@ -8,22 +8,22 @@ import {
   TextField,
   PasswordField,
   Button,
-} from '@entro314labs/entro-zen';
-import { useMessages, useUpdateQuery } from '@/components/hooks';
-import { ROLES } from '@/lib/constants';
+} from '@entro314labs/entro-zen'
+import { useMessages, useUpdateQuery } from '@/components/hooks'
+import { ROLES } from '@/lib/constants'
 
 export function UserAddForm({ onSave, onClose }) {
-  const { mutate, error, isPending } = useUpdateQuery(`/users`);
-  const { formatMessage, labels } = useMessages();
+  const { mutate, error, isPending } = useUpdateQuery(`/users`)
+  const { formatMessage, labels } = useMessages()
 
   const handleSubmit = async (data: any) => {
     mutate(data, {
       onSuccess: async () => {
-        onSave(data);
-        onClose();
+        onSave(data)
+        onClose()
       },
-    });
-  };
+    })
+  }
 
   return (
     <Form onSubmit={handleSubmit} error={error}>
@@ -67,5 +67,5 @@ export function UserAddForm({ onSave, onClose }) {
         </FormSubmitButton>
       </FormButtons>
     </Form>
-  );
+  )
 }

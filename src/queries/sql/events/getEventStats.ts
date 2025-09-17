@@ -1,13 +1,13 @@
-import clickhouse from '@/lib/clickhouse';
-import { EVENT_TYPE } from '@/lib/constants';
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db';
-import prisma from '@/lib/prisma';
-import { QueryFilters } from '@/lib/types';
+import clickhouse from '@/lib/clickhouse'
+import { EVENT_TYPE } from '@/lib/constants'
+import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
+import prisma from '@/lib/prisma'
+import { QueryFilters } from '@/lib/types'
 
 interface WebsiteEventMetric {
-  x: string;
-  t: string;
-  y: number;
+  x: string
+  t: string
+  y: number
 }
 
 export async function getEventStats(
@@ -16,17 +16,17 @@ export async function getEventStats(
   return runQuery({
     [PRISMA]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  });
+  })
 }
 
 async function relationalQuery(websiteId: string, filters: QueryFilters) {
-  const { timezone = 'utc', unit = 'day' } = filters;
-  const { rawQuery, getDateSQL, parseFilters } = prisma;
+  const { timezone = 'utc', unit = 'day' } = filters
+  const { rawQuery, getDateSQL, parseFilters } = prisma
   const { filterQuery, cohortQuery, joinSessionQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
     eventType: EVENT_TYPE.customEvent,
-  });
+  })
 
   return rawQuery(
     `
@@ -43,23 +43,23 @@ async function relationalQuery(websiteId: string, filters: QueryFilters) {
     group by 1, 2
     order by 2
     `,
-    queryParams,
-  );
+    queryParams
+  )
 }
 
 async function clickhouseQuery(
   websiteId: string,
-  filters: QueryFilters,
+  filters: QueryFilters
 ): Promise<{ x: string; t: string; y: number }[]> {
-  const { timezone = 'UTC', unit = 'day' } = filters;
-  const { rawQuery, getDateSQL, parseFilters } = clickhouse;
+  const { timezone = 'UTC', unit = 'day' } = filters
+  const { rawQuery, getDateSQL, parseFilters } = clickhouse
   const { filterQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
     eventType: EVENT_TYPE.customEvent,
-  });
+  })
 
-  let sql = '';
+  let sql = ''
 
   if (filterQuery || cohortQuery) {
     sql = `
@@ -74,7 +74,7 @@ async function clickhouseQuery(
       ${filterQuery}
     group by x, t
     order by t
-    `;
+    `
   } else {
     sql = `
     select
@@ -91,8 +91,8 @@ async function clickhouseQuery(
     ) as g
     group by x, t
     order by t
-    `;
+    `
   }
 
-  return rawQuery(sql, queryParams);
+  return rawQuery(sql, queryParams)
 }

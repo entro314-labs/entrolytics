@@ -1,35 +1,35 @@
-import { Button, Icon, Row, Text } from '@entro314labs/entro-zen';
-import { useMessages } from '@/components/hooks';
-import { Chevron } from '@/components/icons';
+import { Button, Icon, Row, Text } from '@entro314labs/entro-zen'
+import { useMessages } from '@/components/hooks'
+import { Chevron } from '@/components/icons'
 
 export interface PagerProps {
-  page: string | number;
-  pageSize: string | number;
-  count: string | number;
-  onPageChange: (nextPage: number) => void;
-  className?: string;
+  page: string | number
+  pageSize: string | number
+  count: string | number
+  onPageChange: (nextPage: number) => void
+  className?: string
 }
 
 export function Pager({ page, pageSize, count, onPageChange }: PagerProps) {
-  const { formatMessage, labels } = useMessages();
-  const maxPage = pageSize && count ? Math.ceil(+count / +pageSize) : 0;
-  const lastPage = page === maxPage;
-  const firstPage = page === 1;
+  const { formatMessage, labels } = useMessages()
+  const maxPage = pageSize && count ? Math.ceil(+count / +pageSize) : 0
+  const lastPage = page === maxPage
+  const firstPage = page === 1
 
   if (count === 0 || !maxPage) {
-    return null;
+    return null
   }
 
   const handlePageChange = (value: number) => {
-    const nextPage = +page + +value;
+    const nextPage = +page + +value
 
     if (nextPage > 0 && nextPage <= maxPage) {
-      onPageChange(nextPage);
+      onPageChange(nextPage)
     }
-  };
+  }
 
   if (maxPage === 1) {
-    return null;
+    return null
   }
 
   return (
@@ -56,5 +56,5 @@ export function Pager({ page, pageSize, count, onPageChange }: PagerProps) {
         </Row>
       </Row>
     </Row>
-  );
+  )
 }

@@ -1,11 +1,11 @@
-import { Prisma, OrgUser } from '@/generated/prisma/client';
-import { uuid } from '@/lib/crypto';
-import prisma from '@/lib/prisma';
-import { PageResult, QueryFilters } from '@/lib/types';
-import OrgUserFindManyArgs = Prisma.OrgUserFindManyArgs;
+import { Prisma, OrgUser } from '@/generated/prisma/client'
+import { uuid } from '@/lib/crypto'
+import prisma from '@/lib/prisma'
+import { PageResult, QueryFilters } from '@/lib/types'
+import OrgUserFindManyArgs = Prisma.OrgUserFindManyArgs
 
 export async function findOrgUser(criteria: Prisma.OrgUserFindUniqueArgs): Promise<OrgUser> {
-  return prisma.client.orgUser.findUnique(criteria);
+  return prisma.client.orgUser.findUnique(criteria)
 }
 
 export async function getOrgUser(orgId: string, userId: string): Promise<OrgUser> {
@@ -14,14 +14,14 @@ export async function getOrgUser(orgId: string, userId: string): Promise<OrgUser
       orgId,
       userId,
     },
-  });
+  })
 }
 
 export async function getOrgUsers(
   criteria: OrgUserFindManyArgs,
-  filters?: QueryFilters,
+  filters?: QueryFilters
 ): Promise<PageResult<OrgUser[]>> {
-  const { search } = filters;
+  const { search } = filters
 
   const where: Prisma.OrgUserWhereInput = {
     ...criteria.where,
@@ -29,7 +29,7 @@ export async function getOrgUsers(
       { user: { displayName: 'contains' } },
       { user: { email: 'contains' } },
     ]),
-  };
+  }
 
   return prisma.pagedQuery(
     'orgUser',
@@ -37,15 +37,11 @@ export async function getOrgUsers(
       ...criteria,
       where,
     },
-    filters,
-  );
+    filters
+  )
 }
 
-export async function createOrgUser(
-  userId: string,
-  orgId: string,
-  role: string,
-): Promise<OrgUser> {
+export async function createOrgUser(userId: string, orgId: string, role: string): Promise<OrgUser> {
   return prisma.client.orgUser.create({
     data: {
       id: uuid(),
@@ -53,19 +49,19 @@ export async function createOrgUser(
       orgId,
       role,
     },
-  });
+  })
 }
 
 export async function updateOrgUser(
   orgUserId: string,
-  data: Prisma.OrgUserUpdateInput,
+  data: Prisma.OrgUserUpdateInput
 ): Promise<OrgUser> {
   return prisma.client.orgUser.update({
     where: {
       id: orgUserId,
     },
     data,
-  });
+  })
 }
 
 export async function deleteOrgUser(orgId: string, userId: string): Promise<Prisma.BatchPayload> {
@@ -74,5 +70,5 @@ export async function deleteOrgUser(orgId: string, userId: string): Promise<Pris
       orgId,
       userId,
     },
-  });
+  })
 }

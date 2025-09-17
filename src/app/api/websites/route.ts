@@ -1,11 +1,11 @@
-import { z } from 'zod';
-import { canCreateOrgWebsite, canCreateWebsite } from '@/validations';
-import { json, unauthorized } from '@/lib/response';
-import { uuid } from '@/lib/crypto';
-import { parseRequest } from '@/lib/request';
-import { createWebsite } from '@/queries';
+import { z } from 'zod'
+import { canCreateOrgWebsite, canCreateWebsite } from '@/validations'
+import { json, unauthorized } from '@/lib/response'
+import { uuid } from '@/lib/crypto'
+import { parseRequest } from '@/lib/request'
+import { createWebsite } from '@/queries'
 
-export { GET } from '@/app/api/users/[userId]/websites/route';
+export { GET } from '@/app/api/users/[userId]/websites/route'
 
 export async function POST(request: Request) {
   const schema = z.object({
@@ -14,18 +14,18 @@ export async function POST(request: Request) {
     shareId: z.string().max(50).nullable().optional(),
     orgId: z.string().nullable().optional(),
     id: z.string().uuid().nullable().optional(),
-  });
+  })
 
-  const { auth, body, error } = await parseRequest(request, schema);
+  const { auth, body, error } = await parseRequest(request, schema)
 
   if (error) {
-    return error();
+    return error()
   }
 
-  const { id, name, domain, shareId, orgId } = body;
+  const { id, name, domain, shareId, orgId } = body
 
   if ((orgId && !(await canCreateOrgWebsite(auth, orgId))) || !(await canCreateWebsite(auth))) {
-    return unauthorized();
+    return unauthorized()
   }
 
   const data: any = {
@@ -35,13 +35,13 @@ export async function POST(request: Request) {
     domain,
     shareId,
     orgId,
-  };
-
-  if (!orgId) {
-    data.userId = auth.user.id;
   }
 
-  const website = await createWebsite(data);
+  if (!orgId) {
+    data.userId = auth.user.id
+  }
 
-  return json(website);
+  const website = await createWebsite(data)
+
+  return json(website)
 }

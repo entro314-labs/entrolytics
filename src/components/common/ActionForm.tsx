@@ -1,4 +1,4 @@
-import { Row, Column, Text } from '@entro314labs/entro-zen';
+import { Row, Column, Text } from '@entro314labs/entro-zen'
 
 export function ActionForm({ label, description, children }) {
   return (
@@ -11,5 +11,5 @@ export function ActionForm({ label, description, children }) {
         {children}
       </Row>
     </Row>
-  );
+  )
 }

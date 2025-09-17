@@ -1,12 +1,12 @@
-import { Metadata } from 'next';
-import { Providers } from './Providers';
-import '@fontsource/inter/300.css';
-import '@fontsource/inter/400.css';
-import '@fontsource/inter/500.css';
-import '@fontsource/inter/700.css';
-import '@entro314labs/entro-zen/styles.css';
-import '@/styles/global.css';
-import '@/styles/variables.css';
+import { Metadata } from 'next'
+import { Providers } from './Providers'
+import '@fontsource/inter/300.css'
+import '@fontsource/inter/400.css'
+import '@fontsource/inter/500.css'
+import '@fontsource/inter/700.css'
+import '@entro314labs/entro-zen/styles.css'
+import '@/styles/global.css'
+import '@/styles/variables.css'
 
 export default function ({ children }) {
   if (process.env.DISABLE_UI) {
@@ -14,7 +14,7 @@ export default function ({ children }) {
       <html>
         <body></body>
       </html>
-    );
+    )
   }
 
   return (
@@ -35,7 +35,7 @@ export default function ({ children }) {
         <Providers>{children}</Providers>
       </body>
     </html>
-  );
+  )
 }
 
 export const metadata: Metadata = {
@@ -43,4 +43,4 @@ export const metadata: Metadata = {
     template: '%s | Entrolytics',
     default: 'Entrolytics',
   },
-};
+}

@@ -1,22 +1,22 @@
-'use client';
-import { useState } from 'react';
-import { ListItem, Select, Column, Grid, SearchField } from '@entro314labs/entro-zen';
-import { useDateRange, useMessages } from '@/components/hooks';
-import { Panel } from '@/components/common/Panel';
-import { Journey } from './Journey';
-import { WebsiteControls } from '@/app/(main)/websites/[websiteId]/WebsiteControls';
+'use client'
+import { useState } from 'react'
+import { ListItem, Select, Column, Grid, SearchField } from '@entro314labs/entro-zen'
+import { useDateRange, useMessages } from '@/components/hooks'
+import { Panel } from '@/components/common/Panel'
+import { Journey } from './Journey'
+import { WebsiteControls } from '@/app/(main)/websites/[websiteId]/WebsiteControls'
 
-const JOURNEY_STEPS = [2, 3, 4, 5, 6, 7];
-const DEFAULT_STEP = 3;
+const JOURNEY_STEPS = [2, 3, 4, 5, 6, 7]
+const DEFAULT_STEP = 3
 
 export function JourneysPage({ websiteId }: { websiteId: string }) {
-  const { formatMessage, labels } = useMessages();
+  const { formatMessage, labels } = useMessages()
   const {
     dateRange: { startDate, endDate },
-  } = useDateRange(websiteId);
-  const [steps, setSteps] = useState(DEFAULT_STEP);
-  const [startStep, setStartStep] = useState('');
-  const [endStep, setEndStep] = useState('');
+  } = useDateRange(websiteId)
+  const [steps, setSteps] = useState(DEFAULT_STEP)
+  const [startStep, setStartStep] = useState('')
+  const [endStep, setEndStep] = useState('')
 
   return (
     <Column gap>
@@ -29,7 +29,7 @@ export function JourneysPage({ websiteId }: { websiteId: string }) {
           defaultValue={steps}
           onChange={setSteps}
         >
-          {JOURNEY_STEPS.map(step => (
+          {JOURNEY_STEPS.map((step) => (
             <ListItem key={step} id={step}>
               {step}
             </ListItem>
@@ -63,5 +63,5 @@ export function JourneysPage({ websiteId }: { websiteId: string }) {
         />
       </Panel>
     </Column>
-  );
+  )
 }

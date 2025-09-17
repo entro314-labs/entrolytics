@@ -1,8 +1,8 @@
-import { Metadata } from 'next';
-import { App } from './App';
+import { Metadata } from 'next'
+import { App } from './App'
 
 export default function ({ children }) {
-  return <App>{children}</App>;
+  return <App>{children}</App>
 }
 
 export const metadata: Metadata = {
@@ -10,4 +10,4 @@ export const metadata: Metadata = {
     template: '%s | Entrolytics',
     default: 'Entrolytics',
   },
-};
+}

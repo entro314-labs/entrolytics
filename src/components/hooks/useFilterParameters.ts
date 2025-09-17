@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
-import { useNavigation } from './useNavigation';
+import { useMemo } from 'react'
+import { useNavigation } from './useNavigation'
 
 export function useFilterParameters() {
   const {
@@ -24,7 +24,7 @@ export function useFilterParameters() {
       segment,
       cohort,
     },
-  } = useNavigation();
+  } = useNavigation()
 
   return useMemo(() => {
     return {
@@ -45,7 +45,7 @@ export function useFilterParameters() {
       search,
       segment,
       cohort,
-    };
+    }
   }, [
     path,
     referrer,
@@ -66,5 +66,5 @@ export function useFilterParameters() {
     search,
     segment,
     cohort,
-  ]);
+  ])
 }

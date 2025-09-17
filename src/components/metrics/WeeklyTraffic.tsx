@@ -1,39 +1,39 @@
-import { Row, Grid, Text } from '@entro314labs/entro-zen';
-import { format, startOfDay, addHours } from 'date-fns';
-import { useLocale, useMessages, useWeeklyTrafficQuery } from '@/components/hooks';
-import { LoadingPanel } from '@/components/common/LoadingPanel';
-import { getDayOfWeekAsDate } from '@/lib/date';
-import { Focusable, Tooltip, TooltipTrigger } from '@entro314labs/entro-zen';
+import { Row, Grid, Text } from '@entro314labs/entro-zen'
+import { format, startOfDay, addHours } from 'date-fns'
+import { useLocale, useMessages, useWeeklyTrafficQuery } from '@/components/hooks'
+import { LoadingPanel } from '@/components/common/LoadingPanel'
+import { getDayOfWeekAsDate } from '@/lib/date'
+import { Focusable, Tooltip, TooltipTrigger } from '@entro314labs/entro-zen'
 
 export function WeeklyTraffic({ websiteId }: { websiteId: string }) {
-  const { data, isLoading, error } = useWeeklyTrafficQuery(websiteId);
-  const { dateLocale } = useLocale();
-  const { labels, formatMessage } = useMessages();
-  const { weekStartsOn } = dateLocale.options;
+  const { data, isLoading, error } = useWeeklyTrafficQuery(websiteId)
+  const { dateLocale } = useLocale()
+  const { labels, formatMessage } = useMessages()
+  const { weekStartsOn } = dateLocale.options
   const daysOfWeek = Array(7)
     .fill(weekStartsOn)
-    .map((d, i) => (d + i) % 7);
+    .map((d, i) => (d + i) % 7)
 
   const [, max = 1] = data
     ? data.reduce((arr: number[], hours: number[], index: number) => {
-        const min = Math.min(...hours);
-        const max = Math.max(...hours);
+        const min = Math.min(...hours)
+        const max = Math.max(...hours)
 
         if (index === 0) {
-          return [min, max];
+          return [min, max]
         }
 
         if (min < arr[0]) {
-          arr[0] = min;
+          arr[0] = min
         }
 
         if (max > arr[1]) {
-          arr[1] = max;
+          arr[1] = max
         }
 
-        return arr;
+        return arr
       }, [])
-    : [];
+    : []
 
   return (
     <LoadingPanel data={data} isLoading={isLoading} error={error}>
@@ -47,18 +47,18 @@ export function WeeklyTraffic({ websiteId }: { websiteId: string }) {
                 .map((_, i) => {
                   const label = format(addHours(startOfDay(new Date()), i), 'haaa', {
                     locale: dateLocale,
-                  });
+                  })
                   return (
                     <Row key={i} justifyContent="flex-end">
                       <Text color="muted" size="2">
                         {label}
                       </Text>
                     </Row>
-                  );
+                  )
                 })}
             </Grid>
             {daysOfWeek.map((index: number) => {
-              const day = data[index];
+              const day = data[index]
               return (
                 <Grid
                   rows="repeat(24, 16px)"
@@ -73,7 +73,7 @@ export function WeeklyTraffic({ websiteId }: { websiteId: string }) {
                     </Text>
                   </Row>
                   {day?.map((count: number, j) => {
-                    const pct = max ? count / max : 0;
+                    const pct = max ? count / max : 0
                     return (
                       <TooltipTrigger key={j} delay={0} isDisabled={count <= 0}>
                         <Focusable>
@@ -97,17 +97,17 @@ export function WeeklyTraffic({ websiteId }: { websiteId: string }) {
                           </Row>
                         </Focusable>
                         <Tooltip placement="right">{`${formatMessage(
-                          labels.visitors,
+                          labels.visitors
                         )}: ${count}`}</Tooltip>
                       </TooltipTrigger>
-                    );
+                    )
                   })}
                 </Grid>
-              );
+              )
             })}
           </>
         )}
       </Grid>
     </LoadingPanel>
-  );
+  )
 }

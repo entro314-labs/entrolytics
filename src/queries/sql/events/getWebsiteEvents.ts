@@ -1,28 +1,28 @@
-import clickhouse from '@/lib/clickhouse';
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db';
-import prisma from '@/lib/prisma';
-import { QueryFilters } from '@/lib/types';
+import clickhouse from '@/lib/clickhouse'
+import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
+import prisma from '@/lib/prisma'
+import { QueryFilters } from '@/lib/types'
 
 export function getWebsiteEvents(...args: [websiteId: string, filters: QueryFilters]) {
   return runQuery({
     [PRISMA]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  });
+  })
 }
 
 async function relationalQuery(websiteId: string, filters: QueryFilters) {
-  const { pagedRawQuery, parseFilters } = prisma;
-  const { search } = filters;
+  const { pagedRawQuery, parseFilters } = prisma
+  const { search } = filters
   const { filterQuery, dateQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
     search: `%${search}%`,
-  });
+  })
 
   const searchQuery = search
     ? `and ((event_name ilike {{search}} and event_type = 2)
            or (url_path ilike {{search}} and event_type = 1))`
-    : '';
+    : ''
 
   return pagedRawQuery(
     `
@@ -55,22 +55,22 @@ async function relationalQuery(websiteId: string, filters: QueryFilters) {
     order by created_at desc
     `,
     queryParams,
-    filters,
-  );
+    filters
+  )
 }
 
 async function clickhouseQuery(websiteId: string, filters: QueryFilters) {
-  const { pagedRawQuery, parseFilters } = clickhouse;
-  const { search } = filters;
+  const { pagedRawQuery, parseFilters } = clickhouse
+  const { search } = filters
   const { queryParams, dateQuery, cohortQuery, filterQuery } = parseFilters({
     ...filters,
     websiteId,
-  });
+  })
 
   const searchQuery = search
     ? `and ((positionCaseInsensitive(event_name, {search:String}) > 0 and event_type = 2)
            or (positionCaseInsensitive(url_path, {search:String}) > 0 and event_type = 1))`
-    : '';
+    : ''
 
   return pagedRawQuery(
     `
@@ -103,6 +103,6 @@ async function clickhouseQuery(websiteId: string, filters: QueryFilters) {
     order by created_at desc
     `,
     queryParams,
-    filters,
-  );
+    filters
+  )
 }

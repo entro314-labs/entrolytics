@@ -1,110 +1,110 @@
-import { Auth } from '@/lib/types';
-import { PERMISSIONS } from '@/lib/constants';
-import { hasPermission } from '@/lib/auth';
-import { getOrgUser, getWebsite } from '@/queries';
+import { Auth } from '@/lib/types'
+import { PERMISSIONS } from '@/lib/constants'
+import { hasPermission } from '@/lib/auth'
+import { getOrgUser, getWebsite } from '@/queries'
 
-const cloudMode = !!process.env.CLOUD_MODE;
+const cloudMode = !!process.env.CLOUD_MODE
 
 export async function canViewWebsite({ user, shareToken }: Auth, websiteId: string) {
   if (user?.isAdmin) {
-    return true;
+    return true
   }
 
   if (shareToken?.websiteId === websiteId) {
-    return true;
+    return true
   }
 
-  const website = await getWebsite(websiteId);
+  const website = await getWebsite(websiteId)
 
   if (website.userId) {
-    return user.id === website.userId;
+    return user.id === website.userId
   }
 
   if (website.orgId) {
-    const orgUser = await getOrgUser(website.orgId, user.id);
+    const orgUser = await getOrgUser(website.orgId, user.id)
 
-    return !!orgUser;
+    return !!orgUser
   }
 
-  return false;
+  return false
 }
 
 export async function canViewAllWebsites({ user }: Auth) {
-  return user.isAdmin;
+  return user.isAdmin
 }
 
 export async function canCreateWebsite({ user, grant }: Auth) {
   if (cloudMode) {
-    return !!grant?.find(a => a === PERMISSIONS.websiteCreate);
+    return !!grant?.find((a) => a === PERMISSIONS.websiteCreate)
   }
 
   if (user.isAdmin) {
-    return true;
+    return true
   }
 
-  return hasPermission(user.role, PERMISSIONS.websiteCreate);
+  return hasPermission(user.role, PERMISSIONS.websiteCreate)
 }
 
 export async function canUpdateWebsite({ user }: Auth, websiteId: string) {
   if (user.isAdmin) {
-    return true;
+    return true
   }
 
-  const website = await getWebsite(websiteId);
+  const website = await getWebsite(websiteId)
 
   if (website.userId) {
-    return user.id === website.userId;
+    return user.id === website.userId
   }
 
   if (website.orgId) {
-    const orgUser = await getOrgUser(website.orgId, user.id);
+    const orgUser = await getOrgUser(website.orgId, user.id)
 
-    return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteUpdate);
+    return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteUpdate)
   }
 
-  return false;
+  return false
 }
 
 export async function canDeleteWebsite({ user }: Auth, websiteId: string) {
   if (user.isAdmin) {
-    return true;
+    return true
   }
 
-  const website = await getWebsite(websiteId);
+  const website = await getWebsite(websiteId)
 
   if (website.userId) {
-    return user.id === website.userId;
+    return user.id === website.userId
   }
 
   if (website.orgId) {
-    const orgUser = await getOrgUser(website.orgId, user.id);
+    const orgUser = await getOrgUser(website.orgId, user.id)
 
-    return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteDelete);
+    return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteDelete)
   }
 
-  return false;
+  return false
 }
 
 export async function canTransferWebsiteToUser({ user }: Auth, websiteId: string, userId: string) {
-  const website = await getWebsite(websiteId);
+  const website = await getWebsite(websiteId)
 
   if (website.orgId && user.id === userId) {
-    const orgUser = await getOrgUser(website.orgId, userId);
+    const orgUser = await getOrgUser(website.orgId, userId)
 
-    return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteTransferToUser);
+    return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteTransferToUser)
   }
 
-  return false;
+  return false
 }
 
 export async function canTransferWebsiteToOrg({ user }: Auth, websiteId: string, orgId: string) {
-  const website = await getWebsite(websiteId);
+  const website = await getWebsite(websiteId)
 
   if (website.userId && website.userId === user.id) {
-    const orgUser = await getOrgUser(orgId, user.id);
+    const orgUser = await getOrgUser(orgId, user.id)
 
-    return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteTransferToOrg);
+    return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteTransferToOrg)
   }
 
-  return false;
+  return false
 }

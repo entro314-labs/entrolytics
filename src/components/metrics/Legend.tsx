@@ -1,23 +1,23 @@
-import { Row, StatusLight, Text } from '@entro314labs/entro-zen';
-import { colord } from 'colord';
-import { LegendItem } from 'chart.js/auto';
+import { Row, StatusLight, Text } from '@entro314labs/entro-zen'
+import { colord } from 'colord'
+import { LegendItem } from 'chart.js/auto'
 
 export function Legend({
   items = [],
   onClick,
 }: {
-  items: any[];
-  onClick: (index: LegendItem) => void;
+  items: any[]
+  onClick: (index: LegendItem) => void
 }) {
   if (!items.find(({ text }) => text)) {
-    return null;
+    return null
   }
 
   return (
     <Row gap wrap="wrap" justifyContent="center">
-      {items.map(item => {
-        const { text, fillStyle, hidden } = item;
-        const color = colord(fillStyle);
+      {items.map((item) => {
+        const { text, fillStyle, hidden } = item
+        const color = colord(fillStyle)
 
         return (
           <Row key={text} onClick={() => onClick(item)}>
@@ -27,8 +27,8 @@ export function Legend({
               </Text>
             </StatusLight>
           </Row>
-        );
+        )
       })}
     </Row>
-  );
+  )
 }

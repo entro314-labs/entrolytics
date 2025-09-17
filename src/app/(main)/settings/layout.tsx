@@ -1,12 +1,12 @@
-import { Metadata } from 'next';
-import { SettingsLayout } from './SettingsLayout';
+import { Metadata } from 'next'
+import { SettingsLayout } from './SettingsLayout'
 
 export default function ({ children }) {
   if (process.env.cloudMode) {
-    return null;
+    return null
   }
 
-  return <SettingsLayout>{children}</SettingsLayout>;
+  return <SettingsLayout>{children}</SettingsLayout>
 }
 
 export const metadata: Metadata = {
@@ -14,4 +14,4 @@ export const metadata: Metadata = {
     template: '%s | Settings | Entrolytics',
     default: 'Settings | Entrolytics',
   },
-};
+}

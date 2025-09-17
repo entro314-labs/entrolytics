@@ -1,5 +1,5 @@
-import { useMessages, useUpdateQuery } from '@/components/hooks';
-import { ROLES } from '@/lib/constants';
+import { useMessages, useUpdateQuery } from '@/components/hooks'
+import { ROLES } from '@/lib/constants'
 import {
   Button,
   Select,
@@ -8,7 +8,7 @@ import {
   FormField,
   ListItem,
   FormSubmitButton,
-} from '@entro314labs/entro-zen';
+} from '@entro314labs/entro-zen'
 
 export function OrgMemberEditForm({
   orgId,
@@ -17,23 +17,23 @@ export function OrgMemberEditForm({
   onSave,
   onClose,
 }: {
-  orgId: string;
-  userId: string;
-  role: string;
-  onSave?: () => void;
-  onClose?: () => void;
+  orgId: string
+  userId: string
+  role: string
+  onSave?: () => void
+  onClose?: () => void
 }) {
-  const { mutate, error, isPending } = useUpdateQuery(`/orgs/${orgId}/users/${userId}`);
-  const { formatMessage, labels } = useMessages();
+  const { mutate, error, isPending } = useUpdateQuery(`/orgs/${orgId}/users/${userId}`)
+  const { formatMessage, labels } = useMessages()
 
   const handleSubmit = async (data: any) => {
     mutate(data, {
       onSuccess: async () => {
-        onSave();
-        onClose();
+        onSave()
+        onClose()
       },
-    });
-  };
+    })
+  }
 
   return (
     <Form onSubmit={handleSubmit} error={error} defaultValues={{ role }}>
@@ -58,5 +58,5 @@ export function OrgMemberEditForm({
         </FormSubmitButton>
       </FormButtons>
     </Form>
-  );
+  )
 }

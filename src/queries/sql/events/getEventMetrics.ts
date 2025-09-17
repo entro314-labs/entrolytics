@@ -1,19 +1,19 @@
-import clickhouse from '@/lib/clickhouse';
-import { EVENT_TYPE, FILTER_COLUMNS, SESSION_COLUMNS } from '@/lib/constants';
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db';
-import prisma from '@/lib/prisma';
-import { QueryFilters } from '@/lib/types';
+import clickhouse from '@/lib/clickhouse'
+import { EVENT_TYPE, FILTER_COLUMNS, SESSION_COLUMNS } from '@/lib/constants'
+import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
+import prisma from '@/lib/prisma'
+import { QueryFilters } from '@/lib/types'
 
 export interface EventMetricParameters {
-  type: string;
-  limit?: string;
-  offset?: string;
+  type: string
+  limit?: string
+  offset?: string
 }
 
 export interface EventMetricData {
-  x: string;
-  t: string;
-  y: number;
+  x: string
+  t: string
+  y: number
 }
 
 export async function getEventMetrics(
@@ -22,25 +22,25 @@ export async function getEventMetrics(
   return runQuery({
     [PRISMA]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  });
+  })
 }
 
 async function relationalQuery(
   websiteId: string,
   parameters: EventMetricParameters,
-  filters: QueryFilters,
+  filters: QueryFilters
 ) {
-  const { type, limit = 500, offset = 0 } = parameters;
-  const column = FILTER_COLUMNS[type] || type;
-  const { rawQuery, parseFilters } = prisma;
+  const { type, limit = 500, offset = 0 } = parameters
+  const column = FILTER_COLUMNS[type] || type
+  const { rawQuery, parseFilters } = prisma
   const { filterQuery, cohortQuery, joinSessionQuery, queryParams } = parseFilters(
     {
       ...filters,
       websiteId,
       eventType: EVENT_TYPE.customEvent,
     },
-    { joinSession: SESSION_COLUMNS.includes(type) },
-  );
+    { joinSession: SESSION_COLUMNS.includes(type) }
+  )
 
   return rawQuery(
     `
@@ -57,23 +57,23 @@ async function relationalQuery(
     limit ${limit}
     offset ${offset}
     `,
-    { ...queryParams, ...parameters },
-  );
+    { ...queryParams, ...parameters }
+  )
 }
 
 async function clickhouseQuery(
   websiteId: string,
   parameters: EventMetricParameters,
-  filters: QueryFilters,
+  filters: QueryFilters
 ): Promise<EventMetricData[]> {
-  const { type, limit = 500, offset = 0 } = parameters;
-  const column = FILTER_COLUMNS[type] || type;
-  const { rawQuery, parseFilters } = clickhouse;
+  const { type, limit = 500, offset = 0 } = parameters
+  const column = FILTER_COLUMNS[type] || type
+  const { rawQuery, parseFilters } = clickhouse
   const { filterQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
     eventType: EVENT_TYPE.customEvent,
-  });
+  })
 
   return rawQuery(
     `select ${column} x,
@@ -88,6 +88,6 @@ async function clickhouseQuery(
          limit ${limit}
      offset ${offset}
     `,
-    { ...queryParams, ...parameters },
-  );
+    { ...queryParams, ...parameters }
+  )
 }

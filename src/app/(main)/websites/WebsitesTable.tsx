@@ -1,17 +1,17 @@
-import { ReactNode } from 'react';
-import { Row, Text, Icon, DataTable, DataColumn, MenuItem } from '@entro314labs/entro-zen';
-import { useMessages, useNavigation } from '@/components/hooks';
-import { MenuButton } from '@/components/input/MenuButton';
-import { Eye, SquarePen } from '@/components/icons';
-import Link from 'next/link';
+import { ReactNode } from 'react'
+import { Row, Text, Icon, DataTable, DataColumn, MenuItem } from '@entro314labs/entro-zen'
+import { useMessages, useNavigation } from '@/components/hooks'
+import { MenuButton } from '@/components/input/MenuButton'
+import { Eye, SquarePen } from '@/components/icons'
+import Link from 'next/link'
 
 export interface WebsitesTableProps {
-  data: Record<string, any>[];
-  showActions?: boolean;
-  allowEdit?: boolean;
-  allowView?: boolean;
-  orgId?: string;
-  children?: ReactNode;
+  data: Record<string, any>[]
+  showActions?: boolean
+  allowEdit?: boolean
+  allowView?: boolean
+  orgId?: string
+  children?: ReactNode
 }
 
 export function WebsitesTable({
@@ -21,12 +21,12 @@ export function WebsitesTable({
   allowView,
   children,
 }: WebsitesTableProps) {
-  const { formatMessage, labels } = useMessages();
-  const { renderUrl, pathname } = useNavigation();
-  const isSettings = pathname.includes('/settings');
+  const { formatMessage, labels } = useMessages()
+  const { renderUrl, pathname } = useNavigation()
+  const isSettings = pathname.includes('/settings')
 
   if (!data?.length) {
-    return children;
+    return children
   }
 
   return (
@@ -42,7 +42,7 @@ export function WebsitesTable({
       {showActions && (
         <DataColumn id="action" label=" " align="end">
           {(row: any) => {
-            const websiteId = row.id;
+            const websiteId = row.id
 
             return (
               <MenuButton>
@@ -67,10 +67,10 @@ export function WebsitesTable({
                   </MenuItem>
                 )}
               </MenuButton>
-            );
+            )
           }}
         </DataColumn>
       )}
     </DataTable>
-  );
+  )
 }

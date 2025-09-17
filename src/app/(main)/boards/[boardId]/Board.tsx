@@ -1,4 +1,4 @@
-import { Column, Heading } from '@entro314labs/entro-zen';
+import { Column, Heading } from '@entro314labs/entro-zen'
 
 export function Board({ boardId }: { boardId: string }) {
   return (
@@ -6,5 +6,5 @@ export function Board({ boardId }: { boardId: string }) {
       <Heading>Board title</Heading>
       <div>{boardId}</div>
     </Column>
-  );
+  )
 }

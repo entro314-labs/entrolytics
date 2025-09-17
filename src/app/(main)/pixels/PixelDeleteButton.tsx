@@ -1,31 +1,31 @@
-import { Dialog } from '@entro314labs/entro-zen';
-import { ActionButton } from '@/components/input/ActionButton';
-import { Trash } from '@/components/icons';
-import { ConfirmationForm } from '@/components/common/ConfirmationForm';
-import { messages } from '@/components/messages';
-import { useDeleteQuery, useMessages, useModified } from '@/components/hooks';
+import { Dialog } from '@entro314labs/entro-zen'
+import { ActionButton } from '@/components/input/ActionButton'
+import { Trash } from '@/components/icons'
+import { ConfirmationForm } from '@/components/common/ConfirmationForm'
+import { messages } from '@/components/messages'
+import { useDeleteQuery, useMessages, useModified } from '@/components/hooks'
 export function PixelDeleteButton({
   pixelId,
   name,
   onSave,
 }: {
-  pixelId: string;
-  name: string;
-  onSave?: () => void;
+  pixelId: string
+  name: string
+  onSave?: () => void
 }) {
-  const { formatMessage, labels } = useMessages();
-  const { mutate, isPending, error } = useDeleteQuery(`/pixels/${pixelId}`);
-  const { touch } = useModified();
+  const { formatMessage, labels } = useMessages()
+  const { mutate, isPending, error } = useDeleteQuery(`/pixels/${pixelId}`)
+  const { touch } = useModified()
 
   const handleConfirm = (close: () => void) => {
     mutate(null, {
       onSuccess: () => {
-        touch('pixels');
-        onSave?.();
-        close();
+        touch('pixels')
+        onSave?.()
+        close()
       },
-    });
-  };
+    })
+  }
 
   return (
     <ActionButton title={formatMessage(labels.delete)} icon={<Trash />}>
@@ -45,5 +45,5 @@ export function PixelDeleteButton({
         )}
       </Dialog>
     </ActionButton>
-  );
+  )
 }

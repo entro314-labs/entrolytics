@@ -1,23 +1,23 @@
-import { ReactNode, useState, useCallback } from 'react';
-import { SearchField, Row, Column } from '@entro314labs/entro-zen';
-import { UseQueryResult } from '@tanstack/react-query';
-import { useMessages, useNavigation } from '@/components/hooks';
-import { Pager } from '@/components/common/Pager';
-import { LoadingPanel } from '@/components/common/LoadingPanel';
-import { PageResult } from '@/lib/types';
-import { Empty } from '@/components/common/Empty';
+import { ReactNode, useState, useCallback } from 'react'
+import { SearchField, Row, Column } from '@entro314labs/entro-zen'
+import { UseQueryResult } from '@tanstack/react-query'
+import { useMessages, useNavigation } from '@/components/hooks'
+import { Pager } from '@/components/common/Pager'
+import { LoadingPanel } from '@/components/common/LoadingPanel'
+import { PageResult } from '@/lib/types'
+import { Empty } from '@/components/common/Empty'
 
-const DEFAULT_SEARCH_DELAY = 600;
+const DEFAULT_SEARCH_DELAY = 600
 
 export interface DataGridProps {
-  query: UseQueryResult<PageResult<any>, any>;
-  searchDelay?: number;
-  allowSearch?: boolean;
-  allowPaging?: boolean;
-  autoFocus?: boolean;
-  renderActions?: () => ReactNode;
-  renderEmpty?: () => ReactNode;
-  children: ReactNode | ((data: any) => ReactNode);
+  query: UseQueryResult<PageResult<any>, any>
+  searchDelay?: number
+  allowSearch?: boolean
+  allowPaging?: boolean
+  autoFocus?: boolean
+  renderActions?: () => ReactNode
+  renderEmpty?: () => ReactNode
+  children: ReactNode | ((data: any) => ReactNode)
 }
 
 export function DataGrid({
@@ -30,24 +30,24 @@ export function DataGrid({
   renderEmpty = () => <Empty />,
   children,
 }: DataGridProps) {
-  const { formatMessage, labels } = useMessages();
-  const { data, error, isLoading, isFetching } = query;
-  const { router, updateParams, query: queryParams } = useNavigation();
-  const [search, setSearch] = useState(queryParams?.search || data?.search || '');
+  const { formatMessage, labels } = useMessages()
+  const { data, error, isLoading, isFetching } = query
+  const { router, updateParams, query: queryParams } = useNavigation()
+  const [search, setSearch] = useState(queryParams?.search || data?.search || '')
 
   const handleSearch = (value: string) => {
     if (value !== search) {
-      setSearch(value);
-      router.push(updateParams({ search: value, page: 1 }));
+      setSearch(value)
+      router.push(updateParams({ search: value, page: 1 }))
     }
-  };
+  }
 
   const handlePageChange = useCallback(
     (page: number) => {
-      router.push(updateParams({ search, page }));
+      router.push(updateParams({ search, page }))
     },
-    [search],
-  );
+    [search]
+  )
 
   return (
     <Column gap="4" minHeight="300px">
@@ -88,5 +88,5 @@ export function DataGrid({
         )}
       </LoadingPanel>
     </Column>
-  );
+  )
 }

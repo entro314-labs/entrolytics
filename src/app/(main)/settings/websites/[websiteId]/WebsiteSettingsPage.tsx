@@ -1,9 +1,9 @@
-'use client';
-import { Column } from '@entro314labs/entro-zen';
-import { WebsiteProvider } from '@/app/(main)/websites/WebsiteProvider';
-import { WebsiteSettings } from '@/app/(main)/websites/[websiteId]/settings/WebsiteSettings';
-import { WebsiteSettingsHeader } from '@/app/(main)/websites/[websiteId]/settings/WebsiteSettingsHeader';
-import { Panel } from '@/components/common/Panel';
+'use client'
+import { Column } from '@entro314labs/entro-zen'
+import { WebsiteProvider } from '@/app/(main)/websites/WebsiteProvider'
+import { WebsiteSettings } from '@/app/(main)/websites/[websiteId]/settings/WebsiteSettings'
+import { WebsiteSettingsHeader } from '@/app/(main)/websites/[websiteId]/settings/WebsiteSettingsHeader'
+import { Panel } from '@/components/common/Panel'
 
 export function WebsiteSettingsPage({ websiteId }: { websiteId: string }) {
   return (
@@ -15,5 +15,5 @@ export function WebsiteSettingsPage({ websiteId }: { websiteId: string }) {
         </Panel>
       </Column>
     </WebsiteProvider>
-  );
+  )
 }

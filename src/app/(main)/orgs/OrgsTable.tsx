@@ -1,20 +1,20 @@
-import { DataColumn, DataTable, Icon, MenuItem, Text, Row } from '@entro314labs/entro-zen';
-import { useMessages, useNavigation } from '@/components/hooks';
-import { Eye, Edit } from '@/components/icons';
-import { ROLES } from '@/lib/constants';
-import { MenuButton } from '@/components/input/MenuButton';
-import Link from 'next/link';
+import { DataColumn, DataTable, Icon, MenuItem, Text, Row } from '@entro314labs/entro-zen'
+import { useMessages, useNavigation } from '@/components/hooks'
+import { Eye, Edit } from '@/components/icons'
+import { ROLES } from '@/lib/constants'
+import { MenuButton } from '@/components/input/MenuButton'
+import Link from 'next/link'
 
 export function OrgsTable({
   data = [],
   showActions = false,
 }: {
-  data: any[];
-  allowEdit?: boolean;
-  showActions?: boolean;
+  data: any[]
+  allowEdit?: boolean
+  showActions?: boolean
 }) {
-  const { formatMessage, labels } = useMessages();
-  const { renderUrl } = useNavigation();
+  const { formatMessage, labels } = useMessages()
+  const { renderUrl } = useNavigation()
 
   return (
     <DataTable data={data}>
@@ -33,7 +33,7 @@ export function OrgsTable({
       {showActions ? (
         <DataColumn id="action" label=" " align="end">
           {(row: any) => {
-            const { id } = row;
+            const { id } = row
 
             return (
               <MenuButton>
@@ -54,10 +54,10 @@ export function OrgsTable({
                   </Row>
                 </MenuItem>
               </MenuButton>
-            );
+            )
           }}
         </DataColumn>
       ) : null}
     </DataTable>
-  );
+  )
 }

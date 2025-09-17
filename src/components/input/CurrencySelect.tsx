@@ -1,11 +1,11 @@
-import { CURRENCIES } from '@/lib/constants';
-import { ListItem, Select } from '@entro314labs/entro-zen';
-import { useState } from 'react';
-import { useMessages } from '@/components/hooks';
+import { CURRENCIES } from '@/lib/constants'
+import { ListItem, Select } from '@entro314labs/entro-zen'
+import { useState } from 'react'
+import { useMessages } from '@/components/hooks'
 
 export function CurrencySelect({ value, onChange }) {
-  const { formatMessage, labels } = useMessages();
-  const [search, setSearch] = useState('');
+  const { formatMessage, labels } = useMessages()
+  const [search, setSearch] = useState('')
 
   return (
     <Select
@@ -20,15 +20,15 @@ export function CurrencySelect({ value, onChange }) {
     >
       {CURRENCIES.map(({ id, name }) => {
         if (search && !`${id}${name}`.toLowerCase().includes(search)) {
-          return null;
+          return null
         }
 
         return (
           <ListItem key={id} id={id}>
             {id} &mdash; {name}
           </ListItem>
-        );
-      }).filter(n => n)}
+        )
+      }).filter((n) => n)}
     </Select>
-  );
+  )
 }

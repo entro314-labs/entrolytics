@@ -1,14 +1,14 @@
-import { ReactNode } from 'react';
-import { Column, Row, StatusLight, FloatingTooltip } from '@entro314labs/entro-zen';
+import { ReactNode } from 'react'
+import { Column, Row, StatusLight, FloatingTooltip } from '@entro314labs/entro-zen'
 
 export function ChartTooltip({
   title,
   color,
   value,
 }: {
-  title?: string;
-  color?: string;
-  value?: ReactNode;
+  title?: string
+  color?: string
+  value?: ReactNode
 }) {
   return (
     <FloatingTooltip>
@@ -19,5 +19,5 @@ export function ChartTooltip({
         </Row>
       </Column>
     </FloatingTooltip>
-  );
+  )
 }

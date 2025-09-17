@@ -1,11 +1,11 @@
-import { useApi } from '../useApi';
-import { useModified } from '@/components/hooks';
-import { keepPreviousData } from '@tanstack/react-query';
-import { ReactQueryOptions } from '@/lib/types';
+import { useApi } from '../useApi'
+import { useModified } from '@/components/hooks'
+import { keepPreviousData } from '@tanstack/react-query'
+import { ReactQueryOptions } from '@/lib/types'
 
 export function useWebsiteQuery(websiteId: string, options?: ReactQueryOptions) {
-  const { get, useQuery } = useApi();
-  const { modified } = useModified(`website:${websiteId}`);
+  const { get, useQuery } = useApi()
+  const { modified } = useModified(`website:${websiteId}`)
 
   return useQuery({
     queryKey: ['website', { websiteId, modified }],
@@ -13,5 +13,5 @@ export function useWebsiteQuery(websiteId: string, options?: ReactQueryOptions) 
     enabled: !!websiteId,
     placeholderData: keepPreviousData,
     ...options,
-  });
+  })
 }

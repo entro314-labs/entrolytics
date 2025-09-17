@@ -1,32 +1,32 @@
-import { useState, useEffect } from 'react';
-import { httpGet } from '@/lib/fetch';
-import enUS from '../../../public/intl/language/en-US.json';
+import { useState, useEffect } from 'react'
+import { httpGet } from '@/lib/fetch'
+import enUS from '../../../public/intl/language/en-US.json'
 
 const languageNames = {
   'en-US': enUS,
-};
+}
 
 export function useLanguageNames(locale) {
-  const [list, setList] = useState(languageNames[locale] || enUS);
+  const [list, setList] = useState(languageNames[locale] || enUS)
 
   async function loadData(locale) {
-    const { data } = await httpGet(`${process.env.basePath || ''}/intl/language/${locale}.json`);
+    const { data } = await httpGet(`${process.env.basePath || ''}/intl/language/${locale}.json`)
 
     if (data) {
-      languageNames[locale] = data;
-      setList(languageNames[locale]);
+      languageNames[locale] = data
+      setList(languageNames[locale])
     } else {
-      setList(enUS);
+      setList(enUS)
     }
   }
 
   useEffect(() => {
     if (!languageNames[locale]) {
-      loadData(locale);
+      loadData(locale)
     } else {
-      setList(languageNames[locale]);
+      setList(languageNames[locale])
     }
-  }, [locale]);
+  }, [locale])
 
-  return { languageNames: list };
+  return { languageNames: list }
 }

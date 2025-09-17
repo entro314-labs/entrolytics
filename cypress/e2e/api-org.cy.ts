@@ -1,13 +1,13 @@
 describe('Org API tests', () => {
-  Cypress.session.clearAllSavedSessions();
+  Cypress.session.clearAllSavedSessions()
 
-  let orgId;
-  let userId;
+  let orgId
+  let userId
 
   before(() => {
-    cy.login(Cypress.env('entrolytics_user'), Cypress.env('entrolytics_password'));
-    cy.fixture('users').then(data => {
-      const userCreate = data.userCreate;
+    cy.login(Cypress.env('entrolytics_user'), Cypress.env('entrolytics_password'))
+    cy.fixture('users').then((data) => {
+      const userCreate = data.userCreate
       cy.request({
         method: 'POST',
         url: '/api/users',
@@ -16,18 +16,18 @@ describe('Org API tests', () => {
           Authorization: Cypress.env('authorization'),
         },
         body: userCreate,
-      }).then(response => {
-        userId = response.body.id;
-        expect(response.status).to.eq(200);
-        expect(response.body).to.have.property('username', 'cypress1');
-        expect(response.body).to.have.property('role', 'user');
-      });
-    });
-  });
+      }).then((response) => {
+        userId = response.body.id
+        expect(response.status).to.eq(200)
+        expect(response.body).to.have.property('username', 'cypress1')
+        expect(response.body).to.have.property('role', 'user')
+      })
+    })
+  })
 
   it('Creates a org.', () => {
-    cy.fixture('orgs').then(data => {
-      const orgCreate = data.orgCreate;
+    cy.fixture('orgs').then((data) => {
+      const orgCreate = data.orgCreate
       cy.request({
         method: 'POST',
         url: '/api/orgs',
@@ -36,14 +36,14 @@ describe('Org API tests', () => {
           Authorization: Cypress.env('authorization'),
         },
         body: orgCreate,
-      }).then(response => {
-        orgId = response.body[0].id;
-        expect(response.status).to.eq(200);
-        expect(response.body[0]).to.have.property('name', 'cypress');
-        expect(response.body[1]).to.have.property('role', 'org-owner');
-      });
-    });
-  });
+      }).then((response) => {
+        orgId = response.body[0].id
+        expect(response.status).to.eq(200)
+        expect(response.body[0]).to.have.property('name', 'cypress')
+        expect(response.body[1]).to.have.property('role', 'org-owner')
+      })
+    })
+  })
 
   it('Gets a orgs by ID.', () => {
     cy.request({
@@ -53,15 +53,15 @@ describe('Org API tests', () => {
         'Content-Type': 'application/json',
         Authorization: Cypress.env('authorization'),
       },
-    }).then(response => {
-      expect(response.status).to.eq(200);
-      expect(response.body).to.have.property('id', orgId);
-    });
-  });
+    }).then((response) => {
+      expect(response.status).to.eq(200)
+      expect(response.body).to.have.property('id', orgId)
+    })
+  })
 
   it('Updates a org.', () => {
-    cy.fixture('orgs').then(data => {
-      const orgUpdate = data.orgUpdate;
+    cy.fixture('orgs').then((data) => {
+      const orgUpdate = data.orgUpdate
       cy.request({
         method: 'POST',
         url: `/api/orgs/${orgId}`,
@@ -70,13 +70,13 @@ describe('Org API tests', () => {
           Authorization: Cypress.env('authorization'),
         },
         body: orgUpdate,
-      }).then(response => {
-        expect(response.status).to.eq(200);
-        expect(response.body).to.have.property('id', orgId);
-        expect(response.body).to.have.property('name', 'cypressUpdate');
-      });
-    });
-  });
+      }).then((response) => {
+        expect(response.status).to.eq(200)
+        expect(response.body).to.have.property('id', orgId)
+        expect(response.body).to.have.property('name', 'cypressUpdate')
+      })
+    })
+  })
 
   it('Get all users that belong to a org.', () => {
     cy.request({
@@ -86,14 +86,14 @@ describe('Org API tests', () => {
         'Content-Type': 'application/json',
         Authorization: Cypress.env('authorization'),
       },
-    }).then(response => {
-      expect(response.status).to.eq(200);
-      expect(response.body.data[0]).to.have.property('id');
-      expect(response.body.data[0]).to.have.property('orgId');
-      expect(response.body.data[0]).to.have.property('userId');
-      expect(response.body.data[0]).to.have.property('user');
-    });
-  });
+    }).then((response) => {
+      expect(response.status).to.eq(200)
+      expect(response.body.data[0]).to.have.property('id')
+      expect(response.body.data[0]).to.have.property('orgId')
+      expect(response.body.data[0]).to.have.property('userId')
+      expect(response.body.data[0]).to.have.property('user')
+    })
+  })
 
   it('Get a user belonging to a org.', () => {
     cy.request({
@@ -103,13 +103,13 @@ describe('Org API tests', () => {
         'Content-Type': 'application/json',
         Authorization: Cypress.env('authorization'),
       },
-    }).then(response => {
-      expect(response.status).to.eq(200);
-      expect(response.body).to.have.property('orgId');
-      expect(response.body).to.have.property('userId');
-      expect(response.body).to.have.property('role');
-    });
-  });
+    }).then((response) => {
+      expect(response.status).to.eq(200)
+      expect(response.body).to.have.property('orgId')
+      expect(response.body).to.have.property('userId')
+      expect(response.body).to.have.property('role')
+    })
+  })
 
   it('Get all websites belonging to a org.', () => {
     cy.request({
@@ -119,11 +119,11 @@ describe('Org API tests', () => {
         'Content-Type': 'application/json',
         Authorization: Cypress.env('authorization'),
       },
-    }).then(response => {
-      expect(response.status).to.eq(200);
-      expect(response.body).to.have.property('data');
-    });
-  });
+    }).then((response) => {
+      expect(response.status).to.eq(200)
+      expect(response.body).to.have.property('data')
+    })
+  })
 
   it('Add a user to a org.', () => {
     cy.request({
@@ -137,12 +137,12 @@ describe('Org API tests', () => {
         userId,
         role: 'org-member',
       },
-    }).then(response => {
-      expect(response.status).to.eq(200);
-      expect(response.body).to.have.property('userId', userId);
-      expect(response.body).to.have.property('role', 'org-member');
-    });
-  });
+    }).then((response) => {
+      expect(response.status).to.eq(200)
+      expect(response.body).to.have.property('userId', userId)
+      expect(response.body).to.have.property('role', 'org-member')
+    })
+  })
 
   it(`Update a user's role on a org.`, () => {
     cy.request({
@@ -155,12 +155,12 @@ describe('Org API tests', () => {
       body: {
         role: 'org-view-only',
       },
-    }).then(response => {
-      expect(response.status).to.eq(200);
-      expect(response.body).to.have.property('userId', userId);
-      expect(response.body).to.have.property('role', 'org-view-only');
-    });
-  });
+    }).then((response) => {
+      expect(response.status).to.eq(200)
+      expect(response.body).to.have.property('userId', userId)
+      expect(response.body).to.have.property('role', 'org-view-only')
+    })
+  })
 
   it(`Remove a user from a org.`, () => {
     cy.request({
@@ -170,10 +170,10 @@ describe('Org API tests', () => {
         'Content-Type': 'application/json',
         Authorization: Cypress.env('authorization'),
       },
-    }).then(response => {
-      expect(response.status).to.eq(200);
-    });
-  });
+    }).then((response) => {
+      expect(response.status).to.eq(200)
+    })
+  })
 
   it('Deletes a org.', () => {
     cy.request({
@@ -183,11 +183,11 @@ describe('Org API tests', () => {
         'Content-Type': 'application/json',
         Authorization: Cypress.env('authorization'),
       },
-    }).then(response => {
-      expect(response.status).to.eq(200);
-      expect(response.body).to.have.property('ok', true);
-    });
-  });
+    }).then((response) => {
+      expect(response.status).to.eq(200)
+      expect(response.body).to.have.property('ok', true)
+    })
+  })
 
   // it('Gets all orgs that belong to a user.', () => {
   //   cy.request({
@@ -204,6 +204,6 @@ describe('Org API tests', () => {
   // });
 
   after(() => {
-    cy.deleteUser(userId);
-  });
-});
+    cy.deleteUser(userId)
+  })
+})

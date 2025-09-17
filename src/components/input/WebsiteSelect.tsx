@@ -1,38 +1,38 @@
-import { useState } from 'react';
-import { Select, SelectProps, ListItem, Text } from '@entro314labs/entro-zen';
+import { useState } from 'react'
+import { Select, SelectProps, ListItem, Text } from '@entro314labs/entro-zen'
 import {
   useUserWebsitesQuery,
   useWebsiteQuery,
   useNavigation,
   useMessages,
-} from '@/components/hooks';
-import { Empty } from '@/components/common/Empty';
+} from '@/components/hooks'
+import { Empty } from '@/components/common/Empty'
 
 export function WebsiteSelect({
   websiteId,
   orgId,
   ...props
 }: {
-  websiteId?: string;
-  orgId?: string;
+  websiteId?: string
+  orgId?: string
 } & SelectProps) {
-  const { formatMessage, messages } = useMessages();
-  const { router, renderUrl } = useNavigation();
-  const [search, setSearch] = useState('');
-  const { data: website } = useWebsiteQuery(websiteId);
-  const { data, isLoading } = useUserWebsitesQuery({ orgId }, { search, pageSize: 5 });
+  const { formatMessage, messages } = useMessages()
+  const { router, renderUrl } = useNavigation()
+  const [search, setSearch] = useState('')
+  const { data: website } = useWebsiteQuery(websiteId)
+  const { data, isLoading } = useUserWebsitesQuery({ orgId }, { search, pageSize: 5 })
 
   const handleSelect = (value: any) => {
-    router.push(renderUrl(`/websites/${value}`));
-  };
+    router.push(renderUrl(`/websites/${value}`))
+  }
 
   const handleSearch = (value: string) => {
-    setSearch(value);
-  };
+    setSearch(value)
+  }
 
   const handleOpenChange = () => {
-    setSearch('');
-  };
+    setSearch('')
+  }
 
   return (
     <Select
@@ -58,5 +58,5 @@ export function WebsiteSelect({
     >
       {({ id, name }: any) => <ListItem key={id}>{name}</ListItem>}
     </Select>
-  );
+  )
 }

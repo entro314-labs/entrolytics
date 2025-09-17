@@ -1,25 +1,25 @@
-import clickhouse from '@/lib/clickhouse';
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db';
-import prisma from '@/lib/prisma';
-import { QueryFilters } from '@/lib/types';
+import clickhouse from '@/lib/clickhouse'
+import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
+import prisma from '@/lib/prisma'
+import { QueryFilters } from '@/lib/types'
 
 export interface RevenuParameters {
-  startDate: Date;
-  endDate: Date;
-  unit: string;
-  currency: string;
+  startDate: Date
+  endDate: Date
+  unit: string
+  currency: string
 }
 
 export interface RevenueResult {
-  chart: { x: string; t: string; y: number }[];
-  country: { name: string; value: number }[];
-  total: { sum: number; count: number; average: number; unique_count: number };
+  chart: { x: string; t: string; y: number }[]
+  country: { name: string; value: number }[]
+  total: { sum: number; count: number; average: number; unique_count: number }
   table: {
-    currency: string;
-    sum: number;
-    count: number;
-    unique_count: number;
-  }[];
+    currency: string
+    sum: number
+    count: number
+    unique_count: number
+  }[]
 }
 
 export async function getRevenue(
@@ -28,23 +28,23 @@ export async function getRevenue(
   return runQuery({
     [PRISMA]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  });
+  })
 }
 
 async function relationalQuery(
   websiteId: string,
   parameters: RevenuParameters,
-  filters: QueryFilters,
+  filters: QueryFilters
 ): Promise<RevenueResult> {
-  const { startDate, endDate, currency, unit = 'day' } = parameters;
-  const { getDateSQL, rawQuery, parseFilters } = prisma;
+  const { startDate, endDate, currency, unit = 'day' } = parameters
+  const { getDateSQL, rawQuery, parseFilters } = prisma
   const { queryParams, filterQuery, cohortQuery, joinSessionQuery } = parseFilters({
     ...filters,
     websiteId,
     startDate,
     endDate,
     currency,
-  });
+  })
 
   const chart = await rawQuery(
     `
@@ -68,8 +68,8 @@ async function relationalQuery(
     group by  x, t
     order by t
     `,
-    queryParams,
-  );
+    queryParams
+  )
 
   const country = await rawQuery(
     `
@@ -93,8 +93,8 @@ async function relationalQuery(
       ${filterQuery}
     group by session.country
     `,
-    queryParams,
-  );
+    queryParams
+  )
 
   const total = await rawQuery(
     `
@@ -116,10 +116,10 @@ async function relationalQuery(
       and revenue.currency = {{currency}}
       ${filterQuery}
   `,
-    queryParams,
-  ).then(result => result?.[0]);
+    queryParams
+  ).then((result) => result?.[0])
 
-  total.average = total.count > 0 ? total.sum / total.count : 0;
+  total.average = total.count > 0 ? total.sum / total.count : 0
 
   const table = await rawQuery(
     `
@@ -143,32 +143,32 @@ async function relationalQuery(
     group by revenue.currency
     order by sum desc
     `,
-    queryParams,
-  );
+    queryParams
+  )
 
-  return { chart, country, table, total };
+  return { chart, country, table, total }
 }
 
 async function clickhouseQuery(
   websiteId: string,
   parameters: RevenuParameters,
-  filters: QueryFilters,
+  filters: QueryFilters
 ): Promise<RevenueResult> {
-  const { startDate, endDate, unit = 'day', currency } = parameters;
-  const { getDateSQL, rawQuery, parseFilters } = clickhouse;
+  const { startDate, endDate, unit = 'day', currency } = parameters
+  const { getDateSQL, rawQuery, parseFilters } = clickhouse
   const { filterQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
     startDate,
     endDate,
     currency,
-  });
+  })
 
   const chart = await rawQuery<
     {
-      x: string;
-      t: string;
-      y: number;
+      x: string
+      t: string
+      y: number
     }[]
   >(
     `
@@ -191,13 +191,13 @@ async function clickhouseQuery(
     group by  x, t
     order by t
     `,
-    queryParams,
-  );
+    queryParams
+  )
 
   const country = await rawQuery<
     {
-      name: string;
-      value: number;
+      name: string
+      value: number
     }[]
   >(
     `
@@ -218,13 +218,13 @@ async function clickhouseQuery(
       ${filterQuery}
     group by website_event.country
     `,
-    queryParams,
-  );
+    queryParams
+  )
 
   const total = await rawQuery<{
-    sum: number;
-    count: number;
-    unique_count: number;
+    sum: number
+    count: number
+    unique_count: number
   }>(
     `
     select
@@ -244,17 +244,17 @@ async function clickhouseQuery(
       and website_revenue.currency = {currency:String}
       ${filterQuery}
     `,
-    queryParams,
-  ).then(result => result?.[0]);
+    queryParams
+  ).then((result) => result?.[0])
 
-  total.average = total.count > 0 ? total.sum / total.count : 0;
+  total.average = total.count > 0 ? total.sum / total.count : 0
 
   const table = await rawQuery<
     {
-      currency: string;
-      sum: number;
-      count: number;
-      unique_count: number;
+      currency: string
+      sum: number
+      count: number
+      unique_count: number
     }[]
   >(
     `
@@ -277,8 +277,8 @@ async function clickhouseQuery(
     group by website_revenue.currency
     order by sum desc
     `,
-    queryParams,
-  );
+    queryParams
+  )
 
-  return { chart, country, table, total };
+  return { chart, country, table, total }
 }

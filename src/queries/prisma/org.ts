@@ -1,36 +1,36 @@
-import { Prisma, Org } from '@/generated/prisma/client';
-import { ROLES } from '@/lib/constants';
-import { uuid } from '@/lib/crypto';
-import prisma from '@/lib/prisma';
-import { PageResult, QueryFilters } from '@/lib/types';
-import OrgFindManyArgs = Prisma.OrgFindManyArgs;
+import { Prisma, Org } from '@/generated/prisma/client'
+import { ROLES } from '@/lib/constants'
+import { uuid } from '@/lib/crypto'
+import prisma from '@/lib/prisma'
+import { PageResult, QueryFilters } from '@/lib/types'
+import OrgFindManyArgs = Prisma.OrgFindManyArgs
 
 export async function findOrg(criteria: Prisma.OrgFindUniqueArgs): Promise<Org> {
-  return prisma.client.org.findUnique(criteria);
+  return prisma.client.org.findUnique(criteria)
 }
 
 export async function getOrg(orgId: string, options: { includeMembers?: boolean } = {}) {
-  const { includeMembers } = options;
+  const { includeMembers } = options
 
   return findOrg({
     where: {
       id: orgId,
     },
     ...(includeMembers && { include: { members: true } }),
-  });
+  })
 }
 
 export async function getOrgs(
   criteria: OrgFindManyArgs,
-  filters: QueryFilters,
+  filters: QueryFilters
 ): Promise<PageResult<Org[]>> {
-  const { getSearchParameters } = prisma;
-  const { search } = filters;
+  const { getSearchParameters } = prisma
+  const { search } = filters
 
   const where: Prisma.OrgWhereInput = {
     ...criteria.where,
     ...getSearchParameters(search, [{ name: 'contains' }]),
-  };
+  }
 
   return prisma.pagedQuery<OrgFindManyArgs>(
     'org',
@@ -38,8 +38,8 @@ export async function getOrgs(
       ...criteria,
       where,
     },
-    filters,
-  );
+    filters
+  )
 }
 
 export async function getUserOrgs(userId: string, filters: QueryFilters) {
@@ -77,13 +77,13 @@ export async function getUserOrgs(userId: string, filters: QueryFilters) {
         },
       },
     },
-    filters,
-  );
+    filters
+  )
 }
 
 export async function createOrg(data: Prisma.OrgCreateInput, userId: string): Promise<any> {
-  const { id } = data;
-  const { client, transaction } = prisma;
+  const { id } = data
+  const { client, transaction } = prisma
 
   return transaction([
     client.org.create({
@@ -97,11 +97,11 @@ export async function createOrg(data: Prisma.OrgCreateInput, userId: string): Pr
         role: ROLES.orgOwner,
       },
     }),
-  ]);
+  ])
 }
 
 export async function updateOrg(orgId: string, data: Prisma.OrgUpdateInput): Promise<Org> {
-  const { client } = prisma;
+  const { client } = prisma
 
   return client.org.update({
     where: {
@@ -111,14 +111,14 @@ export async function updateOrg(orgId: string, data: Prisma.OrgUpdateInput): Pro
       ...data,
       updatedAt: new Date(),
     },
-  });
+  })
 }
 
 export async function deleteOrg(
-  orgId: string,
+  orgId: string
 ): Promise<Promise<[Prisma.BatchPayload, Prisma.BatchPayload, Org]>> {
-  const { client, transaction } = prisma;
-  const cloudMode = process.env.CLOUD_MODE;
+  const { client, transaction } = prisma
+  const cloudMode = process.env.CLOUD_MODE
 
   if (cloudMode) {
     return transaction([
@@ -130,7 +130,7 @@ export async function deleteOrg(
           id: orgId,
         },
       }),
-    ]);
+    ])
   }
 
   return transaction([
@@ -144,5 +144,5 @@ export async function deleteOrg(
         id: orgId,
       },
     }),
-  ]);
+  ])
 }

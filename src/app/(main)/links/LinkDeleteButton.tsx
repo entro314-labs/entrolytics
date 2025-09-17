@@ -1,32 +1,32 @@
-import { Dialog } from '@entro314labs/entro-zen';
-import { ActionButton } from '@/components/input/ActionButton';
-import { Trash } from '@/components/icons';
-import { ConfirmationForm } from '@/components/common/ConfirmationForm';
-import { messages } from '@/components/messages';
-import { useDeleteQuery, useMessages } from '@/components/hooks';
+import { Dialog } from '@entro314labs/entro-zen'
+import { ActionButton } from '@/components/input/ActionButton'
+import { Trash } from '@/components/icons'
+import { ConfirmationForm } from '@/components/common/ConfirmationForm'
+import { messages } from '@/components/messages'
+import { useDeleteQuery, useMessages } from '@/components/hooks'
 
 export function LinkDeleteButton({
   linkId,
   name,
   onSave,
 }: {
-  linkId: string;
-  websiteId: string;
-  name: string;
-  onSave?: () => void;
+  linkId: string
+  websiteId: string
+  name: string
+  onSave?: () => void
 }) {
-  const { formatMessage, labels } = useMessages();
-  const { mutate, isPending, error, touch } = useDeleteQuery(`/links/${linkId}`);
+  const { formatMessage, labels } = useMessages()
+  const { mutate, isPending, error, touch } = useDeleteQuery(`/links/${linkId}`)
 
   const handleConfirm = (close: () => void) => {
     mutate(null, {
       onSuccess: () => {
-        touch('links');
-        onSave?.();
-        close();
+        touch('links')
+        onSave?.()
+        close()
       },
-    });
-  };
+    })
+  }
 
   return (
     <ActionButton title={formatMessage(labels.delete)} icon={<Trash />}>
@@ -46,5 +46,5 @@ export function LinkDeleteButton({
         )}
       </Dialog>
     </ActionButton>
-  );
+  )
 }

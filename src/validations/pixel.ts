@@ -1,64 +1,64 @@
-import { Auth } from '@/lib/types';
-import { getPixel, getOrgUser } from '@/queries';
-import { hasPermission } from '@/lib/auth';
-import { PERMISSIONS } from '@/lib/constants';
+import { Auth } from '@/lib/types'
+import { getPixel, getOrgUser } from '@/queries'
+import { hasPermission } from '@/lib/auth'
+import { PERMISSIONS } from '@/lib/constants'
 
 export async function canViewPixel({ user }: Auth, pixelId: string) {
   if (user?.isAdmin) {
-    return true;
+    return true
   }
 
-  const pixel = await getPixel(pixelId);
+  const pixel = await getPixel(pixelId)
 
   if (pixel.userId) {
-    return user.id === pixel.userId;
+    return user.id === pixel.userId
   }
 
   if (pixel.orgId) {
-    const orgUser = await getOrgUser(pixel.orgId, user.id);
+    const orgUser = await getOrgUser(pixel.orgId, user.id)
 
-    return !!orgUser;
+    return !!orgUser
   }
 
-  return false;
+  return false
 }
 
 export async function canUpdatePixel({ user }: Auth, pixelId: string) {
   if (user.isAdmin) {
-    return true;
+    return true
   }
 
-  const pixel = await getPixel(pixelId);
+  const pixel = await getPixel(pixelId)
 
   if (pixel.userId) {
-    return user.id === pixel.userId;
+    return user.id === pixel.userId
   }
 
   if (pixel.orgId) {
-    const orgUser = await getOrgUser(pixel.orgId, user.id);
+    const orgUser = await getOrgUser(pixel.orgId, user.id)
 
-    return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteUpdate);
+    return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteUpdate)
   }
 
-  return false;
+  return false
 }
 
 export async function canDeletePixel({ user }: Auth, pixelId: string) {
   if (user.isAdmin) {
-    return true;
+    return true
   }
 
-  const pixel = await getPixel(pixelId);
+  const pixel = await getPixel(pixelId)
 
   if (pixel.userId) {
-    return user.id === pixel.userId;
+    return user.id === pixel.userId
   }
 
   if (pixel.orgId) {
-    const orgUser = await getOrgUser(pixel.orgId, user.id);
+    const orgUser = await getOrgUser(pixel.orgId, user.id)
 
-    return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteDelete);
+    return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteDelete)
   }
 
-  return false;
+  return false
 }

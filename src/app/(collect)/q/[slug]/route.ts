@@ -1,19 +1,19 @@
-import { NextResponse } from 'next/server';
-import { notFound } from '@/lib/response';
-import { findLink } from '@/queries';
-import { POST } from '@/app/api/send/route';
+import { NextResponse } from 'next/server'
+import { notFound } from '@/lib/response'
+import { findLink } from '@/queries'
+import { POST } from '@/app/api/send/route'
 
 export async function GET(request: Request, { params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
+  const { slug } = await params
 
   const link = await findLink({
     where: {
       slug,
     },
-  });
+  })
 
   if (!link) {
-    return notFound();
+    return notFound()
   }
 
   const payload = {
@@ -23,15 +23,15 @@ export async function GET(request: Request, { params }: { params: Promise<{ slug
       url: request.url,
       referrer: request.referrer,
     },
-  };
+  }
 
   const req = new Request(request.url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
-  });
+  })
 
-  await POST(req);
+  await POST(req)
 
-  return NextResponse.redirect(link.url);
+  return NextResponse.redirect(link.url)
 }

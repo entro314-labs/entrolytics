@@ -1,6 +1,6 @@
-import { ReactNode, useState } from 'react';
-import { useMessages } from '@/components/hooks';
-import { useDeleteQuery } from '@/components/hooks/queries/useDeleteQuery';
+import { ReactNode, useState } from 'react'
+import { useMessages } from '@/components/hooks'
+import { useDeleteQuery } from '@/components/hooks/queries/useDeleteQuery'
 import {
   AlertDialog,
   Button,
@@ -12,8 +12,8 @@ import {
   Popover,
   Text,
   Row,
-} from '@entro314labs/entro-zen';
-import { Edit, More, Trash } from '@/components/icons';
+} from '@entro314labs/entro-zen'
+import { Edit, More, Trash } from '@/components/icons'
 
 export function ReportEditButton({
   id,
@@ -22,39 +22,39 @@ export function ReportEditButton({
   children,
   onDelete,
 }: {
-  id: string;
-  name: string;
-  type: string;
-  onDelete?: () => void;
-  children: ({ close }: { close: () => void }) => ReactNode;
+  id: string
+  name: string
+  type: string
+  onDelete?: () => void
+  children: ({ close }: { close: () => void }) => ReactNode
 }) {
-  const { formatMessage, labels, messages } = useMessages();
-  const [showEdit, setShowEdit] = useState(false);
-  const [showDelete, setShowDelete] = useState(false);
-  const { mutate, touch } = useDeleteQuery(`/reports/${id}`);
+  const { formatMessage, labels, messages } = useMessages()
+  const [showEdit, setShowEdit] = useState(false)
+  const [showDelete, setShowDelete] = useState(false)
+  const { mutate, touch } = useDeleteQuery(`/reports/${id}`)
 
   const handleAction = (id: any) => {
     if (id === 'edit') {
-      setShowEdit(true);
+      setShowEdit(true)
     } else if (id === 'delete') {
-      setShowDelete(true);
+      setShowDelete(true)
     }
-  };
+  }
 
   const handleClose = () => {
-    setShowEdit(false);
-    setShowDelete(false);
-  };
+    setShowEdit(false)
+    setShowDelete(false)
+  }
 
   const handleDelete = async () => {
     mutate(null, {
       onSuccess: async () => {
-        touch(`reports:${type}`);
-        setShowDelete(false);
-        onDelete?.();
+        touch(`reports:${type}`)
+        setShowDelete(false)
+        onDelete?.()
       },
-    });
-  };
+    })
+  }
 
   return (
     <>
@@ -97,5 +97,5 @@ export function ReportEditButton({
         )}
       </Modal>
     </>
-  );
+  )
 }

@@ -1,19 +1,19 @@
-import { setItem } from '@/lib/storage';
-import { TIMEZONE_CONFIG } from '@/lib/constants';
-import { formatInTimeZone, fromZonedTime, toZonedTime } from 'date-fns-tz';
-import { useApp, setTimezone } from '@/store/app';
-import { useLocale } from './useLocale';
+import { setItem } from '@/lib/storage'
+import { TIMEZONE_CONFIG } from '@/lib/constants'
+import { formatInTimeZone, fromZonedTime, toZonedTime } from 'date-fns-tz'
+import { useApp, setTimezone } from '@/store/app'
+import { useLocale } from './useLocale'
 
-const selector = (state: { timezone: string }) => state.timezone;
+const selector = (state: { timezone: string }) => state.timezone
 
 export function useTimezone() {
-  const timezone = useApp(selector);
-  const { dateLocale } = useLocale();
+  const timezone = useApp(selector)
+  const { dateLocale } = useLocale()
 
   const saveTimezone = (value: string) => {
-    setItem(TIMEZONE_CONFIG, value);
-    setTimezone(value);
-  };
+    setItem(TIMEZONE_CONFIG, value)
+    setTimezone(value)
+  }
 
   const formatTimezoneDate = (date: string, pattern: string) => {
     return formatInTimeZone(
@@ -22,17 +22,17 @@ export function useTimezone() {
         : date.split(' ').join('T') + 'Z',
       timezone,
       pattern,
-      { locale: dateLocale },
-    );
-  };
+      { locale: dateLocale }
+    )
+  }
 
   const toUtc = (date: Date | string | number) => {
-    return fromZonedTime(date, timezone);
-  };
+    return fromZonedTime(date, timezone)
+  }
 
   const fromUtc = (date: Date | string | number) => {
-    return toZonedTime(date, timezone);
-  };
+    return toZonedTime(date, timezone)
+  }
 
-  return { timezone, saveTimezone, formatTimezoneDate, toUtc, fromUtc };
+  return { timezone, saveTimezone, formatTimezoneDate, toUtc, fromUtc }
 }

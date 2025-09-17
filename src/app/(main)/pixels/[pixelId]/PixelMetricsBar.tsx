@@ -1,23 +1,23 @@
-import { useDateRange, useMessages } from '@/components/hooks';
-import { MetricCard } from '@/components/metrics/MetricCard';
-import { MetricsBar } from '@/components/metrics/MetricsBar';
-import { formatLongNumber } from '@/lib/format';
-import { useWebsiteStatsQuery } from '@/components/hooks/queries/useWebsiteStatsQuery';
-import { LoadingPanel } from '@/components/common/LoadingPanel';
+import { useDateRange, useMessages } from '@/components/hooks'
+import { MetricCard } from '@/components/metrics/MetricCard'
+import { MetricsBar } from '@/components/metrics/MetricsBar'
+import { formatLongNumber } from '@/lib/format'
+import { useWebsiteStatsQuery } from '@/components/hooks/queries/useWebsiteStatsQuery'
+import { LoadingPanel } from '@/components/common/LoadingPanel'
 
 export function PixelMetricsBar({
   pixelId,
 }: {
-  pixelId: string;
-  showChange?: boolean;
-  compareMode?: boolean;
+  pixelId: string
+  showChange?: boolean
+  compareMode?: boolean
 }) {
-  const { dateRange } = useDateRange(pixelId);
-  const { formatMessage, labels } = useMessages();
-  const { data, isLoading, isFetching, error } = useWebsiteStatsQuery(pixelId);
-  const isAllTime = dateRange.value === 'all';
+  const { dateRange } = useDateRange(pixelId)
+  const { formatMessage, labels } = useMessages()
+  const { data, isLoading, isFetching, error } = useWebsiteStatsQuery(pixelId)
+  const isAllTime = dateRange.value === 'all'
 
-  const { pageviews, visitors, visits, comparison } = data || {};
+  const { pageviews, visitors, visits, comparison } = data || {}
 
   const metrics = data
     ? [
@@ -40,7 +40,7 @@ export function PixelMetricsBar({
           formatValue: formatLongNumber,
         },
       ]
-    : null;
+    : null
 
   return (
     <LoadingPanel
@@ -63,9 +63,9 @@ export function PixelMetricsBar({
               reverseColors={reverseColors}
               showChange={!isAllTime}
             />
-          );
+          )
         })}
       </MetricsBar>
     </LoadingPanel>
-  );
+  )
 }

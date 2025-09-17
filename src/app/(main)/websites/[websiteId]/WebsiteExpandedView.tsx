@@ -1,20 +1,20 @@
-import { Grid, Column } from '@entro314labs/entro-zen';
-import { useMessages, useNavigation } from '@/components/hooks';
-import { MetricsExpandedTable } from '@/components/metrics/MetricsExpandedTable';
-import { SideMenu } from '@/components/common/SideMenu';
+import { Grid, Column } from '@entro314labs/entro-zen'
+import { useMessages, useNavigation } from '@/components/hooks'
+import { MetricsExpandedTable } from '@/components/metrics/MetricsExpandedTable'
+import { SideMenu } from '@/components/common/SideMenu'
 
 export function WebsiteExpandedView({
   websiteId,
   onClose,
 }: {
-  websiteId: string;
-  onClose?: () => void;
+  websiteId: string
+  onClose?: () => void
 }) {
-  const { formatMessage, labels } = useMessages();
+  const { formatMessage, labels } = useMessages()
   const {
     updateParams,
     query: { view },
-  } = useNavigation();
+  } = useNavigation()
 
   const items = [
     {
@@ -137,7 +137,7 @@ export function WebsiteExpandedView({
         },
       ],
     },
-  ];
+  ]
 
   return (
     <Grid columns="auto 1fr" gap="6" height="100%" overflow="hidden">
@@ -153,5 +153,5 @@ export function WebsiteExpandedView({
         />
       </Column>
     </Grid>
-  );
+  )
 }

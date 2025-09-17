@@ -1,18 +1,18 @@
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db';
-import prisma from '@/lib/prisma';
-import clickhouse from '@/lib/clickhouse';
-import { EVENT_TYPE, FILTER_COLUMNS, SESSION_COLUMNS } from '@/lib/constants';
-import { QueryFilters } from '@/lib/types';
+import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
+import prisma from '@/lib/prisma'
+import clickhouse from '@/lib/clickhouse'
+import { EVENT_TYPE, FILTER_COLUMNS, SESSION_COLUMNS } from '@/lib/constants'
+import { QueryFilters } from '@/lib/types'
 
 export interface BreakdownParameters {
-  startDate: Date;
-  endDate: Date;
-  fields: string[];
+  startDate: Date
+  endDate: Date
+  fields: string[]
 }
 
 export interface BreakdownData {
-  x: string;
-  y: number;
+  x: string
+  y: number
 }
 
 export async function getBreakdown(
@@ -21,16 +21,16 @@ export async function getBreakdown(
   return runQuery({
     [PRISMA]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  });
+  })
 }
 
 async function relationalQuery(
   websiteId: string,
   parameters: BreakdownParameters,
-  filters: QueryFilters,
+  filters: QueryFilters
 ): Promise<BreakdownData[]> {
-  const { getTimestampDiffSQL, parseFilters, rawQuery } = prisma;
-  const { startDate, endDate, fields } = parameters;
+  const { getTimestampDiffSQL, parseFilters, rawQuery } = prisma
+  const { startDate, endDate, fields } = parameters
   const { filterQuery, joinSessionQuery, cohortQuery, queryParams } = parseFilters(
     {
       ...filters,
@@ -41,8 +41,8 @@ async function relationalQuery(
     },
     {
       joinSession: !!fields.find((name: string) => SESSION_COLUMNS.includes(name)),
-    },
-  );
+    }
+  )
 
   return rawQuery(
     `
@@ -74,24 +74,24 @@ async function relationalQuery(
     order by 1 desc, 2 desc
     limit 500
     `,
-    queryParams,
-  );
+    queryParams
+  )
 }
 
 async function clickhouseQuery(
   websiteId: string,
   parameters: BreakdownParameters,
-  filters: QueryFilters,
+  filters: QueryFilters
 ): Promise<BreakdownData[]> {
-  const { parseFilters, rawQuery } = clickhouse;
-  const { startDate, endDate, fields } = parameters;
+  const { parseFilters, rawQuery } = clickhouse
+  const { startDate, endDate, fields } = parameters
   const { filterQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
     startDate,
     endDate,
     eventType: EVENT_TYPE.pageView,
-  });
+  })
 
   return rawQuery(
     `
@@ -122,14 +122,14 @@ async function clickhouseQuery(
     order by 1 desc, 2 desc
     limit 500
     `,
-    queryParams,
-  );
+    queryParams
+  )
 }
 
 function parseFields(fields: string[]) {
-  return fields.map(name => `${FILTER_COLUMNS[name]} as "${name}"`).join(',');
+  return fields.map((name) => `${FILTER_COLUMNS[name]} as "${name}"`).join(',')
 }
 
 function parseFieldsByName(fields: string[]) {
-  return `${fields.map(name => name).join(',')}`;
+  return `${fields.map((name) => name).join(',')}`
 }

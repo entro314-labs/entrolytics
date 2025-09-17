@@ -1,44 +1,44 @@
-import { useState } from 'react';
-import { Column, Tabs, TabList, Tab, TabPanel, Row, Button } from '@entro314labs/entro-zen';
-import { useFilters, useMessages, useNavigation } from '@/components/hooks';
-import { FieldFilters } from '@/components/input/FieldFilters';
-import { SegmentFilters } from '@/components/input/SegmentFilters';
+import { useState } from 'react'
+import { Column, Tabs, TabList, Tab, TabPanel, Row, Button } from '@entro314labs/entro-zen'
+import { useFilters, useMessages, useNavigation } from '@/components/hooks'
+import { FieldFilters } from '@/components/input/FieldFilters'
+import { SegmentFilters } from '@/components/input/SegmentFilters'
 
 export interface FilterEditFormProps {
-  websiteId?: string;
-  onChange?: (params: { filters: any[]; segment?: string; cohort?: string }) => void;
-  onClose?: () => void;
+  websiteId?: string
+  onChange?: (params: { filters: any[]; segment?: string; cohort?: string }) => void
+  onClose?: () => void
 }
 
 export function FilterEditForm({ websiteId, onChange, onClose }: FilterEditFormProps) {
   const {
     query: { segment, cohort },
-  } = useNavigation();
-  const { filters } = useFilters();
-  const { formatMessage, labels } = useMessages();
-  const [currentFilters, setCurrentFilters] = useState(filters);
-  const [currentSegment, setCurrentSegment] = useState(segment);
-  const [currentCohort, setCurrentCohort] = useState(cohort);
+  } = useNavigation()
+  const { filters } = useFilters()
+  const { formatMessage, labels } = useMessages()
+  const [currentFilters, setCurrentFilters] = useState(filters)
+  const [currentSegment, setCurrentSegment] = useState(segment)
+  const [currentCohort, setCurrentCohort] = useState(cohort)
 
   const handleReset = () => {
-    setCurrentFilters([]);
-    setCurrentSegment(undefined);
-    setCurrentCohort(undefined);
-  };
+    setCurrentFilters([])
+    setCurrentSegment(undefined)
+    setCurrentCohort(undefined)
+  }
 
   const handleSave = () => {
     onChange?.({
-      filters: currentFilters.filter(f => f.value),
+      filters: currentFilters.filter((f) => f.value),
       segment: currentSegment,
       cohort: currentCohort,
-    });
-    onClose?.();
-  };
+    })
+    onClose?.()
+  }
 
   const handleSegmentChange = (id: string, type: string) => {
-    setCurrentSegment(type === 'segment' ? id : undefined);
-    setCurrentCohort(type === 'cohort' ? id : undefined);
-  };
+    setCurrentSegment(type === 'segment' ? id : undefined)
+    setCurrentCohort(type === 'cohort' ? id : undefined)
+  }
 
   return (
     <Column>
@@ -77,5 +77,5 @@ export function FilterEditForm({ websiteId, onChange, onClose }: FilterEditFormP
         </Row>
       </Row>
     </Column>
-  );
+  )
 }

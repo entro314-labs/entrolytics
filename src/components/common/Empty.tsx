@@ -1,12 +1,12 @@
-import { Row } from '@entro314labs/entro-zen';
-import { useMessages } from '@/components/hooks';
+import { Row } from '@entro314labs/entro-zen'
+import { useMessages } from '@/components/hooks'
 
 export interface EmptyProps {
-  message?: string;
+  message?: string
 }
 
 export function Empty({ message }: EmptyProps) {
-  const { formatMessage, messages } = useMessages();
+  const { formatMessage, messages } = useMessages()
 
   return (
     <Row
@@ -20,5 +20,5 @@ export function Empty({ message }: EmptyProps) {
     >
       {message || formatMessage(messages.noDataAvailable)}
     </Row>
-  );
+  )
 }

@@ -1,26 +1,26 @@
-import { DataColumn, DataTable, Row } from '@entro314labs/entro-zen';
-import { useMessages } from '@/components/hooks';
-import { ROLES } from '@/lib/constants';
-import { OrgMemberRemoveButton } from './OrgMemberRemoveButton';
-import { OrgMemberEditButton } from './OrgMemberEditButton';
+import { DataColumn, DataTable, Row } from '@entro314labs/entro-zen'
+import { useMessages } from '@/components/hooks'
+import { ROLES } from '@/lib/constants'
+import { OrgMemberRemoveButton } from './OrgMemberRemoveButton'
+import { OrgMemberEditButton } from './OrgMemberEditButton'
 
 export function OrgMembersTable({
   data = [],
   orgId,
   allowEdit = false,
 }: {
-  data: any[];
-  orgId: string;
-  allowEdit: boolean;
+  data: any[]
+  orgId: string
+  allowEdit: boolean
 }) {
-  const { formatMessage, labels } = useMessages();
+  const { formatMessage, labels } = useMessages()
 
   const roles = {
     [ROLES.orgOwner]: formatMessage(labels.orgOwner),
     [ROLES.orgManager]: formatMessage(labels.orgManager),
     [ROLES.orgMember]: formatMessage(labels.orgMember),
     [ROLES.orgViewOnly]: formatMessage(labels.viewOnly),
-  };
+  }
 
   return (
     <DataTable data={data}>
@@ -34,7 +34,7 @@ export function OrgMembersTable({
         <DataColumn id="action" align="end">
           {(row: any) => {
             if (row?.role === ROLES.orgOwner) {
-              return null;
+              return null
             }
 
             return (
@@ -46,10 +46,10 @@ export function OrgMembersTable({
                   userName={row?.user?.username}
                 />
               </Row>
-            );
+            )
           }}
         </DataColumn>
       )}
     </DataTable>
-  );
+  )
 }

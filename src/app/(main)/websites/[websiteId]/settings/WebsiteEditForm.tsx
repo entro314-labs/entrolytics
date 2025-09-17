@@ -1,21 +1,21 @@
-import { FormSubmitButton, Form, FormField, FormButtons, TextField } from '@entro314labs/entro-zen';
-import { useMessages, useUpdateQuery, useWebsite } from '@/components/hooks';
-import { DOMAIN_REGEX } from '@/lib/constants';
+import { FormSubmitButton, Form, FormField, FormButtons, TextField } from '@entro314labs/entro-zen'
+import { useMessages, useUpdateQuery, useWebsite } from '@/components/hooks'
+import { DOMAIN_REGEX } from '@/lib/constants'
 
 export function WebsiteEditForm({ websiteId, onSave }: { websiteId: string; onSave?: () => void }) {
-  const website = useWebsite();
-  const { formatMessage, labels, messages } = useMessages();
-  const { mutate, error, touch, toast } = useUpdateQuery(`/websites/${websiteId}`);
+  const website = useWebsite()
+  const { formatMessage, labels, messages } = useMessages()
+  const { mutate, error, touch, toast } = useUpdateQuery(`/websites/${websiteId}`)
 
   const handleSubmit = async (data: any) => {
     mutate(data, {
       onSuccess: async () => {
-        toast(formatMessage(messages.saved));
-        touch(`website:${website.id}`);
-        onSave?.();
+        toast(formatMessage(messages.saved))
+        touch(`website:${website.id}`)
+        onSave?.()
       },
-    });
-  };
+    })
+  }
 
   return (
     <Form onSubmit={handleSubmit} error={error} values={website}>
@@ -50,5 +50,5 @@ export function WebsiteEditForm({ websiteId, onSave }: { websiteId: string; onSa
         </FormSubmitButton>
       </FormButtons>
     </Form>
-  );
+  )
 }

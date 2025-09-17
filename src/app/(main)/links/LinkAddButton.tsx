@@ -1,17 +1,17 @@
-import { useMessages, useModified } from '@/components/hooks';
-import { Button, Icon, Modal, Dialog, DialogTrigger, Text, useToast } from '@entro314labs/entro-zen';
-import { Plus } from '@/components/icons';
-import { LinkEditForm } from './LinkEditForm';
+import { useMessages, useModified } from '@/components/hooks'
+import { Button, Icon, Modal, Dialog, DialogTrigger, Text, useToast } from '@entro314labs/entro-zen'
+import { Plus } from '@/components/icons'
+import { LinkEditForm } from './LinkEditForm'
 
 export function LinkAddButton({ orgId }: { orgId?: string }) {
-  const { formatMessage, labels, messages } = useMessages();
-  const { toast } = useToast();
-  const { touch } = useModified();
+  const { formatMessage, labels, messages } = useMessages()
+  const { toast } = useToast()
+  const { touch } = useModified()
 
   const handleSave = async () => {
-    toast(formatMessage(messages.saved));
-    touch('links');
-  };
+    toast(formatMessage(messages.saved))
+    touch('links')
+  }
 
   return (
     <DialogTrigger>
@@ -27,5 +27,5 @@ export function LinkAddButton({ orgId }: { orgId?: string }) {
         </Dialog>
       </Modal>
     </DialogTrigger>
-  );
+  )
 }

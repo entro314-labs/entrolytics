@@ -1,31 +1,31 @@
-'use client';
-import { TabList, Tab, Tabs, TabPanel, Column } from '@entro314labs/entro-zen';
-import { MetricsTable } from '@/components/metrics/MetricsTable';
-import { useState, Key } from 'react';
-import { EventsDataTable } from './EventsDataTable';
-import { Panel } from '@/components/common/Panel';
-import { EventsChart } from '@/components/metrics/EventsChart';
-import { useMessages } from '@/components/hooks';
-import { EventProperties } from './EventProperties';
-import { WebsiteControls } from '@/app/(main)/websites/[websiteId]/WebsiteControls';
-import { getItem, setItem } from '@/lib/storage';
+'use client'
+import { TabList, Tab, Tabs, TabPanel, Column } from '@entro314labs/entro-zen'
+import { MetricsTable } from '@/components/metrics/MetricsTable'
+import { useState, Key } from 'react'
+import { EventsDataTable } from './EventsDataTable'
+import { Panel } from '@/components/common/Panel'
+import { EventsChart } from '@/components/metrics/EventsChart'
+import { useMessages } from '@/components/hooks'
+import { EventProperties } from './EventProperties'
+import { WebsiteControls } from '@/app/(main)/websites/[websiteId]/WebsiteControls'
+import { getItem, setItem } from '@/lib/storage'
 
-const KEY_NAME = 'entrolytics.events.tab';
+const KEY_NAME = 'entrolytics.events.tab'
 
 export function EventsPage({ websiteId }) {
-  const [tab, setTab] = useState(getItem(KEY_NAME) || 'chart');
-  const { formatMessage, labels } = useMessages();
+  const [tab, setTab] = useState(getItem(KEY_NAME) || 'chart')
+  const { formatMessage, labels } = useMessages()
 
   const handleSelect = (value: Key) => {
-    setItem(KEY_NAME, value);
-    setTab(value);
-  };
+    setItem(KEY_NAME, value)
+    setTab(value)
+  }
 
   return (
     <Column gap="3">
       <WebsiteControls websiteId={websiteId} />
       <Panel>
-        <Tabs selectedKey={tab} onSelectionChange={key => handleSelect(key)}>
+        <Tabs selectedKey={tab} onSelectionChange={(key) => handleSelect(key)}>
           <TabList>
             <Tab id="chart">{formatMessage(labels.chart)}</Tab>
             <Tab id="activity">{formatMessage(labels.activity)}</Tab>
@@ -53,5 +53,5 @@ export function EventsPage({ websiteId }) {
         </Tabs>
       </Panel>
     </Column>
-  );
+  )
 }

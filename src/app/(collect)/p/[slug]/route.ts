@@ -1,21 +1,21 @@
-import { NextResponse } from 'next/server';
-import { notFound } from '@/lib/response';
-import { findPixel } from '@/queries';
-import { POST } from '@/app/api/send/route';
+import { NextResponse } from 'next/server'
+import { notFound } from '@/lib/response'
+import { findPixel } from '@/queries'
+import { POST } from '@/app/api/send/route'
 
-const image = Buffer.from('R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw', 'base64');
+const image = Buffer.from('R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw', 'base64')
 
 export async function GET(request: Request, { params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
+  const { slug } = await params
 
   const pixel = await findPixel({
     where: {
       slug,
     },
-  });
+  })
 
   if (!pixel) {
-    return notFound();
+    return notFound()
   }
 
   const payload = {
@@ -25,15 +25,15 @@ export async function GET(request: Request, { params }: { params: Promise<{ slug
       url: request.url,
       referrer: request.referrer,
     },
-  };
+  }
 
   const req = new Request(request.url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
-  });
+  })
 
-  const res = await POST(req);
+  const res = await POST(req)
 
   return new NextResponse(image, {
     headers: {
@@ -41,5 +41,5 @@ export async function GET(request: Request, { params }: { params: Promise<{ slug
       'Content-Length': image.length.toString(),
       'x-entrolytics-collect': JSON.stringify(res),
     },
-  });
+  })
 }

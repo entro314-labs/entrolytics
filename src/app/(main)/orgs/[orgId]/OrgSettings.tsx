@@ -1,37 +1,37 @@
-import { useState } from 'react';
-import { Column, Tabs, TabList, Tab, TabPanel } from '@entro314labs/entro-zen';
-import { useLoginQuery, useMessages, useNavigation, useOrg } from '@/components/hooks';
+import { useState } from 'react'
+import { Column, Tabs, TabList, Tab, TabPanel } from '@entro314labs/entro-zen'
+import { useLoginQuery, useMessages, useNavigation, useOrg } from '@/components/hooks'
 
-import { ROLES } from '@/lib/constants';
-import { Users } from '@/components/icons';
-import { OrgLeaveButton } from '@/app/(main)/orgs/OrgLeaveButton';
-import { OrgManage } from './OrgManage';
-import { OrgEditForm } from './OrgEditForm';
-import { OrgWebsitesDataTable } from './OrgWebsitesDataTable';
-import { OrgMembersDataTable } from './OrgMembersDataTable';
-import { PageHeader } from '@/components/common/PageHeader';
-import { Panel } from '@/components/common/Panel';
+import { ROLES } from '@/lib/constants'
+import { Users } from '@/components/icons'
+import { OrgLeaveButton } from '@/app/(main)/orgs/OrgLeaveButton'
+import { OrgManage } from './OrgManage'
+import { OrgEditForm } from './OrgEditForm'
+import { OrgWebsitesDataTable } from './OrgWebsitesDataTable'
+import { OrgMembersDataTable } from './OrgMembersDataTable'
+import { PageHeader } from '@/components/common/PageHeader'
+import { Panel } from '@/components/common/Panel'
 
 export function OrgSettings({ orgId }: { orgId: string }) {
-  const org = useOrg();
-  const { formatMessage, labels } = useMessages();
-  const { user } = useLoginQuery();
-  const { query, pathname } = useNavigation();
-  const [tab, setTab] = useState(query?.tab || 'details');
+  const org = useOrg()
+  const { formatMessage, labels } = useMessages()
+  const { user } = useLoginQuery()
+  const { query, pathname } = useNavigation()
+  const [tab, setTab] = useState(query?.tab || 'details')
 
-  const isAdmin = pathname.includes('/admin');
+  const isAdmin = pathname.includes('/admin')
 
   const isOrgOwner =
     !!org?.members?.find(({ userId, role }) => role === ROLES.orgOwner && userId === user.id) &&
-    user.role !== ROLES.viewOnly;
+    user.role !== ROLES.viewOnly
 
   const canEdit =
     user.isAdmin ||
     (!!org?.members?.find(
       ({ userId, role }) =>
-        (role === ROLES.orgOwner || role === ROLES.orgManager) && userId === user.id,
+        (role === ROLES.orgOwner || role === ROLES.orgManager) && userId === user.id
     ) &&
-      user.role !== ROLES.viewOnly);
+      user.role !== ROLES.viewOnly)
 
   return (
     <Column gap="6">
@@ -61,5 +61,5 @@ export function OrgSettings({ orgId }: { orgId: string }) {
         </Tabs>
       </Panel>
     </Column>
-  );
+  )
 }

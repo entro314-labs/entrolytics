@@ -1,10 +1,10 @@
-import { SignIn } from '@clerk/nextjs';
-import { Column, Heading, Icon } from '@entro314labs/entro-zen';
-import { Logo } from '@/components/icons';
+import { SignIn } from '@clerk/nextjs'
+import { Column, Heading, Icon } from '@entro314labs/entro-zen'
+import { Logo } from '@/components/icons'
 
 /**
  * Clerk Sign In Page
- * 
+ *
  * This page handles user authentication using Clerk's pre-built SignIn component.
  * It replaces the legacy username/password login system.
  */
@@ -15,11 +15,10 @@ export default function SignInPage() {
         <Logo />
       </Icon>
       <Heading>entrolytics</Heading>
-      <SignIn 
+      <SignIn
         appearance={{
           elements: {
-            formButtonPrimary: 
-              'bg-blue-600 hover:bg-blue-700 text-sm normal-case',
+            formButtonPrimary: 'bg-blue-600 hover:bg-blue-700 text-sm normal-case',
             card: 'shadow-none border border-gray-200',
           },
         }}
@@ -28,5 +27,5 @@ export default function SignInPage() {
         signUpUrl="/sign-up"
       />
     </Column>
-  );
+  )
 }

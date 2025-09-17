@@ -1,4 +1,4 @@
-import esbuild from 'esbuild';
+import esbuild from 'esbuild'
 
 esbuild
   .build({
@@ -15,4 +15,4 @@ esbuild
       '.prisma/client',
     ], // Optional: Exclude external dependencies from bundling
   })
-  .catch(() => process.exit(1));
+  .catch(() => process.exit(1))

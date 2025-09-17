@@ -1,41 +1,41 @@
-import { useFormat } from '@/components//hooks/useFormat';
-import { Empty } from '@/components/common/Empty';
-import { FilterButtons } from '@/components/input/FilterButtons';
+import { useFormat } from '@/components//hooks/useFormat'
+import { Empty } from '@/components/common/Empty'
+import { FilterButtons } from '@/components/input/FilterButtons'
 import {
   useCountryNames,
   useLocale,
   useMessages,
   useTimezone,
   useWebsite,
-} from '@/components/hooks';
-import { Eye, Visitor, Bolt } from '@/components/icons';
-import { BROWSERS, OS_NAMES } from '@/lib/constants';
-import { stringToColor } from '@/lib/format';
-import { useMemo, useState } from 'react';
-import { Icon, SearchField, StatusLight, Text } from '@entro314labs/entro-zen';
-import { List as List } from 'react-window';
-import styles from './RealtimeLog.module.css';
+} from '@/components/hooks'
+import { Eye, Visitor, Bolt } from '@/components/icons'
+import { BROWSERS, OS_NAMES } from '@/lib/constants'
+import { stringToColor } from '@/lib/format'
+import { useMemo, useState } from 'react'
+import { Icon, SearchField, StatusLight, Text } from '@entro314labs/entro-zen'
+import { List as List } from 'react-window'
+import styles from './RealtimeLog.module.css'
 
-const TYPE_ALL = 'all';
-const TYPE_PAGEVIEW = 'pageview';
-const TYPE_SESSION = 'session';
-const TYPE_EVENT = 'event';
+const TYPE_ALL = 'all'
+const TYPE_PAGEVIEW = 'pageview'
+const TYPE_SESSION = 'session'
+const TYPE_EVENT = 'event'
 
 const icons = {
   [TYPE_PAGEVIEW]: <Eye />,
   [TYPE_SESSION]: <Visitor />,
   [TYPE_EVENT]: <Bolt />,
-};
+}
 
 export function RealtimeLog({ data }: { data: any }) {
-  const website = useWebsite();
-  const [search, setSearch] = useState('');
-  const { formatMessage, labels, messages } = useMessages();
-  const { formatValue } = useFormat();
-  const { locale } = useLocale();
-  const { formatTimezoneDate } = useTimezone();
-  const { countryNames } = useCountryNames(locale);
-  const [filter, setFilter] = useState(TYPE_ALL);
+  const website = useWebsite()
+  const [search, setSearch] = useState('')
+  const { formatMessage, labels, messages } = useMessages()
+  const { formatValue } = useFormat()
+  const { locale } = useLocale()
+  const { formatTimezoneDate } = useTimezone()
+  const { countryNames } = useCountryNames(locale)
+  const [filter, setFilter] = useState(TYPE_ALL)
 
   const buttons = [
     {
@@ -54,24 +54,24 @@ export function RealtimeLog({ data }: { data: any }) {
       label: formatMessage(labels.events),
       id: TYPE_EVENT,
     },
-  ];
+  ]
 
-  const getTime = ({ createdAt, firstAt }) => formatTimezoneDate(firstAt || createdAt, 'pp');
+  const getTime = ({ createdAt, firstAt }) => formatTimezoneDate(firstAt || createdAt, 'pp')
 
-  const getColor = ({ id, sessionId }) => stringToColor(sessionId || id);
+  const getColor = ({ id, sessionId }) => stringToColor(sessionId || id)
 
-  const getIcon = ({ __type }) => icons[__type];
+  const getIcon = ({ __type }) => icons[__type]
 
   const getDetail = (log: {
-    __type: string;
-    eventName: string;
-    urlPath: string;
-    browser: string;
-    os: string;
-    country: string;
-    device: string;
+    __type: string
+    eventName: string
+    urlPath: string
+    browser: string
+    os: string
+    country: string
+    device: string
   }) => {
-    const { __type, eventName, urlPath, browser, os, country, device } = log;
+    const { __type, eventName, urlPath, browser, os, country, device } = log
 
     if (__type === TYPE_EVENT) {
       return formatMessage(messages.eventLog, {
@@ -87,7 +87,7 @@ export function RealtimeLog({ data }: { data: any }) {
             {urlPath}
           </a>
         ),
-      });
+      })
     }
 
     if (__type === TYPE_PAGEVIEW) {
@@ -100,7 +100,7 @@ export function RealtimeLog({ data }: { data: any }) {
         >
           {urlPath}
         </a>
-      );
+      )
     }
 
     if (__type === TYPE_SESSION) {
@@ -109,12 +109,12 @@ export function RealtimeLog({ data }: { data: any }) {
         browser: <b key="browser">{BROWSERS[browser]}</b>,
         os: <b key="os">{OS_NAMES[os] || os}</b>,
         device: <b key="device">{formatMessage(labels[device] || labels.unknown)}</b>,
-      });
+      })
     }
-  };
+  }
 
   const Row = ({ index, style }) => {
-    const row = logs[index];
+    const row = logs[index]
     return (
       <div className={styles.row} style={style}>
         <div>
@@ -126,15 +126,15 @@ export function RealtimeLog({ data }: { data: any }) {
           <Text>{getDetail(row)}</Text>
         </div>
       </div>
-    );
-  };
+    )
+  }
 
   const logs = useMemo(() => {
     if (!data) {
-      return [];
+      return []
     }
 
-    let logs = data.events;
+    let logs = data.events
 
     if (search) {
       logs = logs.filter(({ eventName, urlPath, browser, os, country, device }) => {
@@ -146,19 +146,19 @@ export function RealtimeLog({ data }: { data: any }) {
           formatValue(country, 'country'),
           formatValue(device, 'device'),
         ]
-          .filter(n => n)
-          .map(n => n.toLowerCase())
+          .filter((n) => n)
+          .map((n) => n.toLowerCase())
           .join('')
-          .includes(search.toLowerCase());
-      });
+          .includes(search.toLowerCase())
+      })
     }
 
     if (filter !== TYPE_ALL) {
-      return logs.filter(({ __type }) => __type === filter);
+      return logs.filter(({ __type }) => __type === filter)
     }
 
-    return logs;
-  }, [data, filter, formatValue, search]);
+    return logs
+  }, [data, filter, formatValue, search])
 
   return (
     <div className={styles.table}>
@@ -176,5 +176,5 @@ export function RealtimeLog({ data }: { data: any }) {
         )}
       </div>
     </div>
-  );
+  )
 }

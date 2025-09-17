@@ -1,10 +1,10 @@
-'use client';
-import { ReactNode } from 'react';
-import { Column, Grid } from '@entro314labs/entro-zen';
-import { WebsiteProvider } from '@/app/(main)/websites/WebsiteProvider';
-import { PageBody } from '@/components/common/PageBody';
-import { WebsiteHeader } from './WebsiteHeader';
-import { WebsiteNav } from './WebsiteNav';
+'use client'
+import { ReactNode } from 'react'
+import { Column, Grid } from '@entro314labs/entro-zen'
+import { WebsiteProvider } from '@/app/(main)/websites/WebsiteProvider'
+import { PageBody } from '@/components/common/PageBody'
+import { WebsiteHeader } from './WebsiteHeader'
+import { WebsiteNav } from './WebsiteNav'
 
 export function WebsiteLayout({ websiteId, children }: { websiteId: string; children: ReactNode }) {
   return (
@@ -19,5 +19,5 @@ export function WebsiteLayout({ websiteId, children }: { websiteId: string; chil
         </PageBody>
       </Grid>
     </WebsiteProvider>
-  );
+  )
 }

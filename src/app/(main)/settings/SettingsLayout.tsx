@@ -1,14 +1,14 @@
-'use client';
-import { ReactNode } from 'react';
-import { Grid, Column } from '@entro314labs/entro-zen';
-import { useMessages, useNavigation } from '@/components/hooks';
-import { PageBody } from '@/components/common/PageBody';
-import { SideMenu } from '@/components/common/SideMenu';
-import { UserCircle, Users, Knobs } from '@/components/icons';
+'use client'
+import { ReactNode } from 'react'
+import { Grid, Column } from '@entro314labs/entro-zen'
+import { useMessages, useNavigation } from '@/components/hooks'
+import { PageBody } from '@/components/common/PageBody'
+import { SideMenu } from '@/components/common/SideMenu'
+import { UserCircle, Users, Knobs } from '@/components/icons'
 
 export function SettingsLayout({ children }: { children: ReactNode }) {
-  const { formatMessage, labels } = useMessages();
-  const { renderUrl, pathname } = useNavigation();
+  const { formatMessage, labels } = useMessages()
+  const { renderUrl, pathname } = useNavigation()
 
   const items = [
     {
@@ -39,11 +39,11 @@ export function SettingsLayout({ children }: { children: ReactNode }) {
         },
       ],
     },
-  ];
+  ]
 
   const selectedKey =
-    items.flatMap(e => e.items)?.find(({ path }) => path && pathname.includes(path))?.id ||
-    'overview';
+    items.flatMap((e) => e.items)?.find(({ path }) => path && pathname.includes(path))?.id ||
+    'overview'
 
   return (
     <Grid columns="auto 1fr" width="100%" height="100%">
@@ -59,5 +59,5 @@ export function SettingsLayout({ children }: { children: ReactNode }) {
         <PageBody>{children}</PageBody>
       </Column>
     </Grid>
-  );
+  )
 }

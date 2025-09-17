@@ -1,31 +1,31 @@
-import { z } from 'zod';
-import { canViewWebsite } from '@/validations';
-import { getReports } from '@/queries';
-import { filterParams, pagingParams } from '@/lib/schema';
-import { parseRequest } from '@/lib/request';
-import { unauthorized, json } from '@/lib/response';
+import { z } from 'zod'
+import { canViewWebsite } from '@/validations'
+import { getReports } from '@/queries'
+import { filterParams, pagingParams } from '@/lib/schema'
+import { parseRequest } from '@/lib/request'
+import { unauthorized, json } from '@/lib/response'
 
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ websiteId: string }> },
-  filters: { type: string },
+  filters: { type: string }
 ) {
   const schema = z.object({
     ...filterParams,
     ...pagingParams,
-  });
+  })
 
-  const { auth, query, error } = await parseRequest(request, schema);
+  const { auth, query, error } = await parseRequest(request, schema)
 
   if (error) {
-    return error();
+    return error()
   }
 
-  const { websiteId } = await params;
-  const { page, pageSize, search } = query;
+  const { websiteId } = await params
+  const { page, pageSize, search } = query
 
   if (!(await canViewWebsite(auth, websiteId))) {
-    return unauthorized();
+    return unauthorized()
   }
 
   const data = await getReports(
@@ -39,8 +39,8 @@ export async function GET(
       page,
       pageSize,
       search,
-    },
-  );
+    }
+  )
 
-  return json(data);
+  return json(data)
 }

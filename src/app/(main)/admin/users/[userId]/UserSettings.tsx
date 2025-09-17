@@ -1,10 +1,10 @@
-import { Column, Tabs, Tab, TabList, TabPanel } from '@entro314labs/entro-zen';
-import { UserEditForm } from './UserEditForm';
-import { useMessages } from '@/components/hooks';
-import { UserWebsites } from './UserWebsites';
+import { Column, Tabs, Tab, TabList, TabPanel } from '@entro314labs/entro-zen'
+import { UserEditForm } from './UserEditForm'
+import { useMessages } from '@/components/hooks'
+import { UserWebsites } from './UserWebsites'
 
 export function UserSettings({ userId }: { userId: string }) {
-  const { formatMessage, labels } = useMessages();
+  const { formatMessage, labels } = useMessages()
 
   return (
     <Column gap="6">
@@ -21,5 +21,5 @@ export function UserSettings({ userId }: { userId: string }) {
         </TabPanel>
       </Tabs>
     </Column>
-  );
+  )
 }

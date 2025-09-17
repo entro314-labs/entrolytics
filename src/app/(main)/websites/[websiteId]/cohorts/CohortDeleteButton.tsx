@@ -1,9 +1,9 @@
-import { Dialog } from '@entro314labs/entro-zen';
-import { ActionButton } from '@/components/input/ActionButton';
-import { Trash } from '@/components/icons';
-import { ConfirmationForm } from '@/components/common/ConfirmationForm';
-import { messages } from '@/components/messages';
-import { useDeleteQuery, useMessages } from '@/components/hooks';
+import { Dialog } from '@entro314labs/entro-zen'
+import { ActionButton } from '@/components/input/ActionButton'
+import { Trash } from '@/components/icons'
+import { ConfirmationForm } from '@/components/common/ConfirmationForm'
+import { messages } from '@/components/messages'
+import { useDeleteQuery, useMessages } from '@/components/hooks'
 
 export function CohortDeleteButton({
   cohortId,
@@ -11,25 +11,25 @@ export function CohortDeleteButton({
   name,
   onSave,
 }: {
-  cohortId: string;
-  websiteId: string;
-  name: string;
-  onSave?: () => void;
+  cohortId: string
+  websiteId: string
+  name: string
+  onSave?: () => void
 }) {
-  const { formatMessage, labels } = useMessages();
+  const { formatMessage, labels } = useMessages()
   const { mutate, isPending, error, touch } = useDeleteQuery(
-    `/websites/${websiteId}/segments/${cohortId}`,
-  );
+    `/websites/${websiteId}/segments/${cohortId}`
+  )
 
   const handleConfirm = (close: () => void) => {
     mutate(null, {
       onSuccess: () => {
-        touch('cohorts');
-        onSave?.();
-        close();
+        touch('cohorts')
+        onSave?.()
+        close()
       },
-    });
-  };
+    })
+  }
 
   return (
     <ActionButton title={formatMessage(labels.delete)} icon={<Trash />}>
@@ -49,5 +49,5 @@ export function CohortDeleteButton({
         )}
       </Dialog>
     </ActionButton>
-  );
+  )
 }

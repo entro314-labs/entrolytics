@@ -1,19 +1,19 @@
-import { Prisma, User } from '@/generated/prisma/client';
-import { ROLES } from '@/lib/constants';
-import prisma from '@/lib/prisma';
-import { PageResult, Role, QueryFilters } from '@/lib/types';
-import { getRandomChars } from '@/lib/crypto';
-import UserFindManyArgs = Prisma.UserFindManyArgs;
+import { Prisma, User } from '@/generated/prisma/client'
+import { ROLES } from '@/lib/constants'
+import prisma from '@/lib/prisma'
+import { PageResult, Role, QueryFilters } from '@/lib/types'
+import { getRandomChars } from '@/lib/crypto'
+import UserFindManyArgs = Prisma.UserFindManyArgs
 
 export interface GetUserOptions {
-  showDeleted?: boolean;
+  showDeleted?: boolean
 }
 
 async function findUser(
   criteria: Prisma.UserFindUniqueArgs,
-  options: GetUserOptions = {},
+  options: GetUserOptions = {}
 ): Promise<User> {
-  const { showDeleted = false } = options;
+  const { showDeleted = false } = options
 
   return prisma.client.user.findUnique({
     ...criteria,
@@ -32,7 +32,7 @@ async function findUser(
       createdAt: true,
       updatedAt: true,
     },
-  });
+  })
 }
 
 export async function getUser(userId: string, options: GetUserOptions = {}) {
@@ -42,13 +42,13 @@ export async function getUser(userId: string, options: GetUserOptions = {}) {
         id: userId,
       },
     },
-    options,
-  );
+    options
+  )
 }
 
 export async function getUserByEmail(email: string, options: GetUserOptions = {}) {
-  const { showDeleted = false } = options;
-  
+  const { showDeleted = false } = options
+
   return prisma.client.user.findFirst({
     where: {
       email,
@@ -65,15 +65,14 @@ export async function getUserByEmail(email: string, options: GetUserOptions = {}
       createdAt: true,
       updatedAt: true,
     },
-  });
+  })
 }
-
 
 export async function getUsers(
   criteria: UserFindManyArgs,
-  filters: QueryFilters = {},
+  filters: QueryFilters = {}
 ): Promise<PageResult<User[]>> {
-  const { search } = filters;
+  const { search } = filters
 
   const where: Prisma.UserWhereInput = {
     ...criteria.where,
@@ -81,10 +80,10 @@ export async function getUsers(
       { email: 'contains' },
       { firstName: 'contains' },
       { lastName: 'contains' },
-      { displayName: 'contains' }
+      { displayName: 'contains' },
     ]),
     deletedAt: null,
-  };
+  }
 
   return prisma.pagedQuery(
     'user',
@@ -96,23 +95,23 @@ export async function getUsers(
       orderBy: 'createdAt',
       sortDescending: true,
       ...filters,
-    },
-  );
+    }
+  )
 }
 
 export async function createUser(data: {
-  id: string;
-  email: string;
-  firstName?: string;
-  lastName?: string;
-  imageUrl?: string;
-  displayName?: string;
-  role: Role;
+  id: string
+  email: string
+  firstName?: string
+  lastName?: string
+  imageUrl?: string
+  displayName?: string
+  role: Role
 }): Promise<{
-  id: string;
-  email: string;
-  displayName: string;
-  role: string;
+  id: string
+  email: string
+  displayName: string
+  role: string
 }> {
   return prisma.client.user.create({
     data,
@@ -122,7 +121,7 @@ export async function createUser(data: {
       displayName: true,
       role: true,
     },
-  });
+  })
 }
 
 export async function updateUser(userId: string, data: Prisma.UserUpdateInput): Promise<User> {
@@ -141,11 +140,11 @@ export async function updateUser(userId: string, data: Prisma.UserUpdateInput): 
       role: true,
       createdAt: true,
     },
-  });
+  })
 }
 
 export async function deleteUser(
-  userId: string,
+  userId: string
 ): Promise<
   [
     Prisma.BatchPayload,
@@ -157,17 +156,17 @@ export async function deleteUser(
     User,
   ]
 > {
-  const { client, transaction } = prisma;
-  const cloudMode = process.env.CLOUD_MODE;
+  const { client, transaction } = prisma
+  const cloudMode = process.env.CLOUD_MODE
 
   const websites = await client.website.findMany({
     where: { userId },
-  });
+  })
 
-  let websiteIds = [];
+  let websiteIds = []
 
   if (websites.length > 0) {
-    websiteIds = websites.map(a => a.id);
+    websiteIds = websites.map((a) => a.id)
   }
 
   const orgs = await client.org.findMany({
@@ -179,9 +178,9 @@ export async function deleteUser(
         },
       },
     },
-  });
+  })
 
-  const orgIds = orgs.map(a => a.id);
+  const orgIds = orgs.map((a) => a.id)
 
   if (cloudMode) {
     return transaction([
@@ -199,7 +198,7 @@ export async function deleteUser(
           id: userId,
         },
       }),
-    ]);
+    ])
   }
 
   return transaction([
@@ -258,5 +257,5 @@ export async function deleteUser(
         id: userId,
       },
     }),
-  ]);
+  ])
 }

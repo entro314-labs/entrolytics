@@ -1,18 +1,18 @@
-'use client';
-import { Grid, Column } from '@entro314labs/entro-zen';
-import { SectionHeader } from '@/components/common/SectionHeader';
-import { Funnel } from './Funnel';
-import { FunnelAddButton } from './FunnelAddButton';
-import { WebsiteControls } from '@/app/(main)/websites/[websiteId]/WebsiteControls';
-import { useDateRange, useReportsQuery } from '@/components/hooks';
-import { LoadingPanel } from '@/components/common/LoadingPanel';
-import { Panel } from '@/components/common/Panel';
+'use client'
+import { Grid, Column } from '@entro314labs/entro-zen'
+import { SectionHeader } from '@/components/common/SectionHeader'
+import { Funnel } from './Funnel'
+import { FunnelAddButton } from './FunnelAddButton'
+import { WebsiteControls } from '@/app/(main)/websites/[websiteId]/WebsiteControls'
+import { useDateRange, useReportsQuery } from '@/components/hooks'
+import { LoadingPanel } from '@/components/common/LoadingPanel'
+import { Panel } from '@/components/common/Panel'
 
 export function FunnelsPage({ websiteId }: { websiteId: string }) {
-  const { data, isLoading, error } = useReportsQuery({ websiteId, type: 'funnel' });
+  const { data, isLoading, error } = useReportsQuery({ websiteId, type: 'funnel' })
   const {
     dateRange: { startDate, endDate },
-  } = useDateRange(websiteId);
+  } = useDateRange(websiteId)
 
   return (
     <Column gap>
@@ -32,5 +32,5 @@ export function FunnelsPage({ websiteId }: { websiteId: string }) {
         )}
       </LoadingPanel>
     </Column>
-  );
+  )
 }

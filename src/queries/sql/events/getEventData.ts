@@ -1,17 +1,17 @@
-import { EventData } from '@/generated/prisma/client';
-import prisma from '@/lib/prisma';
-import clickhouse from '@/lib/clickhouse';
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db';
+import { EventData } from '@/generated/prisma/client'
+import prisma from '@/lib/prisma'
+import clickhouse from '@/lib/clickhouse'
+import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
 
 export async function getEventData(...args: [eventId: string]): Promise<EventData[]> {
   return runQuery({
     [PRISMA]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  });
+  })
 }
 
 async function relationalQuery(eventId: string) {
-  const { rawQuery } = prisma;
+  const { rawQuery } = prisma
 
   return rawQuery(
     `
@@ -29,12 +29,12 @@ async function relationalQuery(eventId: string) {
     from event_data
     where event_id = {{eventId::uuid}}
     `,
-    { eventId },
-  );
+    { eventId }
+  )
 }
 
 async function clickhouseQuery(eventId: string): Promise<EventData[]> {
-  const { rawQuery } = clickhouse;
+  const { rawQuery } = clickhouse
 
   return rawQuery(
     `
@@ -52,6 +52,6 @@ async function clickhouseQuery(eventId: string): Promise<EventData[]> {
       from event_data
       where event_id = {eventId:UUID}
     `,
-    { eventId },
-  );
+    { eventId }
+  )
 }

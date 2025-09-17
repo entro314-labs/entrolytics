@@ -1,14 +1,14 @@
-import { z } from 'zod';
-import { isValidTimezone } from '@/lib/date';
-import { UNIT_TYPES } from './constants';
+import { z } from 'zod'
+import { isValidTimezone } from '@/lib/date'
+import { UNIT_TYPES } from './constants'
 
-export const timezoneParam = z.string().refine(value => isValidTimezone(value), {
+export const timezoneParam = z.string().refine((value) => isValidTimezone(value), {
   message: 'Invalid timezone',
-});
+})
 
-export const unitParam = z.string().refine(value => UNIT_TYPES.includes(value), {
+export const unitParam = z.string().refine((value) => UNIT_TYPES.includes(value), {
   message: 'Invalid unit',
-});
+})
 
 export const dateRangeParams = {
   startAt: z.coerce.number().optional(),
@@ -18,7 +18,7 @@ export const dateRangeParams = {
   timezone: timezoneParam.optional(),
   unit: unitParam.optional(),
   compare: z.string().optional(),
-};
+}
 
 export const filterParams = {
   path: z.string().optional(),
@@ -38,40 +38,40 @@ export const filterParams = {
   segment: z.string().uuid().optional(),
   cohort: z.string().uuid().optional(),
   eventType: z.coerce.number().int().positive().optional(),
-};
+}
 
 export const searchParams = {
   search: z.string().optional(),
-};
+}
 
 export const pagingParams = {
   page: z.coerce.number().int().positive().optional(),
   pageSize: z.coerce.number().int().positive().optional(),
-};
+}
 
 export const sortingParams = {
   orderBy: z.string().optional(),
-};
+}
 
-export const userRoleParam = z.enum(['admin', 'user', 'view-only']);
+export const userRoleParam = z.enum(['admin', 'user', 'view-only'])
 
-export const orgRoleParam = z.enum(['org-member', 'org-view-only', 'org-manager']);
+export const orgRoleParam = z.enum(['org-member', 'org-view-only', 'org-manager'])
 
-export const anyObjectParam = z.object({}).passthrough();
+export const anyObjectParam = z.object({}).passthrough()
 
 export const urlOrPathParam = z.string().refine(
-  value => {
+  (value) => {
     try {
-      new URL(value, 'https://localhost');
-      return true;
+      new URL(value, 'https://localhost')
+      return true
     } catch {
-      return false;
+      return false
     }
   },
   {
     message: 'Invalid URL.',
-  },
-);
+  }
+)
 
 export const fieldsParam = z.enum([
   'path',
@@ -88,7 +88,7 @@ export const fieldsParam = z.enum([
   'hostname',
   'language',
   'event',
-]);
+])
 
 export const reportTypeParam = z.enum([
   'attribution',
@@ -99,7 +99,7 @@ export const reportTypeParam = z.enum([
   'retention',
   'revenue',
   'utm',
-]);
+])
 
 export const goalReportSchema = z.object({
   type: z.literal('goal'),
@@ -112,13 +112,13 @@ export const goalReportSchema = z.object({
       operator: z.enum(['count', 'sum', 'average']).optional(),
       property: z.string().optional(),
     })
-    .refine(data => {
+    .refine((data) => {
       if (data['type'] === 'event' && data['property']) {
-        return data['operator'] && data['property'];
+        return data['operator'] && data['property']
       }
-      return true;
+      return true
     }),
-});
+})
 
 export const funnelReportSchema = z.object({
   type: z.literal('funnel'),
@@ -131,12 +131,12 @@ export const funnelReportSchema = z.object({
         z.object({
           type: z.enum(['path', 'event']),
           value: z.string(),
-        }),
+        })
       )
       .min(2)
       .max(8),
   }),
-});
+})
 
 export const journeyReportSchema = z.object({
   type: z.literal('journey'),
@@ -147,7 +147,7 @@ export const journeyReportSchema = z.object({
     startStep: z.string().optional(),
     endStep: z.string().optional(),
   }),
-});
+})
 
 export const retentionReportSchema = z.object({
   type: z.literal('retention'),
@@ -156,7 +156,7 @@ export const retentionReportSchema = z.object({
     endDate: z.coerce.date(),
     timezone: z.string().optional(),
   }),
-});
+})
 
 export const utmReportSchema = z.object({
   type: z.literal('utm'),
@@ -164,7 +164,7 @@ export const utmReportSchema = z.object({
     startDate: z.coerce.date(),
     endDate: z.coerce.date(),
   }),
-});
+})
 
 export const revenueReportSchema = z.object({
   type: z.literal('revenue'),
@@ -174,7 +174,7 @@ export const revenueReportSchema = z.object({
     timezone: z.string().optional(),
     currency: z.string(),
   }),
-});
+})
 
 export const attributionReportSchema = z.object({
   type: z.literal('attribution'),
@@ -186,7 +186,7 @@ export const attributionReportSchema = z.object({
     step: z.string(),
     currency: z.string().optional(),
   }),
-});
+})
 
 export const breakdownReportSchema = z.object({
   type: z.literal('breakdown'),
@@ -195,7 +195,7 @@ export const breakdownReportSchema = z.object({
     endDate: z.coerce.date(),
     fields: z.array(fieldsParam),
   }),
-});
+})
 
 export const reportBaseSchema = z.object({
   websiteId: z.string().uuid(),
@@ -203,7 +203,7 @@ export const reportBaseSchema = z.object({
   name: z.string().max(200),
   description: z.string().max(500).optional(),
   parameters: z.object({}).passthrough(),
-});
+})
 
 export const reportTypeSchema = z.discriminatedUnion('type', [
   goalReportSchema,
@@ -214,16 +214,16 @@ export const reportTypeSchema = z.discriminatedUnion('type', [
   revenueReportSchema,
   attributionReportSchema,
   breakdownReportSchema,
-]);
+])
 
-export const reportSchema = reportBaseSchema;
+export const reportSchema = reportBaseSchema
 
 export const reportResultSchema = z.intersection(
   z.object({
     websiteId: z.string().uuid(),
     filters: z.object({ ...filterParams }),
   }),
-  reportTypeSchema,
-);
+  reportTypeSchema
+)
 
-export const segmentTypeParam = z.enum(['segment', 'cohort']);
+export const segmentTypeParam = z.enum(['segment', 'cohort'])

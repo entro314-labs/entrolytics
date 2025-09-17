@@ -1,5 +1,5 @@
-import { Row, Text } from '@entro314labs/entro-zen';
-import { CURRENT_VERSION, HOMEPAGE_URL } from '@/lib/constants';
+import { Row, Text } from '@entro314labs/entro-zen'
+import { CURRENT_VERSION, HOMEPAGE_URL } from '@/lib/constants'
 
 export function Footer() {
   return (
@@ -8,5 +8,5 @@ export function Footer() {
         <Text weight="bold">entrolytics</Text> {`v${CURRENT_VERSION}`}
       </a>
     </Row>
-  );
+  )
 }

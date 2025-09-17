@@ -1,10 +1,10 @@
-import { SignUp } from '@clerk/nextjs';
-import { Column, Heading, Icon } from '@entro314labs/entro-zen';
-import { Logo } from '@/components/icons';
+import { SignUp } from '@clerk/nextjs'
+import { Column, Heading, Icon } from '@entro314labs/entro-zen'
+import { Logo } from '@/components/icons'
 
 /**
  * Clerk Sign Up Page
- * 
+ *
  * This page handles user registration using Clerk's pre-built SignUp component.
  * New users will be automatically synced to our database via the auth system.
  */
@@ -15,11 +15,10 @@ export default function SignUpPage() {
         <Logo />
       </Icon>
       <Heading>entrolytics</Heading>
-      <SignUp 
+      <SignUp
         appearance={{
           elements: {
-            formButtonPrimary: 
-              'bg-blue-600 hover:bg-blue-700 text-sm normal-case',
+            formButtonPrimary: 'bg-blue-600 hover:bg-blue-700 text-sm normal-case',
             card: 'shadow-none border border-gray-200',
           },
         }}
@@ -28,5 +27,5 @@ export default function SignUpPage() {
         signInUrl="/sign-in"
       />
     </Column>
-  );
+  )
 }

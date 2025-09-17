@@ -1,8 +1,8 @@
-'use client';
-import { Column } from '@entro314labs/entro-zen';
-import { PageHeader } from '@/components/common/PageHeader';
-import { PageBody } from '@/components/common/PageBody';
-import { BoardAddButton } from './BoardAddButton';
+'use client'
+import { Column } from '@entro314labs/entro-zen'
+import { PageHeader } from '@/components/common/PageHeader'
+import { PageBody } from '@/components/common/PageBody'
+import { BoardAddButton } from './BoardAddButton'
 
 export function BoardsPage() {
   return (
@@ -13,5 +13,5 @@ export function BoardsPage() {
         </PageHeader>
       </Column>
     </PageBody>
-  );
+  )
 }

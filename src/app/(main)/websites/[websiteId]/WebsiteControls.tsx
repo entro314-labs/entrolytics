@@ -1,9 +1,9 @@
-import { Column, Row } from '@entro314labs/entro-zen';
-import { WebsiteFilterButton } from '@/app/(main)/websites/[websiteId]/WebsiteFilterButton';
-import { WebsiteDateFilter } from '@/components/input/WebsiteDateFilter';
-import { FilterBar } from '@/components/input/FilterBar';
-import { WebsiteMonthSelect } from '@/components/input/WebsiteMonthSelect';
-import { ExportButton } from '@/components/input/ExportButton';
+import { Column, Row } from '@entro314labs/entro-zen'
+import { WebsiteFilterButton } from '@/app/(main)/websites/[websiteId]/WebsiteFilterButton'
+import { WebsiteDateFilter } from '@/components/input/WebsiteDateFilter'
+import { FilterBar } from '@/components/input/FilterBar'
+import { WebsiteMonthSelect } from '@/components/input/WebsiteMonthSelect'
+import { ExportButton } from '@/components/input/ExportButton'
 
 export function WebsiteControls({
   websiteId,
@@ -13,12 +13,12 @@ export function WebsiteControls({
   allowDownload = false,
   allowCompare = false,
 }: {
-  websiteId: string;
-  allowFilter?: boolean;
-  allowDateFilter?: boolean;
-  allowMonthFilter?: boolean;
-  allowDownload?: boolean;
-  allowCompare?: boolean;
+  websiteId: string
+  allowFilter?: boolean
+  allowDateFilter?: boolean
+  allowMonthFilter?: boolean
+  allowDownload?: boolean
+  allowCompare?: boolean
 }) {
   return (
     <Column gap>
@@ -30,5 +30,5 @@ export function WebsiteControls({
       </Row>
       {allowFilter && <FilterBar websiteId={websiteId} />}
     </Column>
-  );
+  )
 }

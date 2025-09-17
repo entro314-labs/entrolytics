@@ -1,19 +1,19 @@
-import { createContext, ReactNode } from 'react';
-import { Loading } from '@entro314labs/entro-zen';
-import { useUserQuery } from '@/components/hooks';
+import { createContext, ReactNode } from 'react'
+import { Loading } from '@entro314labs/entro-zen'
+import { useUserQuery } from '@/components/hooks'
 
-export const UserContext = createContext(null);
+export const UserContext = createContext(null)
 
 export function UserProvider({ userId, children }: { userId: string; children: ReactNode }) {
-  const { data: user, isFetching, isLoading } = useUserQuery(userId);
+  const { data: user, isFetching, isLoading } = useUserQuery(userId)
 
   if (isFetching && isLoading) {
-    return <Loading position="page" />;
+    return <Loading position="page" />
   }
 
   if (!user) {
-    return null;
+    return null
   }
 
-  return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={user}>{children}</UserContext.Provider>
 }

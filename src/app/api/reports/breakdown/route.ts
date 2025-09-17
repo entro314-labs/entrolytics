@@ -1,26 +1,26 @@
-import { canViewWebsite } from '@/validations';
-import { unauthorized, json } from '@/lib/response';
-import { getQueryFilters, parseRequest, setWebsiteDate } from '@/lib/request';
-import { BreakdownParameters, getBreakdown } from '@/queries';
-import { reportResultSchema } from '@/lib/schema';
+import { canViewWebsite } from '@/validations'
+import { unauthorized, json } from '@/lib/response'
+import { getQueryFilters, parseRequest, setWebsiteDate } from '@/lib/request'
+import { BreakdownParameters, getBreakdown } from '@/queries'
+import { reportResultSchema } from '@/lib/schema'
 
 export async function POST(request: Request) {
-  const { auth, body, error } = await parseRequest(request, reportResultSchema);
+  const { auth, body, error } = await parseRequest(request, reportResultSchema)
 
   if (error) {
-    return error();
+    return error()
   }
 
-  const { websiteId } = body;
+  const { websiteId } = body
 
   if (!(await canViewWebsite(auth, websiteId))) {
-    return unauthorized();
+    return unauthorized()
   }
 
-  const parameters = await setWebsiteDate(websiteId, body.parameters);
-  const filters = await getQueryFilters(body.filters, websiteId);
+  const parameters = await setWebsiteDate(websiteId, body.parameters)
+  const filters = await getQueryFilters(body.filters, websiteId)
 
-  const data = await getBreakdown(websiteId, parameters as BreakdownParameters, filters);
+  const data = await getBreakdown(websiteId, parameters as BreakdownParameters, filters)
 
-  return json(data);
+  return json(data)
 }

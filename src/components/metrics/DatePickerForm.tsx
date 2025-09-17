@@ -1,10 +1,17 @@
-import { useState } from 'react';
-import { Button, Row, Column, Calendar, ToggleGroup, ToggleGroupItem } from '@entro314labs/entro-zen';
-import { isAfter, isBefore, isSameDay, startOfDay, endOfDay } from 'date-fns';
-import { useMessages } from '@/components/hooks';
+import { useState } from 'react'
+import {
+  Button,
+  Row,
+  Column,
+  Calendar,
+  ToggleGroup,
+  ToggleGroupItem,
+} from '@entro314labs/entro-zen'
+import { isAfter, isBefore, isSameDay, startOfDay, endOfDay } from 'date-fns'
+import { useMessages } from '@/components/hooks'
 
-const FILTER_DAY = 'filter-day';
-const FILTER_RANGE = 'filter-range';
+const FILTER_DAY = 'filter-day'
+const FILTER_RANGE = 'filter-range'
 
 export function DatePickerForm({
   startDate: defaultStartDate,
@@ -16,23 +23,23 @@ export function DatePickerForm({
 }) {
   const [selected, setSelected] = useState<any>([
     isSameDay(defaultStartDate, defaultEndDate) ? FILTER_DAY : FILTER_RANGE,
-  ]);
-  const [date, setDate] = useState(defaultStartDate || new Date());
-  const [startDate, setStartDate] = useState(defaultStartDate || new Date());
-  const [endDate, setEndDate] = useState(defaultEndDate || new Date());
-  const { formatMessage, labels } = useMessages();
+  ])
+  const [date, setDate] = useState(defaultStartDate || new Date())
+  const [startDate, setStartDate] = useState(defaultStartDate || new Date())
+  const [endDate, setEndDate] = useState(defaultEndDate || new Date())
+  const { formatMessage, labels } = useMessages()
 
   const disabled = selected.includes(FILTER_DAY)
     ? isAfter(minDate, date) && isBefore(maxDate, date)
-    : isAfter(startDate, endDate);
+    : isAfter(startDate, endDate)
 
   const handleSave = () => {
     if (selected.includes(FILTER_DAY)) {
-      onChange(`range:${startOfDay(date).getTime()}:${endOfDay(date).getTime()}`);
+      onChange(`range:${startOfDay(date).getTime()}:${endOfDay(date).getTime()}`)
     } else {
-      onChange(`range:${startOfDay(startDate).getTime()}:${endOfDay(endDate).getTime()}`);
+      onChange(`range:${startOfDay(startDate).getTime()}:${endOfDay(endDate).getTime()}`)
     }
-  };
+  }
 
   return (
     <Column gap>
@@ -70,5 +77,5 @@ export function DatePickerForm({
         </Button>
       </Row>
     </Column>
-  );
+  )
 }

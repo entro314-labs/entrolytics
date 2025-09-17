@@ -1,27 +1,27 @@
-import clickhouse from '@/lib/clickhouse';
-import { EVENT_TYPE } from '@/lib/constants';
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db';
-import prisma from '@/lib/prisma';
-import { QueryFilters } from '@/lib/types';
+import clickhouse from '@/lib/clickhouse'
+import { EVENT_TYPE } from '@/lib/constants'
+import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
+import prisma from '@/lib/prisma'
+import { QueryFilters } from '@/lib/types'
 
 export interface AttributionParameters {
-  startDate: Date;
-  endDate: Date;
-  model: string;
-  type: string;
-  step: string;
-  currency?: string;
+  startDate: Date
+  endDate: Date
+  model: string
+  type: string
+  step: string
+  currency?: string
 }
 
 export interface AttributionResult {
-  referrer: { name: string; value: number }[];
-  paidAds: { name: string; value: number }[];
-  utm_source: { name: string; value: number }[];
-  utm_medium: { name: string; value: number }[];
-  utm_campaign: { name: string; value: number }[];
-  utm_content: { name: string; value: number }[];
-  utm_term: { name: string; value: number }[];
-  total: { pageviews: number; visitors: number; visits: number };
+  referrer: { name: string; value: number }[]
+  paidAds: { name: string; value: number }[]
+  utm_source: { name: string; value: number }[]
+  utm_medium: { name: string; value: number }[]
+  utm_campaign: { name: string; value: number }[]
+  utm_content: { name: string; value: number }[]
+  utm_term: { name: string; value: number }[]
+  total: { pageviews: number; visitors: number; visits: number }
 }
 
 export async function getAttribution(
@@ -30,24 +30,24 @@ export async function getAttribution(
   return runQuery({
     [PRISMA]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  });
+  })
 }
 
 async function relationalQuery(
   websiteId: string,
   parameters: AttributionParameters,
-  filters: QueryFilters,
+  filters: QueryFilters
 ): Promise<AttributionResult> {
-  const { model, type, currency } = parameters;
-  const { rawQuery, parseFilters } = prisma;
-  const eventType = type === 'path' ? EVENT_TYPE.pageView : EVENT_TYPE.customEvent;
-  const column = type === 'path' ? 'url_path' : 'event_name';
+  const { model, type, currency } = parameters
+  const { rawQuery, parseFilters } = prisma
+  const eventType = type === 'path' ? EVENT_TYPE.pageView : EVENT_TYPE.customEvent
+  const column = type === 'path' ? 'url_path' : 'event_name'
   const { filterQuery, joinSessionQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     ...parameters,
     websiteId,
     eventType,
-  });
+  })
 
   function getUTMQuery(utmColumn: string) {
     return `
@@ -64,7 +64,7 @@ async function relationalQuery(
     ${currency ? '' : `and we.${utmColumn} != ''`}  
     group by 1
     order by 2 desc
-    limit 20`;
+    limit 20`
   }
 
   const eventQuery = `WITH events AS (
@@ -78,7 +78,7 @@ async function relationalQuery(
           and created_at between {{startDate}} and {{endDate}}
           and ${column} = {{step}}
           ${filterQuery}
-        group by 1),`;
+        group by 1),`
 
   const revenueEventQuery = `WITH events AS (
         select
@@ -99,7 +99,7 @@ async function relationalQuery(
           and revenue.${column} = {{step}}
           and revenue.currency = {{currency}}
           ${filterQuery}
-        group by 1),`;
+        group by 1),`
 
   function getModelQuery(model: string) {
     return model === 'first-click'
@@ -121,7 +121,7 @@ async function relationalQuery(
     where we.website_id = {{websiteId::uuid}}
           and we.created_at between {{startDate}} and {{endDate}} 
           and we.created_at < e.max_dt
-    group by e.session_id)`;
+    group by e.session_id)`
   }
 
   const referrerRes = await rawQuery(
@@ -149,8 +149,8 @@ async function relationalQuery(
     order by 2 desc
     limit 20
     `,
-    queryParams,
-  );
+    queryParams
+  )
 
   const paidAdsres = await rawQuery(
     `
@@ -182,8 +182,8 @@ async function relationalQuery(
     FROM results
     ${currency ? '' : `WHERE name != ''`}
     `,
-    queryParams,
-  );
+    queryParams
+  )
 
   const sourceRes = await rawQuery(
     `
@@ -191,8 +191,8 @@ async function relationalQuery(
     ${getModelQuery(model)}
     ${getUTMQuery('utm_source')}
     `,
-    queryParams,
-  );
+    queryParams
+  )
 
   const mediumRes = await rawQuery(
     `
@@ -200,8 +200,8 @@ async function relationalQuery(
     ${getModelQuery(model)}
     ${getUTMQuery('utm_medium')}
     `,
-    queryParams,
-  );
+    queryParams
+  )
 
   const campaignRes = await rawQuery(
     `
@@ -209,8 +209,8 @@ async function relationalQuery(
     ${getModelQuery(model)}
     ${getUTMQuery('utm_campaign')}
     `,
-    queryParams,
-  );
+    queryParams
+  )
 
   const contentRes = await rawQuery(
     `
@@ -218,8 +218,8 @@ async function relationalQuery(
     ${getModelQuery(model)}
     ${getUTMQuery('utm_content')}
     `,
-    queryParams,
-  );
+    queryParams
+  )
 
   const termRes = await rawQuery(
     `
@@ -227,8 +227,8 @@ async function relationalQuery(
     ${getModelQuery(model)}
     ${getUTMQuery('utm_term')}
     `,
-    queryParams,
-  );
+    queryParams
+  )
 
   const totalRes = await rawQuery(
     `
@@ -244,8 +244,8 @@ async function relationalQuery(
         and ${column} = {{step}}
         ${filterQuery}
     `,
-    queryParams,
-  ).then(result => result?.[0]);
+    queryParams
+  ).then((result) => result?.[0])
 
   return {
     referrer: referrerRes,
@@ -256,24 +256,24 @@ async function relationalQuery(
     utm_content: contentRes,
     utm_term: termRes,
     total: totalRes,
-  };
+  }
 }
 
 async function clickhouseQuery(
   websiteId: string,
   parameters: AttributionParameters,
-  filters: QueryFilters,
+  filters: QueryFilters
 ): Promise<AttributionResult> {
-  const { model, type, currency } = parameters;
-  const { rawQuery, parseFilters } = clickhouse;
-  const eventType = type === 'path' ? EVENT_TYPE.pageView : EVENT_TYPE.customEvent;
-  const column = type === 'path' ? 'url_path' : 'event_name';
+  const { model, type, currency } = parameters
+  const { rawQuery, parseFilters } = clickhouse
+  const eventType = type === 'path' ? EVENT_TYPE.pageView : EVENT_TYPE.customEvent
+  const column = type === 'path' ? 'url_path' : 'event_name'
   const { filterQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     ...parameters,
     websiteId,
     eventType,
-  });
+  })
 
   function getUTMQuery(utmColumn: string) {
     return `
@@ -291,7 +291,7 @@ async function clickhouseQuery(
       group by 1
       order by 2 desc
       limit 20
-    `;
+    `
   }
 
   function getModelQuery(model: string) {
@@ -305,7 +305,7 @@ async function clickhouseQuery(
         where we.website_id = {websiteId:UUID}
           and we.created_at between {startDate:DateTime64} and {endDate:DateTime64}
         group by e.session_id)
-      `;
+      `
     }
 
     return `
@@ -318,7 +318,7 @@ async function clickhouseQuery(
         and we.created_at between {startDate:DateTime64} and {endDate:DateTime64}
         and we.created_at < e.max_dt
       group by e.session_id)
-      `;
+      `
   }
 
   const eventQuery = `WITH events AS (
@@ -331,7 +331,7 @@ async function clickhouseQuery(
           and created_at between {startDate:DateTime64} and {endDate:DateTime64}
           and ${column} = {step:String}
           ${filterQuery}
-        group by 1),`;
+        group by 1),`
 
   const revenueEventQuery = `WITH events AS (
           select
@@ -351,12 +351,12 @@ async function clickhouseQuery(
             and website_revenue.${column} = {step:String}
             and website_revenue.currency = {currency:String}
             ${filterQuery}
-          group by 1),`;
+          group by 1),`
 
   const referrerRes = await rawQuery<
     {
-      name: string;
-      value: number;
+      name: string
+      value: number
     }[]
   >(
     `
@@ -381,13 +381,13 @@ async function clickhouseQuery(
     order by 2 desc
     limit 20
     `,
-    queryParams,
-  );
+    queryParams
+  )
 
   const paidAdsres = await rawQuery<
     {
-      name: string;
-      value: number;
+      name: string
+      value: number
     }[]
   >(
     `
@@ -412,13 +412,13 @@ async function clickhouseQuery(
     order by 2 desc
     limit 20
     `,
-    queryParams,
-  );
+    queryParams
+  )
 
   const sourceRes = await rawQuery<
     {
-      name: string;
-      value: number;
+      name: string
+      value: number
     }[]
   >(
     `
@@ -426,13 +426,13 @@ async function clickhouseQuery(
     ${getModelQuery(model)}
     ${getUTMQuery('utm_source')}
     `,
-    queryParams,
-  );
+    queryParams
+  )
 
   const mediumRes = await rawQuery<
     {
-      name: string;
-      value: number;
+      name: string
+      value: number
     }[]
   >(
     `
@@ -440,13 +440,13 @@ async function clickhouseQuery(
     ${getModelQuery(model)}
     ${getUTMQuery('utm_medium')}
     `,
-    queryParams,
-  );
+    queryParams
+  )
 
   const campaignRes = await rawQuery<
     {
-      name: string;
-      value: number;
+      name: string
+      value: number
     }[]
   >(
     `
@@ -454,13 +454,13 @@ async function clickhouseQuery(
     ${getModelQuery(model)}
     ${getUTMQuery('utm_campaign')}
     `,
-    queryParams,
-  );
+    queryParams
+  )
 
   const contentRes = await rawQuery<
     {
-      name: string;
-      value: number;
+      name: string
+      value: number
     }[]
   >(
     `
@@ -468,13 +468,13 @@ async function clickhouseQuery(
     ${getModelQuery(model)}
     ${getUTMQuery('utm_content')}
     `,
-    queryParams,
-  );
+    queryParams
+  )
 
   const termRes = await rawQuery<
     {
-      name: string;
-      value: number;
+      name: string
+      value: number
     }[]
   >(
     `
@@ -482,8 +482,8 @@ async function clickhouseQuery(
     ${getModelQuery(model)}
     ${getUTMQuery('utm_term')}
     `,
-    queryParams,
-  );
+    queryParams
+  )
 
   const totalRes = await rawQuery<{ pageviews: number; visitors: number; visits: number }>(
     `
@@ -498,8 +498,8 @@ async function clickhouseQuery(
         and ${column} = {step:String}
         ${filterQuery}
     `,
-    queryParams,
-  ).then(result => result?.[0]);
+    queryParams
+  ).then((result) => result?.[0])
 
   return {
     referrer: referrerRes,
@@ -510,5 +510,5 @@ async function clickhouseQuery(
     utm_content: contentRes,
     utm_term: termRes,
     total: totalRes,
-  };
+  }
 }

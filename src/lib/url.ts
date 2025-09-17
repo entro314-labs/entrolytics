@@ -1,49 +1,49 @@
 export function getQueryString(params: object = {}): string {
-  const searchParams = new URLSearchParams();
+  const searchParams = new URLSearchParams()
 
   Object.entries(params).forEach(([key, value]) => {
     if (value !== undefined) {
-      searchParams.append(key, value);
+      searchParams.append(key, value)
     }
-  });
+  })
 
-  return searchParams.toString();
+  return searchParams.toString()
 }
 
 export function buildUrl(url: string, params: object = {}): string {
-  const queryString = getQueryString(params);
-  return `${url}${queryString && '?' + queryString}`;
+  const queryString = getQueryString(params)
+  return `${url}${queryString && '?' + queryString}`
 }
 
 export function safeDecodeURI(s: string | undefined | null): string | undefined | null {
   if (s === undefined || s === null) {
-    return s;
+    return s
   }
 
   try {
-    return decodeURI(s);
+    return decodeURI(s)
   } catch {
-    return s;
+    return s
   }
 }
 
 export function safeDecodeURIComponent(s: string | undefined | null): string | undefined | null {
   if (s === undefined || s === null) {
-    return s;
+    return s
   }
 
   try {
-    return decodeURIComponent(s);
+    return decodeURIComponent(s)
   } catch {
-    return s;
+    return s
   }
 }
 
 export function isValidUrl(url: string) {
   try {
-    new URL(url);
-    return true;
+    new URL(url)
+    return true
   } catch {
-    return false;
+    return false
   }
 }

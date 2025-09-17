@@ -1,11 +1,11 @@
-import { Text, Column, Row, Label, Box } from '@entro314labs/entro-zen';
-import { useSessionDataQuery } from '@/components/hooks';
-import { Empty } from '@/components/common/Empty';
-import { DATA_TYPES } from '@/lib/constants';
-import { LoadingPanel } from '@/components/common/LoadingPanel';
+import { Text, Column, Row, Label, Box } from '@entro314labs/entro-zen'
+import { useSessionDataQuery } from '@/components/hooks'
+import { Empty } from '@/components/common/Empty'
+import { DATA_TYPES } from '@/lib/constants'
+import { LoadingPanel } from '@/components/common/LoadingPanel'
 
 export function SessionData({ websiteId, sessionId }: { websiteId: string; sessionId: string }) {
-  const { data, isLoading, error } = useSessionDataQuery(websiteId, sessionId);
+  const { data, isLoading, error } = useSessionDataQuery(websiteId, sessionId)
 
   return (
     <LoadingPanel data={data} isLoading={isLoading} error={error}>
@@ -24,9 +24,9 @@ export function SessionData({ websiteId, sessionId }: { websiteId: string; sessi
                 </Box>
               </Row>
             </Column>
-          );
+          )
         })}
       </Column>
     </LoadingPanel>
-  );
+  )
 }

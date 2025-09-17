@@ -1,28 +1,28 @@
-import { Grid, Column, Row, Text, Icon, ProgressBar, Dialog, Box } from '@entro314labs/entro-zen';
-import { useMessages, useResultQuery } from '@/components/hooks';
-import { LoadingPanel } from '@/components/common/LoadingPanel';
-import { File, Lightning, User } from '@/components/icons';
-import { formatLongNumber } from '@/lib/format';
-import { ReportEditButton } from '@/components/input/ReportEditButton';
-import { FunnelEditForm } from './FunnelEditForm';
-import { ChangeLabel } from '@/components/metrics/ChangeLabel';
+import { Grid, Column, Row, Text, Icon, ProgressBar, Dialog, Box } from '@entro314labs/entro-zen'
+import { useMessages, useResultQuery } from '@/components/hooks'
+import { LoadingPanel } from '@/components/common/LoadingPanel'
+import { File, Lightning, User } from '@/components/icons'
+import { formatLongNumber } from '@/lib/format'
+import { ReportEditButton } from '@/components/input/ReportEditButton'
+import { FunnelEditForm } from './FunnelEditForm'
+import { ChangeLabel } from '@/components/metrics/ChangeLabel'
 
 type FunnelResult = {
-  type: string;
-  value: string;
-  visitors: number;
-  previous: number;
-  dropped: number;
-  dropoff: number;
-  remaining: number;
-};
+  type: string
+  value: string
+  visitors: number
+  previous: number
+  dropped: number
+  dropoff: number
+  remaining: number
+}
 
 export function Funnel({ id, name, type, parameters, websiteId }) {
-  const { formatMessage, labels } = useMessages();
+  const { formatMessage, labels } = useMessages()
   const { data, error, isLoading } = useResultQuery(type, {
     websiteId,
     ...parameters,
-  });
+  })
 
   return (
     <LoadingPanel data={data} isLoading={isLoading} error={error}>
@@ -46,7 +46,7 @@ export function Funnel({ id, name, type, parameters, websiteId }) {
                   >
                     <FunnelEditForm id={id} websiteId={websiteId} onClose={close} />
                   </Dialog>
-                );
+                )
               }}
             </ReportEditButton>
           </Column>
@@ -54,9 +54,9 @@ export function Funnel({ id, name, type, parameters, websiteId }) {
         {data?.map(
           (
             { type, value, visitors, previous, dropped, dropoff, remaining }: FunnelResult,
-            index: number,
+            index: number
           ) => {
-            const isPage = type === 'path';
+            const isPage = type === 'path'
             return (
               <Grid key={index} columns="auto 1fr" gap="6">
                 <Column alignItems="center" position="relative">
@@ -124,10 +124,10 @@ export function Funnel({ id, name, type, parameters, websiteId }) {
                   </Row>
                 </Column>
               </Grid>
-            );
-          },
+            )
+          }
         )}
       </Grid>
     </LoadingPanel>
-  );
+  )
 }

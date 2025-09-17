@@ -1,9 +1,9 @@
-import { Grid, Column, Text, Label } from '@entro314labs/entro-zen';
-import { useEventDataQuery } from '@/components/hooks';
-import { LoadingPanel } from '@/components/common/LoadingPanel';
+import { Grid, Column, Text, Label } from '@entro314labs/entro-zen'
+import { useEventDataQuery } from '@/components/hooks'
+import { LoadingPanel } from '@/components/common/LoadingPanel'
 
 export function EventData({ websiteId, eventId }: { websiteId: string; eventId: string }) {
-  const { data, isLoading, error } = useEventDataQuery(websiteId, eventId);
+  const { data, isLoading, error } = useEventDataQuery(websiteId, eventId)
 
   return (
     <LoadingPanel isLoading={isLoading} error={error}>
@@ -14,9 +14,9 @@ export function EventData({ websiteId, eventId }: { websiteId: string; eventId: 
               <Label>{dataKey}</Label>
               <Text>{stringValue}</Text>
             </Column>
-          );
+          )
         })}
       </Grid>
     </LoadingPanel>
-  );
+  )
 }

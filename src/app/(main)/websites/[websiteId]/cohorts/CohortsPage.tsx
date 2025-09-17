@@ -1,8 +1,8 @@
-'use client';
-import { Column } from '@entro314labs/entro-zen';
-import { CohortsDataTable } from './CohortsDataTable';
-import { WebsiteControls } from '@/app/(main)/websites/[websiteId]/WebsiteControls';
-import { Panel } from '@/components/common/Panel';
+'use client'
+import { Column } from '@entro314labs/entro-zen'
+import { CohortsDataTable } from './CohortsDataTable'
+import { WebsiteControls } from '@/app/(main)/websites/[websiteId]/WebsiteControls'
+import { Panel } from '@/components/common/Panel'
 
 export function CohortsPage({ websiteId }) {
   return (
@@ -12,5 +12,5 @@ export function CohortsPage({ websiteId }) {
         <CohortsDataTable websiteId={websiteId} />
       </Panel>
     </Column>
-  );
+  )
 }

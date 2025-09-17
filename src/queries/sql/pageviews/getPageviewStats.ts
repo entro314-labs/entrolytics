@@ -1,24 +1,24 @@
-import clickhouse from '@/lib/clickhouse';
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db';
-import prisma from '@/lib/prisma';
-import { EVENT_COLUMNS, EVENT_TYPE } from '@/lib/constants';
-import { QueryFilters } from '@/lib/types';
+import clickhouse from '@/lib/clickhouse'
+import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
+import prisma from '@/lib/prisma'
+import { EVENT_COLUMNS, EVENT_TYPE } from '@/lib/constants'
+import { QueryFilters } from '@/lib/types'
 
 export async function getPageviewStats(...args: [websiteId: string, filters: QueryFilters]) {
   return runQuery({
     [PRISMA]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  });
+  })
 }
 
 async function relationalQuery(websiteId: string, filters: QueryFilters) {
-  const { timezone = 'utc', unit = 'day' } = filters;
-  const { getDateSQL, parseFilters, rawQuery } = prisma;
+  const { timezone = 'utc', unit = 'day' } = filters
+  const { getDateSQL, parseFilters, rawQuery } = prisma
   const { filterQuery, cohortQuery, joinSessionQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
     eventType: EVENT_TYPE.pageView,
-  });
+  })
 
   return rawQuery(
     `
@@ -34,25 +34,25 @@ async function relationalQuery(websiteId: string, filters: QueryFilters) {
     group by 1
     order by 1
     `,
-    queryParams,
-  );
+    queryParams
+  )
 }
 
 async function clickhouseQuery(
   websiteId: string,
-  filters: QueryFilters,
+  filters: QueryFilters
 ): Promise<{ x: string; y: number }[]> {
-  const { timezone = 'utc', unit = 'day' } = filters;
-  const { parseFilters, rawQuery, getDateSQL } = clickhouse;
+  const { timezone = 'utc', unit = 'day' } = filters
+  const { parseFilters, rawQuery, getDateSQL } = clickhouse
   const { filterQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
     eventType: EVENT_TYPE.pageView,
-  });
+  })
 
-  let sql = '';
+  let sql = ''
 
-  if (EVENT_COLUMNS.some(item => Object.keys(filters).includes(item)) || unit === 'minute') {
+  if (EVENT_COLUMNS.some((item) => Object.keys(filters).includes(item)) || unit === 'minute') {
     sql = `
     select
       g.t as x,
@@ -69,7 +69,7 @@ async function clickhouseQuery(
       group by t
     ) as g
     order by t
-    `;
+    `
   } else {
     sql = `
     select
@@ -87,8 +87,8 @@ async function clickhouseQuery(
       group by t
     ) as g
     order by t
-    `;
+    `
   }
 
-  return rawQuery(sql, queryParams);
+  return rawQuery(sql, queryParams)
 }

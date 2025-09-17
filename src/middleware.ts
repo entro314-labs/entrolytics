@@ -9,7 +9,7 @@ const isPublicRoute = createRouteMatcher([
   '/api/heartbeat',
   '/api/webhooks/(.*)',
   '/script.js',
-  '/telemetry.js'
+  '/telemetry.js',
 ])
 
 // Define protected routes that require authentication

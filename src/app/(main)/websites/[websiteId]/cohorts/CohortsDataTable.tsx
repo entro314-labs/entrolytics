@@ -1,14 +1,14 @@
-import { CohortAddButton } from './CohortAddButton';
-import { useWebsiteCohortsQuery } from '@/components/hooks';
-import { CohortsTable } from './CohortsTable';
-import { DataGrid } from '@/components/common/DataGrid';
+import { CohortAddButton } from './CohortAddButton'
+import { useWebsiteCohortsQuery } from '@/components/hooks'
+import { CohortsTable } from './CohortsTable'
+import { DataGrid } from '@/components/common/DataGrid'
 
 export function CohortsDataTable({ websiteId }: { websiteId?: string }) {
-  const query = useWebsiteCohortsQuery(websiteId, { type: 'cohort' });
+  const query = useWebsiteCohortsQuery(websiteId, { type: 'cohort' })
 
   const renderActions = () => {
-    return <CohortAddButton websiteId={websiteId} />;
-  };
+    return <CohortAddButton websiteId={websiteId} />
+  }
 
   return (
     <DataGrid
@@ -20,5 +20,5 @@ export function CohortsDataTable({ websiteId }: { websiteId?: string }) {
     >
       {({ data }) => <CohortsTable data={data} />}
     </DataGrid>
-  );
+  )
 }

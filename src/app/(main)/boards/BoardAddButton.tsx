@@ -1,18 +1,18 @@
-import { useMessages, useModified, useNavigation } from '@/components/hooks';
-import { Button, Icon, Modal, Dialog, DialogTrigger, Text, useToast } from '@entro314labs/entro-zen';
-import { Plus } from '@/components/icons';
-import { BoardAddForm } from './BoardAddForm';
+import { useMessages, useModified, useNavigation } from '@/components/hooks'
+import { Button, Icon, Modal, Dialog, DialogTrigger, Text, useToast } from '@entro314labs/entro-zen'
+import { Plus } from '@/components/icons'
+import { BoardAddForm } from './BoardAddForm'
 
 export function BoardAddButton() {
-  const { formatMessage, labels, messages } = useMessages();
-  const { toast } = useToast();
-  const { touch } = useModified();
-  const { orgId } = useNavigation();
+  const { formatMessage, labels, messages } = useMessages()
+  const { toast } = useToast()
+  const { touch } = useModified()
+  const { orgId } = useNavigation()
 
   const handleSave = async () => {
-    toast(formatMessage(messages.saved));
-    touch('boards');
-  };
+    toast(formatMessage(messages.saved))
+    touch('boards')
+  }
 
   return (
     <DialogTrigger>
@@ -28,5 +28,5 @@ export function BoardAddButton() {
         </Dialog>
       </Modal>
     </DialogTrigger>
-  );
+  )
 }

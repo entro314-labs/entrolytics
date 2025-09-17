@@ -1,9 +1,9 @@
-import prisma from '@/lib/prisma';
-import { Prisma, Segment } from '@/generated/prisma/client';
-import { PageResult, QueryFilters } from '@/lib/types';
+import prisma from '@/lib/prisma'
+import { Prisma, Segment } from '@/generated/prisma/client'
+import { PageResult, QueryFilters } from '@/lib/types'
 
 async function findSegment(criteria: Prisma.SegmentFindUniqueArgs): Promise<Segment> {
-  return prisma.client.Segment.findUnique(criteria);
+  return prisma.client.Segment.findUnique(criteria)
 }
 
 export async function getSegment(segmentId: string): Promise<Segment> {
@@ -11,15 +11,15 @@ export async function getSegment(segmentId: string): Promise<Segment> {
     where: {
       id: segmentId,
     },
-  });
+  })
 }
 
 export async function getSegments(
   criteria: Prisma.SegmentFindManyArgs,
-  filters: QueryFilters,
+  filters: QueryFilters
 ): Promise<PageResult<Segment[]>> {
-  const { search } = filters;
-  const { getSearchParameters, pagedQuery } = prisma;
+  const { search } = filters
+  const { getSearchParameters, pagedQuery } = prisma
 
   const where: Prisma.SegmentWhereInput = {
     ...criteria.where,
@@ -28,21 +28,21 @@ export async function getSegments(
         name: 'contains',
       },
     ]),
-  };
+  }
 
-  return pagedQuery('segment', { ...criteria, where }, filters);
+  return pagedQuery('segment', { ...criteria, where }, filters)
 }
 
 export async function getWebsiteSegment(websiteId: string, segmentId: string): Promise<Segment> {
   return prisma.client.Segment.findFirst({
     where: { id: segmentId, websiteId },
-  });
+  })
 }
 
 export async function getWebsiteSegments(
   websiteId: string,
   type: string,
-  filters?: QueryFilters,
+  filters?: QueryFilters
 ): Promise<PageResult<Segment[]>> {
   return getSegments(
     {
@@ -51,21 +51,21 @@ export async function getWebsiteSegments(
         type,
       },
     },
-    filters,
-  );
+    filters
+  )
 }
 
 export async function createSegment(data: Prisma.SegmentUncheckedCreateInput): Promise<Segment> {
-  return prisma.client.Segment.create({ data });
+  return prisma.client.Segment.create({ data })
 }
 
 export async function updateSegment(
   SegmentId: string,
-  data: Prisma.SegmentUpdateInput,
+  data: Prisma.SegmentUpdateInput
 ): Promise<Segment> {
-  return prisma.client.Segment.update({ where: { id: SegmentId }, data });
+  return prisma.client.Segment.update({ where: { id: SegmentId }, data })
 }
 
 export async function deleteSegment(SegmentId: string): Promise<Segment> {
-  return prisma.client.Segment.delete({ where: { id: SegmentId } });
+  return prisma.client.Segment.delete({ where: { id: SegmentId } })
 }

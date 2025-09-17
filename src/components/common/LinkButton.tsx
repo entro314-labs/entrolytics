@@ -1,14 +1,14 @@
-import { ReactNode } from 'react';
-import Link from 'next/link';
-import { Button, ButtonProps } from '@entro314labs/entro-zen';
-import { useLocale } from '@/components/hooks';
+import { ReactNode } from 'react'
+import Link from 'next/link'
+import { Button, ButtonProps } from '@entro314labs/entro-zen'
+import { useLocale } from '@/components/hooks'
 
 export interface LinkButtonProps extends ButtonProps {
-  href: string;
-  target?: string;
-  scroll?: boolean;
-  variant?: any;
-  children?: ReactNode;
+  href: string
+  target?: string
+  scroll?: boolean
+  variant?: any
+  children?: ReactNode
 }
 
 export function LinkButton({
@@ -19,7 +19,7 @@ export function LinkButton({
   children,
   ...props
 }: LinkButtonProps) {
-  const { dir } = useLocale();
+  const { dir } = useLocale()
 
   return (
     <Button {...props} variant={variant} asChild>
@@ -27,5 +27,5 @@ export function LinkButton({
         {children}
       </Link>
     </Button>
-  );
+  )
 }

@@ -1,16 +1,16 @@
-import { SessionDetailsPage } from './SessionDetailsPage';
-import { Metadata } from 'next';
+import { SessionDetailsPage } from './SessionDetailsPage'
+import { Metadata } from 'next'
 
 export default async function WebsitePage({
   params,
 }: {
-  params: Promise<{ websiteId: string; sessionId: string }>;
+  params: Promise<{ websiteId: string; sessionId: string }>
 }) {
-  const { websiteId, sessionId } = await params;
+  const { websiteId, sessionId } = await params
 
-  return <SessionDetailsPage websiteId={websiteId} sessionId={sessionId} />;
+  return <SessionDetailsPage websiteId={websiteId} sessionId={sessionId} />
 }
 
 export const metadata: Metadata = {
   title: 'Websites',
-};
+}

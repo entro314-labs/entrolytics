@@ -1,20 +1,20 @@
-import clickhouse from '@/lib/clickhouse';
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db';
-import prisma from '@/lib/prisma';
-import { QueryFilters } from '@/lib/types';
+import clickhouse from '@/lib/clickhouse'
+import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
+import prisma from '@/lib/prisma'
+import { QueryFilters } from '@/lib/types'
 
 export interface RetentionParameters {
-  startDate: Date;
-  endDate: Date;
-  timezone?: string;
+  startDate: Date
+  endDate: Date
+  timezone?: string
 }
 
 export interface RetentionResult {
-  date: string;
-  day: number;
-  visitors: number;
-  returnVisitors: number;
-  percentage: number;
+  date: string
+  day: number
+  visitors: number
+  returnVisitors: number
+  percentage: number
 }
 
 export async function getRetention(
@@ -23,17 +23,17 @@ export async function getRetention(
   return runQuery({
     [PRISMA]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  });
+  })
 }
 
 async function relationalQuery(
   websiteId: string,
   parameters: RetentionParameters,
-  filters: QueryFilters,
+  filters: QueryFilters
 ): Promise<RetentionResult[]> {
-  const { startDate, endDate, timezone } = parameters;
-  const { getDateSQL, getDayDiffQuery, getCastColumnQuery, rawQuery, parseFilters } = prisma;
-  const unit = 'day';
+  const { startDate, endDate, timezone } = parameters
+  const { getDateSQL, getDayDiffQuery, getCastColumnQuery, rawQuery, parseFilters } = prisma
+  const unit = 'day'
 
   const { filterQuery, joinSessionQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
@@ -41,7 +41,7 @@ async function relationalQuery(
     startDate,
     endDate,
     timezone,
-  });
+  })
 
   return rawQuery(
     `
@@ -93,18 +93,18 @@ async function relationalQuery(
     on c.cohort_date = s.cohort_date
     where c.day_number <= 31
     order by 1, 2`,
-    queryParams,
-  );
+    queryParams
+  )
 }
 
 async function clickhouseQuery(
   websiteId: string,
   parameters: RetentionParameters,
-  filters: QueryFilters,
+  filters: QueryFilters
 ): Promise<RetentionResult[]> {
-  const { startDate, endDate, timezone } = parameters;
-  const { getDateSQL, rawQuery, parseFilters } = clickhouse;
-  const unit = 'day';
+  const { startDate, endDate, timezone } = parameters
+  const { getDateSQL, rawQuery, parseFilters } = clickhouse
+  const unit = 'day'
 
   const { filterQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
@@ -112,7 +112,7 @@ async function clickhouseQuery(
     startDate,
     endDate,
     timezone,
-  });
+  })
 
   return rawQuery(
     `
@@ -165,6 +165,6 @@ async function clickhouseQuery(
     on c.cohort_date = s.cohort_date
     where c.day_number <= 31
     order by 1, 2`,
-    queryParams,
-  );
+    queryParams
+  )
 }

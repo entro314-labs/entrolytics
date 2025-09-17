@@ -1,13 +1,13 @@
-import clickhouse from '@/lib/clickhouse';
-import { EVENT_TYPE } from '@/lib/constants';
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db';
-import prisma from '@/lib/prisma';
-import { QueryFilters } from '@/lib/types';
+import clickhouse from '@/lib/clickhouse'
+import { EVENT_TYPE } from '@/lib/constants'
+import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
+import prisma from '@/lib/prisma'
+import { QueryFilters } from '@/lib/types'
 
 export interface UTMParameters {
-  column: string;
-  startDate: Date;
-  endDate: Date;
+  column: string
+  startDate: Date
+  endDate: Date
 }
 
 export async function getUTM(
@@ -16,16 +16,16 @@ export async function getUTM(
   return runQuery({
     [PRISMA]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  });
+  })
 }
 
 async function relationalQuery(
   websiteId: string,
   parameters: UTMParameters,
-  filters: QueryFilters,
+  filters: QueryFilters
 ) {
-  const { column, startDate, endDate } = parameters;
-  const { parseFilters, rawQuery } = prisma;
+  const { column, startDate, endDate } = parameters
+  const { parseFilters, rawQuery } = prisma
 
   const { filterQuery, joinSessionQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
@@ -33,7 +33,7 @@ async function relationalQuery(
     startDate,
     endDate,
     eventType: EVENT_TYPE.pageView,
-  });
+  })
 
   return rawQuery(
     `
@@ -48,24 +48,24 @@ async function relationalQuery(
     group by 1
     order by 2 desc
     `,
-    queryParams,
-  );
+    queryParams
+  )
 }
 
 async function clickhouseQuery(
   websiteId: string,
   parameters: UTMParameters,
-  filters: QueryFilters,
+  filters: QueryFilters
 ) {
-  const { column, startDate, endDate } = parameters;
-  const { parseFilters, rawQuery } = clickhouse;
+  const { column, startDate, endDate } = parameters
+  const { parseFilters, rawQuery } = clickhouse
   const { filterQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
     startDate,
     endDate,
     eventType: EVENT_TYPE.pageView,
-  });
+  })
 
   return rawQuery(
     `
@@ -79,6 +79,6 @@ async function clickhouseQuery(
     group by 1
     order by 2 desc
     `,
-    queryParams,
-  );
+    queryParams
+  )
 }

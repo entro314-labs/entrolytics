@@ -1,9 +1,9 @@
-import { ConfirmationForm } from '@/components/common/ConfirmationForm';
-import { useDeleteQuery, useMessages, useModified } from '@/components/hooks';
-import { messages } from '@/components/messages';
-import { Trash } from '@/components/icons';
-import { Dialog } from '@entro314labs/entro-zen';
-import { ActionButton } from '@/components/input/ActionButton';
+import { ConfirmationForm } from '@/components/common/ConfirmationForm'
+import { useDeleteQuery, useMessages, useModified } from '@/components/hooks'
+import { messages } from '@/components/messages'
+import { Trash } from '@/components/icons'
+import { Dialog } from '@entro314labs/entro-zen'
+import { ActionButton } from '@/components/input/ActionButton'
 
 export function OrgMemberRemoveButton({
   orgId,
@@ -11,25 +11,25 @@ export function OrgMemberRemoveButton({
   userName,
   onSave,
 }: {
-  orgId: string;
-  userId: string;
-  userName: string;
-  disabled?: boolean;
-  onSave?: () => void;
+  orgId: string
+  userId: string
+  userName: string
+  disabled?: boolean
+  onSave?: () => void
 }) {
-  const { formatMessage, labels } = useMessages();
-  const { mutate, isPending, error } = useDeleteQuery(`/orgs/${orgId}/users/${userId}`);
-  const { touch } = useModified();
+  const { formatMessage, labels } = useMessages()
+  const { mutate, isPending, error } = useDeleteQuery(`/orgs/${orgId}/users/${userId}`)
+  const { touch } = useModified()
 
   const handleConfirm = (close: () => void) => {
     mutate(null, {
       onSuccess: () => {
-        touch('orgs:members');
-        onSave?.();
-        close();
+        touch('orgs:members')
+        onSave?.()
+        close()
       },
-    });
-  };
+    })
+  }
 
   return (
     <ActionButton title={formatMessage(labels.delete)} icon={<Trash />}>
@@ -49,5 +49,5 @@ export function OrgMemberRemoveButton({
         )}
       </Dialog>
     </ActionButton>
-  );
+  )
 }

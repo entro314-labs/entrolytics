@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment } from 'react'
 import {
   Icon,
   Button,
@@ -10,15 +10,15 @@ import {
   MenuSection,
   Text,
   Row,
-} from '@entro314labs/entro-zen';
-import { useMessages, useLoginQuery, useNavigation } from '@/components/hooks';
-import { LogOut, UserCircle, LockKeyhole } from '@/components/icons';
+} from '@entro314labs/entro-zen'
+import { useMessages, useLoginQuery, useNavigation } from '@/components/hooks'
+import { LogOut, UserCircle, LockKeyhole } from '@/components/icons'
 
 export function ProfileButton() {
-  const { formatMessage, labels } = useMessages();
-  const { user } = useLoginQuery();
-  const { renderUrl } = useNavigation();
-  const cloudMode = !!process.env.cloudMode;
+  const { formatMessage, labels } = useMessages()
+  const { user } = useLoginQuery()
+  const { renderUrl } = useNavigation()
+  const cloudMode = !!process.env.cloudMode
 
   const items = [
     {
@@ -41,7 +41,7 @@ export function ProfileButton() {
       icon: <LogOut />,
       separator: true,
     },
-  ].filter(n => n);
+  ].filter((n) => n)
 
   return (
     <MenuTrigger>
@@ -65,11 +65,11 @@ export function ProfileButton() {
                     </Row>
                   </MenuItem>
                 </Fragment>
-              );
+              )
             })}
           </MenuSection>
         </Menu>
       </Popover>
     </MenuTrigger>
-  );
+  )
 }

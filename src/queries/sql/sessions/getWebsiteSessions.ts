@@ -1,24 +1,24 @@
-import clickhouse from '@/lib/clickhouse';
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db';
-import { EVENT_COLUMNS } from '@/lib/constants';
-import prisma from '@/lib/prisma';
-import { QueryFilters } from '@/lib/types';
+import clickhouse from '@/lib/clickhouse'
+import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
+import { EVENT_COLUMNS } from '@/lib/constants'
+import prisma from '@/lib/prisma'
+import { QueryFilters } from '@/lib/types'
 
 export async function getWebsiteSessions(...args: [websiteId: string, filters: QueryFilters]) {
   return runQuery({
     [PRISMA]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  });
+  })
 }
 
 async function relationalQuery(websiteId: string, filters: QueryFilters) {
-  const { pagedRawQuery, parseFilters } = prisma;
-  const { search } = filters;
+  const { pagedRawQuery, parseFilters } = prisma
+  const { search } = filters
   const { filterQuery, dateQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
     search: search ? `%${search}%` : undefined,
-  });
+  })
 
   const searchQuery = search
     ? `and (distinct_id ilike {{search}}
@@ -26,7 +26,7 @@ async function relationalQuery(websiteId: string, filters: QueryFilters) {
            or browser ilike {{search}}
            or os ilike {{search}}
            or device ilike {{search}})`
-    : '';
+    : ''
 
   return pagedRawQuery(
     `
@@ -68,17 +68,17 @@ async function relationalQuery(websiteId: string, filters: QueryFilters) {
     order by max(website_event.created_at) desc
     `,
     queryParams,
-    filters,
-  );
+    filters
+  )
 }
 
 async function clickhouseQuery(websiteId: string, filters: QueryFilters) {
-  const { pagedRawQuery, parseFilters, getDateStringSQL } = clickhouse;
-  const { search } = filters;
+  const { pagedRawQuery, parseFilters, getDateStringSQL } = clickhouse
+  const { search } = filters
   const { filterQuery, dateQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
-  });
+  })
 
   const searchQuery = search
     ? `and ((positionCaseInsensitive(distinct_id, {search:String}) > 0)
@@ -86,11 +86,11 @@ async function clickhouseQuery(websiteId: string, filters: QueryFilters) {
            or (positionCaseInsensitive(browser, {search:String}) > 0)
            or (positionCaseInsensitive(os, {search:String}) > 0)
            or (positionCaseInsensitive(device, {search:String}) > 0))`
-    : '';
+    : ''
 
-  let sql = '';
+  let sql = ''
 
-  if (EVENT_COLUMNS.some(item => Object.keys(filters).includes(item))) {
+  if (EVENT_COLUMNS.some((item) => Object.keys(filters).includes(item))) {
     sql = `
     select
       session_id as id,
@@ -116,7 +116,7 @@ async function clickhouseQuery(websiteId: string, filters: QueryFilters) {
     ${searchQuery}
     group by session_id, website_id, browser, os, device, screen, language, country, region, city
     order by lastAt desc
-    `;
+    `
   } else {
     sql = `
     select
@@ -144,8 +144,8 @@ async function clickhouseQuery(websiteId: string, filters: QueryFilters) {
     ${searchQuery}
     group by session_id, website_id, hostname, browser, os, device, screen, language, country, region, city
     order by lastAt desc
-    `;
+    `
   }
 
-  return pagedRawQuery(sql, queryParams, filters);
+  return pagedRawQuery(sql, queryParams, filters)
 }

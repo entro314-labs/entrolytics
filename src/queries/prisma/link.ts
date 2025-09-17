@@ -1,9 +1,9 @@
-import { Prisma, Link } from '@/generated/prisma/client';
-import prisma from '@/lib/prisma';
-import { PageResult, QueryFilters } from '@/lib/types';
+import { Prisma, Link } from '@/generated/prisma/client'
+import prisma from '@/lib/prisma'
+import { PageResult, QueryFilters } from '@/lib/types'
 
 export async function findLink(criteria: Prisma.LinkFindUniqueArgs): Promise<Link> {
-  return prisma.client.link.findUnique(criteria);
+  return prisma.client.link.findUnique(criteria)
 }
 
 export async function getLink(linkId: string): Promise<Link> {
@@ -11,15 +11,15 @@ export async function getLink(linkId: string): Promise<Link> {
     where: {
       id: linkId,
     },
-  });
+  })
 }
 
 export async function getLinks(
   criteria: Prisma.LinkFindManyArgs,
-  filters: QueryFilters = {},
+  filters: QueryFilters = {}
 ): Promise<PageResult<Link[]>> {
-  const { search } = filters;
-  const { getSearchParameters, pagedQuery } = prisma;
+  const { search } = filters
+  const { getSearchParameters, pagedQuery } = prisma
 
   const where: Prisma.LinkWhereInput = {
     ...criteria.where,
@@ -28,14 +28,14 @@ export async function getLinks(
       { url: 'contains' },
       { slug: 'contains' },
     ]),
-  };
+  }
 
-  return pagedQuery('link', { ...criteria, where }, filters);
+  return pagedQuery('link', { ...criteria, where }, filters)
 }
 
 export async function getUserLinks(
   userId: string,
-  filters?: QueryFilters,
+  filters?: QueryFilters
 ): Promise<PageResult<Link[]>> {
   return getLinks(
     {
@@ -44,13 +44,13 @@ export async function getUserLinks(
         deletedAt: null,
       },
     },
-    filters,
-  );
+    filters
+  )
 }
 
 export async function getOrgLinks(
   orgId: string,
-  filters?: QueryFilters,
+  filters?: QueryFilters
 ): Promise<PageResult<Link[]>> {
   return getLinks(
     {
@@ -58,18 +58,18 @@ export async function getOrgLinks(
         orgId,
       },
     },
-    filters,
-  );
+    filters
+  )
 }
 
 export async function createLink(data: Prisma.LinkUncheckedCreateInput): Promise<Link> {
-  return prisma.client.link.create({ data });
+  return prisma.client.link.create({ data })
 }
 
 export async function updateLink(linkId: string, data: any): Promise<Link> {
-  return prisma.client.link.update({ where: { id: linkId }, data });
+  return prisma.client.link.update({ where: { id: linkId }, data })
 }
 
 export async function deleteLink(linkId: string): Promise<Link> {
-  return prisma.client.link.delete({ where: { id: linkId } });
+  return prisma.client.link.delete({ where: { id: linkId } })
 }

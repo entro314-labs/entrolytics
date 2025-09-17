@@ -1,5 +1,5 @@
-import { Key } from 'react';
-import { useRouter } from 'next/navigation';
+import { Key } from 'react'
+import { useRouter } from 'next/navigation'
 import {
   Text,
   Icon,
@@ -13,26 +13,26 @@ import {
   Box,
   SidebarItem,
   Pressable,
-} from '@entro314labs/entro-zen';
-import { useLoginQuery, useMessages, useUserOrgsQuery, useNavigation } from '@/components/hooks';
-import { Chevron, User, Users } from '@/components/icons';
+} from '@entro314labs/entro-zen'
+import { useLoginQuery, useMessages, useUserOrgsQuery, useNavigation } from '@/components/hooks'
+import { Chevron, User, Users } from '@/components/icons'
 
 export function OrgsButton({ showText = true }: { showText?: boolean }) {
-  const { user } = useLoginQuery();
-  const { formatMessage, labels } = useMessages();
-  const { data } = useUserOrgsQuery(user.id);
-  const { orgId } = useNavigation();
-  const router = useRouter();
-  const org = data?.data?.find(({ id }) => id === orgId);
-  const selectedKeys = new Set([orgId || user.id]);
-  const label = orgId ? org?.name : user.username;
+  const { user } = useLoginQuery()
+  const { formatMessage, labels } = useMessages()
+  const { data } = useUserOrgsQuery(user.id)
+  const { orgId } = useNavigation()
+  const router = useRouter()
+  const org = data?.data?.find(({ id }) => id === orgId)
+  const selectedKeys = new Set([orgId || user.id])
+  const label = orgId ? org?.name : user.username
 
   const handleSelect = (id: Key) => {
-    router.push(id === user.id ? '/websites' : `/orgs/${id}/websites`);
-  };
+    router.push(id === user.id ? '/websites' : `/orgs/${id}/websites`)
+  }
 
   if (!data?.count) {
-    return null;
+    return null
   }
 
   return (
@@ -83,5 +83,5 @@ export function OrgsButton({ showText = true }: { showText?: boolean }) {
         </Box>
       </Popover>
     </MenuTrigger>
-  );
+  )
 }

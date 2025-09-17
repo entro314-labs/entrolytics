@@ -1,21 +1,21 @@
-import { useMemo, useState } from 'react';
-import { Select, ListItem, Grid } from '@entro314labs/entro-zen';
+import { useMemo, useState } from 'react'
+import { Select, ListItem, Grid } from '@entro314labs/entro-zen'
 import {
   useMessages,
   useSessionDataPropertiesQuery,
   useSessionDataValuesQuery,
-} from '@/components/hooks';
-import { LoadingPanel } from '@/components/common/LoadingPanel';
-import { PieChart } from '@/components/charts/PieChart';
-import { CHART_COLORS } from '@/lib/constants';
-import { ListTable } from '@/components/metrics/ListTable';
+} from '@/components/hooks'
+import { LoadingPanel } from '@/components/common/LoadingPanel'
+import { PieChart } from '@/components/charts/PieChart'
+import { CHART_COLORS } from '@/lib/constants'
+import { ListTable } from '@/components/metrics/ListTable'
 
 export function SessionProperties({ websiteId }: { websiteId: string }) {
-  const [propertyName, setPropertyName] = useState('');
-  const { formatMessage, labels } = useMessages();
-  const { data, isLoading, isFetching, error } = useSessionDataPropertiesQuery(websiteId);
+  const [propertyName, setPropertyName] = useState('')
+  const { formatMessage, labels } = useMessages()
+  const { data, isLoading, isFetching, error } = useSessionDataPropertiesQuery(websiteId)
 
-  const properties: string[] = data?.map(e => e.propertyName);
+  const properties: string[] = data?.map((e) => e.propertyName)
 
   return (
     <LoadingPanel
@@ -34,7 +34,7 @@ export function SessionProperties({ websiteId }: { websiteId: string }) {
             onChange={setPropertyName}
             placeholder=""
           >
-            {properties?.map(p => (
+            {properties?.map((p) => (
               <ListItem key={p} id={p}>
                 {p}
               </ListItem>
@@ -44,18 +44,18 @@ export function SessionProperties({ websiteId }: { websiteId: string }) {
       )}
       {propertyName && <SessionValues websiteId={websiteId} propertyName={propertyName} />}
     </LoadingPanel>
-  );
+  )
 }
 
 const SessionValues = ({ websiteId, propertyName }) => {
-  const { data, isLoading, isFetching, error } = useSessionDataValuesQuery(websiteId, propertyName);
+  const { data, isLoading, isFetching, error } = useSessionDataValuesQuery(websiteId, propertyName)
 
   const propertySum = useMemo(() => {
-    return data?.reduce((sum, { total }) => sum + total, 0) ?? 0;
-  }, [data]);
+    return data?.reduce((sum, { total }) => sum + total, 0) ?? 0
+  }, [data])
 
   const chartData = useMemo(() => {
-    if (!propertyName || !data) return null;
+    if (!propertyName || !data) return null
     return {
       labels: data.map(({ value }) => value),
       datasets: [
@@ -65,17 +65,17 @@ const SessionValues = ({ websiteId, propertyName }) => {
           borderWidth: 0,
         },
       ],
-    };
-  }, [propertyName, data]);
+    }
+  }, [propertyName, data])
 
   const tableData = useMemo(() => {
-    if (!propertyName || !data || propertySum === 0) return [];
+    if (!propertyName || !data || propertySum === 0) return []
     return data.map(({ value, total }) => ({
       label: value,
       count: total,
       percent: 100 * (total / propertySum),
-    }));
-  }, [propertyName, data, propertySum]);
+    }))
+  }, [propertyName, data, propertySum])
 
   return (
     <LoadingPanel
@@ -93,5 +93,5 @@ const SessionValues = ({ websiteId, propertyName }) => {
         </Grid>
       )}
     </LoadingPanel>
-  );
-};
+  )
+}

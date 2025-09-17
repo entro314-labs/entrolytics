@@ -1,88 +1,98 @@
-import { auth, currentUser } from '@clerk/nextjs/server';
-import debug from 'debug';
-import { ROLE_PERMISSIONS, ROLES, SHARE_TOKEN_HEADER } from '@/lib/constants';
-import { parseToken } from '@/lib/jwt';
-import { secret } from '@/lib/crypto';
-import { ensureArray } from '@/lib/utils';
-import { getUser, createUser } from '@/queries';
+import { auth, currentUser } from '@clerk/nextjs/server'
+import debug from 'debug'
+import { ROLE_PERMISSIONS, ROLES, SHARE_TOKEN_HEADER } from '@/lib/constants'
+import { parseToken } from '@/lib/jwt'
+import { secret } from '@/lib/crypto'
+import { ensureArray } from '@/lib/utils'
+import { getUser, createUser } from '@/queries'
 
-const log = debug('entrolytics:auth');
+const log = debug('entrolytics:auth')
 
 /**
  * Get current authenticated user
- * 
+ *
  * Uses Clerk's auth() function and syncs user to local database.
  * This function assumes the route is already protected by middleware.
- * 
+ *
  * @returns User object or null if not authenticated
  */
 export async function getCurrentUser() {
   try {
-    const { userId: clerkUserId } = await auth();
-    
+    const { userId: clerkUserId } = await auth()
+
     if (!clerkUserId) {
-      return null;
+      return null
     }
 
     // Get user from database using Clerk ID directly as primary key
-    let user = await getUser(clerkUserId);
-    
+    let user = await getUser(clerkUserId)
+
     // If user doesn't exist in our database, sync from Clerk
     if (!user) {
-      const clerkUser = await currentUser();
+      const clerkUser = await currentUser()
       if (clerkUser) {
-        user = await syncUserFromClerk(clerkUser);
+        user = await syncUserFromClerk(clerkUser)
       }
     }
-    
+
     if (user) {
-      user.isAdmin = user.role === ROLES.admin;
+      user.isAdmin = user.role === ROLES.admin
     }
 
-    return user;
+    return user
   } catch (error) {
-    log('getCurrentUser error:', error);
-    return null;
+    log('getCurrentUser error:', error)
+    return null
   }
 }
 
 /**
  * Legacy checkAuth function for backward compatibility
- * 
+ *
  * @param request - The incoming request (optional, for share token parsing)
  * @returns Authentication object with user, shareToken, and clerk data
  */
 export async function checkAuth(request?: Request) {
   try {
     // During build time, Clerk auth might not be available
-    if (!request || !request.url || typeof request.url !== 'string' || process.env.NEXT_PHASE === 'phase-production-build') {
-      return null;
+    if (
+      !request ||
+      !request.url ||
+      typeof request.url !== 'string' ||
+      process.env.NEXT_PHASE === 'phase-production-build'
+    ) {
+      return null
     }
 
-    const { userId: clerkUserId, orgId } = await auth();
-    const shareToken = request ? await parseShareToken(request.headers) : null;
-    
+    const { userId: clerkUserId, orgId } = await auth()
+    const shareToken = request ? await parseShareToken(request.headers) : null
+
     if (process.env.NODE_ENV === 'development') {
-      console.log('checkAuth:', { clerkUserId, orgId, shareToken, url: request?.url || 'build-time' });
+      console.log('checkAuth:', {
+        clerkUserId,
+        orgId,
+        shareToken,
+        url: request?.url || 'build-time',
+      })
     }
 
     // If no Clerk user and no share token, return null
     if (!clerkUserId && !shareToken) {
-      log('checkAuth: User not authorized');
-      return null;
+      log('checkAuth: User not authorized')
+      return null
     }
 
-    const user = clerkUserId ? await getCurrentUser() : null;
+    const user = clerkUserId ? await getCurrentUser() : null
 
     return {
       user,
       shareToken,
       clerkUserId,
       orgId,
-    };
+    }
   } catch (error) {
-    log('checkAuth error:', error);
-    return null;
+    log('checkAuth error:', error)
+    return null
   }
 }
 
@@ -100,17 +110,18 @@ async function syncUserFromClerk(clerkUser: any) {
       lastName: clerkUser.lastName,
       imageUrl: clerkUser.imageUrl,
       role: ROLES.user, // Default role
-      displayName: `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim() || 
-                   clerkUser.emailAddresses[0]?.emailAddress?.split('@')?.[0] || 
-                   'User',
-    };
+      displayName:
+        `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim() ||
+        clerkUser.emailAddresses[0]?.emailAddress?.split('@')?.[0] ||
+        'User',
+    }
 
-    const user = await createUser(userData);
-    log('User synced from Clerk:', user.id);
-    return user;
+    const user = await createUser(userData)
+    log('User synced from Clerk:', user.id)
+    return user
   } catch (error) {
-    log('Error syncing user from Clerk:', error);
-    throw error;
+    log('Error syncing user from Clerk:', error)
+    throw error
   }
 }
 
@@ -119,7 +130,7 @@ async function syncUserFromClerk(clerkUser: any) {
  * Maintains the existing permission system
  */
 export async function hasPermission(role: string, permission: string | string[]) {
-  return ensureArray(permission).some(e => ROLE_PERMISSIONS[role]?.includes(e));
+  return ensureArray(permission).some((e) => ROLE_PERMISSIONS[role]?.includes(e))
 }
 
 /**
@@ -128,10 +139,10 @@ export async function hasPermission(role: string, permission: string | string[])
  */
 export function parseShareToken(headers: Headers) {
   try {
-    return parseToken(headers.get(SHARE_TOKEN_HEADER), secret());
+    return parseToken(headers.get(SHARE_TOKEN_HEADER), secret())
   } catch (e) {
-    log('Share token parse error:', e);
-    return null;
+    log('Share token parse error:', e)
+    return null
   }
 }
 

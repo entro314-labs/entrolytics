@@ -1,10 +1,10 @@
-'use client';
-import { Column } from '@entro314labs/entro-zen';
-import { CompareTables } from './CompareTables';
-import { WebsiteControls } from '@/app/(main)/websites/[websiteId]/WebsiteControls';
-import { WebsiteMetricsBar } from '@/app/(main)/websites/[websiteId]/WebsiteMetricsBar';
-import { Panel } from '@/components/common/Panel';
-import { WebsiteChart } from '@/app/(main)/websites/[websiteId]/WebsiteChart';
+'use client'
+import { Column } from '@entro314labs/entro-zen'
+import { CompareTables } from './CompareTables'
+import { WebsiteControls } from '@/app/(main)/websites/[websiteId]/WebsiteControls'
+import { WebsiteMetricsBar } from '@/app/(main)/websites/[websiteId]/WebsiteMetricsBar'
+import { Panel } from '@/components/common/Panel'
+import { WebsiteChart } from '@/app/(main)/websites/[websiteId]/WebsiteChart'
 
 export function ComparePage({ websiteId }: { websiteId: string }) {
   return (
@@ -16,5 +16,5 @@ export function ComparePage({ websiteId }: { websiteId: string }) {
       </Panel>
       <CompareTables websiteId={websiteId} />
     </Column>
-  );
+  )
 }

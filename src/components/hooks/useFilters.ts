@@ -1,13 +1,13 @@
-import { FILTER_COLUMNS, OPERATORS } from '@/lib/constants';
-import { safeDecodeURIComponent } from '@/lib/url';
-import { useMessages } from './useMessages';
-import { useNavigation } from './useNavigation';
-import { useFields } from './useFields';
+import { FILTER_COLUMNS, OPERATORS } from '@/lib/constants'
+import { safeDecodeURIComponent } from '@/lib/url'
+import { useMessages } from './useMessages'
+import { useNavigation } from './useNavigation'
+import { useFields } from './useFields'
 
 export function useFilters() {
-  const { formatMessage, labels } = useMessages();
-  const { query } = useNavigation();
-  const { fields } = useFields();
+  const { formatMessage, labels } = useMessages()
+  const { query } = useNavigation()
+  const { fields } = useFields()
 
   const operators = [
     { name: 'eq', type: 'string', label: formatMessage(labels.is) },
@@ -27,7 +27,7 @@ export function useFilters() {
     { name: 'bf', type: 'date', label: formatMessage(labels.before) },
     { name: 'af', type: 'date', label: formatMessage(labels.after) },
     { name: 'eq', type: 'uuid', label: formatMessage(labels.is) },
-  ];
+  ]
 
   const operatorLabels = {
     [OPERATORS.equals]: formatMessage(labels.is),
@@ -44,7 +44,7 @@ export function useFilters() {
     [OPERATORS.lessThanEquals]: formatMessage(labels.lessThanEquals),
     [OPERATORS.before]: formatMessage(labels.before),
     [OPERATORS.after]: formatMessage(labels.after),
-  };
+  }
 
   const typeFilters = {
     string: [OPERATORS.equals, OPERATORS.notEquals, OPERATORS.contains, OPERATORS.doesNotContain],
@@ -60,19 +60,19 @@ export function useFilters() {
     ],
     date: [OPERATORS.before, OPERATORS.after],
     uuid: [OPERATORS.equals],
-  };
+  }
 
   const filters = Object.keys(query).reduce((arr, key) => {
     if (FILTER_COLUMNS[key]) {
-      let operator = 'eq';
-      let value = safeDecodeURIComponent(query[key]);
-      const label = fields.find(({ name }) => name === key)?.label;
+      let operator = 'eq'
+      let value = safeDecodeURIComponent(query[key])
+      const label = fields.find(({ name }) => name === key)?.label
 
-      const match = value.match(/^([a-z]+)\.(.*)/);
+      const match = value.match(/^([a-z]+)\.(.*)/)
 
       if (match) {
-        operator = match[1];
-        value = match[2];
+        operator = match[1]
+        value = match[2]
       }
 
       return arr.concat({
@@ -80,10 +80,10 @@ export function useFilters() {
         operator,
         value,
         label,
-      });
+      })
     }
-    return arr;
-  }, []);
+    return arr
+  }, [])
 
   const getFilters = (type: string) => {
     return (
@@ -92,8 +92,8 @@ export function useFilters() {
         value: key,
         label: operatorLabels[key],
       })) ?? []
-    );
-  };
+    )
+  }
 
-  return { fields, operators, filters, operatorLabels, typeFilters, getFilters };
+  return { fields, operators, filters, operatorLabels, typeFilters, getFilters }
 }

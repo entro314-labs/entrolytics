@@ -1,41 +1,41 @@
-import { useState } from 'react';
-import { Button, Select, ListItem, Row } from '@entro314labs/entro-zen';
-import { useLocale, useMessages } from '@/components/hooks';
-import { DEFAULT_LOCALE } from '@/lib/constants';
-import { languages } from '@/lib/lang';
+import { useState } from 'react'
+import { Button, Select, ListItem, Row } from '@entro314labs/entro-zen'
+import { useLocale, useMessages } from '@/components/hooks'
+import { DEFAULT_LOCALE } from '@/lib/constants'
+import { languages } from '@/lib/lang'
 
 export function LanguageSetting() {
-  const [search, setSearch] = useState('');
-  const { formatMessage, labels } = useMessages();
-  const { locale, saveLocale } = useLocale();
+  const [search, setSearch] = useState('')
+  const { formatMessage, labels } = useMessages()
+  const { locale, saveLocale } = useLocale()
   const items = search
-    ? Object.keys(languages).filter(n => {
+    ? Object.keys(languages).filter((n) => {
         return (
           n.toLowerCase().includes(search.toLowerCase()) ||
           languages[n].label.toLowerCase().includes(search.toLowerCase())
-        );
+        )
       })
-    : Object.keys(languages);
+    : Object.keys(languages)
 
-  const handleReset = () => saveLocale(DEFAULT_LOCALE);
+  const handleReset = () => saveLocale(DEFAULT_LOCALE)
 
   const handleOpen = (isOpen: boolean) => {
     if (isOpen) {
-      setSearch('');
+      setSearch('')
     }
-  };
+  }
 
   return (
     <Row gap="3">
       <Select
         value={locale}
-        onChange={val => saveLocale(val as string)}
+        onChange={(val) => saveLocale(val as string)}
         allowSearch
         onSearch={setSearch}
         onOpenChange={handleOpen}
         listProps={{ style: { maxHeight: 300 } }}
       >
-        {items.map(item => (
+        {items.map((item) => (
           <ListItem key={item} id={item}>
             {languages[item].label}
           </ListItem>
@@ -44,5 +44,5 @@ export function LanguageSetting() {
       </Select>
       <Button onPress={handleReset}>{formatMessage(labels.reset)}</Button>
     </Row>
-  );
+  )
 }

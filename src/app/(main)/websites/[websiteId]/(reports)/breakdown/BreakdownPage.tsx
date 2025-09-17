@@ -1,19 +1,28 @@
-'use client';
-import { useState } from 'react';
-import { Button, Column, Box, Text, Icon, DialogTrigger, Modal, Dialog } from '@entro314labs/entro-zen';
-import { useDateRange, useMessages } from '@/components/hooks';
-import { ListCheck } from '@/components/icons';
-import { Panel } from '@/components/common/Panel';
-import { Breakdown } from './Breakdown';
-import { WebsiteControls } from '@/app/(main)/websites/[websiteId]/WebsiteControls';
-import { FieldSelectForm } from '@/app/(main)/websites/[websiteId]/(reports)/breakdown/FieldSelectForm';
-import { SectionHeader } from '@/components/common/SectionHeader';
+'use client'
+import { useState } from 'react'
+import {
+  Button,
+  Column,
+  Box,
+  Text,
+  Icon,
+  DialogTrigger,
+  Modal,
+  Dialog,
+} from '@entro314labs/entro-zen'
+import { useDateRange, useMessages } from '@/components/hooks'
+import { ListCheck } from '@/components/icons'
+import { Panel } from '@/components/common/Panel'
+import { Breakdown } from './Breakdown'
+import { WebsiteControls } from '@/app/(main)/websites/[websiteId]/WebsiteControls'
+import { FieldSelectForm } from '@/app/(main)/websites/[websiteId]/(reports)/breakdown/FieldSelectForm'
+import { SectionHeader } from '@/components/common/SectionHeader'
 
 export function BreakdownPage({ websiteId }: { websiteId: string }) {
   const {
     dateRange: { startDate, endDate },
-  } = useDateRange(websiteId);
-  const [fields, setFields] = useState(['path']);
+  } = useDateRange(websiteId)
+  const [fields, setFields] = useState(['path'])
 
   return (
     <Column gap>
@@ -30,11 +39,11 @@ export function BreakdownPage({ websiteId }: { websiteId: string }) {
         />
       </Panel>
     </Column>
-  );
+  )
 }
 
 const FieldsButton = ({ value, onChange }) => {
-  const { formatMessage, labels } = useMessages();
+  const { formatMessage, labels } = useMessages()
 
   return (
     <Box>
@@ -54,5 +63,5 @@ const FieldsButton = ({ value, onChange }) => {
         </Modal>
       </DialogTrigger>
     </Box>
-  );
-};
+  )
+}

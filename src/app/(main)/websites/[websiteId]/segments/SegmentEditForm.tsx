@@ -7,10 +7,10 @@ import {
   TextField,
   Loading,
   Label,
-} from '@entro314labs/entro-zen';
-import { FieldFilters } from '@/components/input/FieldFilters';
-import { useMessages, useUpdateQuery, useWebsiteSegmentQuery } from '@/components/hooks';
-import { messages } from '@/components/messages';
+} from '@entro314labs/entro-zen'
+import { FieldFilters } from '@/components/input/FieldFilters'
+import { useMessages, useUpdateQuery, useWebsiteSegmentQuery } from '@/components/hooks'
+import { messages } from '@/components/messages'
 
 export function SegmentEditForm({
   segmentId,
@@ -20,36 +20,36 @@ export function SegmentEditForm({
   onSave,
   onClose,
 }: {
-  segmentId?: string;
-  websiteId: string;
-  filters?: any[];
-  showFilters?: boolean;
-  onSave?: () => void;
-  onClose?: () => void;
+  segmentId?: string
+  websiteId: string
+  filters?: any[]
+  showFilters?: boolean
+  onSave?: () => void
+  onClose?: () => void
 }) {
-  const { data } = useWebsiteSegmentQuery(websiteId, segmentId);
-  const { formatMessage, labels } = useMessages();
+  const { data } = useWebsiteSegmentQuery(websiteId, segmentId)
+  const { formatMessage, labels } = useMessages()
 
   const { mutate, error, isPending, touch, toast } = useUpdateQuery(
     `/websites/${websiteId}/segments${segmentId ? `/${segmentId}` : ''}`,
     {
       type: 'segment',
-    },
-  );
+    }
+  )
 
   const handleSubmit = async (formData: any) => {
     mutate(formData, {
       onSuccess: async () => {
-        toast(formatMessage(messages.saved));
-        touch('segments');
-        onSave?.();
-        onClose?.();
+        toast(formatMessage(messages.saved))
+        touch('segments')
+        onSave?.()
+        onClose?.()
       },
-    });
-  };
+    })
+  }
 
   if (segmentId && !data) {
-    return <Loading position="page" />;
+    return <Loading position="page" />
   }
 
   return (
@@ -78,5 +78,5 @@ export function SegmentEditForm({
         </FormSubmitButton>
       </FormButtons>
     </Form>
-  );
+  )
 }

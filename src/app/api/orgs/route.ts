@@ -1,27 +1,27 @@
-import { z } from 'zod';
-import { getRandomChars } from '@/lib/crypto';
-import { unauthorized, json } from '@/lib/response';
-import { canCreateOrg } from '@/validations';
-import { uuid } from '@/lib/crypto';
-import { parseRequest } from '@/lib/request';
-import { createOrg } from '@/queries';
+import { z } from 'zod'
+import { getRandomChars } from '@/lib/crypto'
+import { unauthorized, json } from '@/lib/response'
+import { canCreateOrg } from '@/validations'
+import { uuid } from '@/lib/crypto'
+import { parseRequest } from '@/lib/request'
+import { createOrg } from '@/queries'
 
 export async function POST(request: Request) {
   const schema = z.object({
     name: z.string().max(50),
-  });
+  })
 
-  const { auth, body, error } = await parseRequest(request, schema);
+  const { auth, body, error } = await parseRequest(request, schema)
 
   if (error) {
-    return error();
+    return error()
   }
 
   if (!(await canCreateOrg(auth))) {
-    return unauthorized();
+    return unauthorized()
   }
 
-  const { name } = body;
+  const { name } = body
 
   const org = await createOrg(
     {
@@ -29,8 +29,8 @@ export async function POST(request: Request) {
       name,
       accessCode: `org_${getRandomChars(16)}`,
     },
-    auth.user.id,
-  );
+    auth.user.id
+  )
 
-  return json(org);
+  return json(org)
 }

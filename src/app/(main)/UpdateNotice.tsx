@@ -1,16 +1,16 @@
-import { useEffect, useCallback, useState } from 'react';
-import { Button, AlertBanner, Flexbox } from '@entro314labs/entro-zen';
-import { setItem } from '@/lib/storage';
-import { useVersion, checkVersion } from '@/store/version';
-import { REPO_URL, VERSION_CHECK } from '@/lib/constants';
-import { useMessages } from '@/components/hooks';
-import { usePathname } from 'next/navigation';
+import { useEffect, useCallback, useState } from 'react'
+import { Button, AlertBanner, Flexbox } from '@entro314labs/entro-zen'
+import { setItem } from '@/lib/storage'
+import { useVersion, checkVersion } from '@/store/version'
+import { REPO_URL, VERSION_CHECK } from '@/lib/constants'
+import { useMessages } from '@/components/hooks'
+import { usePathname } from 'next/navigation'
 
 export function UpdateNotice({ user, config }) {
-  const { formatMessage, labels, messages } = useMessages();
-  const { latest, checked, hasUpdate, releaseUrl } = useVersion();
-  const pathname = usePathname();
-  const [dismissed, setDismissed] = useState(checked);
+  const { formatMessage, labels, messages } = useMessages()
+  const { latest, checked, hasUpdate, releaseUrl } = useVersion()
+  const pathname = usePathname()
+  const [dismissed, setDismissed] = useState(checked)
 
   const allowUpdate =
     process.env.NODE_ENV === 'production' &&
@@ -19,31 +19,31 @@ export function UpdateNotice({ user, config }) {
     !config?.privateMode &&
     !pathname.includes('/share/') &&
     !process.env.cloudMode &&
-    !dismissed;
+    !dismissed
 
   const updateCheck = useCallback(() => {
-    setItem(VERSION_CHECK, { version: latest, time: Date.now() });
-  }, [latest]);
+    setItem(VERSION_CHECK, { version: latest, time: Date.now() })
+  }, [latest])
 
   function handleViewClick() {
-    updateCheck();
-    setDismissed(true);
-    open(releaseUrl || REPO_URL, '_blank');
+    updateCheck()
+    setDismissed(true)
+    open(releaseUrl || REPO_URL, '_blank')
   }
 
   function handleDismissClick() {
-    updateCheck();
-    setDismissed(true);
+    updateCheck()
+    setDismissed(true)
   }
 
   useEffect(() => {
     if (allowUpdate) {
-      checkVersion();
+      checkVersion()
     }
-  }, [allowUpdate]);
+  }, [allowUpdate])
 
   if (!allowUpdate || !hasUpdate) {
-    return null;
+    return null
   }
 
   return (
@@ -55,5 +55,5 @@ export function UpdateNotice({ user, config }) {
         <Button onPress={handleDismissClick}>{formatMessage(labels.dismiss)}</Button>
       </AlertBanner>
     </Flexbox>
-  );
+  )
 }

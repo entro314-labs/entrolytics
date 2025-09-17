@@ -1,5 +1,5 @@
-import { ReactNode } from 'react';
-import { Heading, Icon, Row, RowProps, Text, Column } from '@entro314labs/entro-zen';
+import { ReactNode } from 'react'
+import { Heading, Icon, Row, RowProps, Text, Column } from '@entro314labs/entro-zen'
 
 export function PageHeader({
   title,
@@ -9,13 +9,13 @@ export function PageHeader({
   children,
   ...props
 }: {
-  title: string;
-  description?: string;
-  icon?: ReactNode;
-  showBorder?: boolean;
-  allowEdit?: boolean;
-  className?: string;
-  children?: ReactNode;
+  title: string
+  description?: string
+  icon?: ReactNode
+  showBorder?: boolean
+  allowEdit?: boolean
+  className?: string
+  children?: ReactNode
 } & RowProps) {
   return (
     <Row
@@ -39,5 +39,5 @@ export function PageHeader({
       </Column>
       <Row justifyContent="flex-end">{children}</Row>
     </Row>
-  );
+  )
 }

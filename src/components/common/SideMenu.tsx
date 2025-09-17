@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode } from 'react'
 import {
   Text,
   Heading,
@@ -9,15 +9,15 @@ import {
   Column,
   NavMenuGroup,
   NavMenuProps,
-} from '@entro314labs/entro-zen';
-import Link from 'next/link';
+} from '@entro314labs/entro-zen'
+import Link from 'next/link'
 
 export interface SideMenuProps extends NavMenuProps {
-  items: { label: string; items: { id: string; label: string; icon?: any; path: string }[] }[];
-  title?: string;
-  selectedKey?: string;
-  allowMinimize?: boolean;
-  children?: ReactNode;
+  items: { label: string; items: { id: string; label: string; icon?: any; path: string }[] }[]
+  title?: string
+  selectedKey?: string
+  allowMinimize?: boolean
+  children?: ReactNode
 }
 
 export function SideMenu({
@@ -56,7 +56,7 @@ export function SideMenu({
               marginBottom="3"
             >
               {items?.map(({ id, label, icon, path }) => {
-                const isSelected = selectedKey === id;
+                const isSelected = selectedKey === id
 
                 return (
                   <Link key={id} href={path}>
@@ -67,12 +67,12 @@ export function SideMenu({
                       </Row>
                     </NavMenuItem>
                   </Link>
-                );
+                )
               })}
             </NavMenuGroup>
-          );
+          )
         })}
       </NavMenu>
     </Column>
-  );
+  )
 }

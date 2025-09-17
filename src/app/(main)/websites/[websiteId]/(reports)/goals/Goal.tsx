@@ -1,36 +1,36 @@
-import { Grid, Row, Column, Text, Icon, ProgressBar, Dialog } from '@entro314labs/entro-zen';
-import { ReportEditButton } from '@/components/input/ReportEditButton';
-import { useMessages, useResultQuery } from '@/components/hooks';
-import { File, Lightning, User } from '@/components/icons';
-import { LoadingPanel } from '@/components/common/LoadingPanel';
-import { formatLongNumber } from '@/lib/format';
-import { GoalEditForm } from './GoalEditForm';
+import { Grid, Row, Column, Text, Icon, ProgressBar, Dialog } from '@entro314labs/entro-zen'
+import { ReportEditButton } from '@/components/input/ReportEditButton'
+import { useMessages, useResultQuery } from '@/components/hooks'
+import { File, Lightning, User } from '@/components/icons'
+import { LoadingPanel } from '@/components/common/LoadingPanel'
+import { formatLongNumber } from '@/lib/format'
+import { GoalEditForm } from './GoalEditForm'
 
 export interface GoalProps {
-  id: string;
-  name: string;
-  type: string;
+  id: string
+  name: string
+  type: string
   parameters: {
-    name: string;
-    type: string;
-    value: string;
-  };
-  websiteId: string;
-  startDate: Date;
-  endDate: Date;
+    name: string
+    type: string
+    value: string
+  }
+  websiteId: string
+  startDate: Date
+  endDate: Date
 }
 
-export type GoalData = { num: number; total: number };
+export type GoalData = { num: number; total: number }
 
 export function Goal({ id, name, type, parameters, websiteId, startDate, endDate }: GoalProps) {
-  const { formatMessage, labels } = useMessages();
+  const { formatMessage, labels } = useMessages()
   const { data, error, isLoading, isFetching } = useResultQuery<GoalData>(type, {
     websiteId,
     startDate,
     endDate,
     ...parameters,
-  });
-  const isPage = parameters?.type === 'path';
+  })
+  const isPage = parameters?.type === 'path'
 
   return (
     <LoadingPanel data={data} isLoading={isLoading} isFetching={isFetching} error={error}>
@@ -55,7 +55,7 @@ export function Goal({ id, name, type, parameters, websiteId, startDate, endDate
                     >
                       <GoalEditForm id={id} websiteId={websiteId} onClose={close} />
                     </Dialog>
-                  );
+                  )
                 }}
               </ReportEditButton>
             </Column>
@@ -76,7 +76,7 @@ export function Goal({ id, name, type, parameters, websiteId, startDate, endDate
                 <User />
               </Icon>
               <Text title={`${data?.num} / ${data?.total}`}>{`${formatLongNumber(
-                data?.num,
+                data?.num
               )} / ${formatLongNumber(data?.total)}`}</Text>
             </Row>
           </Row>
@@ -94,5 +94,5 @@ export function Goal({ id, name, type, parameters, websiteId, startDate, endDate
         </Grid>
       )}
     </LoadingPanel>
-  );
+  )
 }

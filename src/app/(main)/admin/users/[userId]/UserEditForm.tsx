@@ -7,26 +7,26 @@ import {
   TextField,
   FormSubmitButton,
   PasswordField,
-} from '@entro314labs/entro-zen';
-import { useLoginQuery, useMessages, useUpdateQuery, useUser } from '@/components/hooks';
-import { ROLES } from '@/lib/constants';
+} from '@entro314labs/entro-zen'
+import { useLoginQuery, useMessages, useUpdateQuery, useUser } from '@/components/hooks'
+import { ROLES } from '@/lib/constants'
 
 export function UserEditForm({ userId, onSave }: { userId: string; onSave?: () => void }) {
-  const { formatMessage, labels, messages, getMessage } = useMessages();
-  const user = useUser();
-  const { user: login } = useLoginQuery();
+  const { formatMessage, labels, messages, getMessage } = useMessages()
+  const user = useUser()
+  const { user: login } = useLoginQuery()
 
-  const { mutate, error, toast, touch } = useUpdateQuery(`/users/${userId}`);
+  const { mutate, error, toast, touch } = useUpdateQuery(`/users/${userId}`)
 
   const handleSubmit = async (data: any) => {
     mutate(data, {
       onSuccess: async () => {
-        toast(formatMessage(messages.saved));
-        touch(`user:${user.id}`);
-        onSave?.();
+        toast(formatMessage(messages.saved))
+        touch(`user:${user.id}`)
+        onSave?.()
       },
-    });
-  };
+    })
+  }
 
   return (
     <Form onSubmit={handleSubmit} error={getMessage(error)} values={user}>
@@ -68,5 +68,5 @@ export function UserEditForm({ userId, onSave }: { userId: string; onSave?: () =
         </FormSubmitButton>
       </FormButtons>
     </Form>
-  );
+  )
 }

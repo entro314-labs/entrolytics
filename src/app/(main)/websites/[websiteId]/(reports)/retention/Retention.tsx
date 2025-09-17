@@ -1,33 +1,33 @@
-import { ReactNode } from 'react';
-import { Grid, Row, Column, Text, Icon } from '@entro314labs/entro-zen';
-import { Users } from '@/components/icons';
-import { useMessages, useLocale, useResultQuery } from '@/components/hooks';
-import { formatDate } from '@/lib/date';
-import { formatLongNumber } from '@/lib/format';
-import { Panel } from '@/components/common/Panel';
-import { LoadingPanel } from '@/components/common/LoadingPanel';
+import { ReactNode } from 'react'
+import { Grid, Row, Column, Text, Icon } from '@entro314labs/entro-zen'
+import { Users } from '@/components/icons'
+import { useMessages, useLocale, useResultQuery } from '@/components/hooks'
+import { formatDate } from '@/lib/date'
+import { formatLongNumber } from '@/lib/format'
+import { Panel } from '@/components/common/Panel'
+import { LoadingPanel } from '@/components/common/LoadingPanel'
 
-const DAYS = [1, 2, 3, 4, 5, 6, 7, 14, 21, 28];
+const DAYS = [1, 2, 3, 4, 5, 6, 7, 14, 21, 28]
 
 export interface RetentionProps {
-  websiteId: string;
-  startDate: Date;
-  endDate: Date;
-  days?: number[];
+  websiteId: string
+  startDate: Date
+  endDate: Date
+  days?: number[]
 }
 
 export function Retention({ websiteId, days = DAYS, startDate, endDate }: RetentionProps) {
-  const { formatMessage, labels } = useMessages();
-  const { locale } = useLocale();
+  const { formatMessage, labels } = useMessages()
+  const { locale } = useLocale()
   const { data, error, isLoading } = useResultQuery('retention', {
     websiteId,
     startDate,
     endDate,
-  });
+  })
 
   const rows =
     data?.reduce((arr: any[], row: { date: any; visitors: any; day: any }) => {
-      const { date, visitors, day } = row;
+      const { date, visitors, day } = row
       if (day === 0) {
         return arr.concat({
           date,
@@ -35,17 +35,17 @@ export function Retention({ websiteId, days = DAYS, startDate, endDate }: Retent
           records: days
             .reduce((arr, day) => {
               arr[day] = data.find(
-                (x: { date: any; day: number }) => x.date === date && x.day === day,
-              );
-              return arr;
+                (x: { date: any; day: number }) => x.date === date && x.day === day
+              )
+              return arr
             }, [])
-            .filter(n => n),
-        });
+            .filter((n) => n),
+        })
       }
-      return arr;
-    }, []) || [];
+      return arr
+    }, []) || []
 
-  const totalDays = rows.length;
+  const totalDays = rows.length
 
   return (
     <LoadingPanel data={data} isLoading={isLoading} error={error}>
@@ -64,7 +64,7 @@ export function Retention({ websiteId, days = DAYS, startDate, endDate }: Retent
                   {formatMessage(labels.cohort)}
                 </Text>
               </Column>
-              {days.map(n => (
+              {days.map((n) => (
                 <Column key={n}>
                   <Text weight="bold" align="center" wrap="nowrap">
                     {formatMessage(labels.day)} {n}
@@ -84,23 +84,23 @@ export function Retention({ websiteId, days = DAYS, startDate, endDate }: Retent
                       <Text>{formatLongNumber(visitors)}</Text>
                     </Row>
                   </Column>
-                  {days.map(day => {
+                  {days.map((day) => {
                     if (totalDays - rowIndex < day) {
-                      return null;
+                      return null
                     }
-                    const percentage = records.filter(a => a.day === day)[0]?.percentage;
+                    const percentage = records.filter((a) => a.day === day)[0]?.percentage
                     return (
                       <Cell key={day}>{percentage ? `${Number(percentage).toFixed(2)}%` : ''}</Cell>
-                    );
+                    )
                   })}
                 </Grid>
-              );
+              )
             })}
           </Column>
         </Panel>
       )}
     </LoadingPanel>
-  );
+  )
 }
 
 const Cell = ({ children }: { children: ReactNode }) => {
@@ -115,5 +115,5 @@ const Cell = ({ children }: { children: ReactNode }) => {
     >
       {children}
     </Column>
-  );
-};
+  )
+}

@@ -1,16 +1,25 @@
-import { useState } from 'react';
-import Link from 'next/link';
-import { Row, Text, Icon, DataTable, DataColumn, MenuItem, Modal, Dialog } from '@entro314labs/entro-zen';
-import { Trash, Users } from '@/components/icons';
-import { useMessages } from '@/components/hooks';
-import { Edit } from '@/components/icons';
-import { MenuButton } from '@/components/input/MenuButton';
-import { DateDistance } from '@/components/common/DateDistance';
-import { WebsiteDeleteForm } from '@/app/(main)/websites/[websiteId]/settings/WebsiteDeleteForm';
+import { useState } from 'react'
+import Link from 'next/link'
+import {
+  Row,
+  Text,
+  Icon,
+  DataTable,
+  DataColumn,
+  MenuItem,
+  Modal,
+  Dialog,
+} from '@entro314labs/entro-zen'
+import { Trash, Users } from '@/components/icons'
+import { useMessages } from '@/components/hooks'
+import { Edit } from '@/components/icons'
+import { MenuButton } from '@/components/input/MenuButton'
+import { DateDistance } from '@/components/common/DateDistance'
+import { WebsiteDeleteForm } from '@/app/(main)/websites/[websiteId]/settings/WebsiteDeleteForm'
 
 export function AdminWebsitesTable({ data = [] }: { data: any[] }) {
-  const { formatMessage, labels } = useMessages();
-  const [deleteWebsite, setDeleteWebsite] = useState(null);
+  const { formatMessage, labels } = useMessages()
+  const [deleteWebsite, setDeleteWebsite] = useState(null)
 
   return (
     <>
@@ -37,13 +46,13 @@ export function AdminWebsitesTable({ data = [] }: { data: any[] }) {
                     <Link href={`/admin/orgs/${row?.org?.id}`}>{row?.org?.name}</Link>
                   </Text>
                 </Row>
-              );
+              )
             }
             return (
               <Text truncate>
                 <Link href={`/admin/users/${row?.user?.id}`}>{row?.user?.username}</Link>
               </Text>
-            );
+            )
           }}
         </DataColumn>
         <DataColumn id="created" label={formatMessage(labels.created)} width="180px">
@@ -51,7 +60,7 @@ export function AdminWebsitesTable({ data = [] }: { data: any[] }) {
         </DataColumn>
         <DataColumn id="action" align="end" width="50px">
           {(row: any) => {
-            const { id } = row;
+            const { id } = row
 
             return (
               <MenuButton>
@@ -76,7 +85,7 @@ export function AdminWebsitesTable({ data = [] }: { data: any[] }) {
                   </Row>
                 </MenuItem>
               </MenuButton>
-            );
+            )
           }}
         </DataColumn>
       </DataTable>
@@ -86,5 +95,5 @@ export function AdminWebsitesTable({ data = [] }: { data: any[] }) {
         </Dialog>
       </Modal>
     </>
-  );
+  )
 }

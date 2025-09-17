@@ -1,9 +1,9 @@
-import { Column, Row } from '@entro314labs/entro-zen';
-import { WebsiteFilterButton } from '@/app/(main)/websites/[websiteId]/WebsiteFilterButton';
-import { WebsiteDateFilter } from '@/components/input/WebsiteDateFilter';
-import { FilterBar } from '@/components/input/FilterBar';
-import { WebsiteMonthSelect } from '@/components/input/WebsiteMonthSelect';
-import { ExportButton } from '@/components/input/ExportButton';
+import { Column, Row } from '@entro314labs/entro-zen'
+import { WebsiteFilterButton } from '@/app/(main)/websites/[websiteId]/WebsiteFilterButton'
+import { WebsiteDateFilter } from '@/components/input/WebsiteDateFilter'
+import { FilterBar } from '@/components/input/FilterBar'
+import { WebsiteMonthSelect } from '@/components/input/WebsiteMonthSelect'
+import { ExportButton } from '@/components/input/ExportButton'
 
 export function PixelControls({
   pixelId: websiteId,
@@ -12,11 +12,11 @@ export function PixelControls({
   allowMonthFilter,
   allowDownload = false,
 }: {
-  pixelId: string;
-  allowFilter?: boolean;
-  allowDateFilter?: boolean;
-  allowMonthFilter?: boolean;
-  allowDownload?: boolean;
+  pixelId: string
+  allowFilter?: boolean
+  allowDateFilter?: boolean
+  allowMonthFilter?: boolean
+  allowDownload?: boolean
 }) {
   return (
     <Column gap>
@@ -28,5 +28,5 @@ export function PixelControls({
       </Row>
       {allowFilter && <FilterBar websiteId={websiteId} />}
     </Column>
-  );
+  )
 }

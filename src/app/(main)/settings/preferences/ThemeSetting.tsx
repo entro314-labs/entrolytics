@@ -1,8 +1,8 @@
-import { Row, Button, Icon, useTheme } from '@entro314labs/entro-zen';
-import { Sun, Moon } from '@/components/icons';
+import { Row, Button, Icon, useTheme } from '@entro314labs/entro-zen'
+import { Sun, Moon } from '@/components/icons'
 
 export function ThemeSetting() {
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme } = useTheme()
 
   return (
     <Row gap>
@@ -17,5 +17,5 @@ export function ThemeSetting() {
         </Icon>
       </Button>
     </Row>
-  );
+  )
 }

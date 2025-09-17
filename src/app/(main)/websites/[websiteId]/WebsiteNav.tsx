@@ -14,21 +14,21 @@ import {
   ChartPie,
   UserPlus,
   Compare,
-} from '@/components/icons';
-import { useMessages, useNavigation } from '@/components/hooks';
-import { SideMenu } from '@/components/common/SideMenu';
-import { WebsiteSelect } from '@/components/input/WebsiteSelect';
+} from '@/components/icons'
+import { useMessages, useNavigation } from '@/components/hooks'
+import { SideMenu } from '@/components/common/SideMenu'
+import { WebsiteSelect } from '@/components/input/WebsiteSelect'
 
 export function WebsiteNav({ websiteId }: { websiteId: string }) {
-  const { formatMessage, labels } = useMessages();
-  const { pathname, renderUrl, orgId } = useNavigation();
+  const { formatMessage, labels } = useMessages()
+  const { pathname, renderUrl, orgId } = useNavigation()
 
   const renderPath = (path: string) =>
     renderUrl(`/websites/${websiteId}${path}`, {
       event: undefined,
       compare: undefined,
       view: undefined,
-    });
+    })
 
   const items = [
     {
@@ -141,15 +141,15 @@ export function WebsiteNav({ websiteId }: { websiteId: string }) {
         },
       ],
     },
-  ];
+  ]
 
   const selectedKey =
-    items.flatMap(e => e.items).find(({ path }) => path && pathname.endsWith(path.split('?')[0]))
-      ?.id || 'overview';
+    items.flatMap((e) => e.items).find(({ path }) => path && pathname.endsWith(path.split('?')[0]))
+      ?.id || 'overview'
 
   return (
     <SideMenu items={items} selectedKey={selectedKey} allowMinimize={false}>
       <WebsiteSelect websiteId={websiteId} orgId={orgId} />
     </SideMenu>
-  );
+  )
 }

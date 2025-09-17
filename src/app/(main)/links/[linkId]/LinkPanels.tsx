@@ -1,20 +1,20 @@
-import { Grid, Tabs, Tab, TabList, TabPanel, Heading } from '@entro314labs/entro-zen';
-import { GridRow } from '@/components/common/GridRow';
-import { Panel } from '@/components/common/Panel';
-import { WorldMap } from '@/components/metrics/WorldMap';
-import { MetricsTable } from '@/components/metrics/MetricsTable';
-import { useMessages } from '@/components/hooks';
+import { Grid, Tabs, Tab, TabList, TabPanel, Heading } from '@entro314labs/entro-zen'
+import { GridRow } from '@/components/common/GridRow'
+import { Panel } from '@/components/common/Panel'
+import { WorldMap } from '@/components/metrics/WorldMap'
+import { MetricsTable } from '@/components/metrics/MetricsTable'
+import { useMessages } from '@/components/hooks'
 
 export function LinkPanels({ linkId }: { linkId: string }) {
-  const { formatMessage, labels } = useMessages();
+  const { formatMessage, labels } = useMessages()
   const tableProps = {
     websiteId: linkId,
     limit: 10,
     allowDownload: false,
     showMore: true,
     metric: formatMessage(labels.visitors),
-  };
-  const rowProps = { minHeight: 570 };
+  }
+  const rowProps = { minHeight: 570 }
 
   return (
     <Grid gap="3">
@@ -79,5 +79,5 @@ export function LinkPanels({ linkId }: { linkId: string }) {
         </Panel>
       </GridRow>
     </Grid>
-  );
+  )
 }

@@ -1,14 +1,14 @@
-import { ReactNode } from 'react';
-import { Row } from '@entro314labs/entro-zen';
+import { ReactNode } from 'react'
+import { Row } from '@entro314labs/entro-zen'
 
 export function TypeIcon({
   type,
   value,
   children,
 }: {
-  type: 'browser' | 'country' | 'device' | 'os';
-  value: string;
-  children?: ReactNode;
+  type: 'browser' | 'country' | 'device' | 'os'
+  value: string
+  children?: ReactNode
 }) {
   return (
     <Row gap="3" alignItems="center">
@@ -16,8 +16,8 @@ export function TypeIcon({
         src={`${process.env.basePath || ''}/images/${type}/${
           value?.replaceAll(' ', '-').toLowerCase() || 'unknown'
         }.png`}
-        onError={e => {
-          e.currentTarget.src = `${process.env.basePath || ''}/images/${type}/unknown.png`;
+        onError={(e) => {
+          e.currentTarget.src = `${process.env.basePath || ''}/images/${type}/unknown.png`
         }}
         alt={value}
         width={type === 'country' ? undefined : 16}
@@ -25,5 +25,5 @@ export function TypeIcon({
       />
       {children}
     </Row>
-  );
+  )
 }

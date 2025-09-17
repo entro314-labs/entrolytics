@@ -1,13 +1,13 @@
-'use client';
-import { ProfileSettings } from './ProfileSettings';
-import { useMessages } from '@/components/hooks';
-import { Panel } from '@/components/common/Panel';
-import { Column } from '@entro314labs/entro-zen';
-import { PageHeader } from '@/components/common/PageHeader';
-import { PageBody } from '@/components/common/PageBody';
+'use client'
+import { ProfileSettings } from './ProfileSettings'
+import { useMessages } from '@/components/hooks'
+import { Panel } from '@/components/common/Panel'
+import { Column } from '@entro314labs/entro-zen'
+import { PageHeader } from '@/components/common/PageHeader'
+import { PageBody } from '@/components/common/PageBody'
 
 export function ProfilePage() {
-  const { formatMessage, labels } = useMessages();
+  const { formatMessage, labels } = useMessages()
 
   return (
     <PageBody>
@@ -18,5 +18,5 @@ export function ProfilePage() {
         </Panel>
       </Column>
     </PageBody>
-  );
+  )
 }

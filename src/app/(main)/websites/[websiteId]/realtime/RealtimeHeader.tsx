@@ -1,11 +1,11 @@
-import { MetricCard } from '@/components/metrics/MetricCard';
-import { useMessages } from '@/components/hooks';
-import { RealtimeData } from '@/lib/types';
-import { MetricsBar } from '@/components/metrics/MetricsBar';
+import { MetricCard } from '@/components/metrics/MetricCard'
+import { useMessages } from '@/components/hooks'
+import { RealtimeData } from '@/lib/types'
+import { MetricsBar } from '@/components/metrics/MetricsBar'
 
 export function RealtimeHeader({ data }: { data: RealtimeData }) {
-  const { formatMessage, labels } = useMessages();
-  const { totals }: any = data || {};
+  const { formatMessage, labels } = useMessages()
+  const { totals }: any = data || {}
 
   return (
     <MetricsBar>
@@ -14,5 +14,5 @@ export function RealtimeHeader({ data }: { data: RealtimeData }) {
       <MetricCard label={formatMessage(labels.events)} value={totals.events} />
       <MetricCard label={formatMessage(labels.countries)} value={totals.countries} />
     </MetricsBar>
-  );
+  )
 }

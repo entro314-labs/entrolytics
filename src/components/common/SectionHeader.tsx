@@ -1,5 +1,5 @@
-import { ReactNode } from 'react';
-import { Heading, Icon, Row, Text, RowProps } from '@entro314labs/entro-zen';
+import { ReactNode } from 'react'
+import { Heading, Icon, Row, Text, RowProps } from '@entro314labs/entro-zen'
 
 export function SectionHeader({
   title,
@@ -8,12 +8,12 @@ export function SectionHeader({
   children,
   ...props
 }: {
-  title?: string;
-  description?: string;
-  icon?: ReactNode;
-  allowEdit?: boolean;
-  className?: string;
-  children?: ReactNode;
+  title?: string
+  description?: string
+  icon?: ReactNode
+  allowEdit?: boolean
+  className?: string
+  children?: ReactNode
 } & RowProps) {
   return (
     <Row {...props} justifyContent="space-between" alignItems="center" height="60px">
@@ -24,5 +24,5 @@ export function SectionHeader({
       </Row>
       <Row justifyContent="flex-end">{children}</Row>
     </Row>
-  );
+  )
 }

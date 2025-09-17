@@ -1,31 +1,31 @@
-import { Row } from '@entro314labs/entro-zen';
+import { Row } from '@entro314labs/entro-zen'
 import {
   useCountryNames,
   useLocale,
   useMessages,
   useRegionNames,
   useFormat,
-} from '@/components/hooks';
-import { FilterLink } from '@/components/common/FilterLink';
-import { TypeIcon } from '@/components/common/TypeIcon';
-import { Favicon } from '@/components/common/Favicon';
-import { GROUPED_DOMAINS } from '@/lib/constants';
+} from '@/components/hooks'
+import { FilterLink } from '@/components/common/FilterLink'
+import { TypeIcon } from '@/components/common/TypeIcon'
+import { Favicon } from '@/components/common/Favicon'
+import { GROUPED_DOMAINS } from '@/lib/constants'
 
 export interface MetricLabelProps {
-  type: string;
-  data: any;
-  onClick?: () => void;
+  type: string
+  data: any
+  onClick?: () => void
 }
 
 export function MetricLabel({ type, data }: MetricLabelProps) {
-  const { formatMessage, labels } = useMessages();
-  const { formatValue, formatCity } = useFormat();
-  const { locale } = useLocale();
-  const { countryNames } = useCountryNames(locale);
-  const { getRegionName } = useRegionNames(locale);
+  const { formatMessage, labels } = useMessages()
+  const { formatValue, formatCity } = useFormat()
+  const { locale } = useLocale()
+  const { countryNames } = useCountryNames(locale)
+  const { getRegionName } = useRegionNames(locale)
 
-  const { label, country, domain } = data;
-  const isType = ['browser', 'country', 'device', 'os'].includes(type);
+  const { label, country, domain } = data
+  const isType = ['browser', 'country', 'device', 'os'].includes(type)
 
   switch (type) {
     case 'browser':
@@ -36,10 +36,10 @@ export function MetricLabel({ type, data }: MetricLabelProps) {
           label={formatValue(label, 'browser')}
           icon={<TypeIcon type="browser" value={label} />}
         />
-      );
+      )
 
     case 'channel':
-      return formatMessage(labels[label]);
+      return formatMessage(labels[label])
 
     case 'city':
       return (
@@ -58,7 +58,7 @@ export function MetricLabel({ type, data }: MetricLabelProps) {
             )
           }
         />
-      );
+      )
 
     case 'region':
       return (
@@ -68,7 +68,7 @@ export function MetricLabel({ type, data }: MetricLabelProps) {
           label={getRegionName(label, country)}
           icon={<TypeIcon type="country" value={country} />}
         />
-      );
+      )
 
     case 'country':
       return (
@@ -78,7 +78,7 @@ export function MetricLabel({ type, data }: MetricLabelProps) {
           label={formatValue(label, 'country')}
           icon={<TypeIcon type="country" value={label} />}
         />
-      );
+      )
 
     case 'path':
     case 'entry':
@@ -92,7 +92,7 @@ export function MetricLabel({ type, data }: MetricLabelProps) {
             domain ? `${domain?.startsWith('http') ? domain : `https://${domain}`}${label}` : null
           }
         />
-      );
+      )
 
     case 'device':
       return (
@@ -102,7 +102,7 @@ export function MetricLabel({ type, data }: MetricLabelProps) {
           label={formatValue(label, 'device')}
           icon={<TypeIcon type="device" value={label?.toLowerCase()} />}
         />
-      );
+      )
 
     case 'referrer':
       return (
@@ -113,16 +113,16 @@ export function MetricLabel({ type, data }: MetricLabelProps) {
           label={!label && formatMessage(labels.none)}
           icon={<Favicon domain={label} />}
         />
-      );
+      )
 
     case 'domain':
       if (label === 'Other') {
-        return `(${formatMessage(labels.other)})`;
+        return `(${formatMessage(labels.other)})`
       } else {
-        const name = GROUPED_DOMAINS.find(({ domain }) => domain === label)?.name;
+        const name = GROUPED_DOMAINS.find(({ domain }) => domain === label)?.name
 
         if (!name) {
-          return null;
+          return null
         }
 
         return (
@@ -130,11 +130,11 @@ export function MetricLabel({ type, data }: MetricLabelProps) {
             <Favicon domain={label} />
             {name}
           </Row>
-        );
+        )
       }
 
     case 'language':
-      return formatValue(label, 'language');
+      return formatValue(label, 'language')
 
     default:
       return (
@@ -150,6 +150,6 @@ export function MetricLabel({ type, data }: MetricLabelProps) {
             )
           }
         />
-      );
+      )
   }
 }

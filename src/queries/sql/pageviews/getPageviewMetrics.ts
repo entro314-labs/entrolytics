@@ -1,18 +1,18 @@
-import clickhouse from '@/lib/clickhouse';
-import { EVENT_COLUMNS, EVENT_TYPE, FILTER_COLUMNS, SESSION_COLUMNS } from '@/lib/constants';
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db';
-import prisma from '@/lib/prisma';
-import { QueryFilters } from '@/lib/types';
+import clickhouse from '@/lib/clickhouse'
+import { EVENT_COLUMNS, EVENT_TYPE, FILTER_COLUMNS, SESSION_COLUMNS } from '@/lib/constants'
+import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
+import prisma from '@/lib/prisma'
+import { QueryFilters } from '@/lib/types'
 
 export interface PageviewMetricsParameters {
-  type: string;
-  limit?: number | string;
-  offset?: number | string;
+  type: string
+  limit?: number | string
+  offset?: number | string
 }
 
 export interface PageviewMetricsData {
-  x: string;
-  y: number;
+  x: string
+  y: number
 }
 
 export async function getPageviewMetrics(
@@ -21,37 +21,37 @@ export async function getPageviewMetrics(
   return runQuery({
     [PRISMA]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  });
+  })
 }
 
 async function relationalQuery(
   websiteId: string,
   parameters: PageviewMetricsParameters,
-  filters: QueryFilters,
+  filters: QueryFilters
 ): Promise<PageviewMetricsData[]> {
-  const { type, limit = 500, offset = 0 } = parameters;
-  let column = FILTER_COLUMNS[type] || type;
-  const { rawQuery, parseFilters } = prisma;
+  const { type, limit = 500, offset = 0 } = parameters
+  let column = FILTER_COLUMNS[type] || type
+  const { rawQuery, parseFilters } = prisma
   const { filterQuery, joinSessionQuery, cohortQuery, queryParams } = parseFilters(
     {
       ...filters,
       websiteId,
       eventType: column === 'event_name' ? EVENT_TYPE.customEvent : EVENT_TYPE.pageView,
     },
-    { joinSession: SESSION_COLUMNS.includes(type) },
-  );
+    { joinSession: SESSION_COLUMNS.includes(type) }
+  )
 
-  let entryExitQuery = '';
-  let excludeDomain = '';
+  let entryExitQuery = ''
+  let excludeDomain = ''
 
   if (column === 'referrer_domain') {
     excludeDomain = `and website_event.referrer_domain != website_event.hostname
-      and website_event.referrer_domain != ''`;
+      and website_event.referrer_domain != ''`
   }
 
   if (type === 'entry' || type === 'exit') {
-    const order = type === 'entry' ? 'asc' : 'desc';
-    column = `x.${column}`;
+    const order = type === 'entry' ? 'asc' : 'desc'
+    column = `x.${column}`
 
     entryExitQuery = `
       join (
@@ -65,7 +65,7 @@ async function relationalQuery(
         order by visit_id, created_at ${order}
       ) x
       on x.visit_id = website_event.visit_id
-    `;
+    `
   }
 
   return rawQuery(
@@ -85,37 +85,37 @@ async function relationalQuery(
     limit ${limit}
     offset ${offset}
     `,
-    { ...queryParams, ...parameters },
-  );
+    { ...queryParams, ...parameters }
+  )
 }
 
 async function clickhouseQuery(
   websiteId: string,
   parameters: PageviewMetricsParameters,
-  filters: QueryFilters,
+  filters: QueryFilters
 ): Promise<{ x: string; y: number }[]> {
-  const { type, limit = 500, offset = 0 } = parameters;
-  let column = FILTER_COLUMNS[type] || type;
-  const { rawQuery, parseFilters } = clickhouse;
+  const { type, limit = 500, offset = 0 } = parameters
+  let column = FILTER_COLUMNS[type] || type
+  const { rawQuery, parseFilters } = clickhouse
   const { filterQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
     eventType: column === 'event_name' ? EVENT_TYPE.customEvent : EVENT_TYPE.pageView,
-  });
+  })
 
-  let sql = '';
-  let excludeDomain = '';
+  let sql = ''
+  let excludeDomain = ''
 
-  if (EVENT_COLUMNS.some(item => Object.keys(filters).includes(item))) {
-    let entryExitQuery = '';
+  if (EVENT_COLUMNS.some((item) => Object.keys(filters).includes(item))) {
+    let entryExitQuery = ''
 
     if (column === 'referrer_domain') {
-      excludeDomain = `and referrer_domain != hostname and referrer_domain != ''`;
+      excludeDomain = `and referrer_domain != hostname and referrer_domain != ''`
     }
 
     if (type === 'entry' || type === 'exit') {
-      const aggregrate = type === 'entry' ? 'argMin' : 'argMax';
-      column = `x.${column}`;
+      const aggregrate = type === 'entry' ? 'argMin' : 'argMax'
+      column = `x.${column}`
 
       entryExitQuery = `
       JOIN (select visit_id,
@@ -125,7 +125,7 @@ async function clickhouseQuery(
         and created_at between {startDate:DateTime64} and {endDate:DateTime64}
         and event_type = {eventType:UInt32}
       group by visit_id) x
-      ON x.visit_id = website_event.visit_id`;
+      ON x.visit_id = website_event.visit_id`
     }
 
     sql = `
@@ -142,25 +142,25 @@ async function clickhouseQuery(
     order by y desc
     limit ${limit}
     offset ${offset}
-    `;
+    `
   } else {
-    let groupByQuery = '';
-    let columnQuery = `arrayJoin(${column})`;
+    let groupByQuery = ''
+    let columnQuery = `arrayJoin(${column})`
 
     if (column === 'referrer_domain') {
-      excludeDomain = `and t != ''`;
+      excludeDomain = `and t != ''`
     }
 
     if (type === 'entry') {
-      columnQuery = `argMinMerge(entry_url)`;
+      columnQuery = `argMinMerge(entry_url)`
     }
 
     if (type === 'exit') {
-      columnQuery = `argMaxMerge(exit_url)`;
+      columnQuery = `argMaxMerge(exit_url)`
     }
 
     if (type === 'entry' || type === 'exit') {
-      groupByQuery = 'group by s';
+      groupByQuery = 'group by s'
     }
 
     sql = `
@@ -180,8 +180,8 @@ async function clickhouseQuery(
     order by y desc
     limit ${limit}
     offset ${offset}
-    `;
+    `
   }
 
-  return rawQuery(sql, { ...queryParams, ...parameters });
+  return rawQuery(sql, { ...queryParams, ...parameters })
 }

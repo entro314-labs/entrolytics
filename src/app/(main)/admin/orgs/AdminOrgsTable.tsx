@@ -1,21 +1,21 @@
-import { useState } from 'react';
-import { Row, Text, Icon, DataTable, DataColumn, MenuItem, Modal } from '@entro314labs/entro-zen';
-import Link from 'next/link';
-import { Trash } from '@/components/icons';
-import { useMessages } from '@/components/hooks';
-import { Edit } from '@/components/icons';
-import { MenuButton } from '@/components/input/MenuButton';
-import { DateDistance } from '@/components/common/DateDistance';
+import { useState } from 'react'
+import { Row, Text, Icon, DataTable, DataColumn, MenuItem, Modal } from '@entro314labs/entro-zen'
+import Link from 'next/link'
+import { Trash } from '@/components/icons'
+import { useMessages } from '@/components/hooks'
+import { Edit } from '@/components/icons'
+import { MenuButton } from '@/components/input/MenuButton'
+import { DateDistance } from '@/components/common/DateDistance'
 
 export function AdminOrgsTable({
   data = [],
   showActions = true,
 }: {
-  data: any[];
-  showActions?: boolean;
+  data: any[]
+  showActions?: boolean
 }) {
-  const { formatMessage, labels } = useMessages();
-  const [deleteUser, setDeleteUser] = useState(null);
+  const { formatMessage, labels } = useMessages()
+  const [deleteUser, setDeleteUser] = useState(null)
 
   return (
     <>
@@ -31,13 +31,13 @@ export function AdminOrgsTable({
         </DataColumn>
         <DataColumn id="owner" label={formatMessage(labels.owner)}>
           {(row: any) => {
-            const name = row?.members?.[0]?.user?.username;
+            const name = row?.members?.[0]?.user?.username
 
             return (
               <Text title={name} truncate>
                 <Link href={`/admin/users/${row?.members?.[0]?.user?.id}`}>{name}</Link>
               </Text>
-            );
+            )
           }}
         </DataColumn>
         <DataColumn id="created" label={formatMessage(labels.created)} width="160px">
@@ -46,7 +46,7 @@ export function AdminOrgsTable({
         {showActions && (
           <DataColumn id="action" align="end" width="50px">
             {(row: any) => {
-              const { id } = row;
+              const { id } = row
 
               return (
                 <MenuButton>
@@ -71,12 +71,12 @@ export function AdminOrgsTable({
                     </Row>
                   </MenuItem>
                 </MenuButton>
-              );
+              )
             }}
           </DataColumn>
         )}
       </DataTable>
       <Modal isOpen={!!deleteUser}></Modal>
     </>
-  );
+  )
 }

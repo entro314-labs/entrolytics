@@ -1,17 +1,17 @@
-import { useApi } from '../useApi';
-import { useFilterParameters } from '../useFilterParameters';
-import { ReactQueryOptions } from '@/lib/types';
-import { useDateParameters } from '@/components/hooks/useDateParameters';
+import { useApi } from '../useApi'
+import { useFilterParameters } from '../useFilterParameters'
+import { ReactQueryOptions } from '@/lib/types'
+import { useDateParameters } from '@/components/hooks/useDateParameters'
 
 export function useResultQuery<T = any>(
   type: string,
   params?: Record<string, any>,
-  options?: ReactQueryOptions<T>,
+  options?: ReactQueryOptions<T>
 ) {
-  const { websiteId, ...parameters } = params;
-  const { post, useQuery } = useApi();
-  const { startDate, endDate, timezone } = useDateParameters(websiteId);
-  const filters = useFilterParameters();
+  const { websiteId, ...parameters } = params
+  const { post, useQuery } = useApi()
+  const { startDate, endDate, timezone } = useDateParameters(websiteId)
+  const filters = useFilterParameters()
 
   return useQuery<T>({
     queryKey: [
@@ -40,5 +40,5 @@ export function useResultQuery<T = any>(
       }),
     enabled: !!type,
     ...options,
-  });
+  })
 }

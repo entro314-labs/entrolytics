@@ -1,6 +1,6 @@
-import { WebsitesTable } from './WebsitesTable';
-import { DataGrid } from '@/components/common/DataGrid';
-import { useUserWebsitesQuery } from '@/components/hooks';
+import { WebsitesTable } from './WebsitesTable'
+import { DataGrid } from '@/components/common/DataGrid'
+import { useUserWebsitesQuery } from '@/components/hooks'
 
 export function WebsitesDataTable({
   orgId,
@@ -8,12 +8,12 @@ export function WebsitesDataTable({
   allowView = true,
   showActions = true,
 }: {
-  orgId?: string;
-  allowEdit?: boolean;
-  allowView?: boolean;
-  showActions?: boolean;
+  orgId?: string
+  allowEdit?: boolean
+  allowView?: boolean
+  showActions?: boolean
 }) {
-  const queryResult = useUserWebsitesQuery({ orgId });
+  const queryResult = useUserWebsitesQuery({ orgId })
 
   return (
     <DataGrid query={queryResult} allowSearch allowPaging>
@@ -27,5 +27,5 @@ export function WebsitesDataTable({
         />
       )}
     </DataGrid>
-  );
+  )
 }

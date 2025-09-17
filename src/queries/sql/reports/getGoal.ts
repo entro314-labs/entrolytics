@@ -1,16 +1,16 @@
-import clickhouse from '@/lib/clickhouse';
-import { EVENT_TYPE } from '@/lib/constants';
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db';
-import prisma from '@/lib/prisma';
-import { QueryFilters } from '@/lib/types';
+import clickhouse from '@/lib/clickhouse'
+import { EVENT_TYPE } from '@/lib/constants'
+import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
+import prisma from '@/lib/prisma'
+import { QueryFilters } from '@/lib/types'
 
 export interface GoalParameters {
-  startDate: Date;
-  endDate: Date;
-  type: string;
-  value: string;
-  operator?: string;
-  property?: string;
+  startDate: Date
+  endDate: Date
+  type: string
+  value: string
+  operator?: string
+  property?: string
 }
 
 export async function getGoal(
@@ -19,18 +19,18 @@ export async function getGoal(
   return runQuery({
     [PRISMA]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  });
+  })
 }
 
 async function relationalQuery(
   websiteId: string,
   parameters: GoalParameters,
-  filters: QueryFilters,
+  filters: QueryFilters
 ) {
-  const { startDate, endDate, type, value } = parameters;
-  const { rawQuery, parseFilters } = prisma;
-  const eventType = type === 'path' ? EVENT_TYPE.pageView : EVENT_TYPE.customEvent;
-  const column = type === 'path' ? 'url_path' : 'event_name';
+  const { startDate, endDate, type, value } = parameters
+  const { rawQuery, parseFilters } = prisma
+  const eventType = type === 'path' ? EVENT_TYPE.pageView : EVENT_TYPE.customEvent
+  const column = type === 'path' ? 'url_path' : 'event_name'
   const { filterQuery, dateQuery, joinSessionQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
@@ -38,7 +38,7 @@ async function relationalQuery(
     startDate,
     endDate,
     eventType,
-  });
+  })
 
   return rawQuery(
     `
@@ -60,19 +60,19 @@ async function relationalQuery(
       ${dateQuery}
       ${filterQuery}
     `,
-    queryParams,
-  );
+    queryParams
+  )
 }
 
 async function clickhouseQuery(
   websiteId: string,
   parameters: GoalParameters,
-  filters: QueryFilters,
+  filters: QueryFilters
 ) {
-  const { startDate, endDate, type, value } = parameters;
-  const { rawQuery, parseFilters } = clickhouse;
-  const eventType = type === 'path' ? EVENT_TYPE.pageView : EVENT_TYPE.customEvent;
-  const column = type === 'path' ? 'url_path' : 'event_name';
+  const { startDate, endDate, type, value } = parameters
+  const { rawQuery, parseFilters } = clickhouse
+  const eventType = type === 'path' ? EVENT_TYPE.pageView : EVENT_TYPE.customEvent
+  const column = type === 'path' ? 'url_path' : 'event_name'
   const { filterQuery, dateQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
@@ -80,7 +80,7 @@ async function clickhouseQuery(
     startDate,
     endDate,
     eventType,
-  });
+  })
 
   return rawQuery(
     `
@@ -100,6 +100,6 @@ async function clickhouseQuery(
       ${dateQuery}
       ${filterQuery}
     `,
-    queryParams,
-  ).then(results => results?.[0]);
+    queryParams
+  ).then((results) => results?.[0])
 }

@@ -1,15 +1,15 @@
-import { Button, Icon, Row, Text, Select, ListItem } from '@entro314labs/entro-zen';
-import { isAfter } from 'date-fns';
-import { Chevron } from '@/components/icons';
-import { useDateRange, useMessages, useNavigation } from '@/components/hooks';
-import { DateFilter } from './DateFilter';
+import { Button, Icon, Row, Text, Select, ListItem } from '@entro314labs/entro-zen'
+import { isAfter } from 'date-fns'
+import { Chevron } from '@/components/icons'
+import { useDateRange, useMessages, useNavigation } from '@/components/hooks'
+import { DateFilter } from './DateFilter'
 
 export interface WebsiteDateFilterProps {
-  websiteId: string;
-  compare?: string;
-  showAllTime?: boolean;
-  showButtons?: boolean;
-  allowCompare?: boolean;
+  websiteId: string
+  compare?: string
+  showAllTime?: boolean
+  showButtons?: boolean
+  allowCompare?: boolean
 }
 
 export function WebsiteDateFilter({
@@ -18,30 +18,30 @@ export function WebsiteDateFilter({
   showButtons = true,
   allowCompare,
 }: WebsiteDateFilterProps) {
-  const { dateRange } = useDateRange(websiteId);
-  const { value, endDate } = dateRange;
-  const { formatMessage, labels } = useMessages();
+  const { dateRange } = useDateRange(websiteId)
+  const { value, endDate } = dateRange
+  const { formatMessage, labels } = useMessages()
   const {
     router,
     updateParams,
     query: { compare = 'prev', offset = 0 },
-  } = useNavigation();
-  const isAllTime = value === 'all';
-  const isCustomRange = value.startsWith('range');
+  } = useNavigation()
+  const isAllTime = value === 'all'
+  const isCustomRange = value.startsWith('range')
 
-  const disableForward = value === 'all' || isAfter(endDate, new Date());
+  const disableForward = value === 'all' || isAfter(endDate, new Date())
 
   const handleChange = (date: string) => {
-    router.push(updateParams({ date, offset: undefined }));
-  };
+    router.push(updateParams({ date, offset: undefined }))
+  }
 
   const handleIncrement = (increment: number) => {
-    router.push(updateParams({ offset: +offset + increment }));
-  };
+    router.push(updateParams({ offset: +offset + increment }))
+  }
 
   const handleSelect = (compare: any) => {
-    router.push(updateParams({ compare }));
-  };
+    router.push(updateParams({ compare }))
+  }
 
   return (
     <Row gap>
@@ -81,5 +81,5 @@ export function WebsiteDateFilter({
         </Row>
       )}
     </Row>
-  );
+  )
 }

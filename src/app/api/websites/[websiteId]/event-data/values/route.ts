@@ -1,40 +1,40 @@
-import { z } from 'zod';
-import { getQueryFilters, parseRequest } from '@/lib/request';
-import { unauthorized, json } from '@/lib/response';
-import { canViewWebsite } from '@/validations';
-import { getEventDataValues } from '@/queries';
+import { z } from 'zod'
+import { getQueryFilters, parseRequest } from '@/lib/request'
+import { unauthorized, json } from '@/lib/response'
+import { canViewWebsite } from '@/validations'
+import { getEventDataValues } from '@/queries'
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ websiteId: string }> },
+  { params }: { params: Promise<{ websiteId: string }> }
 ) {
   const schema = z.object({
     startAt: z.coerce.number().int(),
     endAt: z.coerce.number().int(),
     eventName: z.string().optional(),
     propertyName: z.string().optional(),
-  });
+  })
 
-  const { auth, query, error } = await parseRequest(request, schema);
+  const { auth, query, error } = await parseRequest(request, schema)
 
   if (error) {
-    return error();
+    return error()
   }
 
-  const { websiteId } = await params;
+  const { websiteId } = await params
 
   if (!(await canViewWebsite(auth, websiteId))) {
-    return unauthorized();
+    return unauthorized()
   }
 
-  const { eventName, propertyName } = query;
-  const filters = await getQueryFilters(query, websiteId);
+  const { eventName, propertyName } = query
+  const filters = await getQueryFilters(query, websiteId)
 
   const data = await getEventDataValues(websiteId, {
     ...filters,
     eventName,
     propertyName,
-  });
+  })
 
-  return json(data);
+  return json(data)
 }

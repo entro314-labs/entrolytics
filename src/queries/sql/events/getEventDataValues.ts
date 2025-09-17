@@ -1,11 +1,11 @@
-import prisma from '@/lib/prisma';
-import clickhouse from '@/lib/clickhouse';
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db';
-import { QueryFilters } from '@/lib/types';
+import prisma from '@/lib/prisma'
+import clickhouse from '@/lib/clickhouse'
+import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
+import { QueryFilters } from '@/lib/types'
 
 interface WebsiteEventData {
-  value: string;
-  total: number;
+  value: string
+  total: number
 }
 
 export async function getEventDataValues(
@@ -17,18 +17,18 @@ export async function getEventDataValues(
   return runQuery({
     [PRISMA]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  });
+  })
 }
 
 async function relationalQuery(
   websiteId: string,
-  filters: QueryFilters & { eventName?: string; propertyName?: string },
+  filters: QueryFilters & { eventName?: string; propertyName?: string }
 ) {
-  const { rawQuery, parseFilters, getDateSQL } = prisma;
+  const { rawQuery, parseFilters, getDateSQL } = prisma
   const { filterQuery, joinSessionQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
-  });
+  })
 
   return rawQuery(
     `
@@ -54,16 +54,16 @@ async function relationalQuery(
     order by 2 desc
     limit 100
     `,
-    queryParams,
-  );
+    queryParams
+  )
 }
 
 async function clickhouseQuery(
   websiteId: string,
-  filters: QueryFilters & { eventName?: string; propertyName?: string },
+  filters: QueryFilters & { eventName?: string; propertyName?: string }
 ): Promise<{ value: string; total: number }[]> {
-  const { rawQuery, parseFilters } = clickhouse;
-  const { filterQuery, cohortQuery, queryParams } = parseFilters({ ...filters, websiteId });
+  const { rawQuery, parseFilters } = clickhouse
+  const { filterQuery, cohortQuery, queryParams } = parseFilters({ ...filters, websiteId })
 
   return rawQuery(
     `
@@ -83,6 +83,6 @@ async function clickhouseQuery(
     order by 2 desc
     limit 100
     `,
-    queryParams,
-  );
+    queryParams
+  )
 }

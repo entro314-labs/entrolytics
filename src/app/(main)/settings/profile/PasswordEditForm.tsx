@@ -5,28 +5,28 @@ import {
   PasswordField,
   Button,
   FormSubmitButton,
-} from '@entro314labs/entro-zen';
-import { useMessages, useUpdateQuery } from '@/components/hooks';
+} from '@entro314labs/entro-zen'
+import { useMessages, useUpdateQuery } from '@/components/hooks'
 
 export function PasswordEditForm({ onSave, onClose }) {
-  const { formatMessage, labels, messages } = useMessages();
-  const { mutate, error, isPending } = useUpdateQuery('/me/password');
+  const { formatMessage, labels, messages } = useMessages()
+  const { mutate, error, isPending } = useUpdateQuery('/me/password')
 
   const handleSubmit = async (data: any) => {
     mutate(data, {
       onSuccess: async () => {
-        onSave();
-        onClose();
+        onSave()
+        onClose()
       },
-    });
-  };
+    })
+  }
 
   const samePassword = (value: string, values: Record<string, any>) => {
     if (value !== values.newPassword) {
-      return formatMessage(messages.noMatchPassword);
+      return formatMessage(messages.noMatchPassword)
     }
-    return true;
-  };
+    return true
+  }
 
   return (
     <Form onSubmit={handleSubmit} error={error}>
@@ -63,5 +63,5 @@ export function PasswordEditForm({ onSave, onClose }) {
         <FormSubmitButton isDisabled={isPending}>{formatMessage(labels.save)}</FormSubmitButton>
       </FormButtons>
     </Form>
-  );
+  )
 }

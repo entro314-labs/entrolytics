@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl';
+import { defineMessages } from 'react-intl'
 
 export const labels = defineMessages({
   ok: { id: 'label.ok', defaultMessage: 'OK' },
@@ -359,7 +359,7 @@ export const labels = defineMessages({
   invalidUrl: { id: 'label.invalid-url', defaultMessage: 'Invalid URL' },
   environment: { id: 'label.environment', defaultMessage: 'Environment' },
   criteria: { id: 'label.criteria', defaultMessage: 'Criteria' },
-});
+})
 
 export const messages = defineMessages({
   error: { id: 'message.error', defaultMessage: 'Something went wrong.' },
@@ -511,4 +511,4 @@ export const messages = defineMessages({
     id: 'message.sever-error',
     defaultMessage: 'Server error',
   },
-});
+})

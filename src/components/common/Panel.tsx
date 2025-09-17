@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from 'react'
 import {
   Column,
   type ColumnProps,
@@ -8,14 +8,14 @@ import {
   TooltipTrigger,
   Tooltip,
   Heading,
-} from '@entro314labs/entro-zen';
-import { Maximize, Close } from '@/components/icons';
-import { useMessages } from '@/components/hooks';
+} from '@entro314labs/entro-zen'
+import { Maximize, Close } from '@/components/icons'
+import { useMessages } from '@/components/hooks'
 
 export interface PanelProps extends ColumnProps {
-  title?: string;
-  allowFullscreen?: boolean;
-  noPadding?: boolean;
+  title?: string
+  allowFullscreen?: boolean
+  noPadding?: boolean
 }
 
 const fullscreenStyles = {
@@ -26,7 +26,7 @@ const fullscreenStyles = {
   left: 0,
   border: 'none',
   zIndex: 9999,
-} as any;
+} as any
 
 export function Panel({
   title,
@@ -36,12 +36,12 @@ export function Panel({
   children,
   ...props
 }: PanelProps) {
-  const { formatMessage, labels } = useMessages();
-  const [isFullscreen, setIsFullscreen] = useState(false);
+  const { formatMessage, labels } = useMessages()
+  const [isFullscreen, setIsFullscreen] = useState(false)
 
   const handleFullscreen = () => {
-    setIsFullscreen(!isFullscreen);
-  };
+    setIsFullscreen(!isFullscreen)
+  }
 
   return (
     <Column
@@ -68,5 +68,5 @@ export function Panel({
       )}
       {children}
     </Column>
-  );
+  )
 }

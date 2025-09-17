@@ -1,7 +1,7 @@
-import clickhouse from '@/lib/clickhouse';
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db';
-import prisma from '@/lib/prisma';
-import { QueryFilters } from '@/lib/types';
+import clickhouse from '@/lib/clickhouse'
+import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
+import prisma from '@/lib/prisma'
+import { QueryFilters } from '@/lib/types'
 
 export async function getSessionActivity(
   ...args: [websiteId: string, sessionId: string, filters: QueryFilters]
@@ -9,11 +9,11 @@ export async function getSessionActivity(
   return runQuery({
     [PRISMA]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  });
+  })
 }
 
 async function relationalQuery(websiteId: string, sessionId: string, filters: QueryFilters) {
-  const { startDate, endDate } = filters;
+  const { startDate, endDate } = filters
 
   return prisma.client.websiteEvent.findMany({
     where: {
@@ -23,12 +23,12 @@ async function relationalQuery(websiteId: string, sessionId: string, filters: Qu
     },
     take: 500,
     orderBy: { createdAt: 'desc' },
-  });
+  })
 }
 
 async function clickhouseQuery(websiteId: string, sessionId: string, filters: QueryFilters) {
-  const { rawQuery } = clickhouse;
-  const { startDate, endDate } = filters;
+  const { rawQuery } = clickhouse
+  const { startDate, endDate } = filters
 
   return rawQuery(
     `
@@ -49,6 +49,6 @@ async function clickhouseQuery(websiteId: string, sessionId: string, filters: Qu
     order by e.created_at desc
     limit 500
     `,
-    { websiteId, sessionId, startDate, endDate },
-  );
+    { websiteId, sessionId, startDate, endDate }
+  )
 }

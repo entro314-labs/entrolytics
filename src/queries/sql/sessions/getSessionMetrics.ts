@@ -1,13 +1,13 @@
-import clickhouse from '@/lib/clickhouse';
-import { EVENT_COLUMNS, EVENT_TYPE, FILTER_COLUMNS, SESSION_COLUMNS } from '@/lib/constants';
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db';
-import prisma from '@/lib/prisma';
-import { QueryFilters } from '@/lib/types';
+import clickhouse from '@/lib/clickhouse'
+import { EVENT_COLUMNS, EVENT_TYPE, FILTER_COLUMNS, SESSION_COLUMNS } from '@/lib/constants'
+import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
+import prisma from '@/lib/prisma'
+import { QueryFilters } from '@/lib/types'
 
 export interface SessionMetricsParameters {
-  type: string;
-  limit?: number | string;
-  offset?: number | string;
+  type: string
+  limit?: number | string
+  offset?: number | string
 }
 
 export async function getSessionMetrics(
@@ -16,17 +16,17 @@ export async function getSessionMetrics(
   return runQuery({
     [PRISMA]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  });
+  })
 }
 
 async function relationalQuery(
   websiteId: string,
   parameters: SessionMetricsParameters,
-  filters: QueryFilters,
+  filters: QueryFilters
 ) {
-  const { type, limit = 500, offset = 0 } = parameters;
-  let column = FILTER_COLUMNS[type] || type;
-  const { parseFilters, rawQuery } = prisma;
+  const { type, limit = 500, offset = 0 } = parameters
+  let column = FILTER_COLUMNS[type] || type
+  const { parseFilters, rawQuery } = prisma
   const { filterQuery, joinSessionQuery, cohortQuery, queryParams } = parseFilters(
     {
       ...filters,
@@ -35,12 +35,12 @@ async function relationalQuery(
     },
     {
       joinSession: SESSION_COLUMNS.includes(type),
-    },
-  );
-  const includeCountry = column === 'city' || column === 'region';
+    }
+  )
+  const includeCountry = column === 'city' || column === 'region'
 
   if (type === 'language') {
-    column = `lower(left(${type}, 2))`;
+    column = `lower(left(${type}, 2))`
   }
 
   return rawQuery(
@@ -61,32 +61,32 @@ async function relationalQuery(
     limit ${limit}
     offset ${offset}
     `,
-    { ...queryParams, ...parameters },
-  );
+    { ...queryParams, ...parameters }
+  )
 }
 
 async function clickhouseQuery(
   websiteId: string,
   parameters: SessionMetricsParameters,
-  filters: QueryFilters,
+  filters: QueryFilters
 ): Promise<{ x: string; y: number }[]> {
-  const { type, limit = 500, offset = 0 } = parameters;
-  let column = FILTER_COLUMNS[type] || type;
-  const { parseFilters, rawQuery } = clickhouse;
+  const { type, limit = 500, offset = 0 } = parameters
+  let column = FILTER_COLUMNS[type] || type
+  const { parseFilters, rawQuery } = clickhouse
   const { filterQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
     eventType: EVENT_TYPE.pageView,
-  });
-  const includeCountry = column === 'city' || column === 'region';
+  })
+  const includeCountry = column === 'city' || column === 'region'
 
   if (type === 'language') {
-    column = `lower(left(${type}, 2))`;
+    column = `lower(left(${type}, 2))`
   }
 
-  let sql = '';
+  let sql = ''
 
-  if (EVENT_COLUMNS.some(item => Object.keys(filters).includes(item))) {
+  if (EVENT_COLUMNS.some((item) => Object.keys(filters).includes(item))) {
     sql = `
     select
       ${column} x,
@@ -102,7 +102,7 @@ async function clickhouseQuery(
     order by y desc
     limit ${limit}
     offset ${offset}
-    `;
+    `
   } else {
     sql = `
     select
@@ -119,8 +119,8 @@ async function clickhouseQuery(
     order by y desc
     limit ${limit}
     offset ${offset}
-    `;
+    `
   }
 
-  return rawQuery(sql, { ...queryParams, ...parameters });
+  return rawQuery(sql, { ...queryParams, ...parameters })
 }

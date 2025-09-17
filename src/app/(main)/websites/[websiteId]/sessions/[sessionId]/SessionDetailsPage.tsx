@@ -1,23 +1,23 @@
-'use client';
-import { Grid, Row, Column, Tabs, TabList, Tab, TabPanel } from '@entro314labs/entro-zen';
-import { Avatar } from '@/components/common/Avatar';
-import { LoadingPanel } from '@/components/common/LoadingPanel';
-import { useMessages, useWebsiteSessionQuery } from '@/components/hooks';
-import { SessionActivity } from './SessionActivity';
-import { SessionData } from './SessionData';
-import { SessionInfo } from './SessionInfo';
-import { SessionStats } from './SessionStats';
-import { Panel } from '@/components/common/Panel';
+'use client'
+import { Grid, Row, Column, Tabs, TabList, Tab, TabPanel } from '@entro314labs/entro-zen'
+import { Avatar } from '@/components/common/Avatar'
+import { LoadingPanel } from '@/components/common/LoadingPanel'
+import { useMessages, useWebsiteSessionQuery } from '@/components/hooks'
+import { SessionActivity } from './SessionActivity'
+import { SessionData } from './SessionData'
+import { SessionInfo } from './SessionInfo'
+import { SessionStats } from './SessionStats'
+import { Panel } from '@/components/common/Panel'
 
 export function SessionDetailsPage({
   websiteId,
   sessionId,
 }: {
-  websiteId: string;
-  sessionId: string;
+  websiteId: string
+  sessionId: string
 }) {
-  const { data, isLoading, error } = useWebsiteSessionQuery(websiteId, sessionId);
-  const { formatMessage, labels } = useMessages();
+  const { data, isLoading, error } = useWebsiteSessionQuery(websiteId, sessionId)
+  const { formatMessage, labels } = useMessages()
 
   return (
     <LoadingPanel data={data} isLoading={isLoading} error={error}>
@@ -54,5 +54,5 @@ export function SessionDetailsPage({
         </Grid>
       )}
     </LoadingPanel>
-  );
+  )
 }

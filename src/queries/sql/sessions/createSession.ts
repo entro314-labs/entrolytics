@@ -1,5 +1,5 @@
-import { Prisma } from '@/generated/prisma/client';
-import prisma from '@/lib/prisma';
+import { Prisma } from '@/generated/prisma/client'
+import prisma from '@/lib/prisma'
 
 export async function createSession(data: Prisma.SessionCreateInput) {
   const {
@@ -14,7 +14,7 @@ export async function createSession(data: Prisma.SessionCreateInput) {
     region,
     city,
     distinctId,
-  } = data;
+  } = data
 
   try {
     return await prisma.client.session.create({
@@ -31,11 +31,11 @@ export async function createSession(data: Prisma.SessionCreateInput) {
         city,
         distinctId,
       },
-    });
+    })
   } catch (e: any) {
     if (e.message.toLowerCase().includes('unique constraint')) {
-      return null;
+      return null
     }
-    throw e;
+    throw e
   }
 }

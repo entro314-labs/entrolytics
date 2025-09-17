@@ -1,15 +1,15 @@
 /// <reference types="cypress" />
-import { uuid } from '../../src/lib/crypto';
+import { uuid } from '../../src/lib/crypto'
 
 Cypress.Commands.add('getDataTest', (value: string) => {
-  return cy.get(`[data-test=${value}]`);
-});
+  return cy.get(`[data-test=${value}]`)
+})
 
 Cypress.Commands.add('logout', () => {
-  cy.getDataTest('button-profile').click();
-  cy.getDataTest('item-logout').click();
-  cy.url().should('eq', Cypress.config().baseUrl + '/login');
-});
+  cy.getDataTest('button-profile').click()
+  cy.getDataTest('item-logout').click()
+  cy.url().should('eq', Cypress.config().baseUrl + '/login')
+})
 
 Cypress.Commands.add('login', (username: string, password: string) => {
   cy.session([username, password], () => {
@@ -21,14 +21,14 @@ Cypress.Commands.add('login', (username: string, password: string) => {
         password,
       },
     })
-      .then(response => {
-        Cypress.env('authorization', `bearer ${response.body.token}`);
-        window.localStorage.setItem('entrolytics.auth', JSON.stringify(response.body.token));
+      .then((response) => {
+        Cypress.env('authorization', `bearer ${response.body.token}`)
+        window.localStorage.setItem('entrolytics.auth', JSON.stringify(response.body.token))
       })
       .its('status')
-      .should('eq', 200);
-  });
-});
+      .should('eq', 200)
+  })
+})
 
 Cypress.Commands.add('addWebsite', (name: string, domain: string) => {
   cy.request({
@@ -44,10 +44,10 @@ Cypress.Commands.add('addWebsite', (name: string, domain: string) => {
       name: name,
       domain: domain,
     },
-  }).then(response => {
-    expect(response.status).to.eq(200);
-  });
-});
+  }).then((response) => {
+    expect(response.status).to.eq(200)
+  })
+})
 
 Cypress.Commands.add('deleteWebsite', (websiteId: string) => {
   cy.request({
@@ -57,10 +57,10 @@ Cypress.Commands.add('deleteWebsite', (websiteId: string) => {
       'Content-Type': 'application/json',
       Authorization: Cypress.env('authorization'),
     },
-  }).then(response => {
-    expect(response.status).to.eq(200);
-  });
-});
+  }).then((response) => {
+    expect(response.status).to.eq(200)
+  })
+})
 
 Cypress.Commands.add('addUser', (username: string, password: string, role: string) => {
   cy.request({
@@ -75,10 +75,10 @@ Cypress.Commands.add('addUser', (username: string, password: string, role: strin
       password: password,
       role: role,
     },
-  }).then(response => {
-    expect(response.status).to.eq(200);
-  });
-});
+  }).then((response) => {
+    expect(response.status).to.eq(200)
+  })
+})
 
 Cypress.Commands.add('deleteUser', (userId: string) => {
   cy.request({
@@ -88,10 +88,10 @@ Cypress.Commands.add('deleteUser', (userId: string) => {
       'Content-Type': 'application/json',
       Authorization: Cypress.env('authorization'),
     },
-  }).then(response => {
-    expect(response.status).to.eq(200);
-  });
-});
+  }).then((response) => {
+    expect(response.status).to.eq(200)
+  })
+})
 
 Cypress.Commands.add('addOrg', (name: string) => {
   cy.request({
@@ -104,10 +104,10 @@ Cypress.Commands.add('addOrg', (name: string) => {
     body: {
       name: name,
     },
-  }).then(response => {
-    expect(response.status).to.eq(200);
-  });
-});
+  }).then((response) => {
+    expect(response.status).to.eq(200)
+  })
+})
 
 Cypress.Commands.add('deleteOrg', (orgId: string) => {
   cy.request({
@@ -117,7 +117,7 @@ Cypress.Commands.add('deleteOrg', (orgId: string) => {
       'Content-Type': 'application/json',
       Authorization: Cypress.env('authorization'),
     },
-  }).then(response => {
-    expect(response.status).to.eq(200);
-  });
-});
+  }).then((response) => {
+    expect(response.status).to.eq(200)
+  })
+})

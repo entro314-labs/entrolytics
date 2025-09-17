@@ -1,15 +1,15 @@
-import clickhouse from '@/lib/clickhouse';
-import { EVENT_COLUMNS } from '@/lib/constants';
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db';
-import prisma from '@/lib/prisma';
-import { QueryFilters } from '@/lib/types';
+import clickhouse from '@/lib/clickhouse'
+import { EVENT_COLUMNS } from '@/lib/constants'
+import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
+import prisma from '@/lib/prisma'
+import { QueryFilters } from '@/lib/types'
 
 export interface WebsiteSessionStatsData {
-  pageviews: number;
-  visitors: number;
-  visits: number;
-  countries: number;
-  events: number;
+  pageviews: number
+  visitors: number
+  visits: number
+  countries: number
+  events: number
 }
 
 export async function getWebsiteSessionStats(
@@ -18,18 +18,18 @@ export async function getWebsiteSessionStats(
   return runQuery({
     [PRISMA]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  });
+  })
 }
 
 async function relationalQuery(
   websiteId: string,
-  filters: QueryFilters,
+  filters: QueryFilters
 ): Promise<WebsiteSessionStatsData[]> {
-  const { parseFilters, rawQuery } = prisma;
+  const { parseFilters, rawQuery } = prisma
   const { filterQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
-  });
+  })
 
   return rawQuery(
     `
@@ -46,20 +46,20 @@ async function relationalQuery(
       and website_event.created_at between {{startDate}} and {{endDate}}
       ${filterQuery}
     `,
-    queryParams,
-  );
+    queryParams
+  )
 }
 
 async function clickhouseQuery(
   websiteId: string,
-  filters: QueryFilters,
+  filters: QueryFilters
 ): Promise<WebsiteSessionStatsData[]> {
-  const { rawQuery, parseFilters } = clickhouse;
-  const { filterQuery, cohortQuery, queryParams } = parseFilters({ ...filters, websiteId });
+  const { rawQuery, parseFilters } = clickhouse
+  const { filterQuery, cohortQuery, queryParams } = parseFilters({ ...filters, websiteId })
 
-  let sql = '';
+  let sql = ''
 
-  if (EVENT_COLUMNS.some(item => Object.keys(filters).includes(item))) {
+  if (EVENT_COLUMNS.some((item) => Object.keys(filters).includes(item))) {
     sql = `
     select
       sumIf(1, event_type = 1) as "pageviews",
@@ -72,7 +72,7 @@ async function clickhouseQuery(
     where website_id = {websiteId:UUID}
         and created_at between {startDate:DateTime64} and {endDate:DateTime64}
         ${filterQuery}
-    `;
+    `
   } else {
     sql = `
     select
@@ -86,8 +86,8 @@ async function clickhouseQuery(
     where website_id = {websiteId:UUID}
         and created_at between {startDate:DateTime64} and {endDate:DateTime64}
         ${filterQuery}
-    `;
+    `
   }
 
-  return rawQuery(sql, queryParams);
+  return rawQuery(sql, queryParams)
 }

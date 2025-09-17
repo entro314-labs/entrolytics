@@ -9,12 +9,12 @@ import {
   Loading,
   Column,
   Grid,
-} from '@entro314labs/entro-zen';
-import { useMessages, useUpdateQuery, useWebsiteCohortQuery } from '@/components/hooks';
-import { DateFilter } from '@/components/input/DateFilter';
-import { FieldFilters } from '@/components/input/FieldFilters';
-import { LookupField } from '@/components/input/LookupField';
-import { ActionSelect } from '@/components/input/ActionSelect';
+} from '@entro314labs/entro-zen'
+import { useMessages, useUpdateQuery, useWebsiteCohortQuery } from '@/components/hooks'
+import { DateFilter } from '@/components/input/DateFilter'
+import { FieldFilters } from '@/components/input/FieldFilters'
+import { LookupField } from '@/components/input/LookupField'
+import { ActionSelect } from '@/components/input/ActionSelect'
 
 export function CohortEditForm({
   cohortId,
@@ -23,46 +23,46 @@ export function CohortEditForm({
   onSave,
   onClose,
 }: {
-  cohortId?: string;
-  websiteId: string;
-  filters?: any[];
-  showFilters?: boolean;
-  onSave?: () => void;
-  onClose?: () => void;
+  cohortId?: string
+  websiteId: string
+  filters?: any[]
+  showFilters?: boolean
+  onSave?: () => void
+  onClose?: () => void
 }) {
-  const { data } = useWebsiteCohortQuery(websiteId, cohortId);
-  const { formatMessage, labels, messages } = useMessages();
+  const { data } = useWebsiteCohortQuery(websiteId, cohortId)
+  const { formatMessage, labels, messages } = useMessages()
 
   const { mutate, error, isPending, touch, toast } = useUpdateQuery(
     `/websites/${websiteId}/segments${cohortId ? `/${cohortId}` : ''}`,
     {
       type: 'cohort',
-    },
-  );
+    }
+  )
 
   const handleSubmit = async (formData: any) => {
     mutate(formData, {
       onSuccess: async () => {
-        toast(formatMessage(messages.saved));
-        touch('cohorts');
-        onSave?.();
-        onClose?.();
+        toast(formatMessage(messages.saved))
+        touch('cohorts')
+        onSave?.()
+        onClose?.()
       },
-    });
-  };
+    })
+  }
 
   if (cohortId && !data) {
-    return <Loading position="page" />;
+    return <Loading position="page" />
   }
 
   const defaultValues = {
     parameters: { filters, dateRange: '30day', action: { type: 'path', value: '' } },
-  };
+  }
 
   return (
     <Form error={error} onSubmit={handleSubmit} defaultValues={data || defaultValues}>
       {({ watch }) => {
-        const type = watch('parameters.action.type');
+        const type = watch('parameters.action.type')
 
         return (
           <>
@@ -91,7 +91,7 @@ export function CohortEditForm({
                     rules={{ required: formatMessage(labels.required) }}
                   >
                     {({ field }) => {
-                      return <LookupField websiteId={websiteId} type={type} {...field} />;
+                      return <LookupField websiteId={websiteId} type={type} {...field} />
                     }}
                   </FormField>
                 </Column>
@@ -127,8 +127,8 @@ export function CohortEditForm({
               </FormSubmitButton>
             </FormButtons>
           </>
-        );
+        )
       }}
     </Form>
-  );
+  )
 }

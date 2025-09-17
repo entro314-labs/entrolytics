@@ -1,18 +1,18 @@
-'use client';
-import { useState } from 'react';
-import { Column, Grid, Select, ListItem, SearchField } from '@entro314labs/entro-zen';
-import { Attribution } from './Attribution';
-import { WebsiteControls } from '@/app/(main)/websites/[websiteId]/WebsiteControls';
-import { useDateRange, useMessages } from '@/components/hooks';
+'use client'
+import { useState } from 'react'
+import { Column, Grid, Select, ListItem, SearchField } from '@entro314labs/entro-zen'
+import { Attribution } from './Attribution'
+import { WebsiteControls } from '@/app/(main)/websites/[websiteId]/WebsiteControls'
+import { useDateRange, useMessages } from '@/components/hooks'
 
 export function AttributionPage({ websiteId }: { websiteId: string }) {
-  const [model, setModel] = useState('first-click');
-  const [type, setType] = useState('path');
-  const [step, setStep] = useState('/');
-  const { formatMessage, labels } = useMessages();
+  const [model, setModel] = useState('first-click')
+  const [type, setType] = useState('path')
+  const [step, setStep] = useState('/')
+  const { formatMessage, labels } = useMessages()
   const {
     dateRange: { startDate, endDate },
-  } = useDateRange(websiteId);
+  } = useDateRange(websiteId)
 
   return (
     <Column gap="6">
@@ -59,5 +59,5 @@ export function AttributionPage({ websiteId }: { websiteId: string }) {
         step={step}
       />
     </Column>
-  );
+  )
 }

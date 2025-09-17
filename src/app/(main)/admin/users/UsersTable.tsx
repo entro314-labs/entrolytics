@@ -1,23 +1,23 @@
-import { useState } from 'react';
-import { Row, Text, Icon, DataTable, DataColumn, MenuItem, Modal } from '@entro314labs/entro-zen';
-import Link from 'next/link';
-import { ROLES } from '@/lib/constants';
-import { Trash } from '@/components/icons';
-import { useMessages } from '@/components/hooks';
-import { Edit } from '@/components/icons';
-import { MenuButton } from '@/components/input/MenuButton';
-import { UserDeleteForm } from './UserDeleteForm';
-import { DateDistance } from '@/components/common/DateDistance';
+import { useState } from 'react'
+import { Row, Text, Icon, DataTable, DataColumn, MenuItem, Modal } from '@entro314labs/entro-zen'
+import Link from 'next/link'
+import { ROLES } from '@/lib/constants'
+import { Trash } from '@/components/icons'
+import { useMessages } from '@/components/hooks'
+import { Edit } from '@/components/icons'
+import { MenuButton } from '@/components/input/MenuButton'
+import { UserDeleteForm } from './UserDeleteForm'
+import { DateDistance } from '@/components/common/DateDistance'
 
 export function UsersTable({
   data = [],
   showActions = true,
 }: {
-  data: any[];
-  showActions?: boolean;
+  data: any[]
+  showActions?: boolean
 }) {
-  const { formatMessage, labels } = useMessages();
-  const [deleteUser, setDeleteUser] = useState(null);
+  const { formatMessage, labels } = useMessages()
+  const [deleteUser, setDeleteUser] = useState(null)
 
   return (
     <>
@@ -28,7 +28,7 @@ export function UsersTable({
         <DataColumn id="role" label={formatMessage(labels.role)}>
           {(row: any) =>
             formatMessage(
-              labels[Object.keys(ROLES).find(key => ROLES[key] === row.role)] || labels.unknown,
+              labels[Object.keys(ROLES).find((key) => ROLES[key] === row.role)] || labels.unknown
             )
           }
         </DataColumn>
@@ -41,7 +41,7 @@ export function UsersTable({
         {showActions && (
           <DataColumn id="action" align="end" width="100px">
             {(row: any) => {
-              const { id } = row;
+              const { id } = row
 
               return (
                 <MenuButton>
@@ -66,7 +66,7 @@ export function UsersTable({
                     </Row>
                   </MenuItem>
                 </MenuButton>
-              );
+              )
             }}
           </DataColumn>
         )}
@@ -76,10 +76,10 @@ export function UsersTable({
           userId={deleteUser?.id}
           username={deleteUser?.username}
           onClose={() => {
-            setDeleteUser(null);
+            setDeleteUser(null)
           }}
         />
       </Modal>
     </>
-  );
+  )
 }

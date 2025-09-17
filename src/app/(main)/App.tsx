@@ -1,27 +1,27 @@
-'use client';
-import { Grid, Loading, Column } from '@entro314labs/entro-zen';
-import Script from 'next/script';
-import { usePathname } from 'next/navigation';
-import { UpdateNotice } from './UpdateNotice';
-import { SideNav } from '@/app/(main)/SideNav';
-import { useLoginQuery, useConfig } from '@/components/hooks';
+'use client'
+import { Grid, Loading, Column } from '@entro314labs/entro-zen'
+import Script from 'next/script'
+import { usePathname } from 'next/navigation'
+import { UpdateNotice } from './UpdateNotice'
+import { SideNav } from '@/app/(main)/SideNav'
+import { useLoginQuery, useConfig } from '@/components/hooks'
 
 export function App({ children }) {
-  const { user, isLoading, error } = useLoginQuery();
-  const config = useConfig();
-  const pathname = usePathname();
+  const { user, isLoading, error } = useLoginQuery()
+  const config = useConfig()
+  const pathname = usePathname()
 
   if (isLoading) {
-    return <Loading position="page" />;
+    return <Loading position="page" />
   }
 
   if (error) {
-    window.location.href = `${process.env.basePath || ''}/sign-in`;
-    return null;
+    window.location.href = `${process.env.basePath || ''}/sign-in`
+    return null
   }
 
   if (!user || !config) {
-    return null;
+    return null
   }
 
   return (
@@ -37,5 +37,5 @@ export function App({ children }) {
         <Script src={`${process.env.basePath || ''}/telemetry.js`} />
       )}
     </Grid>
-  );
+  )
 }

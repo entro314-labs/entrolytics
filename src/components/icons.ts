@@ -49,5 +49,5 @@ export {
   Users,
   UserPlus,
   X as Close,
-} from 'lucide-react';
-export * from '@/components/svg';
+} from 'lucide-react'
+export * from '@/components/svg'

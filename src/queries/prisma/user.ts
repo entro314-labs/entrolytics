@@ -46,6 +46,17 @@ export async function getUser(userId: string, options: GetUserOptions = {}) {
   )
 }
 
+export async function getUserByClerkId(clerkId: string, options: GetUserOptions = {}) {
+  return findUser(
+    {
+      where: {
+        clerk_id: clerkId,
+      },
+    },
+    options
+  )
+}
+
 export async function getUserByEmail(email: string, options: GetUserOptions = {}) {
   const { showDeleted = false } = options
 
@@ -101,6 +112,7 @@ export async function getUsers(
 
 export async function createUser(data: {
   id: string
+  clerk_id: string
   email: string
   firstName?: string
   lastName?: string

@@ -2,9 +2,9 @@ import { auth, currentUser } from '@clerk/nextjs/server'
 import debug from 'debug'
 import { ROLE_PERMISSIONS, ROLES, SHARE_TOKEN_HEADER } from '@/lib/constants'
 import { parseToken } from '@/lib/jwt'
-import { secret } from '@/lib/crypto'
+import { secret, uuid } from '@/lib/crypto'
 import { ensureArray } from '@/lib/utils'
-import { getUser, createUser } from '@/queries'
+import { getUser, createUser, getUserByClerkId } from '@/queries'
 
 const log = debug('entrolytics:auth')
 
@@ -24,8 +24,8 @@ export async function getCurrentUser() {
       return null
     }
 
-    // Get user from database using Clerk ID directly as primary key
-    let user = await getUser(clerkUserId)
+    // Get user from database using Clerk ID
+    let user = await getUserByClerkId(clerkUserId)
 
     // If user doesn't exist in our database, sync from Clerk
     if (!user) {
@@ -67,8 +67,9 @@ export async function checkAuth(request?: Request) {
     const { userId: clerkUserId, orgId } = await auth()
     const shareToken = request ? await parseShareToken(request.headers) : null
 
+    // Log auth info in development
     if (process.env.NODE_ENV === 'development') {
-      console.log('checkAuth:', {
+      log('checkAuth:', {
         clerkUserId,
         orgId,
         shareToken,
@@ -82,7 +83,29 @@ export async function checkAuth(request?: Request) {
       return null
     }
 
-    const user = clerkUserId ? await getCurrentUser() : null
+    // Get user data more efficiently to avoid double auth() calls
+    let user = null
+    if (clerkUserId) {
+      try {
+        // Try to get user from database using Clerk ID
+        user = await getUserByClerkId(clerkUserId)
+
+        // If user doesn't exist, sync from Clerk
+        if (!user) {
+          const clerkUser = await currentUser()
+          if (clerkUser) {
+            user = await syncUserFromClerk(clerkUser)
+          }
+        }
+
+        if (user) {
+          user.isAdmin = user.role === ROLES.admin
+        }
+      } catch (userError) {
+        log('Error getting user in checkAuth:', userError)
+        user = null
+      }
+    }
 
     return {
       user,
@@ -103,8 +126,8 @@ export async function checkAuth(request?: Request) {
 async function syncUserFromClerk(clerkUser: any) {
   try {
     const userData = {
-      id: clerkUser.id, // Use Clerk ID directly as primary key
-      clerk_id: clerkUser.id, // Also set the clerk_id field for compatibility
+      id: uuid(), // Generate proper UUID for primary key
+      clerk_id: clerkUser.id, // Store Clerk ID in clerk_id field
       email: clerkUser.emailAddresses[0]?.emailAddress || '',
       firstName: clerkUser.firstName,
       lastName: clerkUser.lastName,

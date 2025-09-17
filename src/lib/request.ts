@@ -13,6 +13,11 @@ export async function parseRequest(
   schema?: any,
   options?: { skipAuth: boolean },
 ): Promise<any> {
+  // Handle build-time scenarios where request or request.url might be undefined
+  if (!request || !request.url || typeof request.url !== 'string' || process.env.NEXT_PHASE === 'phase-production-build') {
+    return { url: null, query: {}, body: {}, auth: null, error: null };
+  }
+  
   const url = new URL(request.url);
   let query = Object.fromEntries(url.searchParams);
   let body = await getJsonBody(request);
@@ -33,9 +38,16 @@ export async function parseRequest(
   }
 
   if (!options?.skipAuth && !error) {
-    auth = await checkAuth(request);
+    // Skip auth during build time
+    if (request && request.url && typeof request.url === 'string') {
+      auth = await checkAuth(request);
 
-    if (!auth) {
+      if (!auth) {
+        error = () => unauthorized();
+      }
+    } else {
+      // Build time - create a mock auth object
+      auth = null;
       error = () => unauthorized();
     }
   }
@@ -45,9 +57,12 @@ export async function parseRequest(
 
 export async function getJsonBody(request: Request) {
   try {
+    if (!request || typeof request.clone !== 'function') {
+      return {};
+    }
     return await request.clone().json();
   } catch {
-    return undefined;
+    return {};
   }
 }
 

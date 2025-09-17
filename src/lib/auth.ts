@@ -54,11 +54,16 @@ export async function getCurrentUser() {
  */
 export async function checkAuth(request?: Request) {
   try {
+    // During build time, Clerk auth might not be available
+    if (!request || !request.url || typeof request.url !== 'string' || process.env.NEXT_PHASE === 'phase-production-build') {
+      return null;
+    }
+
     const { userId: clerkUserId, orgId } = await auth();
     const shareToken = request ? await parseShareToken(request.headers) : null;
     
     if (process.env.NODE_ENV === 'development') {
-      console.log('checkAuth:', { clerkUserId, orgId, shareToken, url: request?.url });
+      console.log('checkAuth:', { clerkUserId, orgId, shareToken, url: request?.url || 'build-time' });
     }
 
     // If no Clerk user and no share token, return null
@@ -89,13 +94,14 @@ async function syncUserFromClerk(clerkUser: any) {
   try {
     const userData = {
       id: clerkUser.id, // Use Clerk ID directly as primary key
+      clerk_id: clerkUser.id, // Also set the clerk_id field for compatibility
       email: clerkUser.emailAddresses[0]?.emailAddress || '',
       firstName: clerkUser.firstName,
       lastName: clerkUser.lastName,
       imageUrl: clerkUser.imageUrl,
       role: ROLES.user, // Default role
       displayName: `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim() || 
-                   clerkUser.emailAddresses[0]?.emailAddress?.split('@')[0] || 
+                   clerkUser.emailAddresses[0]?.emailAddress?.split('@')?.[0] || 
                    'User',
     };
 

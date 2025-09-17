@@ -287,6 +287,11 @@ function getClient(params?: {
     options,
   } = params || {};
 
+  if (!process.env.DATABASE_URL) {
+    throw new Error('DATABASE_URL environment variable is required');
+  }
+
+
   const url = new URL(process.env.DATABASE_URL);
 
   const adapter = new PrismaPg(

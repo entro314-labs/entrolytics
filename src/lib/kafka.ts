@@ -14,6 +14,10 @@ let producer: Producer;
 const enabled = Boolean(process.env.KAFKA_URL && process.env.KAFKA_BROKER);
 
 function getClient() {
+  if (!process.env.KAFKA_URL || !process.env.KAFKA_BROKER) {
+    throw new Error('KAFKA_URL and KAFKA_BROKER environment variables are required');
+  }
+
   const { username, password } = new URL(process.env.KAFKA_URL);
   const brokers = process.env.KAFKA_BROKER.split(',');
   const mechanism =

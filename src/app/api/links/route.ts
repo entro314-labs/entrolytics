@@ -7,12 +7,17 @@ import { pagingParams, searchParams } from '@/lib/schema';
 import { createLink, getUserLinks } from '@/queries';
 
 export async function GET(request: Request) {
+  // Check if we're in a build context
+  if (!request || typeof request !== 'object' || !('url' in request)) {
+    return new Response('Build time', { status: 200 });
+  }
+
   const schema = z.object({
     ...pagingParams,
     ...searchParams,
   });
 
-  const { auth, query, error } = await parseRequest(request, schema);
+  const { auth, query, error } = (await parseRequest(request, schema)) || {};
 
   if (error) {
     return error();
@@ -20,12 +25,17 @@ export async function GET(request: Request) {
 
   const filters = await getQueryFilters(query);
 
-  const links = await getUserLinks(auth.user.id, filters);
+  const links = await getUserLinks(auth?.user.id, filters);
 
   return json(links);
 }
 
 export async function POST(request: Request) {
+  // Check if we're in a build context
+  if (!request || typeof request !== 'object' || !('url' in request)) {
+    return new Response('Build time', { status: 200 });
+  }
+
   const schema = z.object({
     name: z.string().max(100),
     url: z.string().max(500),
@@ -34,13 +44,13 @@ export async function POST(request: Request) {
     id: z.string().uuid().nullable().optional(),
   });
 
-  const { auth, body, error } = await parseRequest(request, schema);
+  const { auth, body, error } = (await parseRequest(request, schema)) || {};
 
   if (error) {
     return error();
   }
 
-  const { id, name, url, slug, orgId } = body;
+  const { id, name, url, slug, orgId } = body || {};
 
   if ((orgId && !(await canCreateOrgWebsite(auth, orgId))) || !(await canCreateWebsite(auth))) {
     return unauthorized();
@@ -55,7 +65,7 @@ export async function POST(request: Request) {
   };
 
   if (!orgId) {
-    data.userId = auth.user.id;
+    data.userId = auth?.user.id;
   }
 
   const result = await createLink(data);

@@ -22,6 +22,10 @@ let clickhouse: ClickHouseClient;
 const enabled = Boolean(process.env.CLICKHOUSE_URL);
 
 function getClient() {
+  if (!process.env.CLICKHOUSE_URL) {
+    throw new Error('CLICKHOUSE_URL environment variable is not defined');
+  }
+
   const {
     hostname,
     port,

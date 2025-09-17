@@ -197,6 +197,7 @@ export default {
   typescript: {
     ignoreBuildErrors: true,
   },
+  serverExternalPackages: ['@prisma/client'],
   async headers() {
     return headers;
   },

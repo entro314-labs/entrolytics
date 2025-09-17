@@ -1,0 +1,10 @@
+.next/**/*
+node_modules/**/*
+dist/**/*
+build/**/*
+coverage/**/*
+public/**/*
+src/generated/**/*
+prisma/generated/**/*
+**/*.min.js
+**/*.map

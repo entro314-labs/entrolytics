@@ -1,8 +1,9 @@
 import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
 import { Webhook } from 'svix'
-import { createUser, updateUser, getUser } from '@/queries'
+import { createUser, updateUser, getUserByClerkId } from '@/queries'
 import { ROLES } from '@/lib/constants'
+import { uuid } from '@/lib/crypto'
 
 /**
  * Clerk Webhook Handler
@@ -21,6 +22,7 @@ const webhookSecret = process.env.CLERK_WEBHOOK_SECRET
 if (!webhookSecret) {
   throw new Error('Please add CLERK_WEBHOOK_SECRET from Clerk Dashboard to .env')
 }
+
 
 export async function POST(request: Request) {
   try {
@@ -55,9 +57,23 @@ export async function POST(request: Request) {
       })
     } catch (err) {
       console.error('Error verifying webhook:', err)
-      return new Response('Error occurred', {
-        status: 400,
-      })
+
+      // In development, we can be more lenient with verification
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('Bypassing webhook verification in development mode')
+        try {
+          evt = JSON.parse(body)
+        } catch (parseErr) {
+          console.error('Failed to parse webhook payload:', parseErr)
+          return new Response('Invalid webhook payload', { status: 400 })
+        }
+      } else {
+        // In production, we must verify the webhook
+        console.error('Webhook verification failed in production')
+        return new Response('Webhook verification failed', {
+          status: 400,
+        })
+      }
     }
 
     // Handle the webhook
@@ -90,23 +106,42 @@ export async function POST(request: Request) {
  */
 async function handleUserCreated(data: any) {
   try {
+    console.log('Processing user creation for Clerk ID:', data.id)
+
+    // Check if user already exists
+    const existingUser = await getUserByClerkId(data.id)
+    if (existingUser) {
+      console.log('User already exists, skipping creation:', data.id)
+      return
+    }
+
     const userData = {
-      id: data.id, // Use Clerk ID directly as primary key
+      user_id: uuid(), // Generate UUID for database primary key
+      clerk_id: data.id, // Store Clerk ID in clerk_id field
       email: data.email_addresses[0]?.email_address || '',
-      firstName: data.first_name,
-      lastName: data.last_name,
-      imageUrl: data.image_url,
+      first_name: data.first_name,
+      last_name: data.last_name,
+      image_url: data.image_url,
       role: ROLES.user, // Default role for new users
-      displayName:
+      display_name:
         `${data.first_name || ''} ${data.last_name || ''}`.trim() ||
         data.email_addresses[0]?.email_address?.split('@')[0] ||
         'User',
     }
 
+    console.log('Creating user with data:', userData)
     const user = await createUser(userData)
-    console.log(`User created in database: ${user.id}`)
+    console.log(`User created in database: ${user.user_id}`)
   } catch (error) {
     console.error('Error creating user:', error)
+    console.error('Error details:', {
+      message: error.message,
+      stack: error.stack,
+      userData: {
+        clerk_id: data.id,
+        email: data.email_addresses[0]?.email_address
+      }
+    })
     throw error
   }
 }
@@ -116,7 +151,7 @@ async function handleUserCreated(data: any) {
  */
 async function handleUserUpdated(data: any) {
   try {
-    const existingUser = await getUser(data.id)
+    const existingUser = await getUserByClerkId(data.id)
 
     if (!existingUser) {
       console.warn(`User with Clerk ID ${data.id} not found for update`)
@@ -127,16 +162,16 @@ async function handleUserUpdated(data: any) {
 
     const updateData = {
       email: data.email_addresses[0]?.email_address || existingUser.email,
-      firstName: data.first_name,
-      lastName: data.last_name,
-      imageUrl: data.image_url,
-      displayName:
+      first_name: data.first_name,
+      last_name: data.last_name,
+      image_url: data.image_url,
+      display_name:
         `${data.first_name || ''} ${data.last_name || ''}`.trim() ||
         data.email_addresses[0]?.email_address?.split('@')[0] ||
-        existingUser.displayName,
+        existingUser.display_name,
     }
 
-    await updateUser(data.id, updateData)
+    await updateUser(existingUser.user_id, updateData)
     console.log(`User updated in database: ${data.id}`)
   } catch (error) {
     console.error('Error updating user:', error)
@@ -149,16 +184,16 @@ async function handleUserUpdated(data: any) {
  */
 async function handleUserDeleted(data: any) {
   try {
-    const existingUser = await getUser(data.id)
+    const existingUser = await getUserByClerkId(data.id)
 
     if (!existingUser) {
       console.warn(`User with Clerk ID ${data.id} not found for deletion`)
       return
     }
 
-    // Soft delete the user (set deletedAt timestamp)
-    await updateUser(data.id, {
-      deletedAt: new Date(),
+    // Soft delete the user (set deleted_at timestamp)
+    await updateUser(existingUser.user_id, {
+      deleted_at: new Date(),
     })
 
     console.log(`User soft deleted in database: ${data.id}`)

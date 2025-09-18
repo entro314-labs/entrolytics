@@ -1,5 +1,6 @@
 import 'dotenv/config'
 import { createRequire } from 'module'
+import { PrismaPlugin } from '@prisma/nextjs-monorepo-workaround-plugin'
 
 const require = createRequire(import.meta.url)
 
@@ -21,11 +22,11 @@ const trackerScriptURL = process.env.TRACKER_SCRIPT_URL
 const contentSecurityPolicy = [
   `default-src 'self'`,
   `img-src * data:`,
-  `script-src 'self' 'unsafe-eval' 'unsafe-inline' https://clerk.entrolytics.click https://*.clerk.accounts.dev https://*.clerk.com https://challenges.cloudflare.com https://*.cloudflare.com`,
-  `script-src-elem 'self' 'unsafe-inline' https://clerk.entrolytics.click https://*.clerk.accounts.dev https://*.clerk.com https://challenges.cloudflare.com https://*.cloudflare.com`,
-  `style-src 'self' 'unsafe-inline' https://clerk.entrolytics.click https://*.clerk.accounts.dev https://*.clerk.com`,
-  `connect-src 'self' api.entrolytics.click cloud.entrolytics.click https://clerk.entrolytics.click https://*.clerk.accounts.dev https://*.clerk.com https://api.clerk.com wss://*.clerk.com`,
-  `frame-src 'self' https://clerk.entrolytics.click https://*.clerk.accounts.dev https://*.clerk.com https://challenges.cloudflare.com https://*.cloudflare.com`,
+  `script-src 'self' 'unsafe-eval' 'unsafe-inline' https://accounts.entrolytics.click https://clerk.entrolytics.click https://*.clerk.accounts.dev https://*.clerk.com https://challenges.cloudflare.com https://*.cloudflare.com`,
+  `script-src-elem 'self' 'unsafe-inline' https://accounts.entrolytics.click https://clerk.entrolytics.click https://*.clerk.accounts.dev https://*.clerk.com https://challenges.cloudflare.com https://*.cloudflare.com`,
+  `style-src 'self' 'unsafe-inline' https://accounts.entrolytics.click https://clerk.entrolytics.click https://*.clerk.accounts.dev https://*.clerk.com`,
+  `connect-src 'self' api.entrolytics.click cloud.entrolytics.click https://accounts.entrolytics.click https://clerk.entrolytics.click https://*.clerk.accounts.dev https://*.clerk.com https://api.clerk.com wss://*.clerk.com`,
+  `frame-src 'self' https://accounts.entrolytics.click https://clerk.entrolytics.click https://*.clerk.accounts.dev https://*.clerk.com https://challenges.cloudflare.com https://*.cloudflare.com`,
   `frame-ancestors 'self' ${frameAncestors}`,
   `worker-src 'self' blob:`,
 ]
@@ -198,6 +199,12 @@ export default {
     ignoreBuildErrors: true,
   },
   serverExternalPackages: ['@prisma/client'],
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.plugins = [...config.plugins, new PrismaPlugin()]
+    }
+    return config
+  },
   async headers() {
     return headers
   },

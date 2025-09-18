@@ -5,7 +5,7 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
 RUN npm install -g pnpm
-RUN pnpm install --frozen-lockfile
+RUN pnpm install 
 
 # Rebuild the source code only when needed
 FROM node:22-alpine AS builder
@@ -41,7 +41,7 @@ RUN set -x \
     && apk add --no-cache curl
 
 # Script dependencies
-RUN pnpm add npm-run-all dotenv prisma@6.8.2
+RUN pnpm add npm-run-all dotenv prisma@6.16.2
 
 # Permissions for prisma
 RUN chown -R nextjs:nodejs node_modules/.pnpm/

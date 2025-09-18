@@ -126,21 +126,21 @@ export async function checkAuth(request?: Request) {
 async function syncUserFromClerk(clerkUser: any) {
   try {
     const userData = {
-      id: uuid(), // Generate proper UUID for primary key
+      user_id: uuid(), // Generate proper UUID for primary key
       clerk_id: clerkUser.id, // Store Clerk ID in clerk_id field
       email: clerkUser.emailAddresses[0]?.emailAddress || '',
-      firstName: clerkUser.firstName,
-      lastName: clerkUser.lastName,
-      imageUrl: clerkUser.imageUrl,
+      first_name: clerkUser.firstName,
+      last_name: clerkUser.lastName,
+      image_url: clerkUser.imageUrl,
       role: ROLES.user, // Default role
-      displayName:
+      display_name:
         `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim() ||
         clerkUser.emailAddresses[0]?.emailAddress?.split('@')?.[0] ||
         'User',
     }
 
     const user = await createUser(userData)
-    log('User synced from Clerk:', user.id)
+    log('User synced from Clerk:', user.user_id)
     return user
   } catch (error) {
     log('Error syncing user from Clerk:', error)

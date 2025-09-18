@@ -1,17 +1,17 @@
-import { Prisma, Website } from '@/generated/prisma/client'
+import { Prisma, website } from '@/generated/prisma/client'
 import redis from '@/lib/redis'
 import prisma from '@/lib/prisma'
 import { PageResult, QueryFilters } from '@/lib/types'
 import { ROLES } from '@/lib/constants'
 
-export async function findWebsite(criteria: Prisma.WebsiteFindUniqueArgs): Promise<Website> {
+export async function findWebsite(criteria: Prisma.WebsiteFindUniqueArgs): Promise<website> {
   return prisma.client.website.findUnique(criteria)
 }
 
 export async function getWebsite(websiteId: string) {
   return findWebsite({
     where: {
-      id: websiteId,
+      website_id: websiteId,
     },
   })
 }
@@ -19,8 +19,8 @@ export async function getWebsite(websiteId: string) {
 export async function getSharedWebsite(shareId: string) {
   return findWebsite({
     where: {
-      shareId,
-      deletedAt: null,
+      share_id: shareId,
+      deleted_at: null,
     },
   })
 }
@@ -28,7 +28,7 @@ export async function getSharedWebsite(shareId: string) {
 export async function getWebsites(
   criteria: Prisma.WebsiteFindManyArgs,
   filters: QueryFilters
-): Promise<PageResult<Website[]>> {
+): Promise<PageResult<website[]>> {
   const { search } = filters
   const { getSearchParameters, pagedQuery } = prisma
 
@@ -40,7 +40,7 @@ export async function getWebsites(
       },
       { domain: 'contains' },
     ]),
-    deletedAt: null,
+    deleted_at: null,
   }
 
   return pagedQuery('website', { ...criteria, where }, filters)
@@ -50,19 +50,19 @@ export async function getAllWebsites(userId: string) {
   return prisma.client.website.findMany({
     where: {
       OR: [
-        { userId },
+        { user_id: userId },
         {
           org: {
-            deletedAt: null,
+            deleted_at: null,
             orgUser: {
               some: {
-                userId,
+                user_id: userId,
               },
             },
           },
         },
       ],
-      deletedAt: null,
+      deleted_at: null,
     },
   })
 }
@@ -71,14 +71,14 @@ export async function getAllUserWebsitesIncludingOrgOwner(userId: string) {
   return prisma.client.website.findMany({
     where: {
       OR: [
-        { userId },
+        { user_id: userId },
         {
           org: {
-            deletedAt: null,
+            deleted_at: null,
             orgUser: {
               some: {
                 role: ROLES.orgOwner,
-                userId,
+                user_id: userId,
               },
             },
           },
@@ -91,18 +91,18 @@ export async function getAllUserWebsitesIncludingOrgOwner(userId: string) {
 export async function getUserWebsites(
   userId: string,
   filters?: QueryFilters
-): Promise<PageResult<Website[]>> {
+): Promise<PageResult<website[]>> {
   return getWebsites(
     {
       where: {
-        userId,
+        user_id: userId,
       },
       include: {
         user: {
           select: {
-            displayName: true,
+            display_name: true,
             email: true,
-            id: true,
+            user_id: true,
           },
         },
       },
@@ -117,17 +117,17 @@ export async function getUserWebsites(
 export async function getOrgWebsites(
   orgId: string,
   filters?: QueryFilters
-): Promise<PageResult<Website[]>> {
+): Promise<PageResult<website[]>> {
   return getWebsites(
     {
       where: {
-        orgId,
+        org_id: orgId,
       },
       include: {
         createUser: {
           select: {
-            id: true,
-            displayName: true,
+            user_id: true,
+            display_name: true,
             email: true,
           },
         },
@@ -139,7 +139,7 @@ export async function getOrgWebsites(
 
 export async function createWebsite(
   data: Prisma.WebsiteCreateInput | Prisma.WebsiteUncheckedCreateInput
-): Promise<Website> {
+): Promise<website> {
   return prisma.client.website.create({
     data,
   })
@@ -148,10 +148,10 @@ export async function createWebsite(
 export async function updateWebsite(
   websiteId: string,
   data: Prisma.WebsiteUpdateInput | Prisma.WebsiteUncheckedUpdateInput
-): Promise<Website> {
+): Promise<website> {
   return prisma.client.website.update({
     where: {
-      id: websiteId,
+      website_id: websiteId,
     },
     data,
   })
@@ -159,27 +159,27 @@ export async function updateWebsite(
 
 export async function resetWebsite(
   websiteId: string
-): Promise<[Prisma.BatchPayload, Prisma.BatchPayload, Website]> {
+): Promise<[Prisma.BatchPayload, Prisma.BatchPayload, website]> {
   const { client, transaction } = prisma
   const cloudMode = !!process.env.cloudMode
 
   return transaction([
     client.eventData.deleteMany({
-      where: { websiteId },
+      where: { website_id: websiteId },
     }),
     client.sessionData.deleteMany({
-      where: { websiteId },
+      where: { website_id: websiteId },
     }),
     client.websiteEvent.deleteMany({
-      where: { websiteId },
+      where: { website_id: websiteId },
     }),
     client.session.deleteMany({
-      where: { websiteId },
+      where: { website_id: websiteId },
     }),
     client.website.update({
-      where: { id: websiteId },
+      where: { website_id: websiteId },
       data: {
-        resetAt: new Date(),
+        reset_at: new Date(),
       },
     }),
   ]).then(async (data) => {
@@ -193,22 +193,22 @@ export async function resetWebsite(
 
 export async function deleteWebsite(
   websiteId: string
-): Promise<[Prisma.BatchPayload, Prisma.BatchPayload, Website]> {
+): Promise<[Prisma.BatchPayload, Prisma.BatchPayload, website]> {
   const { client, transaction } = prisma
   const cloudMode = !!process.env.CLOUD_MODE
 
   return transaction([
     client.eventData.deleteMany({
-      where: { websiteId },
+      where: { website_id: websiteId },
     }),
     client.sessionData.deleteMany({
-      where: { websiteId },
+      where: { website_id: websiteId },
     }),
     client.websiteEvent.deleteMany({
-      where: { websiteId },
+      where: { website_id: websiteId },
     }),
     client.session.deleteMany({
-      where: { websiteId },
+      where: { website_id: websiteId },
     }),
     client.report.deleteMany({
       where: {
@@ -220,10 +220,10 @@ export async function deleteWebsite(
           data: {
             deletedAt: new Date(),
           },
-          where: { id: websiteId },
+          where: { website_id: websiteId },
         })
       : client.website.delete({
-          where: { id: websiteId },
+          where: { website_id: websiteId },
         }),
   ]).then(async (data) => {
     if (cloudMode) {

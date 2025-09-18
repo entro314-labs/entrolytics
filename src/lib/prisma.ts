@@ -295,7 +295,7 @@ function getClient(params?: {
 
   const adapter = new PrismaPg(
     { connectionString: url.toString() },
-    { schema: url.searchParams.get('schema') }
+    { schema: url.searchParams.get('schema') || 'public' }
   )
 
   const prisma = new PrismaClient({

@@ -1,5 +1,5 @@
-import * as React from 'react'
-import type { SVGProps } from 'react'
+import * as React from "react";
+import type { SVGProps } from "react";
 const SvgDashboard = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -17,5 +17,5 @@ const SvgDashboard = (props: SVGProps<SVGSVGElement>) => (
     <rect width={7} height={9} x={14} y={12} rx={1} />
     <rect width={7} height={5} x={3} y={16} rx={1} />
   </svg>
-)
-export default SvgDashboard
+);
+export default SvgDashboard;

@@ -15,7 +15,9 @@
     "dev-turbo": "next dev -p 3001 --turbopack",
     "build": "npm-run-all check-env build-db check-db build-tracker build-geo build-app",
     "build-turbo": "npm-run-all check-env build-db check-db build-tracker build-geo build-app-turbo",
+    "vercel-build": "prisma generate && npm-run-all build-tracker build-geo build-app",
     "start": "next start",
+    "postinstall": "prisma generate",
     "build-docker": "npm-run-all build-db build-tracker build-geo build-app",
     "start-docker": "npm-run-all build-db-client check-db update-tracker set-routes-manifest start-server",
     "start-env": "node scripts/start-env.js",
@@ -83,9 +85,11 @@
     "@prisma/adapter-pg": "^6.16.2",
     "@prisma/client": "^6.16.2",
     "@prisma/extension-read-replicas": "^0.4.1",
+    "@prisma/nextjs-monorepo-workaround-plugin": "^6.16.2",
     "@react-spring/web": "^10.0.2",
     "@svgr/cli": "^8.1.0",
     "@tanstack/react-query": "^5.89.0",
+    "@types/pg": "^8.15.5",
     "@umami/redis-client": "^0.29.0",
     "bcryptjs": "^3.0.2",
     "chalk": "^5.6.2",
@@ -183,5 +187,9 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2",
     "vitest": "beta"
+  },
+  "engines": {
+    "node": ">=22.x",
+    "pnpm": ">=10.15.1"
   }
 }

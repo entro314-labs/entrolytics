@@ -1,11 +1,11 @@
-import { Prisma, Org } from '@/generated/prisma/client'
+import { Prisma, org } from '@/generated/prisma/client'
 import { ROLES } from '@/lib/constants'
 import { uuid } from '@/lib/crypto'
 import prisma from '@/lib/prisma'
 import { PageResult, QueryFilters } from '@/lib/types'
 import OrgFindManyArgs = Prisma.OrgFindManyArgs
 
-export async function findOrg(criteria: Prisma.OrgFindUniqueArgs): Promise<Org> {
+export async function findOrg(criteria: Prisma.OrgFindUniqueArgs): Promise<org> {
   return prisma.client.org.findUnique(criteria)
 }
 
@@ -14,7 +14,7 @@ export async function getOrg(orgId: string, options: { includeMembers?: boolean 
 
   return findOrg({
     where: {
-      id: orgId,
+      org_id: orgId,
     },
     ...(includeMembers && { include: { members: true } }),
   })
@@ -23,7 +23,7 @@ export async function getOrg(orgId: string, options: { includeMembers?: boolean 
 export async function getOrgs(
   criteria: OrgFindManyArgs,
   filters: QueryFilters
-): Promise<PageResult<Org[]>> {
+): Promise<PageResult<org[]>> {
   const { getSearchParameters } = prisma
   const { search } = filters
 
@@ -46,9 +46,9 @@ export async function getUserOrgs(userId: string, filters: QueryFilters) {
   return getOrgs(
     {
       where: {
-        deletedAt: null,
+        deleted_at: null,
         members: {
-          some: { userId },
+          some: { user_id: userId },
         },
       },
       include: {
@@ -56,8 +56,8 @@ export async function getUserOrgs(userId: string, filters: QueryFilters) {
           include: {
             user: {
               select: {
-                id: true,
-                displayName: true,
+                user_id: true,
+                display_name: true,
                 email: true,
               },
             },
@@ -66,11 +66,11 @@ export async function getUserOrgs(userId: string, filters: QueryFilters) {
         _count: {
           select: {
             websites: {
-              where: { deletedAt: null },
+              where: { deleted_at: null },
             },
             members: {
               where: {
-                user: { deletedAt: null },
+                user: { deleted_at: null },
               },
             },
           },
@@ -91,32 +91,32 @@ export async function createOrg(data: Prisma.OrgCreateInput, userId: string): Pr
     }),
     client.orgUser.create({
       data: {
-        id: uuid(),
-        orgId: id,
-        userId,
+        org_user_id: uuid(),
+        org_id: id,
+        user_id: userId,
         role: ROLES.orgOwner,
       },
     }),
   ])
 }
 
-export async function updateOrg(orgId: string, data: Prisma.OrgUpdateInput): Promise<Org> {
+export async function updateOrg(orgId: string, data: Prisma.OrgUpdateInput): Promise<org> {
   const { client } = prisma
 
   return client.org.update({
     where: {
-      id: orgId,
+      org_id: orgId,
     },
     data: {
       ...data,
-      updatedAt: new Date(),
+      updated_at: new Date(),
     },
   })
 }
 
 export async function deleteOrg(
   orgId: string
-): Promise<Promise<[Prisma.BatchPayload, Prisma.BatchPayload, Org]>> {
+): Promise<Promise<[Prisma.BatchPayload, Prisma.BatchPayload, org]>> {
   const { client, transaction } = prisma
   const cloudMode = process.env.CLOUD_MODE
 
@@ -124,10 +124,10 @@ export async function deleteOrg(
     return transaction([
       client.org.update({
         data: {
-          deletedAt: new Date(),
+          deleted_at: new Date(),
         },
         where: {
-          id: orgId,
+          org_id: orgId,
         },
       }),
     ])
@@ -136,12 +136,12 @@ export async function deleteOrg(
   return transaction([
     client.orgUser.deleteMany({
       where: {
-        orgId,
+        org_id: orgId,
       },
     }),
     client.org.delete({
       where: {
-        id: orgId,
+        org_id: orgId,
       },
     }),
   ])

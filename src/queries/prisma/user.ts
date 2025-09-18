@@ -1,4 +1,4 @@
-import { Prisma, User } from '@/generated/prisma/client'
+import { Prisma, user } from '@/generated/prisma/client'
 import { ROLES } from '@/lib/constants'
 import prisma from '@/lib/prisma'
 import { PageResult, Role, QueryFilters } from '@/lib/types'
@@ -12,25 +12,25 @@ export interface GetUserOptions {
 async function findUser(
   criteria: Prisma.UserFindUniqueArgs,
   options: GetUserOptions = {}
-): Promise<User> {
+): Promise<user> {
   const { showDeleted = false } = options
 
   return prisma.client.user.findUnique({
     ...criteria,
     where: {
       ...criteria.where,
-      ...(showDeleted && { deletedAt: null }),
+      ...(!showDeleted && { deleted_at: null }),
     },
     select: {
-      id: true,
+      user_id: true,
       email: true,
-      firstName: true,
-      lastName: true,
-      imageUrl: true,
-      displayName: true,
+      first_name: true,
+      last_name: true,
+      image_url: true,
+      display_name: true,
       role: true,
-      createdAt: true,
-      updatedAt: true,
+      created_at: true,
+      updated_at: true,
     },
   })
 }
@@ -39,7 +39,7 @@ export async function getUser(userId: string, options: GetUserOptions = {}) {
   return findUser(
     {
       where: {
-        id: userId,
+        user_id: userId,
       },
     },
     options
@@ -63,18 +63,18 @@ export async function getUserByEmail(email: string, options: GetUserOptions = {}
   return prisma.client.user.findFirst({
     where: {
       email,
-      ...(showDeleted && { deletedAt: null }),
+      ...(!showDeleted && { deleted_at: null }),
     },
     select: {
-      id: true,
+      user_id: true,
       email: true,
-      firstName: true,
-      lastName: true,
-      imageUrl: true,
-      displayName: true,
+      first_name: true,
+      last_name: true,
+      image_url: true,
+      display_name: true,
       role: true,
-      createdAt: true,
-      updatedAt: true,
+      created_at: true,
+      updated_at: true,
     },
   })
 }
@@ -82,18 +82,18 @@ export async function getUserByEmail(email: string, options: GetUserOptions = {}
 export async function getUsers(
   criteria: UserFindManyArgs,
   filters: QueryFilters = {}
-): Promise<PageResult<User[]>> {
+): Promise<PageResult<user[]>> {
   const { search } = filters
 
   const where: Prisma.UserWhereInput = {
     ...criteria.where,
     ...prisma.getSearchParameters(search, [
       { email: 'contains' },
-      { firstName: 'contains' },
-      { lastName: 'contains' },
-      { displayName: 'contains' },
+      { first_name: 'contains' },
+      { last_name: 'contains' },
+      { display_name: 'contains' },
     ]),
-    deletedAt: null,
+    deleted_at: null,
   }
 
   return prisma.pagedQuery(
@@ -103,7 +103,7 @@ export async function getUsers(
       where,
     },
     {
-      orderBy: 'createdAt',
+      orderBy: 'created_at',
       sortDescending: true,
       ...filters,
     }
@@ -111,46 +111,46 @@ export async function getUsers(
 }
 
 export async function createUser(data: {
-  id: string
+  user_id: string
   clerk_id: string
   email: string
-  firstName?: string
-  lastName?: string
-  imageUrl?: string
-  displayName?: string
+  first_name?: string
+  last_name?: string
+  image_url?: string
+  display_name?: string
   role: Role
 }): Promise<{
-  id: string
+  user_id: string
   email: string
-  displayName: string
+  display_name: string
   role: string
 }> {
   return prisma.client.user.create({
     data,
     select: {
-      id: true,
+      user_id: true,
       email: true,
-      displayName: true,
+      display_name: true,
       role: true,
     },
   })
 }
 
-export async function updateUser(userId: string, data: Prisma.UserUpdateInput): Promise<User> {
+export async function updateUser(userId: string, data: Prisma.UserUpdateInput): Promise<user> {
   return prisma.client.user.update({
     where: {
-      id: userId,
+      user_id: userId,
     },
     data,
     select: {
-      id: true,
+      user_id: true,
       email: true,
-      firstName: true,
-      lastName: true,
-      imageUrl: true,
-      displayName: true,
+      first_name: true,
+      last_name: true,
+      image_url: true,
+      display_name: true,
       role: true,
-      createdAt: true,
+      created_at: true,
     },
   })
 }

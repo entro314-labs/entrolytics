@@ -1,12 +1,12 @@
-import { Prisma, Pixel } from '@/generated/prisma/client'
+import { Prisma, pixel } from '@/generated/prisma/client'
 import prisma from '@/lib/prisma'
 import { PageResult, QueryFilters } from '@/lib/types'
 
-export async function findPixel(criteria: Prisma.PixelFindUniqueArgs): Promise<Pixel> {
+export async function findPixel(criteria: Prisma.PixelFindUniqueArgs): Promise<pixel> {
   return prisma.client.pixel.findUnique(criteria)
 }
 
-export async function getPixel(pixelId: string): Promise<Pixel> {
+export async function getPixel(pixelId: string): Promise<pixel> {
   return findPixel({
     where: {
       id: pixelId,
@@ -17,7 +17,7 @@ export async function getPixel(pixelId: string): Promise<Pixel> {
 export async function getPixels(
   criteria: Prisma.PixelFindManyArgs,
   filters: QueryFilters = {}
-): Promise<PageResult<Pixel[]>> {
+): Promise<PageResult<pixel[]>> {
   const { search } = filters
 
   const where: Prisma.PixelWhereInput = {
@@ -31,11 +31,11 @@ export async function getPixels(
 export async function getUserPixels(
   userId: string,
   filters?: QueryFilters
-): Promise<PageResult<Pixel[]>> {
+): Promise<PageResult<pixel[]>> {
   return getPixels(
     {
       where: {
-        userId,
+        user_id: userId,
       },
     },
     filters
@@ -45,25 +45,25 @@ export async function getUserPixels(
 export async function getOrgPixels(
   orgId: string,
   filters?: QueryFilters
-): Promise<PageResult<Pixel[]>> {
+): Promise<PageResult<pixel[]>> {
   return getPixels(
     {
       where: {
-        orgId,
+        org_id: orgId,
       },
     },
     filters
   )
 }
 
-export async function createPixel(data: Prisma.PixelUncheckedCreateInput): Promise<Pixel> {
+export async function createPixel(data: Prisma.PixelUncheckedCreateInput): Promise<pixel> {
   return prisma.client.pixel.create({ data })
 }
 
-export async function updatePixel(pixelId: string, data: any): Promise<Pixel> {
+export async function updatePixel(pixelId: string, data: any): Promise<pixel> {
   return prisma.client.pixel.update({ where: { id: pixelId }, data })
 }
 
-export async function deletePixel(pixelId: string): Promise<Pixel> {
+export async function deletePixel(pixelId: string): Promise<pixel> {
   return prisma.client.pixel.delete({ where: { id: pixelId } })
 }

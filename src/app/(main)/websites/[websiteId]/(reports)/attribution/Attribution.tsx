@@ -68,10 +68,10 @@ export function Attribution({
         metric={formatMessage(currency ? labels.revenue : labels.visitors)}
         currency={currency}
         data={percentFilter(
-          data.map(({ name, value }) => ({
+          Array.isArray(data) ? data.map(({ name, value }) => ({
             x: name,
             y: Number(value),
-          }))
+          })) : []
         )}
       />
     )

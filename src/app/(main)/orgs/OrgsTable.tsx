@@ -17,12 +17,12 @@ export function OrgsTable({
   const { renderUrl } = useNavigation()
 
   return (
-    <DataTable data={data}>
+    <DataTable data={data} rowKey="orgId">
       <DataColumn id="name" label={formatMessage(labels.name)}>
-        {(row: any) => <Link href={renderUrl(`/settings/orgs/${row.id}`)}>{row.name}</Link>}
+        {(row: any) => <Link href={renderUrl(`/settings/orgs/${row.orgId}`)}>{row.name}</Link>}
       </DataColumn>
       <DataColumn id="owner" label={formatMessage(labels.owner)}>
-        {(row: any) => row?.members?.find(({ role }) => role === ROLES.orgOwner)?.user?.username}
+        {(row: any) => Array.isArray(row?.members) ? row.members.find(({ role }) => role === ROLES.orgOwner)?.user?.username : null}
       </DataColumn>
       <DataColumn id="websites" label={formatMessage(labels.websites)} align="end">
         {(row: any) => row?._count?.websites}
@@ -33,11 +33,11 @@ export function OrgsTable({
       {showActions ? (
         <DataColumn id="action" label=" " align="end">
           {(row: any) => {
-            const { id } = row
+            const { orgId } = row
 
             return (
               <MenuButton>
-                <MenuItem href={`/orgs/${id}`}>
+                <MenuItem href={`/orgs/${orgId}`}>
                   <Row alignItems="center" gap>
                     <Icon>
                       <Eye />
@@ -45,7 +45,7 @@ export function OrgsTable({
                     <Text>{formatMessage(labels.view)}</Text>
                   </Row>
                 </MenuItem>
-                <MenuItem href={`/settings/orgs/${id}`}>
+                <MenuItem href={`/settings/orgs/${orgId}`}>
                   <Row alignItems="center" gap>
                     <Icon>
                       <Edit />

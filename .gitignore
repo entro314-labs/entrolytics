@@ -18,7 +18,7 @@ node_modules
 /public/script.js
 /geo
 /dist
-src/generated/prisma/
+# Database generated files are now handled by Drizzle
 
 # misc
 .DS_Store

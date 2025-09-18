@@ -26,6 +26,7 @@ export function UTM({ websiteId, startDate, endDate }: UTMProps) {
         <Column gap>
           {UTM_PARAMS.map((param) => {
             const items = data?.[param]
+            if (!Array.isArray(items)) return null
             const chartData = {
               labels: items.map(({ utm }) => utm),
               datasets: [

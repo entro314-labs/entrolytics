@@ -179,63 +179,59 @@ export async function updateWebsite(websiteId: string, data: any) {
 }
 
 export async function resetWebsite(websiteId: string) {
-  return db.transaction(async (tx) => {
-    const cloudMode = !!process.env.CLOUD_MODE
+  const cloudMode = !!process.env.CLOUD_MODE
 
-    // Delete all related data
-    await Promise.all([
-      tx.delete(eventData).where(eq(eventData.websiteId, websiteId)),
-      tx.delete(sessionData).where(eq(sessionData.websiteId, websiteId)),
-      tx.delete(websiteEvent).where(eq(websiteEvent.websiteId, websiteId)),
-      tx.delete(session).where(eq(session.websiteId, websiteId)),
-    ])
+  // Delete all related data - Note: Without transactions, these operations are not atomic
+  await Promise.all([
+    db.delete(eventData).where(eq(eventData.websiteId, websiteId)),
+    db.delete(sessionData).where(eq(sessionData.websiteId, websiteId)),
+    db.delete(websiteEvent).where(eq(websiteEvent.websiteId, websiteId)),
+    db.delete(session).where(eq(session.websiteId, websiteId)),
+  ])
 
-    // Update reset timestamp
-    const [updatedWebsite] = await tx
-      .update(website)
-      .set({ resetAt: new Date() })
-      .where(eq(website.websiteId, websiteId))
-      .returning()
+  // Update reset timestamp
+  const [updatedWebsite] = await db
+    .update(website)
+    .set({ resetAt: new Date() })
+    .where(eq(website.websiteId, websiteId))
+    .returning()
 
-    if (cloudMode) {
-      await redis.client.set(`website:${websiteId}`, JSON.stringify(updatedWebsite))
-    }
+  if (cloudMode) {
+    await redis.client.set(`website:${websiteId}`, JSON.stringify(updatedWebsite))
+  }
 
-    return updatedWebsite
-  })
+  return updatedWebsite
 }
 
 export async function deleteWebsite(websiteId: string) {
-  return db.transaction(async (tx) => {
-    const cloudMode = !!process.env.CLOUD_MODE
+  const cloudMode = !!process.env.CLOUD_MODE
 
-    // Delete all related data
-    await Promise.all([
-      tx.delete(eventData).where(eq(eventData.websiteId, websiteId)),
-      tx.delete(sessionData).where(eq(sessionData.websiteId, websiteId)),
-      tx.delete(websiteEvent).where(eq(websiteEvent.websiteId, websiteId)),
-      tx.delete(session).where(eq(session.websiteId, websiteId)),
-      tx.delete(report).where(eq(report.websiteId, websiteId)),
-    ])
+  // Delete all related data - Note: Without transactions, these operations are not atomic
+  await Promise.all([
+    db.delete(eventData).where(eq(eventData.websiteId, websiteId)),
+    db.delete(sessionData).where(eq(sessionData.websiteId, websiteId)),
+    db.delete(websiteEvent).where(eq(websiteEvent.websiteId, websiteId)),
+    db.delete(session).where(eq(session.websiteId, websiteId)),
+    db.delete(report).where(eq(report.websiteId, websiteId)),
+  ])
 
-    let deletedWebsite
-    if (cloudMode) {
-      // Soft delete in cloud mode
-      ;[deletedWebsite] = await tx
-        .update(website)
-        .set({ deletedAt: new Date() })
-        .where(eq(website.websiteId, websiteId))
-        .returning()
+  let deletedWebsite
+  if (cloudMode) {
+    // Soft delete in cloud mode
+    ;[deletedWebsite] = await db
+      .update(website)
+      .set({ deletedAt: new Date() })
+      .where(eq(website.websiteId, websiteId))
+      .returning()
 
-      await redis.client.del(`website:${websiteId}`)
-    } else {
-      // Hard delete in non-cloud mode
-      ;[deletedWebsite] = await tx
-        .delete(website)
-        .where(eq(website.websiteId, websiteId))
-        .returning()
-    }
+    await redis.client.del(`website:${websiteId}`)
+  } else {
+    // Hard delete in non-cloud mode
+    ;[deletedWebsite] = await db
+      .delete(website)
+      .where(eq(website.websiteId, websiteId))
+      .returning()
+  }
 
-    return deletedWebsite
-  })
+  return deletedWebsite
 }

@@ -23,11 +23,11 @@ export function AdminWebsitesTable({ data = [] }: { data: any[] }) {
 
   return (
     <>
-      <DataTable data={data}>
+      <DataTable data={data} rowKey="websiteId">
         <DataColumn id="name" label={formatMessage(labels.name)}>
           {(row: any) => (
             <Text truncate>
-              <Link href={`/admin/websites/${row.id}`}>{row.name}</Link>
+              <Link href={`/admin/websites/${row.websiteId}`}>{row.name}</Link>
             </Text>
           )}
         </DataColumn>
@@ -43,14 +43,14 @@ export function AdminWebsitesTable({ data = [] }: { data: any[] }) {
                     <Users />
                   </Icon>
                   <Text truncate>
-                    <Link href={`/admin/orgs/${row?.org?.id}`}>{row?.org?.name}</Link>
+                    <Link href={`/admin/orgs/${row?.org?.orgId}`}>{row?.org?.name}</Link>
                   </Text>
                 </Row>
               )
             }
             return (
               <Text truncate>
-                <Link href={`/admin/users/${row?.user?.id}`}>{row?.user?.username}</Link>
+                <Link href={`/admin/users/${row?.user?.userId}`}>{row?.user?.username}</Link>
               </Text>
             )
           }}
@@ -60,11 +60,11 @@ export function AdminWebsitesTable({ data = [] }: { data: any[] }) {
         </DataColumn>
         <DataColumn id="action" align="end" width="50px">
           {(row: any) => {
-            const { id } = row
+            const { websiteId } = row
 
             return (
               <MenuButton>
-                <MenuItem href={`/admin/websites/${id}`} data-test="link-button-edit">
+                <MenuItem href={`/admin/websites/${websiteId}`} data-test="link-button-edit">
                   <Row alignItems="center" gap>
                     <Icon>
                       <Edit />
@@ -74,7 +74,7 @@ export function AdminWebsitesTable({ data = [] }: { data: any[] }) {
                 </MenuItem>
                 <MenuItem
                   id="delete"
-                  onAction={() => setDeleteWebsite(id)}
+                  onAction={() => setDeleteWebsite(websiteId)}
                   data-test="link-button-delete"
                 >
                   <Row alignItems="center" gap>

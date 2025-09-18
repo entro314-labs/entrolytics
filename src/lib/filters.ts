@@ -1,4 +1,5 @@
 export const urlFilter = (data: any[]) => {
+  if (!Array.isArray(data)) return []
   const map = data.reduce((obj, { x, y }) => {
     if (x) {
       if (!obj[x]) {
@@ -15,6 +16,7 @@ export const urlFilter = (data: any[]) => {
 }
 
 export const refFilter = (data: any[]) => {
+  if (!Array.isArray(data)) return []
   const links = {}
 
   const map = data.reduce((obj, { x, y }) => {
@@ -43,16 +45,18 @@ export const refFilter = (data: any[]) => {
 }
 
 export const emptyFilter = (data: any[]) => {
+  if (!Array.isArray(data)) return []
   return data.map((item) => (item.x ? item : null)).filter((n) => n)
 }
 
 export const percentFilter = (data: any[]) => {
-  if (!data) return []
+  if (!data || !Array.isArray(data)) return []
   const total = data.reduce((n, { y }) => n + y, 0)
   return data.map(({ x, y, ...props }) => ({ x, y, z: total ? (y / total) * 100 : 0, ...props }))
 }
 
 export const paramFilter = (data: any[]) => {
+  if (!Array.isArray(data)) return []
   const map = data.reduce((obj, { x, y }) => {
     try {
       const searchParams = new URLSearchParams(x)

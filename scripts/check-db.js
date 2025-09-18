@@ -64,9 +64,9 @@ async function applyMigration() {
       console.log(execSync('pnpm db:migrate').toString())
       success('Database migrations applied successfully.')
     } catch (e) {
-      // Check if the error is about tables already existing (migration from Prisma to Drizzle)
+      // Check if the error is about tables already existing
       if (e.message && e.message.includes('already exists')) {
-        success('Migration skipped - tables already exist (Prisma to Drizzle migration complete).')
+        success('Migration skipped - tables already exist.')
       } else {
         success('No migrations to apply or migration skipped.')
       }

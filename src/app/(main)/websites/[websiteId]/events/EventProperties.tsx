@@ -80,11 +80,11 @@ const EventValues = ({ websiteId, eventName, propertyName }) => {
   } = useEventDataValuesQuery(websiteId, eventName, propertyName)
 
   const propertySum = useMemo(() => {
-    return values?.reduce((sum, { total }) => sum + total, 0) ?? 0
+    return values && Array.isArray(values) ? values.reduce((sum, { total }) => sum + total, 0) : 0
   }, [values])
 
   const chartData = useMemo(() => {
-    if (!propertyName || !values) return null
+    if (!propertyName || !values || !Array.isArray(values)) return null
     return {
       labels: values.map(({ value }) => value),
       datasets: [
@@ -98,7 +98,7 @@ const EventValues = ({ websiteId, eventName, propertyName }) => {
   }, [propertyName, values])
 
   const tableData = useMemo(() => {
-    if (!propertyName || !values || propertySum === 0) return []
+    if (!propertyName || !values || !Array.isArray(values) || propertySum === 0) return []
     return values.map(({ value, total }) => ({
       label: value,
       count: total,

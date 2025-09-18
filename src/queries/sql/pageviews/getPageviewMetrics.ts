@@ -107,7 +107,7 @@ async function clickhouseQuery(
   let sql = ''
   let excludeDomain = ''
 
-  if (EVENT_COLUMNS.some((item) => Object.keys(filters).includes(item))) {
+  if (filters && typeof filters === 'object' && EVENT_COLUMNS.some((item) => Object.keys(filters).includes(item))) {
     let entryExitQuery = ''
 
     if (column === 'referrer_domain') {

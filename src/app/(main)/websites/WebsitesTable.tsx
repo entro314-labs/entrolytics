@@ -30,10 +30,10 @@ export function WebsitesTable({
   }
 
   return (
-    <DataTable data={data}>
+    <DataTable data={data} rowKey="websiteId">
       <DataColumn id="name" label={formatMessage(labels.name)}>
         {(row: any) => (
-          <Link href={renderUrl(`${isSettings ? '/settings' : ''}/websites/${row.id}`, false)}>
+          <Link href={renderUrl(`${isSettings ? '/settings' : ''}/websites/${row.websiteId}`, false)}>
             {row.name}
           </Link>
         )}
@@ -42,7 +42,7 @@ export function WebsitesTable({
       {showActions && (
         <DataColumn id="action" label=" " align="end">
           {(row: any) => {
-            const websiteId = row.id
+            const websiteId = row.websiteId
 
             return (
               <MenuButton>

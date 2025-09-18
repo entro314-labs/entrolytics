@@ -41,15 +41,13 @@ RUN set -x \
     && apk add --no-cache curl
 
 # Script dependencies
-RUN pnpm add npm-run-all dotenv prisma@6.16.2
+RUN pnpm add npm-run-all dotenv drizzle-kit
 
-# Permissions for prisma
+# Permissions for node modules
 RUN chown -R nextjs:nodejs node_modules/.pnpm/
 
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
-COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/scripts ./scripts
-COPY --from=builder /app/src/generated ./src/generated
 COPY --from=builder /app/dist ./dist
 
 # Automatically leverage output traces to reduce image size

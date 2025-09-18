@@ -208,51 +208,49 @@ export async function updateUser(userId: string, data: any) {
 }
 
 export async function deleteUser(userId: string) {
-  return db.transaction(async (tx) => {
-    const cloudMode = process.env.CLOUD_MODE
+  const cloudMode = process.env.CLOUD_MODE
 
-    // Get websites owned by user
-    const websites = await tx
-      .select({ websiteId: website.websiteId })
-      .from(website)
-      .where(eq(website.userId, userId))
+  // Get websites owned by user
+  const websites = await db
+    .select({ websiteId: website.websiteId })
+    .from(website)
+    .where(eq(website.userId, userId))
 
-    const websiteIds = websites.map((w) => w.websiteId)
+  const websiteIds = websites.map((w) => w.websiteId)
 
-    // Get organizations owned by user
-    const orgs = await tx
-      .select({ orgId: org.orgId })
-      .from(org)
-      .innerJoin(orgUser, eq(org.orgId, orgUser.orgId))
-      .where(and(eq(orgUser.userId, userId), eq(orgUser.role, ROLES.orgOwner)))
+  // Get organizations owned by user
+  const orgs = await db
+    .select({ orgId: org.orgId })
+    .from(org)
+    .innerJoin(orgUser, eq(org.orgId, orgUser.orgId))
+    .where(and(eq(orgUser.userId, userId), eq(orgUser.role, ROLES.orgOwner)))
 
-    const orgIds = orgs.map((o) => o.orgId)
+  const orgIds = orgs.map((o) => o.orgId)
 
-    if (cloudMode) {
-      // Soft delete in cloud mode
-      const results = await Promise.all([
-        tx
-          .update(website)
-          .set({ deletedAt: new Date() })
-          .where(inArray(website.websiteId, websiteIds)),
-        tx.update(user).set({ deletedAt: new Date() }).where(eq(user.userId, userId)),
-      ])
-      return results
-    }
-
-    // Hard delete in non-cloud mode
+  if (cloudMode) {
+    // Soft delete in cloud mode
     const results = await Promise.all([
-      tx.delete(eventData).where(inArray(eventData.websiteId, websiteIds)),
-      tx.delete(sessionData).where(inArray(sessionData.websiteId, websiteIds)),
-      tx.delete(websiteEvent).where(inArray(websiteEvent.websiteId, websiteIds)),
-      tx.delete(session).where(inArray(session.websiteId, websiteIds)),
-      tx.delete(orgUser).where(or(inArray(orgUser.orgId, orgIds), eq(orgUser.userId, userId))),
-      tx.delete(org).where(inArray(org.orgId, orgIds)),
-      tx.delete(report).where(or(inArray(report.websiteId, websiteIds), eq(report.userId, userId))),
-      tx.delete(website).where(inArray(website.websiteId, websiteIds)),
-      tx.delete(user).where(eq(user.userId, userId)),
+      db
+        .update(website)
+        .set({ deletedAt: new Date() })
+        .where(inArray(website.websiteId, websiteIds)),
+      db.update(user).set({ deletedAt: new Date() }).where(eq(user.userId, userId)),
     ])
-
     return results
-  })
+  }
+
+  // Hard delete in non-cloud mode - Note: Without transactions, these operations are not atomic
+  const results = await Promise.all([
+    db.delete(eventData).where(inArray(eventData.websiteId, websiteIds)),
+    db.delete(sessionData).where(inArray(sessionData.websiteId, websiteIds)),
+    db.delete(websiteEvent).where(inArray(websiteEvent.websiteId, websiteIds)),
+    db.delete(session).where(inArray(session.websiteId, websiteIds)),
+    db.delete(orgUser).where(or(inArray(orgUser.orgId, orgIds), eq(orgUser.userId, userId))),
+    db.delete(org).where(inArray(org.orgId, orgIds)),
+    db.delete(report).where(or(inArray(report.websiteId, websiteIds), eq(report.userId, userId))),
+    db.delete(website).where(inArray(website.websiteId, websiteIds)),
+    db.delete(user).where(eq(user.userId, userId)),
+  ])
+
+  return results
 }

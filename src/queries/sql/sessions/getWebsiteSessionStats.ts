@@ -60,7 +60,7 @@ async function clickhouseQuery(
 
   let sql = ''
 
-  if (EVENT_COLUMNS.some((item) => Object.keys(filters).includes(item))) {
+  if (filters && typeof filters === 'object' && EVENT_COLUMNS.some((item) => Object.keys(filters).includes(item))) {
     sql = `
     SELECT
       sumIf(1, event_type = 1) as "pageviews",

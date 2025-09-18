@@ -8,7 +8,5 @@ ignoredBuiltDependencies:
 
 onlyBuiltDependencies:
   - '@clerk/shared'
-  - '@prisma/client'
-  - '@prisma/engines'
-  - prisma
+  - drizzle-kit
   - unrs-resolver

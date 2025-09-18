@@ -6,9 +6,9 @@ export function OrgWebsitesTable({ orgId, data = [] }: { orgId: string; data: an
   const { formatMessage, labels } = useMessages()
 
   return (
-    <DataTable data={data}>
+    <DataTable data={data} rowKey="websiteId">
       <DataColumn id="name" label={formatMessage(labels.name)}>
-        {(row: any) => <Link href={`/orgs/${orgId}/websites/${row.id}`}>{row.name}</Link>}
+        {(row: any) => <Link href={`/orgs/${orgId}/websites/${row.websiteId}`}>{row.name}</Link>}
       </DataColumn>
       <DataColumn id="domain" label={formatMessage(labels.domain)} />
       <DataColumn id="createdBy" label={formatMessage(labels.createdBy)}>

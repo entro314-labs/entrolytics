@@ -51,11 +51,11 @@ const SessionValues = ({ websiteId, propertyName }) => {
   const { data, isLoading, isFetching, error } = useSessionDataValuesQuery(websiteId, propertyName)
 
   const propertySum = useMemo(() => {
-    return data?.reduce((sum, { total }) => sum + total, 0) ?? 0
+    return data && Array.isArray(data) ? data.reduce((sum, { total }) => sum + total, 0) : 0
   }, [data])
 
   const chartData = useMemo(() => {
-    if (!propertyName || !data) return null
+    if (!propertyName || !data || !Array.isArray(data)) return null
     return {
       labels: data.map(({ value }) => value),
       datasets: [
@@ -69,7 +69,7 @@ const SessionValues = ({ websiteId, propertyName }) => {
   }, [propertyName, data])
 
   const tableData = useMemo(() => {
-    if (!propertyName || !data || propertySum === 0) return []
+    if (!propertyName || !data || !Array.isArray(data) || propertySum === 0) return []
     return data.map(({ value, total }) => ({
       label: value,
       count: total,

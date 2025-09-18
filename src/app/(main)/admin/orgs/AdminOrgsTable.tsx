@@ -19,9 +19,9 @@ export function AdminOrgsTable({
 
   return (
     <>
-      <DataTable data={data}>
+      <DataTable data={data} rowKey="orgId">
         <DataColumn id="name" label={formatMessage(labels.name)} width="1fr">
-          {(row: any) => <Link href={`/admin/orgs/${row.id}`}>{row.name}</Link>}
+          {(row: any) => <Link href={`/admin/orgs/${row.orgId}`}>{row.name}</Link>}
         </DataColumn>
         <DataColumn id="websites" label={formatMessage(labels.members)} width="140px">
           {(row: any) => row?._count?.members}
@@ -31,11 +31,12 @@ export function AdminOrgsTable({
         </DataColumn>
         <DataColumn id="owner" label={formatMessage(labels.owner)}>
           {(row: any) => {
-            const name = row?.members?.[0]?.user?.username
+            const member = Array.isArray(row?.members) && row.members.length > 0 ? row.members[0] : null
+            const name = member?.user?.username
 
             return (
               <Text title={name} truncate>
-                <Link href={`/admin/users/${row?.members?.[0]?.user?.id}`}>{name}</Link>
+                {member ? <Link href={`/admin/users/${member.user?.id}`}>{name}</Link> : name}
               </Text>
             )
           }}
@@ -46,11 +47,11 @@ export function AdminOrgsTable({
         {showActions && (
           <DataColumn id="action" align="end" width="50px">
             {(row: any) => {
-              const { id } = row
+              const { orgId } = row
 
               return (
                 <MenuButton>
-                  <MenuItem href={`/admin/orgs/${id}`} data-test="link-button-edit">
+                  <MenuItem href={`/admin/orgs/${orgId}`} data-test="link-button-edit">
                     <Row alignItems="center" gap>
                       <Icon>
                         <Edit />

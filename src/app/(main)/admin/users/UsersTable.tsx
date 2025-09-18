@@ -21,9 +21,9 @@ export function UsersTable({
 
   return (
     <>
-      <DataTable data={data}>
+      <DataTable data={data} rowKey="userId">
         <DataColumn id="username" label={formatMessage(labels.username)} width="2fr">
-          {(row: any) => <Link href={`/admin/users/${row.id}`}>{row.username}</Link>}
+          {(row: any) => <Link href={`/admin/users/${row.userId}`}>{row.username}</Link>}
         </DataColumn>
         <DataColumn id="role" label={formatMessage(labels.role)}>
           {(row: any) =>
@@ -41,11 +41,11 @@ export function UsersTable({
         {showActions && (
           <DataColumn id="action" align="end" width="100px">
             {(row: any) => {
-              const { id } = row
+              const { userId } = row
 
               return (
                 <MenuButton>
-                  <MenuItem href={`/admin/users/${id}`} data-test="link-button-edit">
+                  <MenuItem href={`/admin/users/${userId}`} data-test="link-button-edit">
                     <Row alignItems="center" gap>
                       <Icon>
                         <Edit />
@@ -73,7 +73,7 @@ export function UsersTable({
       </DataTable>
       <Modal isOpen={!!deleteUser}>
         <UserDeleteForm
-          userId={deleteUser?.id}
+          userId={deleteUser?.userId}
           username={deleteUser?.username}
           onClose={() => {
             setDeleteUser(null)

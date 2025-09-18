@@ -44,7 +44,7 @@ async function clickhouseQuery(websiteId: string, filters: QueryFilters) {
 
   let sql = ''
 
-  if (EVENT_COLUMNS.some((item) => Object.keys(filters).includes(item))) {
+  if (filters && typeof filters === 'object' && EVENT_COLUMNS.some((item) => Object.keys(filters).includes(item))) {
     sql = `
     SELECT
       formatDateTime(toDateTime(created_at, '${timezone}'), '%w:%H') as time,
@@ -77,6 +77,11 @@ async function clickhouseQuery(websiteId: string, filters: QueryFilters) {
 
 function formatResults(data: any) {
   const days = []
+
+  // Add array check to prevent .find() error
+  if (!Array.isArray(data)) {
+    data = []
+  }
 
   for (let i = 0; i < 7; i++) {
     days.push([])

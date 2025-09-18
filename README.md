@@ -41,7 +41,7 @@ cp .env.example .env.local
 # Edit .env.local with your configuration
 
 # Set up the database
-pnpm run build-db
+pnpm run check-db
 
 # Configure admin access (optional - see ADMIN_SETUP.md)
 echo 'INITIAL_ADMIN_EMAIL="admin@yourdomain.com"' >> .env.local
@@ -85,9 +85,8 @@ pnpm build-turbo           # Build with Turbopack
 pnpm build-docker          # Docker-specific build
 
 # Database
-pnpm build-db              # Generate Prisma client and setup
+pnpm check-db              # Verify database connection and apply migrations
 pnpm update-db             # Deploy database migrations
-pnpm check-db              # Verify database connection
 
 # Components & Assets
 pnpm build-tracker         # Build analytics tracking script
@@ -115,8 +114,7 @@ src/
 ├── styles/              # CSS modules and global styles
 └── types/               # TypeScript type definitions
 
-prisma/
-├── schema.prisma        # Database schema
+drizzle/
 └── migrations/          # Database migrations
 
 scripts/                 # Build and utility scripts
@@ -147,7 +145,7 @@ FORCE_SSL=1
 
 ### Database Setup
 
-Entrolytics uses PostgreSQL with Prisma ORM. The system supports:
+Entrolytics uses PostgreSQL with Drizzle ORM. The system supports:
 
 - **Primary database** for metadata and user management
 - **Read replicas** for improved dashboard performance
@@ -201,7 +199,7 @@ curl -X POST https://your-domain.com/api/send \
 ### Technology Stack
 
 - **Framework**: Next.js 15.5 with App Router
-- **Database**: PostgreSQL with Prisma ORM
+- **Database**: PostgreSQL with Drizzle ORM
 - **Authentication**: Clerk with organization support
 - **Styling**: CSS Modules with PostCSS
 - **Charts**: Chart.js with date-fns adapter
@@ -277,7 +275,6 @@ pnpm install
 # Update DATABASE_URL in .env.local
 
 # Run initial setup
-pnpm run build-db
 pnpm run check-db
 
 # Start development server
@@ -314,7 +311,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - UI components from [@entro314labs/entro-zen](https://npmjs.com/package/@entro314labs/entro-zen)
 - Authentication by [Clerk](https://clerk.com/)
 - Charts powered by [Chart.js](https://www.chartjs.org/)
-- Database ORM by [Prisma](https://prisma.io/)
+- Database ORM by [Drizzle](https://orm.drizzle.team/)
 
 ## 📞 Support
 

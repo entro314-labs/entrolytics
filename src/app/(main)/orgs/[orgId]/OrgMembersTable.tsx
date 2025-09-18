@@ -23,7 +23,7 @@ export function OrgMembersTable({
   }
 
   return (
-    <DataTable data={data}>
+    <DataTable data={data} rowKey="userId">
       <DataColumn id="username" label={formatMessage(labels.username)}>
         {(row: any) => row?.user?.username}
       </DataColumn>
@@ -39,10 +39,10 @@ export function OrgMembersTable({
 
             return (
               <Row alignItems="center">
-                <OrgMemberEditButton orgId={orgId} userId={row?.user?.id} role={row?.role} />
+                <OrgMemberEditButton orgId={orgId} userId={row?.user?.userId} role={row?.role} />
                 <OrgMemberRemoveButton
                   orgId={orgId}
-                  userId={row?.user?.id}
+                  userId={row?.user?.userId}
                   userName={row?.user?.username}
                 />
               </Row>

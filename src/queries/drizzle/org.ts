@@ -164,34 +164,32 @@ export async function getUserOrgs(
 }
 
 export async function createOrg(data: any, userId: string) {
-  return db.transaction(async (tx) => {
-    const orgValues: any = {
+  const orgValues: any = {
+    orgId: data.id,
+    name: data.name,
+    accessCode: data.access_code,
+  }
+
+  if (data.logo_url) {
+    orgValues.logoUrl = data.logo_url
+  }
+
+  const [newOrg] = await db
+    .insert(org)
+    .values(orgValues)
+    .returning()
+
+  const [newOrgUser] = await db
+    .insert(orgUser)
+    .values({
+      orgUserId: uuid(),
       orgId: data.id,
-      name: data.name,
-      accessCode: data.access_code,
-    }
+      userId: userId,
+      role: ROLES.orgOwner,
+    })
+    .returning()
 
-    if (data.logo_url) {
-      orgValues.logoUrl = data.logo_url
-    }
-
-    const [newOrg] = await tx
-      .insert(org)
-      .values(orgValues)
-      .returning()
-
-    const [newOrgUser] = await tx
-      .insert(orgUser)
-      .values({
-        orgUserId: uuid(),
-        orgId: data.id,
-        userId: userId,
-        role: ROLES.orgOwner,
-      })
-      .returning()
-
-    return [newOrg, newOrgUser]
-  })
+  return [newOrg, newOrgUser]
 }
 
 export async function updateOrg(orgId: string, data: any) {
@@ -209,25 +207,23 @@ export async function updateOrg(orgId: string, data: any) {
 }
 
 export async function deleteOrg(orgId: string) {
-  return db.transaction(async (tx) => {
-    const cloudMode = !!process.env.CLOUD_MODE
+  const cloudMode = !!process.env.CLOUD_MODE
 
-    if (cloudMode) {
-      // Soft delete in cloud mode
-      const [deletedOrg] = await tx
-        .update(org)
-        .set({ deletedAt: new Date() })
-        .where(eq(org.orgId, orgId))
-        .returning()
+  if (cloudMode) {
+    // Soft delete in cloud mode
+    const [deletedOrg] = await db
+      .update(org)
+      .set({ deletedAt: new Date() })
+      .where(eq(org.orgId, orgId))
+      .returning()
 
-      return [deletedOrg]
-    }
+    return [deletedOrg]
+  }
 
-    // Hard delete in non-cloud mode
-    const deletedOrgUsers = await tx.delete(orgUser).where(eq(orgUser.orgId, orgId))
+  // Hard delete in non-cloud mode
+  const deletedOrgUsers = await db.delete(orgUser).where(eq(orgUser.orgId, orgId))
 
-    const [deletedOrg] = await tx.delete(org).where(eq(org.orgId, orgId)).returning()
+  const [deletedOrg] = await db.delete(org).where(eq(org.orgId, orgId)).returning()
 
-    return [deletedOrgUsers, deletedOrg]
-  })
+  return [deletedOrgUsers, deletedOrg]
 }

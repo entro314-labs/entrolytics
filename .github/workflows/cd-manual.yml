@@ -18,7 +18,7 @@ jobs:
         db-type: [postgresql]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v5
 
       - name: Extract version parts from input
         id: extract_version

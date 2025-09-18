@@ -3,6 +3,7 @@ import { canUpdatePixel, canDeletePixel, canViewPixel } from '@/validations'
 import { parseRequest } from '@/lib/request'
 import { ok, json, unauthorized, serverError, badRequest } from '@/lib/response'
 import { deletePixel, getPixel, updatePixel } from '@/queries'
+import { isValidUuid } from '@/lib/uuid'
 
 export async function GET(request: Request, { params }: { params: Promise<{ pixelId: string }> }) {
   const { auth, error } = await parseRequest(request)
@@ -12,6 +13,11 @@ export async function GET(request: Request, { params }: { params: Promise<{ pixe
   }
 
   const { pixelId } = await params
+
+  // Validate pixelId is a proper UUID
+  if (!isValidUuid(pixelId)) {
+    return badRequest('Invalid pixel ID format')
+  }
 
   if (!(await canViewPixel(auth, pixelId))) {
     return unauthorized()
@@ -36,6 +42,11 @@ export async function POST(request: Request, { params }: { params: Promise<{ pix
 
   const { pixelId } = await params
   const { name, slug } = body
+
+  // Validate pixelId is a proper UUID
+  if (!isValidUuid(pixelId)) {
+    return badRequest('Invalid pixel ID format')
+  }
 
   if (!(await canUpdatePixel(auth, pixelId))) {
     return unauthorized()

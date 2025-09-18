@@ -25,7 +25,8 @@ export async function request(
   // Check if this is an external URL that needs proxying
   if (typeof window !== 'undefined' && shouldProxy(url)) {
     try {
-      console.log(`[PROXY] Routing external request through proxy: ${url}`)
+      console.log(`[PROXY] Routing external request through proxy: ${method} ${url}`)
+      console.trace('[PROXY] Request stack trace:')
       const proxyResponse = await proxyRequest({
         url,
         method: method as any,

@@ -1,8 +1,9 @@
 import { z } from 'zod'
-import { unauthorized, json, notFound, ok } from '@/lib/response'
+import { unauthorized, json, notFound, ok, badRequest } from '@/lib/response'
 import { canDeleteOrg, canUpdateOrg, canViewOrg } from '@/validations'
 import { parseRequest } from '@/lib/request'
 import { deleteOrg, getOrg, updateOrg } from '@/queries'
+import { isValidUuid } from '@/lib/uuid'
 
 export async function GET(request: Request, { params }: { params: Promise<{ orgId: string }> }) {
   const { auth, error } = await parseRequest(request)
@@ -12,6 +13,11 @@ export async function GET(request: Request, { params }: { params: Promise<{ orgI
   }
 
   const { orgId } = await params
+
+  // Validate orgId is a proper UUID
+  if (!isValidUuid(orgId)) {
+    return badRequest('Invalid organization ID format')
+  }
 
   if (!(await canViewOrg(auth, orgId))) {
     return unauthorized()
@@ -40,6 +46,11 @@ export async function POST(request: Request, { params }: { params: Promise<{ org
 
   const { orgId } = await params
 
+  // Validate orgId is a proper UUID
+  if (!isValidUuid(orgId)) {
+    return badRequest('Invalid organization ID format')
+  }
+
   if (!(await canUpdateOrg(auth, orgId))) {
     return unauthorized('You must be the owner of this org.')
   }
@@ -57,6 +68,11 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ o
   }
 
   const { orgId } = await params
+
+  // Validate orgId is a proper UUID
+  if (!isValidUuid(orgId)) {
+    return badRequest('Invalid organization ID format')
+  }
 
   if (!(await canDeleteOrg(auth, orgId))) {
     return unauthorized('You must be the owner of this org.')

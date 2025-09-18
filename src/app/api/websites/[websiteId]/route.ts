@@ -4,6 +4,7 @@ import { SHARE_ID_REGEX } from '@/lib/constants'
 import { parseRequest } from '@/lib/request'
 import { ok, json, unauthorized, serverError, badRequest } from '@/lib/response'
 import { deleteWebsite, getWebsite, updateWebsite } from '@/queries'
+import { isValidUuid } from '@/lib/uuid'
 
 export async function GET(
   request: Request,
@@ -16,6 +17,11 @@ export async function GET(
   }
 
   const { websiteId } = await params
+
+  // Validate websiteId is a proper UUID
+  if (!isValidUuid(websiteId)) {
+    return badRequest('Invalid website ID format')
+  }
 
   if (!(await canViewWebsite(auth, websiteId))) {
     return unauthorized()
@@ -45,6 +51,11 @@ export async function POST(
   const { websiteId } = await params
   const { name, domain, shareId } = body
 
+  // Validate websiteId is a proper UUID
+  if (!isValidUuid(websiteId)) {
+    return badRequest('Invalid website ID format')
+  }
+
   if (!(await canUpdateWebsite(auth, websiteId))) {
     return unauthorized()
   }
@@ -73,6 +84,11 @@ export async function DELETE(
   }
 
   const { websiteId } = await params
+
+  // Validate websiteId is a proper UUID
+  if (!isValidUuid(websiteId)) {
+    return badRequest('Invalid website ID format')
+  }
 
   if (!(await canDeleteWebsite(auth, websiteId))) {
     return unauthorized()

@@ -1,7 +1,7 @@
 ---
 services:
   entrolytics:
-    image: ghcr.io/entrolytics-software/entrolytics:postgresql-latest
+    image: ghcr.io/entro314-labs/entrolytics:postgresql-latest
     ports:
       - "3000:3000"
     environment:

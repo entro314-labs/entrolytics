@@ -25,24 +25,59 @@ export function WebsitesTable({
   const { renderUrl, pathname } = useNavigation()
   const isSettings = pathname.includes('/settings')
 
-  if (!data?.length) {
-    return children
+  // Defensive guards
+  if (!data || !Array.isArray(data) || data.length === 0) {
+    return children || null
+  }
+
+  // Additional safety check for data integrity
+  const safeData = data.filter(item => {
+    const website = item?.website || item
+    return website && (website.websiteId || website.id)
+  })
+
+  if (safeData.length === 0) {
+    return children || null
   }
 
   return (
-    <DataTable data={data} rowKey="websiteId">
+    <DataTable
+      data={safeData}
+      rowKey={(row: any) => {
+        const id = row.website?.websiteId || row.websiteId
+        if (!id) {
+          console.warn('WebsitesTable: Missing websiteId for row:', row)
+          return `fallback-${JSON.stringify(row).slice(0, 50)}`
+        }
+        return id
+      }}
+      aria-label="Websites list"
+      role="table"
+    >
       <DataColumn id="name" label={formatMessage(labels.name)}>
-        {(row: any) => (
-          <Link href={renderUrl(`${isSettings ? '/settings' : ''}/websites/${row.websiteId}`, false)}>
-            {row.name}
-          </Link>
-        )}
+        {(row: any) => {
+          const website = row.website || row
+          const websiteId = website.websiteId
+          const name = website.name
+
+          return (
+            <Link href={renderUrl(`${isSettings ? '/settings' : ''}/websites/${websiteId}`, false)}>
+              {name}
+            </Link>
+          )
+        }}
       </DataColumn>
-      <DataColumn id="domain" label={formatMessage(labels.domain)} />
+      <DataColumn id="domain" label={formatMessage(labels.domain)}>
+        {(row: any) => {
+          const website = row.website || row
+          return website.domain
+        }}
+      </DataColumn>
       {showActions && (
         <DataColumn id="action" label=" " align="end">
           {(row: any) => {
-            const websiteId = row.websiteId
+            const website = row.website || row
+            const websiteId = website.websiteId
 
             return (
               <MenuButton>

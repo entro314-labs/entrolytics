@@ -3,6 +3,7 @@ import { canUpdateLink, canDeleteLink, canViewLink } from '@/validations'
 import { parseRequest } from '@/lib/request'
 import { ok, json, unauthorized, serverError, badRequest } from '@/lib/response'
 import { deleteLink, getLink, updateLink } from '@/queries'
+import { isValidUuid } from '@/lib/uuid'
 
 export async function GET(request: Request, { params }: { params: Promise<{ linkId: string }> }) {
   const { auth, error } = await parseRequest(request)
@@ -12,6 +13,11 @@ export async function GET(request: Request, { params }: { params: Promise<{ link
   }
 
   const { linkId } = await params
+
+  // Validate linkId is a proper UUID
+  if (!isValidUuid(linkId)) {
+    return badRequest('Invalid link ID format')
+  }
 
   if (!(await canViewLink(auth, linkId))) {
     return unauthorized()
@@ -37,6 +43,11 @@ export async function POST(request: Request, { params }: { params: Promise<{ lin
 
   const { linkId } = await params
   const { name, url, slug } = body
+
+  // Validate linkId is a proper UUID
+  if (!isValidUuid(linkId)) {
+    return badRequest('Invalid link ID format')
+  }
 
   if (!(await canUpdateLink(auth, linkId))) {
     return unauthorized()
@@ -66,6 +77,11 @@ export async function DELETE(
   }
 
   const { linkId } = await params
+
+  // Validate linkId is a proper UUID
+  if (!isValidUuid(linkId)) {
+    return badRequest('Invalid link ID format')
+  }
 
   if (!(await canDeleteLink(auth, linkId))) {
     return unauthorized()

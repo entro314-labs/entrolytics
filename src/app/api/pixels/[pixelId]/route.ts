@@ -77,6 +77,11 @@ export async function DELETE(
 
   const { pixelId } = await params
 
+  // Validate pixelId is a proper UUID
+  if (!isValidUuid(pixelId)) {
+    return badRequest('Invalid pixel ID format')
+  }
+
   if (!(await canDeletePixel(auth, pixelId))) {
     return unauthorized()
   }

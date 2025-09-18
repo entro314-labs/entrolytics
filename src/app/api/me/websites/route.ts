@@ -23,5 +23,6 @@ export async function GET(request: Request) {
 
   const websites = await getUserWebsites(auth.user.userId, filters)
 
+
   return json(websites)
 }

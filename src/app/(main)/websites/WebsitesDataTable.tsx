@@ -1,5 +1,6 @@
 import { WebsitesTable } from './WebsitesTable'
 import { DataGrid } from '@/components/common/DataGrid'
+import { TableErrorBoundary } from '@/components/common/TableErrorBoundary'
 import { useUserWebsitesQuery } from '@/components/hooks'
 
 export function WebsitesDataTable({
@@ -15,17 +16,32 @@ export function WebsitesDataTable({
 }) {
   const queryResult = useUserWebsitesQuery({ orgId })
 
+
   return (
     <DataGrid query={queryResult} allowSearch allowPaging>
-      {({ data }) => (
-        <WebsitesTable
-          orgId={orgId}
-          data={data}
-          showActions={showActions}
-          allowEdit={allowEdit}
-          allowView={allowView}
-        />
-      )}
+      {(result) => {
+        try {
+          const websitesData = result?.data || result
+
+          // Ensure we always pass a valid array to WebsitesTable
+          const safeWebsitesData = Array.isArray(websitesData) ? websitesData : []
+
+          return (
+            <TableErrorBoundary>
+              <WebsitesTable
+                orgId={orgId}
+                data={safeWebsitesData}
+                showActions={showActions}
+                allowEdit={allowEdit}
+                allowView={allowView}
+              />
+            </TableErrorBoundary>
+          )
+        } catch (error) {
+          console.error('Error rendering WebsitesTable:', error)
+          return <div>Error loading websites. Please try again.</div>
+        }
+      }}
     </DataGrid>
   )
 }

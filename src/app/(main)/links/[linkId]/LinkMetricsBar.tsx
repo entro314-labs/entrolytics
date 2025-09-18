@@ -51,7 +51,7 @@ export function LinkMetricsBar({
       minHeight="136px"
     >
       <MetricsBar>
-        {metrics?.map(({ label, value, prev, change, formatValue, reverseColors }: any) => {
+        {Array.isArray(metrics) && metrics.map(({ label, value, prev, change, formatValue, reverseColors }: any) => {
           return (
             <MetricCard
               key={label}

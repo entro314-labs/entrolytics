@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Optional: Add domain whitelist for additional security
-    // const allowedDomains = ['myroomie.gr', 'example.com']
+    // const allowedDomains = ['example.com', 'api.example.com']
     // if (!allowedDomains.includes(urlObj.hostname)) {
     //   return badRequest('Domain not allowed')
     // }

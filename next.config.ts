@@ -1,6 +1,5 @@
 import 'dotenv/config'
 import { createRequire } from 'module'
-import { PrismaPlugin } from '@prisma/nextjs-monorepo-workaround-plugin'
 
 const require = createRequire(import.meta.url)
 
@@ -198,13 +197,7 @@ export default {
   typescript: {
     ignoreBuildErrors: true,
   },
-  serverExternalPackages: ['@prisma/client'],
-  webpack: (config, { isServer }) => {
-    if (isServer) {
-      config.plugins = [...config.plugins, new PrismaPlugin()]
-    }
-    return config
-  },
+  serverExternalPackages: ['@neondatabase/serverless'],
   async headers() {
     return headers
   },

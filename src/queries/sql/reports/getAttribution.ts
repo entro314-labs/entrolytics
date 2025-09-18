@@ -1,7 +1,8 @@
 import clickhouse from '@/lib/clickhouse'
 import { EVENT_TYPE } from '@/lib/constants'
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
-import prisma from '@/lib/prisma'
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
+import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
+
 import { QueryFilters } from '@/lib/types'
 
 export interface AttributionParameters {
@@ -28,7 +29,7 @@ export async function getAttribution(
   ...args: [websiteId: string, parameters: AttributionParameters, filters: QueryFilters]
 ) {
   return runQuery({
-    [PRISMA]: () => relationalQuery(...args),
+    [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
   })
 }
@@ -39,7 +40,7 @@ async function relationalQuery(
   filters: QueryFilters
 ): Promise<AttributionResult> {
   const { model, type, currency } = parameters
-  const { rawQuery, parseFilters } = prisma
+  // Using rawQuery FROM analytics-utils
   const eventType = type === 'path' ? EVENT_TYPE.pageView : EVENT_TYPE.customEvent
   const column = type === 'path' ? 'url_path' : 'event_name'
   const { filterQuery, joinSessionQuery, cohortQuery, queryParams } = parseFilters({
@@ -51,102 +52,102 @@ async function relationalQuery(
 
   function getUTMQuery(utmColumn: string) {
     return `
-    select 
+    SELECT 
         coalesce(we.${utmColumn}, '') name,
-        ${currency ? 'sum(e.value)' : 'count(distinct we.session_id)'} value
-    from model m
-    join website_event we
+        ${currency ? 'SUM(e.value)' : 'COUNT(DISTINCT we.session_id)'} value
+    FROM model m
+    JOIN website_event we
     on we.created_at = m.created_at
-        and we.session_id = m.session_id
-    ${currency ? 'join events e on e.session_id = m.session_id' : ''}
-    where we.website_id = {{websiteId::uuid}}
-          and we.created_at between {{startDate}} and {{endDate}}
-    ${currency ? '' : `and we.${utmColumn} != ''`}  
-    group by 1
-    order by 2 desc
+        AND we.session_id = m.session_id
+    ${currency ? 'JOIN events e on e.session_id = m.session_id' : ''}
+    WHERE we.website_id = {{websiteId::uuid}}
+          AND we.created_at between {{startDate}} AND {{endDate}}
+    ${currency ? '' : `AND we.${utmColumn} != ''`}  
+    GROUP BY 1
+    ORDER BY 2 desc
     limit 20`
   }
 
   const eventQuery = `WITH events AS (
-        select distinct
+        SELECT DISTINCT
             session_id,
-            max(created_at) max_dt
-        from website_event
+            MAX(created_at) max_dt
+        FROM website_event
         ${cohortQuery}
         ${joinSessionQuery}
-        where website_id = {{websiteId::uuid}}
-          and created_at between {{startDate}} and {{endDate}}
-          and ${column} = {{step}}
+        WHERE website_id = {{websiteId::uuid}}
+          AND created_at between {{startDate}} AND {{endDate}}
+          AND ${column} = {{step}}
           ${filterQuery}
-        group by 1),`
+        GROUP BY 1),`
 
   const revenueEventQuery = `WITH events AS (
-        select
+        SELECT
           revenue.session_id,
-          max(revenue.created_at) max_dt,
-          sum(revenue.revenue) value
-        from revenue
-        join website_event
+          MAX(revenue.created_at) max_dt,
+          SUM(revenue.revenue) value
+        FROM revenue
+        JOIN website_event
           on website_event.website_id = revenue.website_id
-            and website_event.session_id = revenue.session_id
-            and website_event.event_id = revenue.event_id
-            and website_event.website_id = {{websiteId::uuid}}
-            and website_event.created_at between {{startDate}} and {{endDate}}
+            AND website_event.session_id = revenue.session_id
+            AND website_event.event_id = revenue.event_id
+            AND website_event.website_id = {{websiteId::uuid}}
+            AND website_event.created_at between {{startDate}} AND {{endDate}}
         ${cohortQuery}
         ${joinSessionQuery}
-        where revenue.website_id = {{websiteId::uuid}}
-          and revenue.created_at between {{startDate}} and {{endDate}}
-          and revenue.${column} = {{step}}
-          and revenue.currency = {{currency}}
+        WHERE revenue.website_id = {{websiteId::uuid}}
+          AND revenue.created_at between {{startDate}} AND {{endDate}}
+          AND revenue.${column} = {{step}}
+          AND revenue.currency = {{currency}}
           ${filterQuery}
-        group by 1),`
+        GROUP BY 1),`
 
   function getModelQuery(model: string) {
     return model === 'first-click'
       ? `\n 
-    model AS (select e.session_id,
-        min(we.created_at) created_at
-    from events e
-    join website_event we
+    model AS (SELECT e.session_id,
+        MIN(we.created_at) created_at
+    FROM events e
+    JOIN website_event we
     on we.session_id = e.session_id
-    where we.website_id = {{websiteId::uuid}}
-          and we.created_at between {{startDate}} and {{endDate}}
-    group by e.session_id)`
+    WHERE we.website_id = {{websiteId::uuid}}
+          AND we.created_at between {{startDate}} AND {{endDate}}
+    GROUP BY e.session_id)`
       : `\n 
-    model AS (select e.session_id,
-        max(we.created_at) created_at
-    from events e
-    join website_event we
+    model AS (SELECT e.session_id,
+        MAX(we.created_at) created_at
+    FROM events e
+    JOIN website_event we
     on we.session_id = e.session_id
-    where we.website_id = {{websiteId::uuid}}
-          and we.created_at between {{startDate}} and {{endDate}} 
-          and we.created_at < e.max_dt
-    group by e.session_id)`
+    WHERE we.website_id = {{websiteId::uuid}}
+          AND we.created_at between {{startDate}} AND {{endDate}} 
+          AND we.created_at < e.max_dt
+    GROUP BY e.session_id)`
   }
 
   const referrerRes = await rawQuery(
     `
     ${currency ? revenueEventQuery : eventQuery}
     ${getModelQuery(model)}
-    select coalesce(we.referrer_domain, '') name,
-        ${currency ? 'sum(e.value)' : 'count(distinct we.session_id)'} value
-    from model m
-    join website_event we
+    SELECT coalesce(we.referrer_domain, '') name,
+        ${currency ? 'SUM(e.value)' : 'COUNT(DISTINCT we.session_id)'} value
+    FROM model m
+    JOIN website_event we
     on we.created_at = m.created_at
-        and we.session_id = m.session_id
-    join session s
+        AND we.session_id = m.session_id
+    JOIN session s
     on s.session_id = m.session_id
-    ${currency ? 'join events e on e.session_id = m.session_id' : ''}
-    where we.website_id = {{websiteId::uuid}}
-          and we.created_at between {{startDate}} and {{endDate}}
+    ${currency ? 'JOIN events e on e.session_id = m.session_id' : ''}
+    WHERE we.website_id = {{websiteId::uuid}}
+          AND we.created_at between {{startDate}} AND {{endDate}}
     ${
       currency
         ? ''
-        : `and we.referrer_domain != hostname
-      and we.referrer_domain != ''`
+        : `AND we.referrer_domain != hostname
+      AND we.referrer_domain != ''`
     }  
-    group by 1
-    order by 2 desc
+    GROUP BY 1
+    ORDER BY 2 desc
     limit 20
     `,
     queryParams
@@ -158,25 +159,25 @@ async function relationalQuery(
     ${getModelQuery(model)},
 
     results AS (
-    select case
-            when coalesce(gclid, '') != '' then 'Google Ads' 
-            when coalesce(fbclid, '') != '' then 'Facebook / Meta' 
-            when coalesce(msclkid, '') != '' then 'Microsoft Ads' 
-            when coalesce(ttclid, '') != '' then 'TikTok Ads' 
-            when coalesce(li_fat_id, '') != '' then 'LinkedIn Ads' 
-            when coalesce(twclid, '') != '' then 'Twitter Ads (X)'
-            else ''
-          end name,
-        ${currency ? 'sum(e.value)' : 'count(distinct we.session_id)'} value
-    from model m
-    join website_event we
+    SELECT CASE
+            WHEN coalesce(gclid, '') != '' THEN 'Google Ads' 
+            WHEN coalesce(fbclid, '') != '' THEN 'Facebook / Meta' 
+            WHEN coalesce(msclkid, '') != '' THEN 'Microsoft Ads' 
+            WHEN coalesce(ttclid, '') != '' THEN 'TikTok Ads' 
+            WHEN coalesce(li_fat_id, '') != '' THEN 'LinkedIn Ads' 
+            WHEN coalesce(twclid, '') != '' THEN 'Twitter Ads (X)'
+            ELSE ''
+          END name,
+        ${currency ? 'SUM(e.value)' : 'COUNT(DISTINCT we.session_id)'} value
+    FROM model m
+    JOIN website_event we
     on we.created_at = m.created_at
-        and we.session_id = m.session_id
-    ${currency ? 'join events e on e.session_id = m.session_id' : ''}
-    where we.website_id = {{websiteId::uuid}}
-          and we.created_at between {{startDate}} and {{endDate}}
-    group by 1
-    order by 2 desc
+        AND we.session_id = m.session_id
+    ${currency ? 'JOIN events e on e.session_id = m.session_id' : ''}
+    WHERE we.website_id = {{websiteId::uuid}}
+          AND we.created_at between {{startDate}} AND {{endDate}}
+    GROUP BY 1
+    ORDER BY 2 desc
     limit 20)
     SELECT * 
     FROM results
@@ -232,16 +233,16 @@ async function relationalQuery(
 
   const totalRes = await rawQuery(
     `
-    select 
-        count(*) as "pageviews",
-        count(distinct session_id) as "visitors",
-        count(distinct visit_id) as "visits"
-    from website_event
+    SELECT 
+        COUNT(*) as "pageviews",
+        COUNT(DISTINCT session_id) as "visitors",
+        COUNT(DISTINCT visit_id) as "visits"
+    FROM website_event
     ${joinSessionQuery}
     ${cohortQuery}
-    where website_id = {{websiteId::uuid}}
-        and created_at between {{startDate}} and {{endDate}}
-        and ${column} = {{step}}
+    WHERE website_id = {{websiteId::uuid}}
+        AND created_at between {{startDate}} AND {{endDate}}
+        AND ${column} = {{step}}
         ${filterQuery}
     `,
     queryParams
@@ -277,19 +278,19 @@ async function clickhouseQuery(
 
   function getUTMQuery(utmColumn: string) {
     return `
-      select 
+      SELECT 
           we.${utmColumn} name,
-          ${currency ? 'sum(e.value)' : 'uniqExact(we.session_id)'} value
-      from model m
-      join website_event we
+          ${currency ? 'SUM(e.value)' : 'uniqExact(we.session_id)'} value
+      FROM model m
+      JOIN website_event we
       on we.created_at = m.created_at
-          and we.session_id = m.session_id
-      ${currency ? 'join events e on e.session_id = m.session_id' : ''}
-      where we.website_id = {websiteId:UUID}
-            and we.created_at between {startDate:DateTime64} and {endDate:DateTime64}
-      ${currency ? '' : `and we.${utmColumn} != ''`}  
-      group by 1
-      order by 2 desc
+          AND we.session_id = m.session_id
+      ${currency ? 'JOIN events e on e.session_id = m.session_id' : ''}
+      WHERE we.website_id = {websiteId:UUID}
+            AND we.created_at between {startDate:DateTime64} AND {endDate:DateTime64}
+      ${currency ? '' : `AND we.${utmColumn} != ''`}  
+      GROUP BY 1
+      ORDER BY 2 desc
       limit 20
     `
   }
@@ -297,61 +298,61 @@ async function clickhouseQuery(
   function getModelQuery(model: string) {
     if (model === 'first-click') {
       return ` 
-        model AS (select e.session_id,
-            min(we.created_at) created_at
-        from events e
-        join website_event we
+        model AS (SELECT e.session_id,
+            MIN(we.created_at) created_at
+        FROM events e
+        JOIN website_event we
         on we.session_id = e.session_id
-        where we.website_id = {websiteId:UUID}
-          and we.created_at between {startDate:DateTime64} and {endDate:DateTime64}
-        group by e.session_id)
+        WHERE we.website_id = {websiteId:UUID}
+          AND we.created_at between {startDate:DateTime64} AND {endDate:DateTime64}
+        GROUP BY e.session_id)
       `
     }
 
     return `
-      model AS (select e.session_id,
-          max(we.created_at) created_at
-      from events e
-      join website_event we
+      model AS (SELECT e.session_id,
+          MAX(we.created_at) created_at
+      FROM events e
+      JOIN website_event we
       on we.session_id = e.session_id
-      where we.website_id = {websiteId:UUID}
-        and we.created_at between {startDate:DateTime64} and {endDate:DateTime64}
-        and we.created_at < e.max_dt
-      group by e.session_id)
+      WHERE we.website_id = {websiteId:UUID}
+        AND we.created_at between {startDate:DateTime64} AND {endDate:DateTime64}
+        AND we.created_at < e.max_dt
+      GROUP BY e.session_id)
       `
   }
 
   const eventQuery = `WITH events AS (
-        select distinct
+        SELECT DISTINCT
             session_id,
-            max(created_at) max_dt
-        from website_event
+            MAX(created_at) max_dt
+        FROM website_event
         ${cohortQuery}
-        where website_id = {websiteId:UUID}
-          and created_at between {startDate:DateTime64} and {endDate:DateTime64}
-          and ${column} = {step:String}
+        WHERE website_id = {websiteId:UUID}
+          AND created_at between {startDate:DateTime64} AND {endDate:DateTime64}
+          AND ${column} = {step:String}
           ${filterQuery}
-        group by 1),`
+        GROUP BY 1),`
 
   const revenueEventQuery = `WITH events AS (
-          select
+          SELECT
               website_revenue.session_id,
-              max(website_revenue.created_at) max_dt,
-              sum(website_revenue.revenue) as value
-          from website_revenue
-          join website_event
+              MAX(website_revenue.created_at) max_dt,
+              SUM(website_revenue.revenue) as value
+          FROM website_revenue
+          JOIN website_event
           on website_event.website_id = website_revenue.website_id
-            and website_event.session_id = website_revenue.session_id
-            and website_event.event_id = website_revenue.event_id
-            and website_event.website_id = {websiteId:UUID}
-            and website_event.created_at between {startDate:DateTime64} and {endDate:DateTime64}
+            AND website_event.session_id = website_revenue.session_id
+            AND website_event.event_id = website_revenue.event_id
+            AND website_event.website_id = {websiteId:UUID}
+            AND website_event.created_at between {startDate:DateTime64} AND {endDate:DateTime64}
           ${cohortQuery}
-          where website_revenue.website_id = {websiteId:UUID}
-            and website_revenue.created_at between {startDate:DateTime64} and {endDate:DateTime64}
-            and website_revenue.${column} = {step:String}
-            and website_revenue.currency = {currency:String}
+          WHERE website_revenue.website_id = {websiteId:UUID}
+            AND website_revenue.created_at between {startDate:DateTime64} AND {endDate:DateTime64}
+            AND website_revenue.${column} = {step:String}
+            AND website_revenue.currency = {currency:String}
             ${filterQuery}
-          group by 1),`
+          GROUP BY 1),`
 
   const referrerRes = await rawQuery<
     {
@@ -362,23 +363,23 @@ async function clickhouseQuery(
     `
     ${currency ? revenueEventQuery : eventQuery}
     ${getModelQuery(model)}
-    select we.referrer_domain name,
-        ${currency ? 'sum(e.value)' : 'uniqExact(we.session_id)'} value
-    from model m
-    join website_event we
+    SELECT we.referrer_domain name,
+        ${currency ? 'SUM(e.value)' : 'uniqExact(we.session_id)'} value
+    FROM model m
+    JOIN website_event we
     on we.created_at = m.created_at
-        and we.session_id = m.session_id
-    ${currency ? 'join events e on e.session_id = m.session_id' : ''}
-    where we.website_id = {websiteId:UUID}
-          and we.created_at between {startDate:DateTime64} and {endDate:DateTime64}
+        AND we.session_id = m.session_id
+    ${currency ? 'JOIN events e on e.session_id = m.session_id' : ''}
+    WHERE we.website_id = {websiteId:UUID}
+          AND we.created_at between {startDate:DateTime64} AND {endDate:DateTime64}
     ${
       currency
         ? ''
-        : `and we.referrer_domain != hostname
-      and we.referrer_domain != ''`
+        : `AND we.referrer_domain != hostname
+      AND we.referrer_domain != ''`
     }  
-    group by 1
-    order by 2 desc
+    GROUP BY 1
+    ORDER BY 2 desc
     limit 20
     `,
     queryParams
@@ -393,23 +394,23 @@ async function clickhouseQuery(
     `
     ${currency ? revenueEventQuery : eventQuery}
     ${getModelQuery(model)}
-    select multiIf(gclid != '', 'Google Ads', 
+    SELECT multiIf(gclid != '', 'Google Ads', 
                    fbclid != '', 'Facebook / Meta', 
                    msclkid != '', 'Microsoft Ads', 
                    ttclid != '', 'TikTok Ads', 
                    li_fat_id != '', 'LinkedIn Ads', 
                    twclid != '', 'Twitter Ads (X)','') name,
-        ${currency ? 'sum(e.value)' : 'uniqExact(we.session_id)'} value
-    from model m
-    join website_event we
+        ${currency ? 'SUM(e.value)' : 'uniqExact(we.session_id)'} value
+    FROM model m
+    JOIN website_event we
     on we.created_at = m.created_at
-        and we.session_id = m.session_id
-    ${currency ? 'join events e on e.session_id = m.session_id' : ''}
-    where we.website_id = {websiteId:UUID}
-      and we.created_at between {startDate:DateTime64} and {endDate:DateTime64}
-    ${currency ? '' : `and name != ''`}
-    group by 1
-    order by 2 desc
+        AND we.session_id = m.session_id
+    ${currency ? 'JOIN events e on e.session_id = m.session_id' : ''}
+    WHERE we.website_id = {websiteId:UUID}
+      AND we.created_at between {startDate:DateTime64} AND {endDate:DateTime64}
+    ${currency ? '' : `AND name != ''`}
+    GROUP BY 1
+    ORDER BY 2 desc
     limit 20
     `,
     queryParams
@@ -487,15 +488,15 @@ async function clickhouseQuery(
 
   const totalRes = await rawQuery<{ pageviews: number; visitors: number; visits: number }>(
     `
-    select 
-        count(*) as "pageviews",
+    SELECT 
+        COUNT(*) as "pageviews",
         uniqExact(session_id) as "visitors",
         uniqExact(visit_id) as "visits"
-    from website_event
+    FROM website_event
     ${cohortQuery}
-    where website_id = {websiteId:UUID}
-        and created_at between {startDate:DateTime64} and {endDate:DateTime64}
-        and ${column} = {step:String}
+    WHERE website_id = {websiteId:UUID}
+        AND created_at between {startDate:DateTime64} AND {endDate:DateTime64}
+        AND ${column} = {step:String}
         ${filterQuery}
     `,
     queryParams

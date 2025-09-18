@@ -1,7 +1,7 @@
 import clickhouse from '@/lib/clickhouse'
 import { EVENT_TYPE } from '@/lib/constants'
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
-import prisma from '@/lib/prisma'
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
+import { getTimestampDiffSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
 import { QueryFilters } from '@/lib/types'
 import { EVENT_COLUMNS } from '@/lib/constants'
 
@@ -17,7 +17,7 @@ export async function getWebsiteStats(
   ...args: [websiteId: string, filters: QueryFilters]
 ): Promise<WebsiteStatsData[]> {
   return runQuery({
-    [PRISMA]: () => relationalQuery(...args),
+    [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
   })
 }
@@ -26,7 +26,6 @@ async function relationalQuery(
   websiteId: string,
   filters: QueryFilters
 ): Promise<WebsiteStatsData[]> {
-  const { getTimestampDiffSQL, parseFilters, rawQuery } = prisma
   const { filterQuery, joinSessionQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
@@ -35,26 +34,26 @@ async function relationalQuery(
 
   return rawQuery(
     `
-    select
-      sum(t.c) as "pageviews",
-      count(distinct t.session_id) as "visitors",
-      count(distinct t.visit_id) as "visits",
-      sum(case when t.c = 1 then 1 else 0 end) as "bounces",
-      sum(${getTimestampDiffSQL('t.min_time', 't.max_time')}) as "totaltime"
-    from (
-      select
+    SELECT
+      SUM(t.c) as "pageviews",
+      COUNT(DISTINCT t.session_id) as "visitors",
+      COUNT(DISTINCT t.visit_id) as "visits",
+      SUM(CASE WHEN t.c = 1 THEN 1 ELSE 0 END) as "bounces",
+      SUM(${getTimestampDiffSQL('t.min_time', 't.max_time')}) as "totaltime"
+    FROM (
+      SELECT
         website_event.session_id,
         website_event.visit_id,
-        count(*) as "c",
-        min(website_event.created_at) as "min_time",
-        max(website_event.created_at) as "max_time"
-      from website_event
+        COUNT(*) as "c",
+        MIN(website_event.created_at) as "min_time",
+        MAX(website_event.created_at) as "max_time"
+      FROM website_event
       ${cohortQuery}
-      ${joinSessionQuery}  
-      where website_event.website_id = {{websiteId::uuid}}
-        and website_event.created_at between {{startDate}} and {{endDate}}
+      ${joinSessionQuery}
+      WHERE website_event.website_id = {{websiteId::uuid}}
+        AND website_event.created_at BETWEEN {{startDate}} AND {{endDate}}
         ${filterQuery}
-      group by 1, 2
+      GROUP BY 1, 2
     ) as t
     `,
     queryParams

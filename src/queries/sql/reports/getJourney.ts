@@ -1,6 +1,7 @@
 import clickhouse from '@/lib/clickhouse'
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
-import prisma from '@/lib/prisma'
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
+import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
+
 import { QueryFilters } from '@/lib/types'
 
 export interface JourneyParameters {
@@ -19,14 +20,14 @@ export interface JourneyResult {
   e5: string
   e6: string
   e7: string
-  count: number
+  COUNT: number
 }
 
 export async function getJourney(
   ...args: [websiteId: string, parameters: JourneyParameters, filters: QueryFilters]
 ) {
   return runQuery({
-    [PRISMA]: () => relationalQuery(...args),
+    [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
   })
 }
@@ -37,7 +38,7 @@ async function relationalQuery(
   filters: QueryFilters
 ): Promise<JourneyResult[]> {
   const { startDate, endDate, steps, startStep, endStep } = parameters
-  const { rawQuery, parseFilters } = prisma
+  // Using rawQuery FROM analytics-utils
   const { sequenceQuery, startStepQuery, endStepQuery, params } = getJourneyQuery(
     steps,
     startStep,
@@ -78,27 +79,27 @@ async function relationalQuery(
     }
 
     sequenceQuery = `\nsequences as (
-          select ${selectQuery}
-          count(*) count
+          SELECT ${selectQuery}
+          COUNT(*) COUNT
       FROM (
-        select visit_id,
+        SELECT visit_id,
             ${maxQuery}
         FROM events
-        group by visit_id) s
-      group by ${groupByQuery})
+        GROUP BY visit_id) s
+      GROUP BY ${groupByQuery})
     `
 
     // create start Step params query
     if (startStep) {
-      startStepQuery = `and e1 = {{startStep}}`
+      startStepQuery = `AND e1 = {{startStep}}`
       params['startStep'] = startStep
     }
 
-    // create end Step params query
+    // create END Step params query
     if (endStep) {
       for (let i = 1; i < steps; i++) {
-        const startQuery = i === 1 ? 'and (' : '\nor '
-        endStepQuery += `${startQuery}(e${i} = {{endStep}} and e${i + 1} is null) `
+        const startQuery = i === 1 ? 'AND (' : '\nor '
+        endStepQuery += `${startQuery}(e${i} = {{endStep}} AND e${i + 1} is null) `
       }
       endStepQuery += `\nor (e${steps} = {{endStep}}))`
 
@@ -116,24 +117,24 @@ async function relationalQuery(
   return rawQuery(
     `
     WITH events AS (
-      select distinct
+      SELECT DISTINCT
           visit_id,
           referrer_path,
           coalesce(nullIf(event_name, ''), url_path) event,
           row_number() OVER (PARTITION BY visit_id ORDER BY created_at) AS event_number
-      from website_event
+      FROM website_event
       ${cohortQuery}
       ${joinSessionQuery}
-      where website_id = {{websiteId::uuid}}
-        and created_at between {{startDate}} and {{endDate}}),
+      WHERE website_id = {{websiteId::uuid}}
+        AND created_at between {{startDate}} AND {{endDate}}),
         ${filterQuery}
     ${sequenceQuery}
-    select *
-    from sequences
-    where 1 = 1
+    SELECT *
+    FROM sequences
+    WHERE 1 = 1
     ${startStepQuery}
     ${endStepQuery}
-    order by count desc
+    ORDER BY COUNT desc
     limit 100
     `,
     {
@@ -190,27 +191,27 @@ async function clickhouseQuery(
     }
 
     sequenceQuery = `\nsequences as (
-          select ${selectQuery}
-          count(*) count
+          SELECT ${selectQuery}
+          COUNT(*) COUNT
       FROM (
-        select visit_id,
+        SELECT visit_id,
             ${maxQuery}
         FROM events
-        group by visit_id) s
-      group by ${groupByQuery})
+        GROUP BY visit_id) s
+      GROUP BY ${groupByQuery})
     `
 
     // create start Step params query
     if (startStep) {
-      startStepQuery = `and e1 = {startStep:String}`
+      startStepQuery = `AND e1 = {startStep:String}`
       params['startStep'] = startStep
     }
 
-    // create end Step params query
+    // create END Step params query
     if (endStep) {
       for (let i = 1; i < steps; i++) {
-        const startQuery = i === 1 ? 'and (' : '\nor '
-        endStepQuery += `${startQuery}(e${i} = {endStep:String} and e${i + 1} is null) `
+        const startQuery = i === 1 ? 'AND (' : '\nor '
+        endStepQuery += `${startQuery}(e${i} = {endStep:String} AND e${i + 1} is null) `
       }
       endStepQuery += `\nor (e${steps} = {endStep:String}))`
 
@@ -228,22 +229,22 @@ async function clickhouseQuery(
   return rawQuery(
     `
     WITH events AS (
-      select distinct
+      SELECT DISTINCT
           visit_id,
           coalesce(nullIf(event_name, ''), url_path) event,
           row_number() OVER (PARTITION BY visit_id ORDER BY created_at) AS event_number
-      from website_event
+      FROM website_event
       ${cohortQuery}
-      where website_id = {websiteId:UUID}
+      WHERE website_id = {websiteId:UUID}
         ${filterQuery}
-        and created_at between {startDate:DateTime64} and {endDate:DateTime64}),
+        AND created_at between {startDate:DateTime64} AND {endDate:DateTime64}),
     ${sequenceQuery}
-    select *
-    from sequences
-    where 1 = 1
+    SELECT *
+    FROM sequences
+    WHERE 1 = 1
     ${startStepQuery}
     ${endStepQuery}
-    order by count desc
+    ORDER BY COUNT desc
     limit 100
     `,
     {
@@ -268,8 +269,8 @@ function combineSequentialDuplicates(array: any) {
 }
 
 function parseResult(data: any) {
-  return data.map(({ e1, e2, e3, e4, e5, e6, e7, count }) => ({
+  return data.map(({ e1, e2, e3, e4, e5, e6, e7, COUNT }) => ({
     items: combineSequentialDuplicates([e1, e2, e3, e4, e5, e6, e7]),
-    count: +Number(count),
+    COUNT: +Number(COUNT),
   }))
 }

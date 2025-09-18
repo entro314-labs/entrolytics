@@ -1,7 +1,8 @@
 import clickhouse from '@/lib/clickhouse'
 import { EVENT_TYPE } from '@/lib/constants'
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
-import prisma from '@/lib/prisma'
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
+import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
+
 import { QueryFilters } from '@/lib/types'
 
 export interface GoalParameters {
@@ -17,7 +18,7 @@ export async function getGoal(
   ...args: [websiteId: string, params: GoalParameters, filters: QueryFilters]
 ) {
   return runQuery({
-    [PRISMA]: () => relationalQuery(...args),
+    [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
   })
 }
@@ -28,7 +29,7 @@ async function relationalQuery(
   filters: QueryFilters
 ) {
   const { startDate, endDate, type, value } = parameters
-  const { rawQuery, parseFilters } = prisma
+  // Using rawQuery FROM analytics-utils
   const eventType = type === 'path' ? EVENT_TYPE.pageView : EVENT_TYPE.customEvent
   const column = type === 'path' ? 'url_path' : 'event_name'
   const { filterQuery, dateQuery, joinSessionQuery, cohortQuery, queryParams } = parseFilters({
@@ -42,21 +43,21 @@ async function relationalQuery(
 
   return rawQuery(
     `
-    select count(*) as num,
+    SELECT COUNT(*) as num,
     (
-      select count(distinct session_id)
-      from website_event
+      SELECT COUNT(DISTINCT session_id)
+      FROM website_event
       ${cohortQuery}
       ${joinSessionQuery}
-      where website_id = {websiteId:UUID}
+      WHERE website_id = {websiteId:UUID}
       ${dateQuery}
       ${filterQuery}
     ) as total
-    from website_event
+    FROM website_event
     ${cohortQuery}
     ${joinSessionQuery}
-    where website_id = {websiteId:UUID}
-      and ${column} = {value:String}
+    WHERE website_id = {websiteId:UUID}
+      AND ${column} = {value:String}
       ${dateQuery}
       ${filterQuery}
     `,
@@ -84,19 +85,19 @@ async function clickhouseQuery(
 
   return rawQuery(
     `
-    select count(*) as num,
+    SELECT COUNT(*) as num,
     (
-      select count(distinct session_id)
-      from website_event
+      SELECT COUNT(DISTINCT session_id)
+      FROM website_event
       ${cohortQuery}
-      where website_id = {websiteId:UUID}
+      WHERE website_id = {websiteId:UUID}
         ${dateQuery}
         ${filterQuery}
     ) as total
-    from website_event
+    FROM website_event
     ${cohortQuery}
-    where website_id = {websiteId:UUID}
-      and ${column} = {value:String}
+    WHERE website_id = {websiteId:UUID}
+      AND ${column} = {value:String}
       ${dateQuery}
       ${filterQuery}
     `,

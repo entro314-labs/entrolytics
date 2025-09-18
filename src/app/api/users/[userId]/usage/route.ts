@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { json, unauthorized } from '@/lib/response'
-import { getAllUserWebsitesIncludingOrgOwner } from '@/queries/prisma/website'
+import { getAllUserWebsitesIncludingOrgOwner } from '@/queries'
 import { getEventUsage } from '@/queries/sql/events/getEventUsage'
 import { getEventDataUsage } from '@/queries/sql/events/getEventDataUsage'
 import { parseRequest, getQueryFilters } from '@/lib/request'

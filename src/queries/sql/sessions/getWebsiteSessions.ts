@@ -1,18 +1,19 @@
 import clickhouse from '@/lib/clickhouse'
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
+import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery, pagedRawQuery } from '@/lib/analytics-utils'
 import { EVENT_COLUMNS } from '@/lib/constants'
-import prisma from '@/lib/prisma'
+
 import { QueryFilters } from '@/lib/types'
 
 export async function getWebsiteSessions(...args: [websiteId: string, filters: QueryFilters]) {
   return runQuery({
-    [PRISMA]: () => relationalQuery(...args),
+    [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
   })
 }
 
 async function relationalQuery(websiteId: string, filters: QueryFilters) {
-  const { pagedRawQuery, parseFilters } = prisma
+  // Using pagedRawQuery and parseFilters from analytics-utils
   const { search } = filters
   const { filterQuery, dateQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
@@ -21,16 +22,16 @@ async function relationalQuery(websiteId: string, filters: QueryFilters) {
   })
 
   const searchQuery = search
-    ? `and (distinct_id ilike {{search}}
-           or city ilike {{search}}
-           or browser ilike {{search}}
-           or os ilike {{search}}
-           or device ilike {{search}})`
+    ? `AND (distinct_id ilike {{search}}
+           OR city ilike {{search}}
+           OR browser ilike {{search}}
+           OR os ilike {{search}}
+           OR device ilike {{search}})`
     : ''
 
   return pagedRawQuery(
     `
-    select
+    SELECT
       session.session_id as "id",
       session.website_id as "websiteId",
       website_event.hostname,
@@ -42,19 +43,19 @@ async function relationalQuery(websiteId: string, filters: QueryFilters) {
       session.country,
       session.region,
       session.city,
-      min(website_event.created_at) as "firstAt",
-      max(website_event.created_at) as "lastAt",
-      count(distinct website_event.visit_id) as "visits",
-      sum(case when website_event.event_type = 1 then 1 else 0 end) as "views",
-      max(website_event.created_at) as "createdAt"
-    from website_event 
+      MIN(website_event.created_at) as "firstAt",
+      MAX(website_event.created_at) as "lastAt",
+      COUNT(DISTINCT website_event.visit_id) as "visits",
+      SUM(CASE WHEN website_event.event_type = 1 THEN 1 ELSE 0 END) as "views",
+      MAX(website_event.created_at) as "createdAt"
+    FROM website_event 
     ${cohortQuery}
-    join session on session.session_id = website_event.session_id
-    where website_event.website_id = {{websiteId::uuid}}
+    JOIN session on session.session_id = website_event.session_id
+    WHERE website_event.website_id = {{websiteId::uuid}}
     ${dateQuery}
     ${filterQuery}
     ${searchQuery}
-    group by session.session_id, 
+    GROUP BY session.session_id, 
       session.website_id, 
       website_event.hostname, 
       session.browser, 
@@ -65,7 +66,7 @@ async function relationalQuery(websiteId: string, filters: QueryFilters) {
       session.country, 
       session.region, 
       session.city
-    order by max(website_event.created_at) desc
+    ORDER BY MAX(website_event.created_at) desc
     `,
     queryParams,
     filters
@@ -81,18 +82,18 @@ async function clickhouseQuery(websiteId: string, filters: QueryFilters) {
   })
 
   const searchQuery = search
-    ? `and ((positionCaseInsensitive(distinct_id, {search:String}) > 0)
-           or (positionCaseInsensitive(city, {search:String}) > 0)
-           or (positionCaseInsensitive(browser, {search:String}) > 0)
-           or (positionCaseInsensitive(os, {search:String}) > 0)
-           or (positionCaseInsensitive(device, {search:String}) > 0))`
+    ? `AND ((positionCaseInsensitive(distinct_id, {search:String}) > 0)
+           OR (positionCaseInsensitive(city, {search:String}) > 0)
+           OR (positionCaseInsensitive(browser, {search:String}) > 0)
+           OR (positionCaseInsensitive(os, {search:String}) > 0)
+           OR (positionCaseInsensitive(device, {search:String}) > 0))`
     : ''
 
   let sql = ''
 
   if (EVENT_COLUMNS.some((item) => Object.keys(filters).includes(item))) {
     sql = `
-    select
+    SELECT
       session_id as id,
       website_id as websiteId,
       browser,
@@ -103,23 +104,23 @@ async function clickhouseQuery(websiteId: string, filters: QueryFilters) {
       country,
       region,
       city,
-      ${getDateStringSQL('min(created_at)')} as firstAt,
-      ${getDateStringSQL('max(created_at)')} as lastAt,
+      ${getDateStringSQL('MIN(created_at)')} as firstAt,
+      ${getDateStringSQL('MAX(created_at)')} as lastAt,
       uniq(visit_id) as visits,
       sumIf(1, event_type = 1) as views,
       lastAt as createdAt
-    from website_event
+    FROM website_event
     ${cohortQuery}
-    where website_id = {websiteId:UUID}
+    WHERE website_id = {websiteId:UUID}
     ${dateQuery}
     ${filterQuery}
     ${searchQuery}
-    group by session_id, website_id, browser, os, device, screen, language, country, region, city
-    order by lastAt desc
+    GROUP BY session_id, website_id, browser, os, device, screen, language, country, region, city
+    ORDER BY lastAt desc
     `
   } else {
     sql = `
-    select
+    SELECT
       session_id as id,
       website_id as websiteId,
       hostname,
@@ -131,19 +132,19 @@ async function clickhouseQuery(websiteId: string, filters: QueryFilters) {
       country,
       region,
       city,
-      ${getDateStringSQL('min(min_time)')} as firstAt,
-      ${getDateStringSQL('max(max_time)')} as lastAt,
+      ${getDateStringSQL('MIN(min_time)')} as firstAt,
+      ${getDateStringSQL('MAX(max_time)')} as lastAt,
       uniq(visit_id) as visits,
       sumIf(views, event_type = 1) as views,
       lastAt as createdAt
-    from website_event_stats_hourly as website_event
+    FROM website_event_stats_hourly as website_event
     ${cohortQuery}
-    where website_id = {websiteId:UUID}
+    WHERE website_id = {websiteId:UUID}
     ${dateQuery}
     ${filterQuery}
     ${searchQuery}
-    group by session_id, website_id, hostname, browser, os, device, screen, language, country, region, city
-    order by lastAt desc
+    GROUP BY session_id, website_id, hostname, browser, os, device, screen, language, country, region, city
+    ORDER BY lastAt desc
     `
   }
 

@@ -1,8 +1,8 @@
 import { EVENT_NAME_LENGTH, URL_LENGTH, EVENT_TYPE, PAGE_TITLE_LENGTH } from '@/lib/constants'
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
+import { CLICKHOUSE, DRIZZLE, runQuery, db, websiteEvent } from '@/lib/db'
 import clickhouse from '@/lib/clickhouse'
 import kafka from '@/lib/kafka'
-import prisma from '@/lib/prisma'
+
 import { uuid } from '@/lib/crypto'
 import { saveEventData } from './saveEventData'
 import { saveRevenue } from './saveRevenue'
@@ -57,7 +57,7 @@ export interface SaveEventArgs {
 
 export async function saveEvent(args: SaveEventArgs) {
   return runQuery({
-    [PRISMA]: () => relationalQuery(args),
+    [DRIZZLE]: () => relationalQuery(args),
     [CLICKHOUSE]: () => clickhouseQuery(args),
   })
 }
@@ -92,35 +92,33 @@ async function relationalQuery({
 }: SaveEventArgs) {
   const websiteEventId = uuid()
 
-  await prisma.client.websiteEvent.create({
-    data: {
-      id: websiteEventId,
-      websiteId,
-      sessionId,
-      visitId,
-      urlPath: urlPath?.substring(0, URL_LENGTH),
-      urlQuery: urlQuery?.substring(0, URL_LENGTH),
-      utmSource,
-      utmMedium,
-      utmCampaign,
-      utmContent,
-      utmTerm,
-      referrerPath: referrerPath?.substring(0, URL_LENGTH),
-      referrerQuery: referrerQuery?.substring(0, URL_LENGTH),
-      referrerDomain: referrerDomain?.substring(0, URL_LENGTH),
-      pageTitle: pageTitle?.substring(0, PAGE_TITLE_LENGTH),
-      gclid,
-      fbclid,
-      msclkid,
-      ttclid,
-      lifatid,
-      twclid,
-      eventType,
-      eventName: eventName ? eventName?.substring(0, EVENT_NAME_LENGTH) : null,
-      tag,
-      hostname,
-      createdAt,
-    },
+  await db.insert(websiteEvent).values({
+    eventId: websiteEventId,
+    websiteId,
+    sessionId,
+    visitId,
+    urlPath: urlPath?.substring(0, URL_LENGTH),
+    urlQuery: urlQuery?.substring(0, URL_LENGTH),
+    utmSource,
+    utmMedium,
+    utmCampaign,
+    utmContent,
+    utmTerm,
+    referrerPath: referrerPath?.substring(0, URL_LENGTH),
+    referrerQuery: referrerQuery?.substring(0, URL_LENGTH),
+    referrerDomain: referrerDomain?.substring(0, URL_LENGTH),
+    pageTitle: pageTitle?.substring(0, PAGE_TITLE_LENGTH),
+    gclid,
+    fbclid,
+    msclkid,
+    ttclid,
+    liFatId: lifatid,
+    twclid,
+    eventType,
+    eventName: eventName ? eventName?.substring(0, EVENT_NAME_LENGTH) : null,
+    tag,
+    hostname,
+    createdAt,
   })
 
   if (eventData) {

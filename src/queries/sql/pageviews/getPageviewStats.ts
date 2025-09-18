@@ -1,19 +1,20 @@
 import clickhouse from '@/lib/clickhouse'
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
-import prisma from '@/lib/prisma'
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
+import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
+
 import { EVENT_COLUMNS, EVENT_TYPE } from '@/lib/constants'
 import { QueryFilters } from '@/lib/types'
 
 export async function getPageviewStats(...args: [websiteId: string, filters: QueryFilters]) {
   return runQuery({
-    [PRISMA]: () => relationalQuery(...args),
+    [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
   })
 }
 
 async function relationalQuery(websiteId: string, filters: QueryFilters) {
   const { timezone = 'utc', unit = 'day' } = filters
-  const { getDateSQL, parseFilters, rawQuery } = prisma
+  // Using rawQuery FROM analytics-utils
   const { filterQuery, cohortQuery, joinSessionQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
@@ -22,17 +23,17 @@ async function relationalQuery(websiteId: string, filters: QueryFilters) {
 
   return rawQuery(
     `
-    select
+    SELECT
       ${getDateSQL('website_event.created_at', unit, timezone)} x,
-      count(*) y
-    from website_event
+      COUNT(*) y
+    FROM website_event
     ${cohortQuery}
     ${joinSessionQuery}  
-    where website_event.website_id = {{websiteId::uuid}}
-      and website_event.created_at between {{startDate}} and {{endDate}}
+    WHERE website_event.website_id = {{websiteId::uuid}}
+      AND website_event.created_at between {{startDate}} AND {{endDate}}
       ${filterQuery}
-    group by 1
-    order by 1
+    GROUP BY 1
+    ORDER BY 1
     `,
     queryParams
   )
@@ -54,39 +55,39 @@ async function clickhouseQuery(
 
   if (EVENT_COLUMNS.some((item) => Object.keys(filters).includes(item)) || unit === 'minute') {
     sql = `
-    select
+    SELECT
       g.t as x,
       g.y as y
-    from (
-      select
+    FROM (
+      SELECT
         ${getDateSQL('website_event.created_at', unit, timezone)} as t,
-        count(*) as y
-      from website_event
+        COUNT(*) as y
+      FROM website_event
       ${cohortQuery}
-      where website_id = {websiteId:UUID}
-        and created_at between {startDate:DateTime64} and {endDate:DateTime64}
+      WHERE website_id = {websiteId:UUID}
+        AND created_at between {startDate:DateTime64} AND {endDate:DateTime64}
         ${filterQuery}
-      group by t
+      GROUP BY t
     ) as g
-    order by t
+    ORDER BY t
     `
   } else {
     sql = `
-    select
+    SELECT
       g.t as x,
       g.y as y
-    from (
-      select
+    FROM (
+      SELECT
         ${getDateSQL('website_event.created_at', unit, timezone)} as t,
-        sum(views) as y
-      from website_event_stats_hourly as website_event
+        SUM(views) as y
+      FROM website_event_stats_hourly as website_event
       ${cohortQuery}
-      where website_id = {websiteId:UUID}
-        and created_at between {startDate:DateTime64} and {endDate:DateTime64}
+      WHERE website_id = {websiteId:UUID}
+        AND created_at between {startDate:DateTime64} AND {endDate:DateTime64}
         ${filterQuery}
-      group by t
+      GROUP BY t
     ) as g
-    order by t
+    ORDER BY t
     `
   }
 

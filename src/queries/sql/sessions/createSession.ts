@@ -1,37 +1,14 @@
-import { Prisma } from '@/generated/prisma/client'
-import prisma from '@/lib/prisma'
+import { db, session, NewSession } from '@/lib/db'
 
-export async function createSession(data: Prisma.SessionCreateInput) {
-  const {
-    id,
-    websiteId,
-    browser,
-    os,
-    device,
-    screen,
-    language,
-    country,
-    region,
-    city,
-    distinctId,
-  } = data
-
+export async function createSession(data: NewSession) {
   try {
-    return await prisma.client.session.create({
-      data: {
-        id,
-        websiteId,
-        browser,
-        os,
-        device,
-        screen,
-        language,
-        country,
-        region,
-        city,
-        distinctId,
-      },
-    })
+    const [newSession] = await db
+      .insert(session)
+      .values(data)
+      .returning()
+      .onConflictDoNothing()
+
+    return newSession
   } catch (e: any) {
     if (e.message.toLowerCase().includes('unique constraint')) {
       return null

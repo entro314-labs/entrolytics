@@ -4,7 +4,7 @@ import { ROLE_PERMISSIONS, ROLES, SHARE_TOKEN_HEADER } from '@/lib/constants'
 import { parseToken } from '@/lib/jwt'
 import { secret, uuid } from '@/lib/crypto'
 import { ensureArray } from '@/lib/utils'
-import { getUser, createUser, getUserByClerkId } from '@/queries'
+import { getUser, createUser, getUserByClerkId } from '@/queries/drizzle/user'
 
 const log = debug('entrolytics:auth')
 

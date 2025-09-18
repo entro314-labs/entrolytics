@@ -1,9 +1,10 @@
 import { DATA_TYPE } from '@/lib/constants'
 import { uuid } from '@/lib/crypto'
 import { flattenJSON, getStringValue } from '@/lib/data'
-import prisma from '@/lib/prisma'
+import { db, sessionData as sessionDataTable } from '@/lib/db'
+import { eq, and } from 'drizzle-orm'
 import { DynamicData } from '@/lib/types'
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
 import kafka from '@/lib/kafka'
 import clickhouse from '@/lib/clickhouse'
 
@@ -17,7 +18,7 @@ export interface SaveSessionDataArgs {
 
 export async function saveSessionData(data: SaveSessionDataArgs) {
   return runQuery({
-    [PRISMA]: () => relationalQuery(data),
+    [DRIZZLE]: () => relationalQuery(data),
     [CLICKHOUSE]: () => clickhouseQuery(data),
   })
 }
@@ -29,12 +30,10 @@ export async function relationalQuery({
   distinctId,
   createdAt,
 }: SaveSessionDataArgs) {
-  const { client } = prisma
-
   const jsonKeys = flattenJSON(sessionData)
 
   const flattenedData = jsonKeys.map((a) => ({
-    id: uuid(),
+    sessionDataId: uuid(),
     websiteId,
     sessionId,
     dataKey: a.key,
@@ -46,34 +45,31 @@ export async function relationalQuery({
     createdAt,
   }))
 
-  const existing = await client.sessionData.findMany({
-    where: {
-      sessionId,
-    },
-    select: {
-      id: true,
-      sessionId: true,
-      dataKey: true,
-    },
-  })
+  const existing = await db
+    .select({
+      sessionDataId: sessionDataTable.sessionDataId,
+      sessionId: sessionDataTable.sessionId,
+      dataKey: sessionDataTable.dataKey,
+    })
+    .from(sessionDataTable)
+    .where(and(
+      eq(sessionDataTable.websiteId, websiteId),
+      eq(sessionDataTable.sessionId, sessionId)
+    ))
 
   for (const data of flattenedData) {
-    const { sessionId, dataKey, ...props } = data
-    const record = existing.find((e) => e.sessionId === sessionId && e.dataKey === dataKey)
+    const { sessionId: currentSessionId, dataKey, ...props } = data
+    const record = existing.find((e) => e.sessionId === currentSessionId && e.dataKey === dataKey)
 
     if (record) {
-      await client.sessionData.update({
-        where: {
-          id: record.id,
-        },
-        data: {
-          ...props,
-        },
-      })
+      await db
+        .update(sessionDataTable)
+        .set(props)
+        .where(eq(sessionDataTable.sessionDataId, record.sessionDataId))
     } else {
-      await client.sessionData.create({
-        data,
-      })
+      await db
+        .insert(sessionDataTable)
+        .values(data)
     }
   }
 }

@@ -2,7 +2,7 @@
 import { createContext, ReactNode } from 'react'
 import { useWebsiteQuery } from '@/components/hooks'
 import { Loading } from '@entro314labs/entro-zen'
-import { Website } from '@/generated/prisma/client'
+import { Website } from '@/lib/db'
 
 export const WebsiteContext = createContext<Website>(null)
 

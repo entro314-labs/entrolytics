@@ -1,6 +1,5 @@
 import { uuid } from '@/lib/crypto'
-import { PRISMA, runQuery } from '@/lib/db'
-import prisma from '@/lib/prisma'
+import { DRIZZLE, runQuery, db, revenue } from '@/lib/db'
 
 export interface SaveRevenueArgs {
   websiteId: string
@@ -14,23 +13,21 @@ export interface SaveRevenueArgs {
 
 export async function saveRevenue(data: SaveRevenueArgs) {
   return runQuery({
-    [PRISMA]: () => relationalQuery(data),
+    [DRIZZLE]: () => relationalQuery(data),
   })
 }
 
 async function relationalQuery(data: SaveRevenueArgs) {
   const { websiteId, sessionId, eventId, eventName, currency, revenue, createdAt } = data
 
-  await prisma.client.revenue.create({
-    data: {
-      id: uuid(),
-      websiteId,
-      sessionId,
-      eventId,
-      eventName,
-      currency,
-      revenue,
-      createdAt,
-    },
+  await db.insert(revenue).values({
+    revenueId: uuid(),
+    websiteId,
+    sessionId,
+    eventId,
+    eventName,
+    currency,
+    revenue,
+    createdAt,
   })
 }

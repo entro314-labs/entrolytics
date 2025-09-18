@@ -3,7 +3,7 @@ import { parseRequest } from '@/lib/request'
 import { json, unauthorized } from '@/lib/response'
 import { pagingParams, searchParams } from '@/lib/schema'
 import { canViewAllWebsites } from '@/validations'
-import { getWebsites } from '@/queries/prisma/website'
+import { getWebsites } from '@/queries'
 import { ROLES } from '@/lib/constants'
 
 export async function GET(request: Request) {

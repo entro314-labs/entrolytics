@@ -1,7 +1,8 @@
 import clickhouse from '@/lib/clickhouse'
 import { EVENT_COLUMNS } from '@/lib/constants'
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
-import prisma from '@/lib/prisma'
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
+import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
+
 import { QueryFilters } from '@/lib/types'
 
 export interface WebsiteSessionStatsData {
@@ -16,7 +17,7 @@ export async function getWebsiteSessionStats(
   ...args: [websiteId: string, filters: QueryFilters]
 ): Promise<WebsiteSessionStatsData[]> {
   return runQuery({
-    [PRISMA]: () => relationalQuery(...args),
+    [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
   })
 }
@@ -25,7 +26,7 @@ async function relationalQuery(
   websiteId: string,
   filters: QueryFilters
 ): Promise<WebsiteSessionStatsData[]> {
-  const { parseFilters, rawQuery } = prisma
+  // Using rawQuery FROM analytics-utils
   const { filterQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
@@ -33,17 +34,17 @@ async function relationalQuery(
 
   return rawQuery(
     `
-    select
-      count(*) as "pageviews",
-      count(distinct website_event.session_id) as "visitors",
-      count(distinct website_event.visit_id) as "visits",
-      count(distinct session.country) as "countries",
-      sum(case when website_event.event_type = 2 then 1 else 0 end) as "events"
-    from website_event
+    SELECT
+      COUNT(*) as "pageviews",
+      COUNT(DISTINCT website_event.session_id) as "visitors",
+      COUNT(DISTINCT website_event.visit_id) as "visits",
+      COUNT(DISTINCT session.country) as "countries",
+      SUM(CASE WHEN website_event.event_type = 2 THEN 1 ELSE 0 END) as "events"
+    FROM website_event
     ${cohortQuery}
-    join session on website_event.session_id = session.session_id
-    where website_event.website_id = {{websiteId::uuid}}
-      and website_event.created_at between {{startDate}} and {{endDate}}
+    JOIN session on website_event.session_id = session.session_id
+    WHERE website_event.website_id = {{websiteId::uuid}}
+      AND website_event.created_at between {{startDate}} AND {{endDate}}
       ${filterQuery}
     `,
     queryParams
@@ -61,30 +62,30 @@ async function clickhouseQuery(
 
   if (EVENT_COLUMNS.some((item) => Object.keys(filters).includes(item))) {
     sql = `
-    select
+    SELECT
       sumIf(1, event_type = 1) as "pageviews",
       uniq(session_id) as "visitors",
       uniq(visit_id) as "visits",
       uniq(country) as "countries",
-      sum(length(event_name)) as "events"
-    from website_event
+      SUM(length(event_name)) as "events"
+    FROM website_event
     ${cohortQuery}
-    where website_id = {websiteId:UUID}
-        and created_at between {startDate:DateTime64} and {endDate:DateTime64}
+    WHERE website_id = {websiteId:UUID}
+        AND created_at between {startDate:DateTime64} AND {endDate:DateTime64}
         ${filterQuery}
     `
   } else {
     sql = `
-    select
-      sum(views) as "pageviews",
+    SELECT
+      SUM(views) as "pageviews",
       uniq(session_id) as "visitors",
       uniq(visit_id) as "visits",
       uniq(country) as "countries",
-      sum(length(event_name)) as "events"
-    from website_event_stats_hourly website_event
+      SUM(length(event_name)) as "events"
+    FROM website_event_stats_hourly website_event
     ${cohortQuery}
-    where website_id = {websiteId:UUID}
-        and created_at between {startDate:DateTime64} and {endDate:DateTime64}
+    WHERE website_id = {websiteId:UUID}
+        AND created_at between {startDate:DateTime64} AND {endDate:DateTime64}
         ${filterQuery}
     `
   }

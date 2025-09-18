@@ -1,17 +1,17 @@
-import prisma from '@/lib/prisma'
 import clickhouse from '@/lib/clickhouse'
-import { runQuery, CLICKHOUSE, PRISMA } from '@/lib/db'
+import { runQuery, CLICKHOUSE, DRIZZLE } from '@/lib/db'
+import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
 import { DEFAULT_RESET_DATE } from '@/lib/constants'
 
 export async function getWebsiteDateRange(...args: [websiteId: string]) {
   return runQuery({
-    [PRISMA]: () => relationalQuery(...args),
+    [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
   })
 }
 
 async function relationalQuery(websiteId: string) {
-  const { rawQuery, parseFilters } = prisma
+  // Using rawQuery FROM analytics-utils
   const { queryParams } = parseFilters({
     startDate: new Date(DEFAULT_RESET_DATE),
     websiteId,
@@ -19,12 +19,12 @@ async function relationalQuery(websiteId: string) {
 
   const result = await rawQuery(
     `
-    select
-      min(created_at) as mindate,
-      max(created_at) as maxdate
-    from website_event
-    where website_id = {{websiteId::uuid}}
-      and created_at >= {{startDate}}
+    SELECT
+      MIN(created_at) as mindate,
+      MAX(created_at) as maxdate
+    FROM website_event
+    WHERE website_id = {{websiteId::uuid}}
+      AND created_at >= {{startDate}}
     `,
     queryParams
   )
@@ -41,12 +41,12 @@ async function clickhouseQuery(websiteId: string) {
 
   const result = await rawQuery(
     `
-    select
-      min(created_at) as mindate,
-      max(created_at) as maxdate
-    from website_event_stats_hourly
-    where website_id = {websiteId:UUID}
-      and created_at >= {startDate:DateTime64}
+    SELECT
+      MIN(created_at) as mindate,
+      MAX(created_at) as maxdate
+    FROM website_event_stats_hourly
+    WHERE website_id = {websiteId:UUID}
+      AND created_at >= {startDate:DateTime64}
     `,
     queryParams
   )

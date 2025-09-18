@@ -1,7 +1,8 @@
 import clickhouse from '@/lib/clickhouse'
 import { EVENT_TYPE, FILTER_COLUMNS, SESSION_COLUMNS } from '@/lib/constants'
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
-import prisma from '@/lib/prisma'
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
+import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
+
 import { QueryFilters } from '@/lib/types'
 
 export interface EventExpandedMetricParameters {
@@ -23,7 +24,7 @@ export async function getEventExpandedMetrics(
   ...args: [websiteId: string, parameters: EventExpandedMetricParameters, filters: QueryFilters]
 ): Promise<EventExpandedMetricData[]> {
   return runQuery({
-    [PRISMA]: () => relationalQuery(...args),
+    [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
   })
 }
@@ -35,7 +36,7 @@ async function relationalQuery(
 ) {
   const { type, limit = 500, offset = 0 } = parameters
   const column = FILTER_COLUMNS[type] || type
-  const { rawQuery, parseFilters } = prisma
+  // Using rawQuery FROM analytics-utils
   const { filterQuery, cohortQuery, joinSessionQuery, queryParams } = parseFilters(
     {
       ...filters,
@@ -47,16 +48,16 @@ async function relationalQuery(
 
   return rawQuery(
     `
-    select ${column} x,
-      count(*) as y
-    from website_event
+    SELECT ${column} x,
+      COUNT(*) as y
+    FROM website_event
     ${cohortQuery}
     ${joinSessionQuery}
-    where website_event.website_id = {{websiteId::uuid}}
-      and website_event.created_at between {{startDate}} and {{endDate}}
+    WHERE website_event.website_id = {{websiteId::uuid}}
+      AND website_event.created_at between {{startDate}} AND {{endDate}}
       ${filterQuery}
-    group by 1
-    order by 2 desc
+    GROUP BY 1
+    ORDER BY 2 desc
     limit ${limit}
     offset ${offset}
     `,
@@ -79,31 +80,31 @@ async function clickhouseQuery(
 
   return rawQuery(
     `
-    select
+    SELECT
       name,
-      sum(t.c) as "pageviews",
+      SUM(t.c) as "pageviews",
       uniq(t.session_id) as "visitors",
       uniq(t.visit_id) as "visits",
-      sum(if(t.c = 1, 1, 0)) as "bounces",
-      sum(max_time-min_time) as "totaltime"
-    from (
-      select
+      SUM(if(t.c = 1, 1, 0)) as "bounces",
+      SUM(max_time-min_time) as "totaltime"
+    FROM (
+      SELECT
         ${column} name,
         session_id,
         visit_id,
-        count(*) c,
-        min(created_at) min_time,
-        max(created_at) max_time
-      from website_event
+        COUNT(*) c,
+        MIN(created_at) min_time,
+        MAX(created_at) max_time
+      FROM website_event
       ${cohortQuery}
-      where website_id = {websiteId:UUID}
-        and created_at between {startDate:DateTime64} and {endDate:DateTime64}
-        and name != ''
+      WHERE website_id = {websiteId:UUID}
+        AND created_at between {startDate:DateTime64} AND {endDate:DateTime64}
+        AND name != ''
         ${filterQuery}
-      group by name, session_id, visit_id
+      GROUP BY name, session_id, visit_id
     ) as t
-    group by name 
-    order by visitors desc, visits desc
+    GROUP BY name 
+    ORDER BY visitors desc, visits desc
     limit ${limit}
     offset ${offset}
     `,

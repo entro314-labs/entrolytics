@@ -1,17 +1,18 @@
 import clickhouse from '@/lib/clickhouse'
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
-import prisma from '@/lib/prisma'
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
+import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery, pagedRawQuery } from '@/lib/analytics-utils'
+
 import { QueryFilters } from '@/lib/types'
 
 export function getWebsiteEvents(...args: [websiteId: string, filters: QueryFilters]) {
   return runQuery({
-    [PRISMA]: () => relationalQuery(...args),
+    [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
   })
 }
 
 async function relationalQuery(websiteId: string, filters: QueryFilters) {
-  const { pagedRawQuery, parseFilters } = prisma
+  // Using pagedRawQuery and parseFilters from analytics-utils
   const { search } = filters
   const { filterQuery, dateQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
@@ -20,13 +21,13 @@ async function relationalQuery(websiteId: string, filters: QueryFilters) {
   })
 
   const searchQuery = search
-    ? `and ((event_name ilike {{search}} and event_type = 2)
-           or (url_path ilike {{search}} and event_type = 1))`
+    ? `AND ((event_name ilike {{search}} AND event_type = 2)
+           OR (url_path ilike {{search}} AND event_type = 1))`
     : ''
 
   return pagedRawQuery(
     `
-    select
+    SELECT
       event_id as "id",
       website_id as "websiteId", 
       session_id as "sessionId",
@@ -45,14 +46,14 @@ async function relationalQuery(websiteId: string, filters: QueryFilters) {
       page_title as "pageTitle",
       event_type as "eventType",
       event_name as "eventName"
-    from website_event
+    FROM website_event
     ${cohortQuery}
-    join session on website_event.session_id = session.session_id 
-    where website_id = {{websiteId::uuid}}
+    JOIN session on website_event.session_id = session.session_id 
+    WHERE website_id = {{websiteId::uuid}}
     ${dateQuery}
     ${filterQuery}
     ${searchQuery}
-    order by created_at desc
+    ORDER BY created_at desc
     `,
     queryParams,
     filters
@@ -68,13 +69,13 @@ async function clickhouseQuery(websiteId: string, filters: QueryFilters) {
   })
 
   const searchQuery = search
-    ? `and ((positionCaseInsensitive(event_name, {search:String}) > 0 and event_type = 2)
-           or (positionCaseInsensitive(url_path, {search:String}) > 0 and event_type = 1))`
+    ? `AND ((positionCaseInsensitive(event_name, {search:String}) > 0 AND event_type = 2)
+           OR (positionCaseInsensitive(url_path, {search:String}) > 0 AND event_type = 1))`
     : ''
 
   return pagedRawQuery(
     `
-    select
+    SELECT
       event_id as id,
       website_id as websiteId, 
       session_id as sessionId,
@@ -94,13 +95,13 @@ async function clickhouseQuery(websiteId: string, filters: QueryFilters) {
       event_type as eventType,
       event_name as eventName,
       event_id IN (SELECT event_id FROM event_data) as hasData
-    from website_event
+    FROM website_event
     ${cohortQuery}
-    where website_id = {websiteId:UUID}
+    WHERE website_id = {websiteId:UUID}
     ${dateQuery}
     ${filterQuery}
     ${searchQuery}
-    order by created_at desc
+    ORDER BY created_at desc
     `,
     queryParams,
     filters

@@ -23,7 +23,6 @@ if (!webhookSecret) {
   throw new Error('Please add CLERK_WEBHOOK_SECRET from Clerk Dashboard to .env')
 }
 
-
 export async function POST(request: Request) {
   try {
     // Get the headers
@@ -139,8 +138,8 @@ async function handleUserCreated(data: any) {
       stack: error.stack,
       userData: {
         clerk_id: data.id,
-        email: data.email_addresses[0]?.email_address
-      }
+        email: data.email_addresses[0]?.email_address,
+      },
     })
     throw error
   }

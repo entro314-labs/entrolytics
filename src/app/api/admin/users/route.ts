@@ -3,7 +3,7 @@ import { parseRequest } from '@/lib/request'
 import { json, unauthorized } from '@/lib/response'
 import { pagingParams, searchParams } from '@/lib/schema'
 import { canViewUsers } from '@/validations'
-import { getUsers } from '@/queries/prisma/user'
+import { getUsers } from '@/queries'
 
 export async function GET(request: Request) {
   const schema = z.object({

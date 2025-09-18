@@ -1,10 +1,11 @@
 import clickhouse from '@/lib/clickhouse'
-import { CLICKHOUSE, PRISMA, runQuery, notImplemented } from '@/lib/db'
+import { CLICKHOUSE, DRIZZLE, runQuery, notImplemented } from '@/lib/db'
+import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
 import { QueryFilters } from '@/lib/types'
 
 export function getEventDataUsage(...args: [websiteIds: string[], filters: QueryFilters]) {
   return runQuery({
-    [PRISMA]: notImplemented,
+    [DRIZZLE]: notImplemented,
     [CLICKHOUSE]: () => clickhouseQuery(...args),
   })
 }
@@ -12,19 +13,19 @@ export function getEventDataUsage(...args: [websiteIds: string[], filters: Query
 function clickhouseQuery(
   websiteIds: string[],
   filters: QueryFilters
-): Promise<{ websiteId: string; count: number }[]> {
+): Promise<{ websiteId: string; COUNT: number }[]> {
   const { rawQuery } = clickhouse
   const { startDate, endDate } = filters
 
   return rawQuery(
     `
-    select 
+    SELECT 
       website_id as websiteId,
-      count(*) as count
-    from event_data 
-    where created_at between {startDate:DateTime64} and {endDate:DateTime64}
-      and website_id in {websiteIds:Array(UUID)}
-    group by website_id
+      COUNT(*) as COUNT
+    FROM event_data 
+    WHERE created_at between {startDate:DateTime64} AND {endDate:DateTime64}
+      AND website_id in {websiteIds:Array(UUID)}
+    GROUP BY website_id
     `,
     {
       websiteIds,

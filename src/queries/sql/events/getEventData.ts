@@ -1,21 +1,22 @@
-import { EventData } from '@/generated/prisma/client'
-import prisma from '@/lib/prisma'
+import { EventData } from '@/lib/db'
+
 import clickhouse from '@/lib/clickhouse'
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
+import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
 
 export async function getEventData(...args: [eventId: string]): Promise<EventData[]> {
   return runQuery({
-    [PRISMA]: () => relationalQuery(...args),
+    [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
   })
 }
 
 async function relationalQuery(eventId: string) {
-  const { rawQuery } = prisma
+  // Using rawQuery FROM analytics-utils
 
   return rawQuery(
     `
-    select website_id as websiteId,
+    SELECT website_id as websiteId,
        session_id as sessionId,
        event_id as eventId,
        url_path as urlPath,
@@ -26,8 +27,8 @@ async function relationalQuery(eventId: string) {
        date_value as dateValue,
        data_type as dataType,
        created_at as createdAt
-    from event_data
-    where event_id = {{eventId::uuid}}
+    FROM event_data
+    WHERE event_id = {{eventId::uuid}}
     `,
     { eventId }
   )
@@ -38,7 +39,7 @@ async function clickhouseQuery(eventId: string): Promise<EventData[]> {
 
   return rawQuery(
     `
-      select website_id as websiteId,
+      SELECT website_id as websiteId,
         session_id as sessionId,
         event_id as eventId,
         url_path as urlPath,
@@ -49,8 +50,8 @@ async function clickhouseQuery(eventId: string): Promise<EventData[]> {
         date_value as dateValue,
         data_type as dataType,
         created_at as createdAt
-      from event_data
-      where event_id = {eventId:UUID}
+      FROM event_data
+      WHERE event_id = {eventId:UUID}
     `,
     { eventId }
   )

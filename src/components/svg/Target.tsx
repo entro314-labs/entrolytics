@@ -1,5 +1,5 @@
-import * as React from "react";
-import type { SVGProps } from "react";
+import * as React from 'react'
+import type { SVGProps } from 'react'
 const SvgTarget = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -17,5 +17,5 @@ const SvgTarget = (props: SVGProps<SVGSVGElement>) => (
     <path d="M14.764 12.811a.75.75 0 0 1 1.5 0c0 2.8-2.274 5.074-5.075 5.074a5.077 5.077 0 0 1-5.074-5.074 5.077 5.077 0 0 1 5.074-5.075.75.75 0 0 1 0 1.5 3.575 3.575 0 1 0 3.575 3.575m7.766-7.223-3.057 3.058a.75.75 0 0 1-.531.22h-3.058a.75.75 0 0 1-.75-.75V5.058a.75.75 0 0 1 .22-.531l3.058-3.057a.75.75 0 0 1 1.242.293L20.3 3.7l1.937.646a.75.75 0 0 1 .293 1.242m-1.918-.202-1.142-.381a.75.75 0 0 1-.475-.475l-.381-1.142-1.98 1.98v1.998h1.998z" />
     <path d="M15.354 7.585a.75.75 0 1 1 1.061 1.061l-4.587 4.586a.749.749 0 1 1-1.06-1.06z" />
   </svg>
-);
-export default SvgTarget;
+)
+export default SvgTarget

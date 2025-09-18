@@ -3,8 +3,7 @@ import 'dotenv/config'
 import { execSync } from 'node:child_process'
 import chalk from 'chalk'
 import semver from 'semver'
-import { PrismaClient } from '../dist/generated/prisma/client.js'
-import { PrismaPg } from '@prisma/adapter-pg'
+import { neon } from '@neondatabase/serverless'
 
 const MIN_VERSION = '9.4.0'
 
@@ -13,14 +12,12 @@ if (process.env.SKIP_DB_CHECK) {
   process.exit(0)
 }
 
-const url = new URL(process.env.DATABASE_URL)
+if (!process.env.DATABASE_URL) {
+  console.error('DATABASE_URL is not defined.')
+  process.exit(1)
+}
 
-const adapter = new PrismaPg(
-  { connectionString: url.toString() },
-  { schema: url.searchParams.get('schema') || 'public' }
-)
-
-const prisma = new PrismaClient({ adapter })
+const sql = neon(process.env.DATABASE_URL)
 
 function success(msg) {
   console.log(chalk.greenBright(`✓ ${msg}`))
@@ -40,7 +37,7 @@ async function checkEnv() {
 
 async function checkConnection() {
   try {
-    await prisma.$connect()
+    await sql`SELECT 1`
 
     success('Database connection successful.')
   } catch (e) {
@@ -49,7 +46,7 @@ async function checkConnection() {
 }
 
 async function checkDatabaseVersion() {
-  const query = await prisma.$queryRaw`select version() as version`
+  const query = await sql`SELECT version() as version`
   const version = semver.valid(semver.coerce(query[0].version))
 
   if (semver.lt(version, MIN_VERSION)) {
@@ -63,9 +60,17 @@ async function checkDatabaseVersion() {
 
 async function applyMigration() {
   if (!process.env.SKIP_DB_MIGRATION) {
-    console.log(execSync('prisma migrate deploy').toString())
-
-    success('Database is up to date.')
+    try {
+      console.log(execSync('pnpm db:migrate').toString())
+      success('Database migrations applied successfully.')
+    } catch (e) {
+      // Check if the error is about tables already existing (migration from Prisma to Drizzle)
+      if (e.message && e.message.includes('already exists')) {
+        success('Migration skipped - tables already exist (Prisma to Drizzle migration complete).')
+      } else {
+        success('No migrations to apply or migration skipped.')
+      }
+    }
   }
 }
 

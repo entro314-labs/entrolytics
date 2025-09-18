@@ -1,7 +1,8 @@
 import clickhouse from '@/lib/clickhouse'
 import { EVENT_TYPE, FILTER_COLUMNS, SESSION_COLUMNS } from '@/lib/constants'
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
-import prisma from '@/lib/prisma'
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
+import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
+
 import { QueryFilters } from '@/lib/types'
 
 export interface EventMetricParameters {
@@ -20,7 +21,7 @@ export async function getEventMetrics(
   ...args: [websiteId: string, parameters: EventMetricParameters, filters: QueryFilters]
 ): Promise<EventMetricData[]> {
   return runQuery({
-    [PRISMA]: () => relationalQuery(...args),
+    [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
   })
 }
@@ -32,7 +33,7 @@ async function relationalQuery(
 ) {
   const { type, limit = 500, offset = 0 } = parameters
   const column = FILTER_COLUMNS[type] || type
-  const { rawQuery, parseFilters } = prisma
+  // Using rawQuery FROM analytics-utils
   const { filterQuery, cohortQuery, joinSessionQuery, queryParams } = parseFilters(
     {
       ...filters,
@@ -44,16 +45,16 @@ async function relationalQuery(
 
   return rawQuery(
     `
-    select ${column} x,
-      count(*) as y
-    from website_event
+    SELECT ${column} x,
+      COUNT(*) as y
+    FROM website_event
     ${cohortQuery}
     ${joinSessionQuery}
-    where website_event.website_id = {{websiteId::uuid}}
-      and website_event.created_at between {{startDate}} and {{endDate}}
+    WHERE website_event.website_id = {{websiteId::uuid}}
+      AND website_event.created_at between {{startDate}} AND {{endDate}}
       ${filterQuery}
-    group by 1
-    order by 2 desc
+    GROUP BY 1
+    ORDER BY 2 desc
     limit ${limit}
     offset ${offset}
     `,
@@ -76,15 +77,15 @@ async function clickhouseQuery(
   })
 
   return rawQuery(
-    `select ${column} x,
-            count(*) as y
-     from website_event
+    `SELECT ${column} x,
+            COUNT(*) as y
+     FROM website_event
       ${cohortQuery}
-     where website_id = {websiteId:UUID}
-        and created_at between {startDate:DateTime64} and {endDate:DateTime64}
+     WHERE website_id = {websiteId:UUID}
+        AND created_at between {startDate:DateTime64} AND {endDate:DateTime64}
         ${filterQuery}
-     group by x
-     order by y desc
+     GROUP BY x
+     ORDER BY y desc
          limit ${limit}
      offset ${offset}
     `,

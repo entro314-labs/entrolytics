@@ -1,13 +1,13 @@
-import prisma from '@/lib/prisma'
 import clickhouse from '@/lib/clickhouse'
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
+import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
 import { QueryFilters } from '@/lib/types'
 
 export async function getEventDataProperties(
   ...args: [websiteId: string, filters: QueryFilters & { propertyName?: string }]
 ) {
   return runQuery({
-    [PRISMA]: () => relationalQuery(...args),
+    [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
   })
 }
@@ -16,7 +16,7 @@ async function relationalQuery(
   websiteId: string,
   filters: QueryFilters & { propertyName?: string }
 ) {
-  const { rawQuery, parseFilters } = prisma
+  // Using rawQuery FROM analytics-utils
   const { filterQuery, cohortQuery, joinSessionQuery, queryParams } = parseFilters(
     { ...filters, websiteId },
     {
@@ -26,21 +26,21 @@ async function relationalQuery(
 
   return rawQuery(
     `
-    select
+    SELECT
       website_event.event_name as "eventName",
       event_data.data_key as "propertyName",
-      count(*) as "total"
-    from event_data 
-    join website_event on website_event.event_id = event_data.website_event_id
-      and website_event.website_id = {{websiteId::uuid}}
-      and website_event.created_at between {{startDate}} and {{endDate}}
+      COUNT(*) as "total"
+    FROM event_data 
+    JOIN website_event on website_event.event_id = event_data.website_event_id
+      AND website_event.website_id = {{websiteId::uuid}}
+      AND website_event.created_at between {{startDate}} AND {{endDate}}
     ${cohortQuery}
     ${joinSessionQuery}
-    where event_data.website_id = {{websiteId::uuid}}
-      and event_data.created_at between {{startDate}} and {{endDate}}
+    WHERE event_data.website_id = {{websiteId::uuid}}
+      AND event_data.created_at between {{startDate}} AND {{endDate}}
     ${filterQuery}
-    group by website_event.event_name, event_data.data_key
-    order by 3 desc
+    GROUP BY website_event.event_name, event_data.data_key
+    ORDER BY 3 desc
     limit 500
     `,
     queryParams
@@ -61,17 +61,17 @@ async function clickhouseQuery(
 
   return rawQuery(
     `
-    select
+    SELECT
       event_name as eventName,
       data_key as propertyName,
-      count(*) as total
-    from event_data website_event
+      COUNT(*) as total
+    FROM event_data website_event
     ${cohortQuery}
-    where website_id = {websiteId:UUID}
-      and created_at between {startDate:DateTime64} and {endDate:DateTime64}
+    WHERE website_id = {websiteId:UUID}
+      AND created_at between {startDate:DateTime64} AND {endDate:DateTime64}
     ${filterQuery}
-    group by event_name, data_key
-    order by 1, 3 desc
+    GROUP BY event_name, data_key
+    ORDER BY 1, 3 desc
     limit 500
     `,
     queryParams

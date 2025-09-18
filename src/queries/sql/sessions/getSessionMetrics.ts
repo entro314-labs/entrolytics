@@ -1,7 +1,8 @@
 import clickhouse from '@/lib/clickhouse'
 import { EVENT_COLUMNS, EVENT_TYPE, FILTER_COLUMNS, SESSION_COLUMNS } from '@/lib/constants'
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
-import prisma from '@/lib/prisma'
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
+import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
+
 import { QueryFilters } from '@/lib/types'
 
 export interface SessionMetricsParameters {
@@ -14,7 +15,7 @@ export async function getSessionMetrics(
   ...args: [websiteId: string, parameters: SessionMetricsParameters, filters: QueryFilters]
 ) {
   return runQuery({
-    [PRISMA]: () => relationalQuery(...args),
+    [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
   })
 }
@@ -26,7 +27,7 @@ async function relationalQuery(
 ) {
   const { type, limit = 500, offset = 0 } = parameters
   let column = FILTER_COLUMNS[type] || type
-  const { parseFilters, rawQuery } = prisma
+  // Using rawQuery FROM analytics-utils
   const { filterQuery, joinSessionQuery, cohortQuery, queryParams } = parseFilters(
     {
       ...filters,
@@ -45,19 +46,19 @@ async function relationalQuery(
 
   return rawQuery(
     `
-    select 
+    SELECT 
       ${column} x,
-      count(distinct website_event.session_id) y
+      COUNT(DISTINCT website_event.session_id) y
       ${includeCountry ? ', country' : ''}
-    from website_event
+    FROM website_event
     ${cohortQuery}
     ${joinSessionQuery}
-    where website_event.website_id = {{websiteId::uuid}}
-      and website_event.created_at between {{startDate}} and {{endDate}}
+    WHERE website_event.website_id = {{websiteId::uuid}}
+      AND website_event.created_at between {{startDate}} AND {{endDate}}
     ${filterQuery}
-    group by 1 
+    GROUP BY 1 
     ${includeCountry ? ', 3' : ''}
-    order by 2 desc
+    ORDER BY 2 desc
     limit ${limit}
     offset ${offset}
     `,
@@ -88,35 +89,35 @@ async function clickhouseQuery(
 
   if (EVENT_COLUMNS.some((item) => Object.keys(filters).includes(item))) {
     sql = `
-    select
+    SELECT
       ${column} x,
-      count(distinct session_id) y
+      COUNT(DISTINCT session_id) y
       ${includeCountry ? ', country' : ''}
-    from website_event
+    FROM website_event
     ${cohortQuery}
-    where website_id = {websiteId:UUID}
-      and created_at between {startDate:DateTime64} and {endDate:DateTime64}
+    WHERE website_id = {websiteId:UUID}
+      AND created_at between {startDate:DateTime64} AND {endDate:DateTime64}
       ${filterQuery}
-    group by x 
+    GROUP BY x 
     ${includeCountry ? ', country' : ''}
-    order by y desc
+    ORDER BY y desc
     limit ${limit}
     offset ${offset}
     `
   } else {
     sql = `
-    select
+    SELECT
       ${column} x,
       uniq(session_id) y
       ${includeCountry ? ', country' : ''}
-    from website_event_stats_hourly as website_event
+    FROM website_event_stats_hourly as website_event
     ${cohortQuery}
-    where website_id = {websiteId:UUID}
-      and created_at between {startDate:DateTime64} and {endDate:DateTime64}
+    WHERE website_id = {websiteId:UUID}
+      AND created_at between {startDate:DateTime64} AND {endDate:DateTime64}
       ${filterQuery}
-    group by x 
+    GROUP BY x 
     ${includeCountry ? ', country' : ''}
-    order by y desc
+    ORDER BY y desc
     limit ${limit}
     offset ${offset}
     `

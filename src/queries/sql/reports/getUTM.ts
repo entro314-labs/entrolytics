@@ -1,7 +1,8 @@
 import clickhouse from '@/lib/clickhouse'
 import { EVENT_TYPE } from '@/lib/constants'
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
-import prisma from '@/lib/prisma'
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
+import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
+
 import { QueryFilters } from '@/lib/types'
 
 export interface UTMParameters {
@@ -14,7 +15,7 @@ export async function getUTM(
   ...args: [websiteId: string, parameters: UTMParameters, filters: QueryFilters]
 ) {
   return runQuery({
-    [PRISMA]: () => relationalQuery(...args),
+    [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
   })
 }
@@ -25,7 +26,7 @@ async function relationalQuery(
   filters: QueryFilters
 ) {
   const { column, startDate, endDate } = parameters
-  const { parseFilters, rawQuery } = prisma
+  // Using rawQuery FROM analytics-utils
 
   const { filterQuery, joinSessionQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
@@ -37,16 +38,16 @@ async function relationalQuery(
 
   return rawQuery(
     `
-    select ${column} utm, count(*) as views
-    from website_event
+    SELECT ${column} utm, COUNT(*) as views
+    FROM website_event
     ${cohortQuery}
     ${joinSessionQuery}
-    where website_id = {{websiteId::uuid}}
-      and created_at between {{startDate}} and {{endDate}}
-      and coalesce(${column}, '') != ''
+    WHERE website_id = {{websiteId::uuid}}
+      AND created_at between {{startDate}} AND {{endDate}}
+      AND coalesce(${column}, '') != ''
       ${filterQuery}
-    group by 1
-    order by 2 desc
+    GROUP BY 1
+    ORDER BY 2 desc
     `,
     queryParams
   )
@@ -69,15 +70,15 @@ async function clickhouseQuery(
 
   return rawQuery(
     `
-    select ${column} utm, count(*) as views
-    from website_event
+    SELECT ${column} utm, COUNT(*) as views
+    FROM website_event
     ${cohortQuery}
-    where website_id = {websiteId:UUID}
-      and created_at between {startDate:DateTime64} and {endDate:DateTime64}
-      and ${column} != ''
+    WHERE website_id = {websiteId:UUID}
+      AND created_at between {startDate:DateTime64} AND {endDate:DateTime64}
+      AND ${column} != ''
       ${filterQuery}
-    group by 1
-    order by 2 desc
+    GROUP BY 1
+    ORDER BY 2 desc
     `,
     queryParams
   )

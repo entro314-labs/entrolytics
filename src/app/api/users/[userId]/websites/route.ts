@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { unauthorized, json } from '@/lib/response'
-import { getUserWebsites } from '@/queries/prisma/website'
+import { getUserWebsites } from '@/queries'
 import { pagingParams, searchParams } from '@/lib/schema'
 import { getQueryFilters, parseRequest } from '@/lib/request'
 

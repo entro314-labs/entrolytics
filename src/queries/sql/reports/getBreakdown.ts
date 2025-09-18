@@ -1,5 +1,6 @@
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
-import prisma from '@/lib/prisma'
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
+import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
+
 import clickhouse from '@/lib/clickhouse'
 import { EVENT_TYPE, FILTER_COLUMNS, SESSION_COLUMNS } from '@/lib/constants'
 import { QueryFilters } from '@/lib/types'
@@ -19,7 +20,7 @@ export async function getBreakdown(
   ...args: [websiteId: string, parameters: BreakdownParameters, filters: QueryFilters]
 ) {
   return runQuery({
-    [PRISMA]: () => relationalQuery(...args),
+    [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
   })
 }
@@ -29,7 +30,7 @@ async function relationalQuery(
   parameters: BreakdownParameters,
   filters: QueryFilters
 ): Promise<BreakdownData[]> {
-  const { getTimestampDiffSQL, parseFilters, rawQuery } = prisma
+  // Using rawQuery FROM analytics-utils
   const { startDate, endDate, fields } = parameters
   const { filterQuery, joinSessionQuery, cohortQuery, queryParams } = parseFilters(
     {
@@ -46,32 +47,32 @@ async function relationalQuery(
 
   return rawQuery(
     `
-    select
-      sum(t.c) as "views",
-      count(distinct t.session_id) as "visitors",
-      count(distinct t.visit_id) as "visits",
-      sum(case when t.c = 1 then 1 else 0 end) as "bounces",
-      sum(${getTimestampDiffSQL('t.min_time', 't.max_time')}) as "totaltime",
+    SELECT
+      SUM(t.c) as "views",
+      COUNT(DISTINCT t.session_id) as "visitors",
+      COUNT(DISTINCT t.visit_id) as "visits",
+      SUM(CASE WHEN t.c = 1 THEN 1 ELSE 0 END) as "bounces",
+      SUM(${getTimestampDiffSQL('t.min_time', 't.max_time')}) as "totaltime",
       ${parseFieldsByName(fields)}
-    from (
-      select
+    FROM (
+      SELECT
         ${parseFields(fields)},
         website_event.session_id,
         website_event.visit_id,
-        count(*) as "c",
-        min(website_event.created_at) as "min_time",
-        max(website_event.created_at) as "max_time"
-      from website_event
+        COUNT(*) as "c",
+        MIN(website_event.created_at) as "min_time",
+        MAX(website_event.created_at) as "max_time"
+      FROM website_event
       ${cohortQuery}  
       ${joinSessionQuery}
-      where website_event.website_id = {{websiteId::uuid}}
-        and website_event.created_at between {{startDate}} and {{endDate}}
+      WHERE website_event.website_id = {{websiteId::uuid}}
+        AND website_event.created_at between {{startDate}} AND {{endDate}}
         ${filterQuery}
-      group by ${parseFieldsByName(fields)}, 
+      GROUP BY ${parseFieldsByName(fields)}, 
         website_event.session_id, website_event.visit_id
     ) as t
-    group by ${parseFieldsByName(fields)}
-    order by 1 desc, 2 desc
+    GROUP BY ${parseFieldsByName(fields)}
+    ORDER BY 1 desc, 2 desc
     limit 500
     `,
     queryParams
@@ -95,31 +96,31 @@ async function clickhouseQuery(
 
   return rawQuery(
     `
-    select
-      sum(t.c) as "views",
-      count(distinct t.session_id) as "visitors",
-      count(distinct t.visit_id) as "visits",
-      sum(if(t.c = 1, 1, 0)) as "bounces",
-      sum(max_time-min_time) as "totaltime",
+    SELECT
+      SUM(t.c) as "views",
+      COUNT(DISTINCT t.session_id) as "visitors",
+      COUNT(DISTINCT t.visit_id) as "visits",
+      SUM(if(t.c = 1, 1, 0)) as "bounces",
+      SUM(max_time-min_time) as "totaltime",
       ${parseFieldsByName(fields)}
-    from (
-      select
+    FROM (
+      SELECT
         ${parseFields(fields)},
         session_id,
         visit_id,
-        count(*) c,
-        min(created_at) min_time,
-        max(created_at) max_time
-      from website_event
+        COUNT(*) c,
+        MIN(created_at) min_time,
+        MAX(created_at) max_time
+      FROM website_event
       ${cohortQuery}
-      where website_id = {websiteId:UUID}
-        and created_at between {startDate:DateTime64} and {endDate:DateTime64}
+      WHERE website_id = {websiteId:UUID}
+        AND created_at between {startDate:DateTime64} AND {endDate:DateTime64}
         ${filterQuery}
-      group by ${parseFieldsByName(fields)}, 
+      GROUP BY ${parseFieldsByName(fields)}, 
         session_id, visit_id
     ) as t
-    group by ${parseFieldsByName(fields)}
-    order by 1 desc, 2 desc
+    GROUP BY ${parseFieldsByName(fields)}
+    ORDER BY 1 desc, 2 desc
     limit 500
     `,
     queryParams
@@ -127,9 +128,9 @@ async function clickhouseQuery(
 }
 
 function parseFields(fields: string[]) {
-  return fields.map((name) => `${FILTER_COLUMNS[name]} as "${name}"`).join(',')
+  return fields.map((name) => `${FILTER_COLUMNS[name]} as "${name}"`).JOIN(',')
 }
 
 function parseFieldsByName(fields: string[]) {
-  return `${fields.map((name) => name).join(',')}`
+  return `${fields.map((name) => name).JOIN(',')}`
 }

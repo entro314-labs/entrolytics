@@ -1,6 +1,7 @@
 import clickhouse from '@/lib/clickhouse'
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
-import prisma from '@/lib/prisma'
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
+import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
+
 import { QueryFilters } from '@/lib/types'
 
 export interface RevenuParameters {
@@ -13,11 +14,11 @@ export interface RevenuParameters {
 export interface RevenueResult {
   chart: { x: string; t: string; y: number }[]
   country: { name: string; value: number }[]
-  total: { sum: number; count: number; average: number; unique_count: number }
+  total: { SUM: number; COUNT: number; average: number; unique_count: number }
   table: {
     currency: string
-    sum: number
-    count: number
+    SUM: number
+    COUNT: number
     unique_count: number
   }[]
 }
@@ -26,7 +27,7 @@ export async function getRevenue(
   ...args: [websiteId: string, parameters: RevenuParameters, filters: QueryFilters]
 ) {
   return runQuery({
-    [PRISMA]: () => relationalQuery(...args),
+    [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
   })
 }
@@ -37,7 +38,7 @@ async function relationalQuery(
   filters: QueryFilters
 ): Promise<RevenueResult> {
   const { startDate, endDate, currency, unit = 'day' } = parameters
-  const { getDateSQL, rawQuery, parseFilters } = prisma
+  // Using rawQuery FROM analytics-utils
   const { queryParams, filterQuery, cohortQuery, joinSessionQuery } = parseFilters({
     ...filters,
     websiteId,
@@ -48,100 +49,100 @@ async function relationalQuery(
 
   const chart = await rawQuery(
     `
-    select
+    SELECT
       revenue.event_name x,
       ${getDateSQL('revenue.created_at', unit)} t,
-      sum(revenue.revenue) y
-    from revenue
-    join website_event
+      SUM(revenue.revenue) y
+    FROM revenue
+    JOIN website_event
       on website_event.website_id = revenue.website_id
-        and website_event.session_id = revenue.session_id
-        and website_event.event_id = revenue.event_id
-        and website_event.website_id = {{websiteId::uuid}}
-        and website_event.created_at between {{startDate}} and {{endDate}}
+        AND website_event.session_id = revenue.session_id
+        AND website_event.event_id = revenue.event_id
+        AND website_event.website_id = {{websiteId::uuid}}
+        AND website_event.created_at between {{startDate}} AND {{endDate}}
     ${cohortQuery}
     ${joinSessionQuery}
-    where revenue.website_id = {{websiteId::uuid}}
-      and revenue.created_at between {{startDate}} and {{endDate}}
-      and revenue.currency like {{currency}}
+    WHERE revenue.website_id = {{websiteId::uuid}}
+      AND revenue.created_at between {{startDate}} AND {{endDate}}
+      AND revenue.currency like {{currency}}
       ${filterQuery}
-    group by  x, t
-    order by t
+    GROUP BY  x, t
+    ORDER BY t
     `,
     queryParams
   )
 
   const country = await rawQuery(
     `
-    select
+    SELECT
       session.country as name,
-      sum(r.revenue) value
-    from revenue 
-    join website_event
+      SUM(r.revenue) value
+    FROM revenue 
+    JOIN website_event
       on website_event.website_id = revenue.website_id
-        and website_event.session_id = revenue.session_id
-        and website_event.event_id = revenue.event_id
-        and website_event.website_id = {{websiteId::uuid}}
-        and website_event.created_at between {{startDate}} and {{endDate}}
-    join session 
+        AND website_event.session_id = revenue.session_id
+        AND website_event.event_id = revenue.event_id
+        AND website_event.website_id = {{websiteId::uuid}}
+        AND website_event.created_at between {{startDate}} AND {{endDate}}
+    JOIN session 
       on session.website_id = revenue.website_id
-        and session.session_id = revenue.session_id
+        AND session.session_id = revenue.session_id
     ${cohortQuery}
-    where revenue.website_id = {{websiteId::uuid}}
-      and revenue.created_at between {{startDate}} and {{endDate}}
-      and revenue.currency = {{currency}}
+    WHERE revenue.website_id = {{websiteId::uuid}}
+      AND revenue.created_at between {{startDate}} AND {{endDate}}
+      AND revenue.currency = {{currency}}
       ${filterQuery}
-    group by session.country
+    GROUP BY session.country
     `,
     queryParams
   )
 
   const total = await rawQuery(
     `
-    select
-      sum(revenue.revenue) as sum,
-      count(distinct revenue.event_id) as count,
-      count(distinct revenue.session_id) as unique_count
-    from revenue
-    join website_event
+    SELECT
+      SUM(revenue.revenue) as SUM,
+      COUNT(DISTINCT revenue.event_id) as COUNT,
+      COUNT(DISTINCT revenue.session_id) as unique_count
+    FROM revenue
+    JOIN website_event
       on website_event.website_id = revenue.website_id
-        and website_event.session_id = revenue.session_id
-        and website_event.event_id = revenue.event_id
-        and website_event.website_id = {{websiteId::uuid}}
-        and website_event.created_at between {{startDate}} and {{endDate}}
+        AND website_event.session_id = revenue.session_id
+        AND website_event.event_id = revenue.event_id
+        AND website_event.website_id = {{websiteId::uuid}}
+        AND website_event.created_at between {{startDate}} AND {{endDate}}
     ${cohortQuery}
     ${joinSessionQuery}
-    where revenue.website_id = {{websiteId::uuid}}
-      and revenue.created_at between {{startDate}} and {{endDate}}
-      and revenue.currency = {{currency}}
+    WHERE revenue.website_id = {{websiteId::uuid}}
+      AND revenue.created_at between {{startDate}} AND {{endDate}}
+      AND revenue.currency = {{currency}}
       ${filterQuery}
   `,
     queryParams
   ).then((result) => result?.[0])
 
-  total.average = total.count > 0 ? total.sum / total.count : 0
+  total.average = total.COUNT > 0 ? total.SUM / total.COUNT : 0
 
   const table = await rawQuery(
     `
-    select
+    SELECT
       revenue.currency,
-      sum(revenue.revenue) as sum,
-      count(distinct revenue.event_id) as count,
-      count(distinct revenue.session_id) as unique_count
-    from revenue
-    join website_event
+      SUM(revenue.revenue) as SUM,
+      COUNT(DISTINCT revenue.event_id) as COUNT,
+      COUNT(DISTINCT revenue.session_id) as unique_count
+    FROM revenue
+    JOIN website_event
       on website_event.website_id = revenue.website_id
-        and website_event.session_id = revenue.session_id
-        and website_event.event_id = revenue.event_id
-        and website_event.website_id = {{websiteId::uuid}}
-        and website_event.created_at between {{startDate}} and {{endDate}}
+        AND website_event.session_id = revenue.session_id
+        AND website_event.event_id = revenue.event_id
+        AND website_event.website_id = {{websiteId::uuid}}
+        AND website_event.created_at between {{startDate}} AND {{endDate}}
     ${cohortQuery}
     ${joinSessionQuery}
-    where revenue.website_id = {{websiteId::uuid}}
-      and revenue.created_at between {{startDate}} and {{endDate}}
+    WHERE revenue.website_id = {{websiteId::uuid}}
+      AND revenue.created_at between {{startDate}} AND {{endDate}}
       ${filterQuery}
-    group by revenue.currency
-    order by sum desc
+    GROUP BY revenue.currency
+    ORDER BY SUM desc
     `,
     queryParams
   )
@@ -172,24 +173,24 @@ async function clickhouseQuery(
     }[]
   >(
     `
-    select
+    SELECT
       website_revenue.event_name x,
       ${getDateSQL('website_revenue.created_at', unit)} t,
-      sum(website_revenue.revenue) y
-    from website_revenue
-    join website_event
+      SUM(website_revenue.revenue) y
+    FROM website_revenue
+    JOIN website_event
           on website_event.website_id = website_revenue.website_id
-            and website_event.session_id = website_revenue.session_id
-            and website_event.event_id = website_revenue.event_id
-            and website_event.website_id = {websiteId:UUID}
-            and website_event.created_at between {startDate:DateTime64} and {endDate:DateTime64}
+            AND website_event.session_id = website_revenue.session_id
+            AND website_event.event_id = website_revenue.event_id
+            AND website_event.website_id = {websiteId:UUID}
+            AND website_event.created_at between {startDate:DateTime64} AND {endDate:DateTime64}
     ${cohortQuery}
-    where website_revenue.website_id = {websiteId:UUID}
-      and website_revenue.created_at between {startDate:DateTime64} and {endDate:DateTime64}
-      and website_revenue.currency = {currency:String}
+    WHERE website_revenue.website_id = {websiteId:UUID}
+      AND website_revenue.created_at between {startDate:DateTime64} AND {endDate:DateTime64}
+      AND website_revenue.currency = {currency:String}
       ${filterQuery}
-    group by  x, t
-    order by t
+    GROUP BY  x, t
+    ORDER BY t
     `,
     queryParams
   )
@@ -201,81 +202,81 @@ async function clickhouseQuery(
     }[]
   >(
     `
-    select
+    SELECT
       website_event.country as name,
-      sum(website_revenue.revenue) as value
-    from website_revenue
-    join website_event
+      SUM(website_revenue.revenue) as value
+    FROM website_revenue
+    JOIN website_event
           on website_event.website_id = website_revenue.website_id
-            and website_event.session_id = website_revenue.session_id
-            and website_event.event_id = website_revenue.event_id
-            and website_event.website_id = {websiteId:UUID}
-            and website_event.created_at between {startDate:DateTime64} and {endDate:DateTime64}
+            AND website_event.session_id = website_revenue.session_id
+            AND website_event.event_id = website_revenue.event_id
+            AND website_event.website_id = {websiteId:UUID}
+            AND website_event.created_at between {startDate:DateTime64} AND {endDate:DateTime64}
     ${cohortQuery}
-    where website_revenue.website_id = {websiteId:UUID}
-      and website_revenue.created_at between {startDate:DateTime64} and {endDate:DateTime64}
-      and website_revenue.currency = {currency:String}
+    WHERE website_revenue.website_id = {websiteId:UUID}
+      AND website_revenue.created_at between {startDate:DateTime64} AND {endDate:DateTime64}
+      AND website_revenue.currency = {currency:String}
       ${filterQuery}
-    group by website_event.country
+    GROUP BY website_event.country
     `,
     queryParams
   )
 
   const total = await rawQuery<{
-    sum: number
-    count: number
+    SUM: number
+    COUNT: number
     unique_count: number
   }>(
     `
-    select
-      sum(website_revenue.revenue) as sum,
-      uniqExact(website_revenue.event_id) as count,
+    SELECT
+      SUM(website_revenue.revenue) as SUM,
+      uniqExact(website_revenue.event_id) as COUNT,
       uniqExact(website_revenue.session_id) as unique_count
-    from website_revenue
-    join website_event
+    FROM website_revenue
+    JOIN website_event
           on website_event.website_id = website_revenue.website_id
-            and website_event.session_id = website_revenue.session_id
-            and website_event.event_id = website_revenue.event_id
-            and website_event.website_id = {websiteId:UUID}
-            and website_event.created_at between {startDate:DateTime64} and {endDate:DateTime64}
+            AND website_event.session_id = website_revenue.session_id
+            AND website_event.event_id = website_revenue.event_id
+            AND website_event.website_id = {websiteId:UUID}
+            AND website_event.created_at between {startDate:DateTime64} AND {endDate:DateTime64}
     ${cohortQuery}
-    where website_revenue.website_id = {websiteId:UUID}
-      and website_revenue.created_at between {startDate:DateTime64} and {endDate:DateTime64}
-      and website_revenue.currency = {currency:String}
+    WHERE website_revenue.website_id = {websiteId:UUID}
+      AND website_revenue.created_at between {startDate:DateTime64} AND {endDate:DateTime64}
+      AND website_revenue.currency = {currency:String}
       ${filterQuery}
     `,
     queryParams
   ).then((result) => result?.[0])
 
-  total.average = total.count > 0 ? total.sum / total.count : 0
+  total.average = total.COUNT > 0 ? total.SUM / total.COUNT : 0
 
   const table = await rawQuery<
     {
       currency: string
-      sum: number
-      count: number
+      SUM: number
+      COUNT: number
       unique_count: number
     }[]
   >(
     `
-    select
+    SELECT
       website_revenue.currency,
-      sum(website_revenue.revenue) as sum,
-      uniqExact(website_revenue.event_id) as count,
+      SUM(website_revenue.revenue) as SUM,
+      uniqExact(website_revenue.event_id) as COUNT,
       uniqExact(website_revenue.session_id) as unique_count
-    from website_revenue
-    join website_event
+    FROM website_revenue
+    JOIN website_event
           on website_event.website_id = website_revenue.website_id
-            and website_event.session_id = website_revenue.session_id
-            and website_event.event_id = website_revenue.event_id
-            and website_event.website_id = {websiteId:UUID}
-            and website_event.created_at between {startDate:DateTime64} and {endDate:DateTime64}
+            AND website_event.session_id = website_revenue.session_id
+            AND website_event.event_id = website_revenue.event_id
+            AND website_event.website_id = {websiteId:UUID}
+            AND website_event.created_at between {startDate:DateTime64} AND {endDate:DateTime64}
     ${cohortQuery}
-    where website_revenue.website_id = {websiteId:UUID}
-      and website_revenue.created_at between {startDate:DateTime64} and {endDate:DateTime64}
+    WHERE website_revenue.website_id = {websiteId:UUID}
+      AND website_revenue.created_at between {startDate:DateTime64} AND {endDate:DateTime64}
       ${filterQuery}
-    group by website_revenue.currency
-    order by sum desc
+    GROUP BY website_revenue.currency
+    ORDER BY SUM desc
     `,
     queryParams
   )

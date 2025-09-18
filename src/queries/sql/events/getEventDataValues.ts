@@ -1,6 +1,6 @@
-import prisma from '@/lib/prisma'
 import clickhouse from '@/lib/clickhouse'
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
+import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
 import { QueryFilters } from '@/lib/types'
 
 interface WebsiteEventData {
@@ -15,7 +15,7 @@ export async function getEventDataValues(
   ]
 ): Promise<WebsiteEventData[]> {
   return runQuery({
-    [PRISMA]: () => relationalQuery(...args),
+    [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
   })
 }
@@ -24,7 +24,7 @@ async function relationalQuery(
   websiteId: string,
   filters: QueryFilters & { eventName?: string; propertyName?: string }
 ) {
-  const { rawQuery, parseFilters, getDateSQL } = prisma
+  // Using rawQuery FROM analytics-utils
   const { filterQuery, joinSessionQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
@@ -32,26 +32,26 @@ async function relationalQuery(
 
   return rawQuery(
     `
-    select
-      case 
-        when data_type = 2 then replace(string_value, '.0000', '') 
-        when data_type = 4 then ${getDateSQL('date_value', 'hour')} 
-        else string_value
-      end as "value",
-      count(*) as "total"
-    from event_data
-    join website_event on website_event.event_id = event_data.website_event_id
-      and website_event.website_id = {{websiteId::uuid}}
-      and website_event.created_at between {{startDate}} and {{endDate}}
+    SELECT
+      CASE 
+        WHEN data_type = 2 THEN replace(string_value, '.0000', '') 
+        WHEN data_type = 4 THEN ${getDateSQL('date_value', 'hour')} 
+        ELSE string_value
+      END as "value",
+      COUNT(*) as "total"
+    FROM event_data
+    JOIN website_event on website_event.event_id = event_data.website_event_id
+      AND website_event.website_id = {{websiteId::uuid}}
+      AND website_event.created_at between {{startDate}} AND {{endDate}}
     ${cohortQuery}
     ${joinSessionQuery}
-    where event_data.website_id = {{websiteId::uuid}}
-      and event_data.created_at between {{startDate}} and {{endDate}}
-      and event_data.data_key = {{propertyName}}
-      and website_event.event_name = {{eventName}}
+    WHERE event_data.website_id = {{websiteId::uuid}}
+      AND event_data.created_at between {{startDate}} AND {{endDate}}
+      AND event_data.data_key = {{propertyName}}
+      AND website_event.event_name = {{eventName}}
     ${filterQuery}
-    group by value
-    order by 2 desc
+    GROUP BY value
+    ORDER BY 2 desc
     limit 100
     `,
     queryParams
@@ -67,20 +67,20 @@ async function clickhouseQuery(
 
   return rawQuery(
     `
-    select
+    SELECT
       multiIf(data_type = 2, replaceAll(string_value, '.0000', ''),
               data_type = 4, toString(date_trunc('hour', date_value)),
               string_value) as "value",
-      count(*) as "total"
-    from event_data website_event
+      COUNT(*) as "total"
+    FROM event_data website_event
     ${cohortQuery}
-    where website_id = {websiteId:UUID}
-      and created_at between {startDate:DateTime64} and {endDate:DateTime64}
-      and data_key = {propertyName:String}
-      and event_name = {eventName:String}
+    WHERE website_id = {websiteId:UUID}
+      AND created_at between {startDate:DateTime64} AND {endDate:DateTime64}
+      AND data_key = {propertyName:String}
+      AND event_name = {eventName:String}
     ${filterQuery}
-    group by value
-    order by 2 desc
+    GROUP BY value
+    ORDER BY 2 desc
     limit 100
     `,
     queryParams

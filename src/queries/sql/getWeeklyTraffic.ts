@@ -1,19 +1,19 @@
-import prisma from '@/lib/prisma'
 import clickhouse from '@/lib/clickhouse'
-import { runQuery, PRISMA, CLICKHOUSE } from '@/lib/db'
+import { runQuery, DRIZZLE, CLICKHOUSE } from '@/lib/db'
+import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
 import { QueryFilters } from '@/lib/types'
 import { EVENT_COLUMNS } from '@/lib/constants'
 
 export async function getWeeklyTraffic(...args: [websiteId: string, filters: QueryFilters]) {
   return runQuery({
-    [PRISMA]: () => relationalQuery(...args),
+    [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
   })
 }
 
 async function relationalQuery(websiteId: string, filters: QueryFilters) {
   const timezone = 'utc'
-  const { rawQuery, getDateWeeklySQL, parseFilters } = prisma
+  // Using rawQuery FROM analytics-utils
   const { filterQuery, joinSessionQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
@@ -21,17 +21,17 @@ async function relationalQuery(websiteId: string, filters: QueryFilters) {
 
   return rawQuery(
     `
-    select
+    SELECT
       ${getDateWeeklySQL('created_at', timezone)} as time,
-      count(distinct session_id) as value
-    from website_event
+      COUNT(DISTINCT session_id) as value
+    FROM website_event
     ${cohortQuery}
     ${joinSessionQuery}
-    where website_id = {{websiteId::uuid}}
-      and created_at between {{startDate}} and {{endDate}}
+    WHERE website_id = {{websiteId::uuid}}
+      AND created_at between {{startDate}} AND {{endDate}}
       ${filterQuery}
-    group by time
-    order by 2
+    GROUP BY time
+    ORDER BY 2
     `,
     queryParams
   ).then(formatResults)
@@ -46,29 +46,29 @@ async function clickhouseQuery(websiteId: string, filters: QueryFilters) {
 
   if (EVENT_COLUMNS.some((item) => Object.keys(filters).includes(item))) {
     sql = `
-    select
+    SELECT
       formatDateTime(toDateTime(created_at, '${timezone}'), '%w:%H') as time,
-      count(distinct session_id) as value
-    from website_event
+      COUNT(DISTINCT session_id) as value
+    FROM website_event
     ${cohortQuery}
-    where website_id = {websiteId:UUID}
-      and created_at between {startDate:DateTime64} and {endDate:DateTime64}
+    WHERE website_id = {websiteId:UUID}
+      AND created_at between {startDate:DateTime64} AND {endDate:DateTime64}
       ${filterQuery}
-    group by time
-    order by time
+    GROUP BY time
+    ORDER BY time
     `
   } else {
     sql = `
-    select
+    SELECT
       formatDateTime(toDateTime(created_at, '${timezone}'), '%w:%H') as time,
-      count(distinct session_id) as value
-    from website_event_stats_hourly website_event
+      COUNT(DISTINCT session_id) as value
+    FROM website_event_stats_hourly website_event
     ${cohortQuery}
-    where website_id = {websiteId:UUID}
-      and created_at between {startDate:DateTime64} and {endDate:DateTime64}
+    WHERE website_id = {websiteId:UUID}
+      AND created_at between {startDate:DateTime64} AND {endDate:DateTime64}
       ${filterQuery}
-    group by time
-    order by time
+    GROUP BY time
+    ORDER BY time
     `
   }
 

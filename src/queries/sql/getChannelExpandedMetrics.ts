@@ -8,8 +8,9 @@ import {
   SOCIAL_DOMAINS,
   VIDEO_DOMAINS,
 } from '@/lib/constants'
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db'
-import prisma from '@/lib/prisma'
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
+import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
+
 import { QueryFilters } from '@/lib/types'
 
 export interface ChannelExpandedMetricsParameters {
@@ -30,7 +31,7 @@ export async function getChannelExpandedMetrics(
   ...args: [websiteId: string, filters?: QueryFilters]
 ): Promise<ChannelExpandedMetricsData[]> {
   return runQuery({
-    [PRISMA]: () => relationalQuery(...args),
+    [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
   })
 }
@@ -39,7 +40,7 @@ async function relationalQuery(
   websiteId: string,
   filters: QueryFilters
 ): Promise<ChannelExpandedMetricsData[]> {
-  const { rawQuery, parseFilters } = prisma
+  // Using rawQuery FROM analytics-utils
   const { queryParams, filterQuery, joinSessionQuery, cohortQuery, dateQuery } = parseFilters({
     ...filters,
     websiteId,
@@ -49,34 +50,34 @@ async function relationalQuery(
   return rawQuery(
     `
     WITH channels as (
-      select case when ${toPostgresPositionClause('utm_medium', ['cp', 'ppc', 'retargeting', 'paid'])} then 'paid' else 'organic' end prefix,
-          case
-          when referrer_domain = '' and url_query = '' then 'direct'
-          when ${toPostgresPositionClause('url_query', PAID_AD_PARAMS)} then 'paidAds'
-          when ${toPostgresPositionClause('utm_medium', ['referral', 'app', 'link'])} then 'referral'
-          when position(utm_medium, 'affiliate') > 0 then 'affiliate'
-          when position(utm_medium, 'sms') > 0 or position(utm_source, 'sms') > 0 then 'sms'
-          when ${toPostgresPositionClause('referrer_domain', SEARCH_DOMAINS)} or position(utm_medium, 'organic') > 0 then concat(prefix, 'Search')
-          when ${toPostgresPositionClause('referrer_domain', SOCIAL_DOMAINS)} then concat(prefix, 'Social')
-          when ${toPostgresPositionClause('referrer_domain', EMAIL_DOMAINS)} or position(utm_medium, 'mail') > 0 then 'email'
-          when ${toPostgresPositionClause('referrer_domain', SHOPPING_DOMAINS)} or position(utm_medium, 'shop') > 0 then concat(prefix, 'Shopping')
-          when ${toPostgresPositionClause('referrer_domain', VIDEO_DOMAINS)} or position(utm_medium, 'video') > 0 then concat(prefix, 'Video')
-          else '' end AS x,
-        count(distinct session_id) y
-      from website_event
+      SELECT CASE WHEN ${toPostgresPositionClause('utm_medium', ['cp', 'ppc', 'retargeting', 'paid'])} THEN 'paid' ELSE 'organic' END prefix,
+          CASE
+          WHEN referrer_domain = '' AND url_query = '' THEN 'direct'
+          WHEN ${toPostgresPositionClause('url_query', PAID_AD_PARAMS)} THEN 'paidAds'
+          WHEN ${toPostgresPositionClause('utm_medium', ['referral', 'app', 'link'])} THEN 'referral'
+          WHEN position(utm_medium, 'affiliate') > 0 THEN 'affiliate'
+          WHEN position(utm_medium, 'sms') > 0 OR position(utm_source, 'sms') > 0 THEN 'sms'
+          WHEN ${toPostgresPositionClause('referrer_domain', SEARCH_DOMAINS)} OR position(utm_medium, 'organic') > 0 THEN concat(prefix, 'Search')
+          WHEN ${toPostgresPositionClause('referrer_domain', SOCIAL_DOMAINS)} THEN concat(prefix, 'Social')
+          WHEN ${toPostgresPositionClause('referrer_domain', EMAIL_DOMAINS)} OR position(utm_medium, 'mail') > 0 THEN 'email'
+          WHEN ${toPostgresPositionClause('referrer_domain', SHOPPING_DOMAINS)} OR position(utm_medium, 'shop') > 0 THEN concat(prefix, 'Shopping')
+          WHEN ${toPostgresPositionClause('referrer_domain', VIDEO_DOMAINS)} OR position(utm_medium, 'video') > 0 THEN concat(prefix, 'Video')
+          ELSE '' END AS x,
+        COUNT(DISTINCT session_id) y
+      FROM website_event
       ${cohortQuery}
       ${joinSessionQuery}
-      where website_id = {{websiteId::uuid}}
+      WHERE website_id = {{websiteId::uuid}}
         ${dateQuery}
         ${filterQuery}
-      group by 1, 2
-      order by y desc)
+      GROUP BY 1, 2
+      ORDER BY y desc)
 
-    select x, sum(y) y
-    from channels
-    where x != ''
-    group by x
-    order by y desc;
+    SELECT x, SUM(y) y
+    FROM channels
+    WHERE x != ''
+    GROUP BY x
+    ORDER BY y desc;
     `,
     queryParams
   )
@@ -95,63 +96,63 @@ async function clickhouseQuery(
 
   return rawQuery(
     `
-    select
+    SELECT
       name,
-      sum(t.c) as "pageviews",
+      SUM(t.c) as "pageviews",
       uniq(t.session_id) as "visitors",
       uniq(t.visit_id) as "visits",
-      sum(if(t.c = 1, 1, 0)) as "bounces",
-      sum(max_time-min_time) as "totaltime"
-    from (
-      select case when multiSearchAny(utm_medium, ['cp', 'ppc', 'retargeting', 'paid']) != 0 then 'paid' else 'organic' end prefix,
-          case
-          when referrer_domain = '' and url_query = '' then 'direct'
-          when multiSearchAny(url_query, [${toClickHouseStringArray(
+      SUM(if(t.c = 1, 1, 0)) as "bounces",
+      SUM(max_time-min_time) as "totaltime"
+    FROM (
+      SELECT CASE WHEN multiSearchAny(utm_medium, ['cp', 'ppc', 'retargeting', 'paid']) != 0 THEN 'paid' ELSE 'organic' END prefix,
+          CASE
+          WHEN referrer_domain = '' AND url_query = '' THEN 'direct'
+          WHEN multiSearchAny(url_query, [${toClickHouseStringArray(
             PAID_AD_PARAMS
-          )}]) != 0 then 'paidAds'
-          when multiSearchAny(utm_medium, ['referral', 'app','link']) != 0 then 'referral'
-          when position(utm_medium, 'affiliate') > 0 then 'affiliate'
-          when position(utm_medium, 'sms') > 0 or position(utm_source, 'sms') > 0 then 'sms'
-          when multiSearchAny(referrer_domain, [${toClickHouseStringArray(
+          )}]) != 0 THEN 'paidAds'
+          WHEN multiSearchAny(utm_medium, ['referral', 'app','link']) != 0 THEN 'referral'
+          WHEN position(utm_medium, 'affiliate') > 0 THEN 'affiliate'
+          WHEN position(utm_medium, 'sms') > 0 OR position(utm_source, 'sms') > 0 THEN 'sms'
+          WHEN multiSearchAny(referrer_domain, [${toClickHouseStringArray(
             SEARCH_DOMAINS
-          )}]) != 0 or position(utm_medium, 'organic') > 0 then concat(prefix, 'Search')
-          when multiSearchAny(referrer_domain, [${toClickHouseStringArray(
+          )}]) != 0 OR position(utm_medium, 'organic') > 0 THEN concat(prefix, 'Search')
+          WHEN multiSearchAny(referrer_domain, [${toClickHouseStringArray(
             SOCIAL_DOMAINS
-          )}]) != 0 then concat(prefix, 'Social')
-          when multiSearchAny(referrer_domain, [${toClickHouseStringArray(
+          )}]) != 0 THEN concat(prefix, 'Social')
+          WHEN multiSearchAny(referrer_domain, [${toClickHouseStringArray(
             EMAIL_DOMAINS
-          )}]) != 0 or position(utm_medium, 'mail') > 0 then 'email'
-          when multiSearchAny(referrer_domain, [${toClickHouseStringArray(
+          )}]) != 0 OR position(utm_medium, 'mail') > 0 THEN 'email'
+          WHEN multiSearchAny(referrer_domain, [${toClickHouseStringArray(
             SHOPPING_DOMAINS
-          )}]) != 0 or position(utm_medium, 'shop') > 0 then concat(prefix, 'Shopping')
-          when multiSearchAny(referrer_domain, [${toClickHouseStringArray(
+          )}]) != 0 OR position(utm_medium, 'shop') > 0 THEN concat(prefix, 'Shopping')
+          WHEN multiSearchAny(referrer_domain, [${toClickHouseStringArray(
             VIDEO_DOMAINS
-          )}]) != 0 or position(utm_medium, 'video') > 0 then concat(prefix, 'Video')
-          else '' end AS name,
+          )}]) != 0 OR position(utm_medium, 'video') > 0 THEN concat(prefix, 'Video')
+          ELSE '' END AS name,
         session_id,
         visit_id,
-        count(*) c,
-        min(created_at) min_time,
-        max(created_at) max_time
-      from website_event
+        COUNT(*) c,
+        MIN(created_at) min_time,
+        MAX(created_at) max_time
+      FROM website_event
       ${cohortQuery}
-      where website_id = {websiteId:UUID}
-        and created_at between {startDate:DateTime64} and {endDate:DateTime64}
-        and name != ''
+      WHERE website_id = {websiteId:UUID}
+        AND created_at between {startDate:DateTime64} AND {endDate:DateTime64}
+        AND name != ''
         ${filterQuery}
-      group by prefix, name, session_id, visit_id
+      GROUP BY prefix, name, session_id, visit_id
     ) as t
-    group by name 
-    order by visitors desc, visits desc;
+    GROUP BY name 
+    ORDER BY visitors desc, visits desc;
     `,
     queryParams
   )
 }
 
 function toClickHouseStringArray(arr: string[]): string {
-  return arr.map((p) => `'${p.replace(/'/g, "\\'")}'`).join(', ')
+  return arr.map((p) => `'${p.replace(/'/g, "\\'")}'`).JOIN(', ')
 }
 
 function toPostgresPositionClause(column: string, arr: string[]) {
-  return arr.map((val) => `position(${column}, '${val.replace(/'/g, "''")}') > 0`).join(' OR\n  ')
+  return arr.map((val) => `position(${column}, '${val.replace(/'/g, "''")}') > 0`).JOIN(' OR\n  ')
 }

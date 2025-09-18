@@ -22,7 +22,7 @@ export function EventsChart({ websiteId, focusLabel }: EventsChartProps) {
   const chartData: any = useMemo(() => {
     if (!data) return
 
-    const map = (data as any[]).reduce((obj, { x, t, y }) => {
+    const map = Array.isArray(data) ? data.reduce((obj, { x, t, y }) => {
       if (!obj[x]) {
         obj[x] = []
       }
@@ -30,7 +30,7 @@ export function EventsChart({ websiteId, focusLabel }: EventsChartProps) {
       obj[x].push({ x: t, y })
 
       return obj
-    }, {})
+    }, {}) : {}
 
     return {
       datasets: Object.keys(map).map((key, index) => {

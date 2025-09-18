@@ -17,13 +17,13 @@ export function EventProperties({ websiteId }: { websiteId: string }) {
   const { formatMessage, labels } = useMessages()
   const { data, isLoading, isFetching, error } = useEventDataPropertiesQuery(websiteId)
 
-  const events: string[] = data
-    ? data.reduce((arr: string | any[], e: { eventName: any }) => {
+  const events: string[] = data && Array.isArray(data)
+    ? data.reduce((arr: string[], e: { eventName: any }) => {
         return !arr.includes(e.eventName) ? arr.concat(e.eventName) : arr
       }, [])
     : []
-  const properties: string[] = eventName
-    ? data?.filter((e) => e.eventName === eventName).map((e) => e.propertyName)
+  const properties: string[] = eventName && data && Array.isArray(data)
+    ? data.filter((e) => e.eventName === eventName).map((e) => e.propertyName)
     : []
 
   return (

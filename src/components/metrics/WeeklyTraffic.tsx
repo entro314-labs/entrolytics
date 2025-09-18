@@ -14,7 +14,7 @@ export function WeeklyTraffic({ websiteId }: { websiteId: string }) {
     .fill(weekStartsOn)
     .map((d, i) => (d + i) % 7)
 
-  const [, max = 1] = data
+  const [, max = 1] = data && Array.isArray(data)
     ? data.reduce((arr: number[], hours: number[], index: number) => {
         const min = Math.min(...hours)
         const max = Math.max(...hours)

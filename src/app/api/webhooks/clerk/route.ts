@@ -4,6 +4,7 @@ import { Webhook } from 'svix'
 import { createUser, updateUser, getUserByClerkId } from '@/queries'
 import { ROLES } from '@/lib/constants'
 import { uuid } from '@/lib/crypto'
+import { bootstrapAdminSetup } from '@/lib/admin'
 
 /**
  * Clerk Webhook Handler
@@ -131,6 +132,9 @@ async function handleUserCreated(data: any) {
     console.log('Creating user with data:', userData)
     const user = await createUser(userData)
     console.log(`User created in database: ${user.user_id}`)
+
+    // Check for admin bootstrap after user creation
+    await bootstrapAdminSetup(userData.email, user.user_id)
   } catch (error) {
     console.error('Error creating user:', error)
     console.error('Error details:', {
@@ -170,7 +174,7 @@ async function handleUserUpdated(data: any) {
         existingUser.display_name,
     }
 
-    await updateUser(existingUser.user_id, updateData)
+    await updateUser(existingUser.userId, updateData)
     console.log(`User updated in database: ${data.id}`)
   } catch (error) {
     console.error('Error updating user:', error)
@@ -191,7 +195,7 @@ async function handleUserDeleted(data: any) {
     }
 
     // Soft delete the user (set deleted_at timestamp)
-    await updateUser(existingUser.user_id, {
+    await updateUser(existingUser.userId, {
       deleted_at: new Date(),
     })
 

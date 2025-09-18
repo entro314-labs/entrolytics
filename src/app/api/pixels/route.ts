@@ -20,7 +20,7 @@ export async function GET(request: Request) {
 
   const filters = await getQueryFilters(query)
 
-  const links = await getUserPixels(auth.user.user_id, filters)
+  const links = await getUserPixels(auth.user.userId, filters)
 
   return json(links)
 }
@@ -49,11 +49,11 @@ export async function POST(request: Request) {
     id: id ?? uuid(),
     name,
     slug,
-    orgId,
+    org_id: orgId,
   }
 
   if (!orgId) {
-    data.user_id = auth.user.user_id
+    data.user_id = auth.user.userId
   }
 
   const result = await createPixel(data)

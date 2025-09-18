@@ -21,7 +21,7 @@ export async function GET(request: Request) {
 
   const filters = await getQueryFilters(query)
 
-  const websites = await getUserWebsites(auth.user.id, filters)
+  const websites = await getUserWebsites(auth.user.userId, filters)
 
   return json(websites)
 }

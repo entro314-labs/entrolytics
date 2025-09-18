@@ -3,7 +3,7 @@ import { unauthorized, json, badRequest, notFound } from '@/lib/response'
 import { canCreateOrg } from '@/validations'
 import { parseRequest } from '@/lib/request'
 import { ROLES } from '@/lib/constants'
-import { createOrgUser, findOrg, getOrgUser } from '@/queries'
+import { createOrgUser, findOrgByAccessCode, getOrgUser } from '@/queries'
 
 export async function POST(request: Request) {
   const schema = z.object({
@@ -22,23 +22,19 @@ export async function POST(request: Request) {
 
   const { accessCode } = body
 
-  const org = await findOrg({
-    where: {
-      accessCode,
-    },
-  })
+  const org = await findOrgByAccessCode(accessCode)
 
   if (!org) {
     return notFound('Org not found.')
   }
 
-  const orgUser = await getOrgUser(org.id, auth.user.id)
+  const orgUser = await getOrgUser(org.id, auth.user.userId)
 
   if (orgUser) {
     return badRequest('User is already a org member.')
   }
 
-  const user = await createOrgUser(auth.user.id, org.id, ROLES.orgMember)
+  const user = await createOrgUser(auth.user.userId, org.id, ROLES.orgMember)
 
   return json(user)
 }

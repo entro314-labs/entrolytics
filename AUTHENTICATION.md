@@ -61,8 +61,30 @@ CREATE TABLE "user" (
 
 Configure Clerk webhook at `/api/webhooks/clerk` for events:
 - `user.created`
-- `user.updated` 
+- `user.updated`
 - `user.deleted`
+
+### 4. Admin Setup
+
+Configure automatic admin user promotion:
+
+```env
+# Email address that receives admin privileges automatically
+INITIAL_ADMIN_EMAIL="admin@yourdomain.com"
+
+# Auto-promote first user to admin (recommended for initial setup)
+AUTO_PROMOTE_FIRST_USER="true"
+```
+
+**Admin Management Commands:**
+```bash
+pnpm admin:status           # Check admin setup status
+pnpm admin:promote <email>  # Promote user to admin
+pnpm admin:list            # List all admin users
+pnpm admin:validate        # Validate admin configuration
+```
+
+📖 **See [ADMIN_SETUP.md](./ADMIN_SETUP.md) for complete admin setup guide.**
 
 ## Usage
 

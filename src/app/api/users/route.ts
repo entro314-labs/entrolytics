@@ -37,13 +37,13 @@ export async function POST(request: Request) {
   }
 
   const user = await createUser({
-    id: id || uuid(),
-    clerkId,
+    user_id: id || uuid(),
+    clerk_id: clerkId,
     email,
-    firstName,
-    lastName,
-    imageUrl,
-    displayName,
+    first_name: firstName,
+    last_name: lastName,
+    image_url: imageUrl,
+    display_name: displayName,
     role: role ?? ROLES.user,
   })
 

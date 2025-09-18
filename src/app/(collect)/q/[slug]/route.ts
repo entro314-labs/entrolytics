@@ -1,16 +1,12 @@
 import { NextResponse } from 'next/server'
 import { notFound } from '@/lib/response'
-import { findLink } from '@/queries'
+import { findLinkBySlug } from '@/queries'
 import { POST } from '@/app/api/send/route'
 
 export async function GET(request: Request, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
 
-  const link = await findLink({
-    where: {
-      slug,
-    },
-  })
+  const link = await findLinkBySlug(slug)
 
   if (!link) {
     return notFound()

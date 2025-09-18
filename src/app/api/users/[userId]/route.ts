@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { canUpdateUser, canViewUser, canDeleteUser } from '@/validations'
-import { getUser, getUserByEmail, updateUser, deleteUser } from '@/queries'
+import { getUser, getUserByEmail, getUserByClerkId, updateUser, deleteUser } from '@/queries'
 import { json, unauthorized, badRequest, ok, notFound } from '@/lib/response'
 import { parseRequest } from '@/lib/request'
 import { userRoleParam } from '@/lib/schema'
@@ -18,8 +18,8 @@ export async function GET(request: Request, { params }: { params: Promise<{ user
     return unauthorized()
   }
 
-  // userId is now Clerk ID directly (primary key)
-  const user = await getUser(userId)
+  // userId parameter is the Clerk ID from URL
+  const user = await getUserByClerkId(userId)
 
   if (!user) {
     return notFound()
@@ -69,8 +69,13 @@ export async function POST(request: Request, { params }: { params: Promise<{ use
     data.role = role
   }
 
-  // userId is now Clerk ID directly (primary key)
-  const updated = await updateUser(userId, data)
+  // Get database user ID from Clerk ID
+  const targetUser = await getUserByClerkId(userId)
+  if (!targetUser) {
+    return notFound()
+  }
+
+  const updated = await updateUser(targetUser.userId, data)
 
   return json(updated)
 }
@@ -91,12 +96,18 @@ export async function DELETE(
     return unauthorized()
   }
 
-  // userId is now Clerk ID directly (primary key)
-  if (userId === auth.user.id) {
+  // userId parameter is the Clerk ID from URL
+  if (userId === auth.user.clerkId) {
     return badRequest('You cannot delete yourself.')
   }
 
-  await deleteUser(userId)
+  // Get database user ID from Clerk ID
+  const targetUser = await getUserByClerkId(userId)
+  if (!targetUser) {
+    return notFound()
+  }
+
+  await deleteUser(targetUser.userId)
 
   return ok()
 }

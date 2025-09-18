@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { notFound } from '@/lib/response'
-import { findPixel } from '@/queries'
+import { findPixelBySlug } from '@/queries'
 import { POST } from '@/app/api/send/route'
 
 const image = Buffer.from('R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw', 'base64')
@@ -8,11 +8,7 @@ const image = Buffer.from('R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICR
 export async function GET(request: Request, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
 
-  const pixel = await findPixel({
-    where: {
-      slug,
-    },
-  })
+  const pixel = await findPixelBySlug(slug)
 
   if (!pixel) {
     return notFound()

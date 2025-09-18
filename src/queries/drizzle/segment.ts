@@ -1,4 +1,4 @@
-import { eq, and, ilike, sql } from 'drizzle-orm'
+import { eq, and, ilike, sql, desc, asc } from 'drizzle-orm'
 import { db, segment } from '@/lib/db'
 import { PageResult, QueryFilters } from '@/lib/types'
 
@@ -49,7 +49,7 @@ export async function getSegments(
   // Apply pagination and ordering
   const offset = (page - 1) * pageSize
   const data = await query
-    .orderBy(sortDescending ? segment[orderBy].desc() : segment[orderBy].asc())
+    .orderBy(sortDescending ? desc(segment[orderBy]) : asc(segment[orderBy]))
     .limit(pageSize)
     .offset(offset)
 

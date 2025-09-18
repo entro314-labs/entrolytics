@@ -25,7 +25,7 @@ export async function GET(request: Request) {
 
   const filters = await getQueryFilters(query)
 
-  const links = await getUserLinks(auth?.user.user_id, filters)
+  const links = await getUserLinks(auth?.user.userId, filters)
 
   return json(links)
 }
@@ -61,11 +61,11 @@ export async function POST(request: Request) {
     name,
     url,
     slug,
-    orgId,
+    org_id: orgId,
   }
 
   if (!orgId) {
-    data.user_id = auth?.user.user_id
+    data.user_id = auth?.user.userId
   }
 
   const result = await createLink(data)

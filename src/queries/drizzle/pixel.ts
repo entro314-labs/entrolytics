@@ -1,4 +1,4 @@
-import { eq, and, or, ilike, sql } from 'drizzle-orm'
+import { eq, and, or, ilike, sql, desc, asc } from 'drizzle-orm'
 import { db, pixel } from '@/lib/db'
 import { PageResult, QueryFilters } from '@/lib/types'
 
@@ -13,6 +13,15 @@ export async function findPixel(pixelId: string) {
 
 export async function getPixel(pixelId: string) {
   return findPixel(pixelId)
+}
+
+export async function findPixelBySlug(slug: string) {
+  return db
+    .select()
+    .from(pixel)
+    .where(eq(pixel.slug, slug))
+    .limit(1)
+    .then((rows) => rows[0] || null)
 }
 
 export async function getPixels(
@@ -49,7 +58,7 @@ export async function getPixels(
   // Apply pagination and ordering
   const offset = (page - 1) * pageSize
   const data = await query
-    .orderBy(sortDescending ? pixel[orderBy].desc() : pixel[orderBy].asc())
+    .orderBy(sortDescending ? desc(pixel[orderBy]) : asc(pixel[orderBy]))
     .limit(pageSize)
     .offset(offset)
 

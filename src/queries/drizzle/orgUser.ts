@@ -1,4 +1,4 @@
-import { eq, and, or, ilike, sql } from 'drizzle-orm'
+import { eq, and, or, ilike, sql, desc, asc } from 'drizzle-orm'
 import { db, orgUser, user } from '@/lib/db'
 import { uuid } from '@/lib/crypto'
 import { PageResult, QueryFilters } from '@/lib/types'
@@ -71,7 +71,7 @@ export async function getOrgUsers(
   // Apply pagination and ordering
   const offset = (page - 1) * pageSize
   const data = await query
-    .orderBy(sortDescending ? orgUser[orderBy].desc() : orgUser[orderBy].asc())
+    .orderBy(sortDescending ? desc(orgUser[orderBy]) : asc(orgUser[orderBy]))
     .limit(pageSize)
     .offset(offset)
 

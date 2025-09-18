@@ -11,11 +11,11 @@ export async function canViewLink({ user }: Auth, linkId: string) {
   const link = await getLink(linkId)
 
   if (link.userId) {
-    return user.id === link.userId
+    return user.userId === link.userId
   }
 
   if (link.orgId) {
-    const orgUser = await getOrgUser(link.orgId, user.id)
+    const orgUser = await getOrgUser(link.orgId, user.userId)
 
     return !!orgUser
   }
@@ -31,11 +31,11 @@ export async function canUpdateLink({ user }: Auth, linkId: string) {
   const link = await getLink(linkId)
 
   if (link.userId) {
-    return user.id === link.userId
+    return user.userId === link.userId
   }
 
   if (link.orgId) {
-    const orgUser = await getOrgUser(link.orgId, user.id)
+    const orgUser = await getOrgUser(link.orgId, user.userId)
 
     return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteUpdate)
   }
@@ -51,11 +51,11 @@ export async function canDeleteLink({ user }: Auth, linkId: string) {
   const link = await getLink(linkId)
 
   if (link.userId) {
-    return user.id === link.userId
+    return user.userId === link.userId
   }
 
   if (link.orgId) {
-    const orgUser = await getOrgUser(link.orgId, user.id)
+    const orgUser = await getOrgUser(link.orgId, user.userId)
 
     return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteDelete)
   }

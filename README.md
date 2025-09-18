@@ -43,11 +43,32 @@ cp .env.example .env.local
 # Set up the database
 pnpm run build-db
 
+# Configure admin access (optional - see ADMIN_SETUP.md)
+echo 'INITIAL_ADMIN_EMAIL="admin@yourdomain.com"' >> .env.local
+echo 'AUTO_PROMOTE_FIRST_USER="true"' >> .env.local
+
 # Start development server
 pnpm run dev
 ```
 
 Visit [http://localhost:3000](http://localhost:3000) to access your Entrolytics dashboard.
+
+### 🔐 Admin Setup
+
+Entrolytics includes a comprehensive admin management system:
+
+```bash
+# Check admin setup status
+pnpm admin:status
+
+# Promote a user to admin
+pnpm admin:promote user@example.com
+
+# List all admin users
+pnpm admin:list
+```
+
+📖 **See [ADMIN_SETUP.md](./ADMIN_SETUP.md) for complete setup guide.**
 
 ## 🛠 Development
 

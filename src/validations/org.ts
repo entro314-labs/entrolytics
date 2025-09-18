@@ -10,7 +10,7 @@ export async function canViewOrg({ user }: Auth, orgId: string) {
     return true
   }
 
-  return getOrgUser(orgId, user.id)
+  return getOrgUser(orgId, user.userId)
 }
 
 export async function canCreateOrg({ user, grant }: Auth) {
@@ -34,7 +34,7 @@ export async function canUpdateOrg({ user, grant }: Auth, orgId: string) {
     return !!grant?.find((a) => a === PERMISSIONS.orgUpdate)
   }
 
-  const orgUser = await getOrgUser(orgId, user.id)
+  const orgUser = await getOrgUser(orgId, user.userId)
 
   return orgUser && hasPermission(orgUser.role, PERMISSIONS.orgUpdate)
 }
@@ -44,7 +44,7 @@ export async function canDeleteOrg({ user }: Auth, orgId: string) {
     return true
   }
 
-  const orgUser = await getOrgUser(orgId, user.id)
+  const orgUser = await getOrgUser(orgId, user.userId)
 
   return orgUser && hasPermission(orgUser.role, PERMISSIONS.orgDelete)
 }
@@ -62,11 +62,11 @@ export async function canDeleteOrgUser({ user }: Auth, orgId: string, removeUser
     return true
   }
 
-  if (removeUserId === user.id) {
+  if (removeUserId === user.userId) {
     return true
   }
 
-  const orgUser = await getOrgUser(orgId, user.id)
+  const orgUser = await getOrgUser(orgId, user.userId)
 
   return orgUser && hasPermission(orgUser.role, PERMISSIONS.orgUpdate)
 }
@@ -76,7 +76,7 @@ export async function canCreateOrgWebsite({ user }: Auth, orgId: string) {
     return true
   }
 
-  const orgUser = await getOrgUser(orgId, user.id)
+  const orgUser = await getOrgUser(orgId, user.userId)
 
   return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteCreate)
 }

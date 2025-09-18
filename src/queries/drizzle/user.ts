@@ -1,4 +1,4 @@
-import { eq, and, or, ilike, isNull, inArray } from 'drizzle-orm'
+import { eq, and, or, ilike, isNull, inArray, desc, asc, sql } from 'drizzle-orm'
 import {
   db,
   user,
@@ -35,6 +35,7 @@ async function findUser(where: any, options: GetUserOptions = {}) {
       imageUrl: user.imageUrl,
       displayName: user.displayName,
       role: user.role,
+      clerkId: user.clerkId,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
     })
@@ -69,6 +70,7 @@ export async function getUserByEmail(email: string, options: GetUserOptions = {}
       imageUrl: user.imageUrl,
       displayName: user.displayName,
       role: user.role,
+      clerkId: user.clerkId,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
     })
@@ -93,6 +95,7 @@ export async function getUsers(
       imageUrl: user.imageUrl,
       displayName: user.displayName,
       role: user.role,
+      clerkId: user.clerkId,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
     })
@@ -115,7 +118,7 @@ export async function getUsers(
 
   // Get total count
   const countQuery = db
-    .select({ count: db.$count() })
+    .select({ count: sql<number>`count(*)` })
     .from(user)
     .where(and(...conditions))
 
@@ -124,7 +127,7 @@ export async function getUsers(
   // Apply pagination and ordering
   const offset = (page - 1) * pageSize
   const data = await query
-    .orderBy(sortDescending ? user[orderBy].desc() : user[orderBy].asc())
+    .orderBy(sortDescending ? desc(user[orderBy]) : asc(user[orderBy]))
     .limit(pageSize)
     .offset(offset)
 

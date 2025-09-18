@@ -18,15 +18,16 @@ export async function GET(request: Request, { params }: { params: Promise<{ user
 
   const { userId } = await params
 
-  // userId is now Clerk ID directly (primary key)
+  // userId parameter is the Clerk ID from URL
   // Check authorization - user can access their own data or admin can access any
-  if (!auth.user.isAdmin && auth.user.id !== userId) {
+  if (!auth.user.isAdmin && auth.user.clerkId !== userId) {
     return unauthorized()
   }
 
   const filters = await getQueryFilters(query)
 
-  const websites = await getUserWebsites(userId, filters)
+  // Use the database user ID for the query
+  const websites = await getUserWebsites(auth.user.userId, filters)
 
   return json(websites)
 }

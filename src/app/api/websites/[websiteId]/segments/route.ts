@@ -60,7 +60,7 @@ export async function POST(
 
   const result = await createSegment({
     id: uuid(),
-    websiteId,
+    website_id: websiteId,
     type,
     name,
     parameters,

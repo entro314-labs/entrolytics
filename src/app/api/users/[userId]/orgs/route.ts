@@ -17,14 +17,14 @@ export async function GET(request: Request, { params }: { params: Promise<{ user
 
   const { userId } = await params
 
-  // userId is now Clerk ID directly (primary key)
+  // userId parameter should be the Clerk ID
   // Check authorization - user can access their own data or admin can access any
-  if (auth.user.clerk_id !== userId && !auth.user.isAdmin) {
+  if (auth.user.clerkId !== userId && !auth.user.isAdmin) {
     return unauthorized()
   }
 
   // Get the database user ID from the Clerk ID to find organizations
-  const orgs = await getUserOrgs(auth.user.user_id, query)
+  const orgs = await getUserOrgs(auth.user.userId, query)
 
   return json(orgs)
 }

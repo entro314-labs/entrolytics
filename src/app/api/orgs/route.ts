@@ -1,36 +1,72 @@
 import { z } from 'zod'
 import { getRandomChars } from '@/lib/crypto'
 import { unauthorized, json } from '@/lib/response'
-import { canCreateOrg } from '@/validations'
+import { canCreateOrg, canViewAllOrgs } from '@/validations'
 import { uuid } from '@/lib/crypto'
-import { parseRequest } from '@/lib/request'
-import { createOrg } from '@/queries'
+import { parseRequest, getQueryFilters } from '@/lib/request'
+import { createOrg, getOrgs, getUserOrgs } from '@/queries'
+import { pagingParams, searchParams } from '@/lib/schema'
 
-export async function POST(request: Request) {
+export async function GET(request: Request) {
   const schema = z.object({
-    name: z.string().max(50),
+    ...pagingParams,
+    ...searchParams,
   })
 
-  const { auth, body, error } = await parseRequest(request, schema)
+  const { auth, query, error } = await parseRequest(request, schema)
 
   if (error) {
     return error()
   }
 
-  if (!(await canCreateOrg(auth))) {
-    return unauthorized()
+  const filters = await getQueryFilters(query)
+
+  // If user is admin, return all orgs, otherwise return user's orgs
+  if (await canViewAllOrgs(auth)) {
+    const orgs = await getOrgs({}, filters)
+    return json(orgs)
+  } else {
+    const orgs = await getUserOrgs(auth?.user?.userId, filters)
+    return json(orgs)
   }
+}
 
-  const { name } = body
+export async function POST(request: Request) {
+  try {
+    const schema = z.object({
+      name: z.string().max(50),
+    })
 
-  const org = await createOrg(
-    {
-      id: uuid(),
-      name,
-      accessCode: `org_${getRandomChars(16)}`,
-    },
-    auth.user.id
-  )
+    const { auth, body, error } = await parseRequest(request, schema)
 
-  return json(org)
+    if (error) {
+      return error()
+    }
+
+    if (!(await canCreateOrg(auth))) {
+      return unauthorized()
+    }
+
+    const { name } = body
+
+    const result = await createOrg(
+      {
+        id: uuid(),
+        name,
+        access_code: `org_${getRandomChars(16)}`,
+      },
+      auth.user.userId
+    )
+
+    // createOrg returns [newOrg, newOrgUser], we want just the org
+    const [org] = result
+
+    return json(org)
+  } catch (err) {
+    console.error('Error creating org:', err)
+    return new Response(JSON.stringify({ error: 'Internal server error', details: err.message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    })
+  }
 }

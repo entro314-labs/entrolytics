@@ -13,7 +13,7 @@ export async function canViewUser(auth: Auth, viewedUserId: string) {
 
   // Check if userId is a Clerk ID or internal database ID
   const isClerkId = viewedUserId.startsWith('user_')
-  const userIdToCompare = isClerkId ? clerkUserId : user.id
+  const userIdToCompare = isClerkId ? clerkUserId : user.userId
 
   return userIdToCompare === viewedUserId
 }
@@ -31,7 +31,7 @@ export async function canUpdateUser(auth: Auth, viewedUserId: string) {
 
   // Check if userId is a Clerk ID or internal database ID
   const isClerkId = viewedUserId.startsWith('user_')
-  const userIdToCompare = isClerkId ? clerkUserId : user.id
+  const userIdToCompare = isClerkId ? clerkUserId : user.userId
 
   return userIdToCompare === viewedUserId
 }

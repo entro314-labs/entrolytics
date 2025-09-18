@@ -1,4 +1,4 @@
-import { eq, and, or, ilike, isNull, sql } from 'drizzle-orm'
+import { eq, and, or, ilike, isNull, sql, desc, asc } from 'drizzle-orm'
 import { db, link } from '@/lib/db'
 import { PageResult, QueryFilters } from '@/lib/types'
 
@@ -13,6 +13,15 @@ export async function findLink(linkId: string) {
 
 export async function getLink(linkId: string) {
   return findLink(linkId)
+}
+
+export async function findLinkBySlug(slug: string) {
+  return db
+    .select()
+    .from(link)
+    .where(eq(link.slug, slug))
+    .limit(1)
+    .then((rows) => rows[0] || null)
 }
 
 export async function getLinks(
@@ -55,7 +64,7 @@ export async function getLinks(
   // Apply pagination and ordering
   const offset = (page - 1) * pageSize
   const data = await query
-    .orderBy(sortDescending ? link[orderBy].desc() : link[orderBy].asc())
+    .orderBy(sortDescending ? desc(link[orderBy]) : asc(link[orderBy]))
     .limit(pageSize)
     .offset(offset)
 

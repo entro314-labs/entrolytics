@@ -21,34 +21,7 @@ export async function GET(request: Request) {
     return unauthorized()
   }
 
-  const orgs = await getOrgs(
-    {
-      include: {
-        _count: {
-          select: {
-            members: true,
-            websites: true,
-          },
-        },
-        members: {
-          select: {
-            user: {
-              omit: {
-                password: true,
-              },
-            },
-          },
-          where: {
-            role: 'org-owner',
-          },
-        },
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-    },
-    query
-  )
+  const orgs = await getOrgs({}, query)
 
   return json(orgs)
 }

@@ -47,7 +47,7 @@ export async function POST(
 
   const result = await updateReport(reportId, {
     websiteId,
-    userId: auth.user.id,
+    userId: auth.user.userId,
     type,
     name,
     description,

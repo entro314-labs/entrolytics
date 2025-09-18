@@ -28,19 +28,10 @@ export async function GET(
     return unauthorized()
   }
 
-  const data = await getReports(
-    {
-      where: {
-        websiteId,
-        type: filters.type,
-      },
-    },
-    {
-      page,
-      pageSize,
-      search,
-    }
-  )
+  const whereClause: any = { websiteId }
+  if (filters.type) whereClause.type = filters.type
+
+  const data = await getReports(whereClause, { page, pageSize, search })
 
   return json(data)
 }

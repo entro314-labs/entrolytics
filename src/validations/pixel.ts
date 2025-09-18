@@ -11,11 +11,11 @@ export async function canViewPixel({ user }: Auth, pixelId: string) {
   const pixel = await getPixel(pixelId)
 
   if (pixel.userId) {
-    return user.id === pixel.userId
+    return user.userId === pixel.userId
   }
 
   if (pixel.orgId) {
-    const orgUser = await getOrgUser(pixel.orgId, user.id)
+    const orgUser = await getOrgUser(pixel.orgId, user.userId)
 
     return !!orgUser
   }
@@ -31,11 +31,11 @@ export async function canUpdatePixel({ user }: Auth, pixelId: string) {
   const pixel = await getPixel(pixelId)
 
   if (pixel.userId) {
-    return user.id === pixel.userId
+    return user.userId === pixel.userId
   }
 
   if (pixel.orgId) {
-    const orgUser = await getOrgUser(pixel.orgId, user.id)
+    const orgUser = await getOrgUser(pixel.orgId, user.userId)
 
     return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteUpdate)
   }
@@ -51,11 +51,11 @@ export async function canDeletePixel({ user }: Auth, pixelId: string) {
   const pixel = await getPixel(pixelId)
 
   if (pixel.userId) {
-    return user.id === pixel.userId
+    return user.userId === pixel.userId
   }
 
   if (pixel.orgId) {
-    const orgUser = await getOrgUser(pixel.orgId, user.id)
+    const orgUser = await getOrgUser(pixel.orgId, user.userId)
 
     return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteDelete)
   }

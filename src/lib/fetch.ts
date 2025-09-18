@@ -1,4 +1,5 @@
 import { buildUrl } from '@/lib/url'
+import { shouldProxy, proxyRequest } from '@/lib/proxy'
 
 export interface ErrorResponse {
   error: {
@@ -21,6 +22,43 @@ export async function request(
   body?: string,
   headers: object = {}
 ): Promise<FetchResponse> {
+  // Check if this is an external URL that needs proxying
+  if (typeof window !== 'undefined' && shouldProxy(url)) {
+    try {
+      console.log(`[PROXY] Routing external request through proxy: ${url}`)
+      const proxyResponse = await proxyRequest({
+        url,
+        method: method as any,
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          ...headers,
+        } as Record<string, string>,
+        body: body ? JSON.parse(body) : undefined,
+      })
+
+      return {
+        ok: proxyResponse.status >= 200 && proxyResponse.status < 300,
+        status: proxyResponse.status,
+        data: proxyResponse.status >= 200 && proxyResponse.status < 300 ? proxyResponse.data : undefined,
+        error: proxyResponse.status >= 200 && proxyResponse.status < 300 ? undefined : proxyResponse.data,
+      }
+    } catch (error) {
+      console.error('[PROXY] Proxy request failed:', error)
+      return {
+        ok: false,
+        status: 500,
+        error: {
+          error: {
+            status: 500,
+            message: `Proxy request failed: ${error.message}`,
+          }
+        }
+      }
+    }
+  }
+
+  // Use regular fetch for internal URLs
   return fetch(url, {
     method,
     cache: 'no-cache',

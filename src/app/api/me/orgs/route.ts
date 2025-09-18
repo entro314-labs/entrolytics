@@ -22,7 +22,7 @@ export async function GET(request: Request) {
 
   const filters = await getQueryFilters(query)
 
-  const orgs = await getUserOrgs(auth?.user?.id, filters)
+  const orgs = await getUserOrgs(auth?.user?.userId, filters)
 
   return json(orgs)
 }

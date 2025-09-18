@@ -1,4 +1,4 @@
-import { eq, and, or, ilike, sql } from 'drizzle-orm'
+import { eq, and, or, ilike, sql, desc, asc } from 'drizzle-orm'
 import { db, report, user, website } from '@/lib/db'
 import { PageResult, QueryFilters } from '@/lib/types'
 
@@ -80,7 +80,7 @@ export async function getReports(
   // Apply pagination and ordering
   const offset = (page - 1) * pageSize
   const data = await query
-    .orderBy(sortDescending ? report[orderBy].desc() : report[orderBy].asc())
+    .orderBy(sortDescending ? desc(report[orderBy]) : asc(report[orderBy]))
     .limit(pageSize)
     .offset(offset)
 

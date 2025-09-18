@@ -1,4 +1,4 @@
-import { eq, and, or, ilike, isNull, inArray } from 'drizzle-orm'
+import { eq, and, or, ilike, isNull, inArray, desc, asc, sql } from 'drizzle-orm'
 import {
   db,
   website,
@@ -59,7 +59,7 @@ export async function getWebsites(
 
   // Get total count
   const countQuery = db
-    .select({ count: db.$count() })
+    .select({ count: sql<number>`count(*)` })
     .from(website)
     .where(and(...conditions))
 
@@ -68,7 +68,7 @@ export async function getWebsites(
   // Apply pagination and ordering
   const offset = (page - 1) * pageSize
   const data = await query
-    .orderBy(sortDescending ? website[orderBy].desc() : website[orderBy].asc())
+    .orderBy(sortDescending ? desc(website[orderBy]) : asc(website[orderBy]))
     .limit(pageSize)
     .offset(offset)
 

@@ -25,25 +25,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ orgI
 
   const filters = await getQueryFilters(query)
 
-  const users = await getOrgUsers(
-    {
-      where: {
-        orgId,
-        user: {
-          deletedAt: null,
-        },
-      },
-      include: {
-        user: {
-          select: {
-            id: true,
-            username: true,
-          },
-        },
-      },
-    },
-    filters
-  )
+  const users = await getOrgUsers({ orgId }, filters)
 
   return json(users)
 }

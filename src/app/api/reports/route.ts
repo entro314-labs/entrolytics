@@ -30,18 +30,11 @@ export async function GET(request: Request) {
     return unauthorized()
   }
 
-  const data = await getReports(
-    {
-      where: {
-        websiteId,
-        type,
-        website: {
-          deletedAt: null,
-        },
-      },
-    },
-    filters
-  )
+  const whereClause: any = {}
+  if (websiteId) whereClause.websiteId = websiteId
+  if (type) whereClause.type = type
+
+  const data = await getReports(whereClause, filters)
 
   return json(data)
 }
@@ -61,7 +54,7 @@ export async function POST(request: Request) {
 
   const result = await createReport({
     id: uuid(),
-    userId: auth.user.id,
+    userId: auth.user.userId,
     websiteId,
     type,
     name,

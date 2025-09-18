@@ -1,4 +1,4 @@
-import { eq, and, or, ilike, isNull, inArray, sql } from 'drizzle-orm'
+import { eq, and, or, ilike, isNull, inArray, sql, desc, asc } from 'drizzle-orm'
 import { db, org, orgUser, user, website } from '@/lib/db'
 import { ROLES } from '@/lib/constants'
 import { uuid } from '@/lib/crypto'
@@ -43,6 +43,15 @@ export async function getOrg(orgId: string, options: { includeMembers?: boolean 
   return findOrg(orgId, options)
 }
 
+export async function findOrgByAccessCode(accessCode: string) {
+  return db
+    .select()
+    .from(org)
+    .where(eq(org.accessCode, accessCode))
+    .limit(1)
+    .then((rows) => rows[0] || null)
+}
+
 export async function getOrgs(
   whereClause: any = {},
   filters: QueryFilters = {}
@@ -77,7 +86,7 @@ export async function getOrgs(
   // Apply pagination and ordering
   const offset = (page - 1) * pageSize
   const data = await query
-    .orderBy(sortDescending ? org[orderBy].desc() : org[orderBy].asc())
+    .orderBy(sortDescending ? desc(org[orderBy]) : asc(org[orderBy]))
     .limit(pageSize)
     .offset(offset)
 
@@ -140,7 +149,7 @@ export async function getUserOrgs(
   // Apply pagination and ordering
   const offset = (page - 1) * pageSize
   const data = await query
-    .orderBy(sortDescending ? org[orderBy].desc() : org[orderBy].asc())
+    .orderBy(sortDescending ? desc(org[orderBy]) : asc(org[orderBy]))
     .limit(pageSize)
     .offset(offset)
 
@@ -156,14 +165,19 @@ export async function getUserOrgs(
 
 export async function createOrg(data: any, userId: string) {
   return db.transaction(async (tx) => {
+    const orgValues: any = {
+      orgId: data.id,
+      name: data.name,
+      accessCode: data.access_code,
+    }
+
+    if (data.logo_url) {
+      orgValues.logoUrl = data.logo_url
+    }
+
     const [newOrg] = await tx
       .insert(org)
-      .values({
-        orgId: data.id,
-        name: data.name,
-        accessCode: data.access_code,
-        logoUrl: data.logo_url,
-      })
+      .values(orgValues)
       .returning()
 
     const [newOrgUser] = await tx

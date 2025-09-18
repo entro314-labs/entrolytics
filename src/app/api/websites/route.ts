@@ -1,11 +1,34 @@
 import { z } from 'zod'
-import { canCreateOrgWebsite, canCreateWebsite } from '@/validations'
+import { canCreateOrgWebsite, canCreateWebsite, canViewAllWebsites } from '@/validations'
 import { json, unauthorized } from '@/lib/response'
 import { uuid } from '@/lib/crypto'
-import { parseRequest } from '@/lib/request'
-import { createWebsite } from '@/queries'
+import { parseRequest, getQueryFilters } from '@/lib/request'
+import { createWebsite, getWebsites, getUserWebsites } from '@/queries'
+import { pagingParams, searchParams } from '@/lib/schema'
 
-export { GET } from '@/app/api/users/[userId]/websites/route'
+export async function GET(request: Request) {
+  const schema = z.object({
+    ...pagingParams,
+    ...searchParams,
+  })
+
+  const { auth, query, error } = await parseRequest(request, schema)
+
+  if (error) {
+    return error()
+  }
+
+  const filters = await getQueryFilters(query)
+
+  // If user is admin, return all websites, otherwise return user's websites
+  if (await canViewAllWebsites(auth)) {
+    const websites = await getWebsites({}, filters)
+    return json(websites)
+  } else {
+    const websites = await getUserWebsites(auth?.user?.userId, filters)
+    return json(websites)
+  }
+}
 
 export async function POST(request: Request) {
   const schema = z.object({
@@ -29,16 +52,16 @@ export async function POST(request: Request) {
   }
 
   const data: any = {
-    id: id ?? uuid(),
-    createdBy: auth.user.id,
+    website_id: id ?? uuid(),
+    created_by: auth.user.userId,
     name,
     domain,
-    shareId,
-    orgId,
+    share_id: shareId,
+    org_id: orgId,
   }
 
   if (!orgId) {
-    data.userId = auth.user.id
+    data.user_id = auth.user.userId
   }
 
   const website = await createWebsite(data)

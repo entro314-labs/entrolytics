@@ -17,11 +17,11 @@ export async function canViewWebsite({ user, shareToken }: Auth, websiteId: stri
   const website = await getWebsite(websiteId)
 
   if (website.userId) {
-    return user.id === website.userId
+    return user.userId === website.userId
   }
 
   if (website.orgId) {
-    const orgUser = await getOrgUser(website.orgId, user.id)
+    const orgUser = await getOrgUser(website.orgId, user.userId)
 
     return !!orgUser
   }
@@ -53,11 +53,11 @@ export async function canUpdateWebsite({ user }: Auth, websiteId: string) {
   const website = await getWebsite(websiteId)
 
   if (website.userId) {
-    return user.id === website.userId
+    return user.userId === website.userId
   }
 
   if (website.orgId) {
-    const orgUser = await getOrgUser(website.orgId, user.id)
+    const orgUser = await getOrgUser(website.orgId, user.userId)
 
     return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteUpdate)
   }
@@ -73,11 +73,11 @@ export async function canDeleteWebsite({ user }: Auth, websiteId: string) {
   const website = await getWebsite(websiteId)
 
   if (website.userId) {
-    return user.id === website.userId
+    return user.userId === website.userId
   }
 
   if (website.orgId) {
-    const orgUser = await getOrgUser(website.orgId, user.id)
+    const orgUser = await getOrgUser(website.orgId, user.userId)
 
     return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteDelete)
   }
@@ -88,7 +88,7 @@ export async function canDeleteWebsite({ user }: Auth, websiteId: string) {
 export async function canTransferWebsiteToUser({ user }: Auth, websiteId: string, userId: string) {
   const website = await getWebsite(websiteId)
 
-  if (website.orgId && user.id === userId) {
+  if (website.orgId && user.userId === userId) {
     const orgUser = await getOrgUser(website.orgId, userId)
 
     return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteTransferToUser)
@@ -100,8 +100,8 @@ export async function canTransferWebsiteToUser({ user }: Auth, websiteId: string
 export async function canTransferWebsiteToOrg({ user }: Auth, websiteId: string, orgId: string) {
   const website = await getWebsite(websiteId)
 
-  if (website.userId && website.userId === user.id) {
-    const orgUser = await getOrgUser(orgId, user.id)
+  if (website.userId && website.userId === user.userId) {
+    const orgUser = await getOrgUser(orgId, user.userId)
 
     return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteTransferToOrg)
   }

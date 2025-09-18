@@ -2,6 +2,7 @@ import { useApi } from '../useApi'
 import { useModified } from '@/components/hooks'
 import { keepPreviousData } from '@tanstack/react-query'
 import { ReactQueryOptions } from '@/lib/types'
+import { isValidUuid } from '@/lib/uuid'
 
 export function useWebsiteQuery(websiteId: string, options?: ReactQueryOptions) {
   const { get, useQuery } = useApi()
@@ -10,7 +11,7 @@ export function useWebsiteQuery(websiteId: string, options?: ReactQueryOptions) 
   return useQuery({
     queryKey: ['website', { websiteId, modified }],
     queryFn: () => get(`/websites/${websiteId}`),
-    enabled: !!websiteId,
+    enabled: !!websiteId && isValidUuid(websiteId),
     placeholderData: keepPreviousData,
     ...options,
   })

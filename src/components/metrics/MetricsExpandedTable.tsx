@@ -51,7 +51,7 @@ export function MetricsExpandedTable({
     ...params,
   })
 
-  const items = data?.map(({ name, ...props }) => ({ label: name, ...props }))
+  const items = Array.isArray(data) ? data.map(({ name, ...props }) => ({ label: name, ...props })) : null
 
   return (
     <>

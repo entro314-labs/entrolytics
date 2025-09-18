@@ -8,6 +8,13 @@
       "when": 1758157833514,
       "tag": "0001_complete_schema_migration",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1758187490758,
+      "tag": "0002_add_uuid_defaults",
+      "breakpoints": true
     }
   ]
 }

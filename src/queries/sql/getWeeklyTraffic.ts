@@ -1,6 +1,6 @@
 import clickhouse from '@/lib/clickhouse'
 import { runQuery, DRIZZLE, CLICKHOUSE } from '@/lib/db'
-import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
+import { getTimestampDiffSQL, getDateSQL, getDateWeeklySQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
 import { QueryFilters } from '@/lib/types'
 import { EVENT_COLUMNS } from '@/lib/constants'
 

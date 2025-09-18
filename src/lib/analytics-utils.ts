@@ -30,6 +30,15 @@ export function getDateSQL(field: string, unit: string, timezone: string): strin
   }
 }
 
+export function getDateWeeklySQL(field: string, timezone: string): string {
+  const tz = timezone === 'utc' ? 'UTC' : timezone
+
+  // Returns format compatible with ClickHouse %w:%H (weekday:hour)
+  // PostgreSQL: EXTRACT(DOW FROM timestamp) gives day of week (0=Sunday, 6=Saturday)
+  // EXTRACT(HOUR FROM timestamp) gives hour (0-23)
+  return `CONCAT(EXTRACT(DOW FROM ${field} AT TIME ZONE '${tz}'), ':', LPAD(EXTRACT(HOUR FROM ${field} AT TIME ZONE '${tz}')::TEXT, 2, '0'))`
+}
+
 export interface ParsedFilters {
   filterQuery: string
   joinSessionQuery: string

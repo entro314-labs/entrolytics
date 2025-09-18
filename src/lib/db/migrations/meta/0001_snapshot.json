@@ -1,6 +1,6 @@
 {
-  "id": "0e3d7f17-f05f-48c7-84ef-249dbcf6087c",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "49522a09-3c9f-47bd-8b91-c7ea8ec9347e",
+  "prevId": "0e3d7f17-f05f-48c7-84ef-249dbcf6087c",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -12,7 +12,8 @@
           "name": "event_data_id",
           "type": "uuid",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "default": "gen_random_uuid()"
         },
         "website_id": {
           "name": "website_id",
@@ -174,7 +175,8 @@
           "name": "link_id",
           "type": "uuid",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "default": "gen_random_uuid()"
         },
         "name": {
           "name": "name",
@@ -311,7 +313,8 @@
           "name": "org_id",
           "type": "uuid",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "default": "gen_random_uuid()"
         },
         "name": {
           "name": "name",
@@ -1572,7 +1575,8 @@
           "name": "website_id",
           "type": "uuid",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "default": "gen_random_uuid()"
         },
         "name": {
           "name": "name",

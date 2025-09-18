@@ -37,7 +37,7 @@ export function MetricsTable({
   })
 
   const filteredData = useMemo(() => {
-    if (data) {
+    if (data && Array.isArray(data)) {
       let items = data as any[]
 
       if (dataFilter) {

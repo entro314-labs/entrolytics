@@ -10,11 +10,12 @@ import {
   index,
   uniqueIndex,
 } from 'drizzle-orm/pg-core'
+import { sql } from 'drizzle-orm'
 
 export const eventData = pgTable(
   'event_data',
   {
-    eventDataId: uuid('event_data_id').primaryKey(),
+    eventDataId: uuid('event_data_id').primaryKey().default(sql`gen_random_uuid()`),
     websiteId: uuid('website_id').notNull(),
     websiteEventId: uuid('website_event_id').notNull(),
     dataKey: varchar('data_key', { length: 500 }).notNull(),
@@ -45,7 +46,7 @@ export const eventData = pgTable(
 export const link = pgTable(
   'link',
   {
-    linkId: uuid('link_id').primaryKey(),
+    linkId: uuid('link_id').primaryKey().default(sql`gen_random_uuid()`),
     name: varchar('name', { length: 100 }).notNull(),
     url: varchar('url', { length: 500 }).notNull(),
     slug: varchar('slug', { length: 100 }).unique().notNull(),
@@ -68,7 +69,7 @@ export const link = pgTable(
 export const org = pgTable(
   'org',
   {
-    orgId: uuid('org_id').primaryKey(),
+    orgId: uuid('org_id').primaryKey().default(sql`gen_random_uuid()`),
     name: varchar('name', { length: 50 }).notNull(),
     accessCode: varchar('access_code', { length: 50 }).unique(),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
@@ -318,7 +319,7 @@ export const user = pgTable(
 export const website = pgTable(
   'website',
   {
-    websiteId: uuid('website_id').primaryKey(),
+    websiteId: uuid('website_id').primaryKey().default(sql`gen_random_uuid()`),
     name: varchar('name', { length: 100 }).notNull(),
     domain: varchar('domain', { length: 500 }),
     shareId: varchar('share_id', { length: 50 }).unique(),

@@ -1,93 +1,108 @@
-import { z } from 'zod'
-import { canUpdateLink, canDeleteLink, canViewLink } from '@/validations'
-import { parseRequest } from '@/lib/request'
-import { ok, json, unauthorized, serverError, badRequest } from '@/lib/response'
-import { deleteLink, getLink, updateLink } from '@/queries'
-import { isValidUuid } from '@/lib/uuid'
+import { z } from "zod";
+import { canUpdateLink, canDeleteLink, canViewLink } from "@/validations";
+import { parseRequest } from "@/lib/request";
+import {
+	ok,
+	json,
+	unauthorized,
+	serverError,
+	badRequest,
+} from "@/lib/response";
+import { deleteLink, getLink, updateLink } from "@/queries";
+import { isValidUuid } from "@/lib/uuid";
 
-export async function GET(request: Request, { params }: { params: Promise<{ linkId: string }> }) {
-  const { auth, error } = await parseRequest(request)
+export async function GET(
+	request: Request,
+	{ params }: { params: Promise<{ linkId: string }> },
+) {
+	const { auth, error } = await parseRequest(request);
 
-  if (error) {
-    return error()
-  }
+	if (error) {
+		return error();
+	}
 
-  const { linkId } = await params
+	const { linkId } = await params;
 
-  // Validate linkId is a proper UUID
-  if (!isValidUuid(linkId)) {
-    return badRequest('Invalid link ID format')
-  }
+	// Validate linkId is a proper UUID
+	if (!isValidUuid(linkId)) {
+		return badRequest("Invalid link ID format");
+	}
 
-  if (!(await canViewLink(auth, linkId))) {
-    return unauthorized()
-  }
+	if (!(await canViewLink(auth, linkId))) {
+		return unauthorized();
+	}
 
-  const website = await getLink(linkId)
+	const website = await getLink(linkId);
 
-  return json(website)
+	return json(website);
 }
 
-export async function POST(request: Request, { params }: { params: Promise<{ linkId: string }> }) {
-  const schema = z.object({
-    name: z.string(),
-    url: z.string(),
-    slug: z.string(),
-  })
+export async function POST(
+	request: Request,
+	{ params }: { params: Promise<{ linkId: string }> },
+) {
+	const schema = z.object({
+		name: z.string(),
+		url: z.string(),
+		slug: z.string(),
+	});
 
-  const { auth, body, error } = await parseRequest(request, schema)
+	const { auth, body, error } = await parseRequest(request, schema);
 
-  if (error) {
-    return error()
-  }
+	if (error) {
+		return error();
+	}
 
-  const { linkId } = await params
-  const { name, url, slug } = body
+	const { linkId } = await params;
+	const { name, url, slug } = body;
 
-  // Validate linkId is a proper UUID
-  if (!isValidUuid(linkId)) {
-    return badRequest('Invalid link ID format')
-  }
+	// Validate linkId is a proper UUID
+	if (!isValidUuid(linkId)) {
+		return badRequest("Invalid link ID format");
+	}
 
-  if (!(await canUpdateLink(auth, linkId))) {
-    return unauthorized()
-  }
+	if (!(await canUpdateLink(auth, linkId))) {
+		return unauthorized();
+	}
 
-  try {
-    const result = await updateLink(linkId, { name, url, slug })
+	try {
+		const result = await updateLink(linkId, { name, url, slug });
 
-    return Response.json(result)
-  } catch (e: any) {
-    if (e.message.toLowerCase().includes('unique constraint') && e.message.includes('slug')) {
-      return badRequest('That slug is already taken.')
-    }
+		return Response.json(result);
+	} catch (e: any) {
+		if (
+			e.message.toLowerCase().includes("unique constraint") &&
+			e.message.includes("slug")
+		) {
+			return badRequest("That slug is already taken.");
+		}
 
-    return serverError(e)
-  }
+		return serverError(e);
+	}
 }
 
 export async function DELETE(
-  request: Request,
-  { params }: { params: Promise<{ linkId: string }> }
+	request: Request,
+	{ params }: { params: Promise<{ linkId: string }> },
 ) {
-  const { auth, error } = await parseRequest(request)
+	const { auth, error } = await parseRequest(request);
 
-  if (error) {
-    return error()
-  }
+	if (error) {
+		return error();
+	}
 
-  const { linkId } = await params
+	const { linkId } = await params;
 
-  // Validate linkId is a proper UUID
-  if (!isValidUuid(linkId)) {
-    return badRequest('Invalid link ID format')
-  }
+	// Validate linkId is a proper UUID
+	if (!isValidUuid(linkId)) {
+		return badRequest("Invalid link ID format");
+	}
 
-  if (!(await canDeleteLink(auth, linkId))) {
-    return unauthorized()
-  }
+	if (!(await canDeleteLink(auth, linkId))) {
+		return unauthorized();
+	}
 
-  await deleteLink(linkId)
+	await deleteLink(linkId);
 
-  return ok()
+	return ok();
 }

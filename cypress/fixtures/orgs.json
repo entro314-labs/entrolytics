@@ -1,0 +1,8 @@
+{
+	"orgCreate": {
+		"name": "cypress"
+	},
+	"orgUpdate": {
+		"name": "cypressUpdate"
+	}
+}

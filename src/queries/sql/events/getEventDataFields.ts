@@ -1,31 +1,39 @@
-import clickhouse from '@/lib/clickhouse'
-import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
-import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
+import clickhouse from "@/lib/clickhouse";
+import { CLICKHOUSE, DRIZZLE, runQuery } from "@/lib/db";
+import {
+	getTimestampDiffSQL,
+	getDateSQL,
+	parseFilters,
+	rawQuery,
+} from "@/lib/analytics-utils";
 
-import { QueryFilters } from '@/lib/types'
+import { QueryFilters } from "@/lib/types";
 
-export async function getEventDataFields(...args: [websiteId: string, filters: QueryFilters]) {
-  return runQuery({
-    [DRIZZLE]: () => relationalQuery(...args),
-    [CLICKHOUSE]: () => clickhouseQuery(...args),
-  })
+export async function getEventDataFields(
+	...args: [websiteId: string, filters: QueryFilters]
+) {
+	return runQuery({
+		[DRIZZLE]: () => relationalQuery(...args),
+		[CLICKHOUSE]: () => clickhouseQuery(...args),
+	});
 }
 
 async function relationalQuery(websiteId: string, filters: QueryFilters) {
-  // Using rawQuery FROM analytics-utils
-  const { filterQuery, cohortQuery, joinSessionQuery, queryParams } = parseFilters({
-    ...filters,
-    websiteId,
-  })
+	// Using rawQuery FROM analytics-utils
+	const { filterQuery, cohortQuery, joinSessionQuery, queryParams } =
+		parseFilters({
+			...filters,
+			websiteId,
+		});
 
-  return rawQuery(
-    `
+	return rawQuery(
+		`
     SELECT
       data_key as "propertyName",
       data_type as "dataType",
       CASE 
         WHEN data_type = 2 THEN replace(string_value, '.0000', '') 
-        WHEN data_type = 4 THEN ${getDateSQL('date_value', 'hour')} 
+        WHEN data_type = 4 THEN ${getDateSQL("date_value", "hour", "UTC")}
         ELSE string_value
       END as "value",
       COUNT(*) as "total"
@@ -42,19 +50,29 @@ async function relationalQuery(websiteId: string, filters: QueryFilters) {
     ORDER BY 2 desc
     limit 100
     `,
-    queryParams
-  )
+		queryParams,
+	);
 }
 
 async function clickhouseQuery(
-  websiteId: string,
-  filters: QueryFilters
-): Promise<{ propertyName: string; dataType: number; propertyValue: string; total: number }[]> {
-  const { rawQuery, parseFilters } = clickhouse
-  const { filterQuery, cohortQuery, queryParams } = parseFilters({ ...filters, websiteId })
+	websiteId: string,
+	filters: QueryFilters,
+): Promise<
+	{
+		propertyName: string;
+		dataType: number;
+		propertyValue: string;
+		total: number;
+	}[]
+> {
+	const { rawQuery, parseFilters } = clickhouse;
+	const { filterQuery, cohortQuery, queryParams } = parseFilters({
+		...filters,
+		websiteId,
+	});
 
-  return rawQuery(
-    `
+	return rawQuery(
+		`
     SELECT
       data_key as propertyName,
       data_type as dataType,
@@ -71,6 +89,6 @@ async function clickhouseQuery(
     ORDER BY 2 desc
     limit 100
     `,
-    queryParams
-  )
+		queryParams,
+	);
 }

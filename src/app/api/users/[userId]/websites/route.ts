@@ -1,33 +1,42 @@
-import { z } from 'zod'
-import { unauthorized, json } from '@/lib/response'
-import { getUserWebsites } from '@/queries'
-import { pagingParams, searchParams } from '@/lib/schema'
-import { getQueryFilters, parseRequest } from '@/lib/request'
+import { z } from "zod";
+import { unauthorized, json, notFound } from "@/lib/response";
+import { getUserWebsites, getUserByClerkId } from "@/queries";
+import { pagingParams, searchParams } from "@/lib/schema";
+import { getQueryFilters, parseRequest } from "@/lib/request";
 
-export async function GET(request: Request, { params }: { params: Promise<{ userId: string }> }) {
-  const schema = z.object({
-    ...pagingParams,
-    ...searchParams,
-  })
+export async function GET(
+	request: Request,
+	{ params }: { params: Promise<{ userId: string }> },
+) {
+	const schema = z.object({
+		...pagingParams,
+		...searchParams,
+	});
 
-  const { auth, query, error } = await parseRequest(request, schema)
+	const { auth, query, error } = await parseRequest(request, schema);
 
-  if (error) {
-    return error()
-  }
+	if (error) {
+		return error();
+	}
 
-  const { userId } = await params
+	const { userId } = await params;
 
-  // userId parameter is the Clerk ID from URL
-  // Check authorization - user can access their own data or admin can access any
-  if (!auth.user.isAdmin && auth.user.clerkId !== userId) {
-    return unauthorized()
-  }
+	// userId parameter is the Clerk ID from URL
+	// Check authorization - user can access their own data or admin can access any
+	if (!auth.user.isAdmin && auth.user.clerkId !== userId) {
+		return unauthorized();
+	}
 
-  const filters = await getQueryFilters(query)
+	const targetUser = await getUserByClerkId(userId);
 
-  // Use the database user ID for the query
-  const websites = await getUserWebsites(auth.user.userId, filters)
+	if (!targetUser) {
+		return notFound("User not found.");
+	}
 
-  return json(websites)
+	const filters = await getQueryFilters(query);
+
+	// Use the target user's database ID for the query
+	const websites = await getUserWebsites(targetUser.userId, filters);
+
+	return json(websites);
 }

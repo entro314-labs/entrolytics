@@ -1,22 +1,22 @@
-import { UmamiRedisClient } from '@umami/redis-client'
+import { UmamiRedisClient } from "@umami/redis-client";
 
-const REDIS = 'redis'
-const enabled = !!process.env.REDIS_URL
+const REDIS = "redis";
+const enabled = !!process.env.REDIS_URL;
 
 function getClient() {
-  if (!process.env.REDIS_URL) {
-    throw new Error('REDIS_URL environment variable is required')
-  }
+	if (!process.env.REDIS_URL) {
+		throw new Error("REDIS_URL environment variable is required");
+	}
 
-  const redis = new UmamiRedisClient(process.env.REDIS_URL)
+	const redis = new UmamiRedisClient({ url: process.env.REDIS_URL });
 
-  if (process.env.NODE_ENV !== 'production') {
-    globalThis[REDIS] = redis
-  }
+	if (process.env.NODE_ENV !== "production") {
+		globalThis[REDIS] = redis;
+	}
 
-  return redis
+	return redis;
 }
 
-const client = globalThis[REDIS] || (enabled ? getClient() : null)
+const client = globalThis[REDIS] || (enabled ? getClient() : null);
 
-export default { client, enabled }
+export default { client, enabled };

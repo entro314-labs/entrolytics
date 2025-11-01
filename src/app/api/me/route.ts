@@ -1,5 +1,5 @@
-import { parseRequest } from '@/lib/request'
-import { json } from '@/lib/response'
+import { parseRequest } from "@/lib/request";
+import { json } from "@/lib/response";
 
 /**
  * Get Current User Information
@@ -8,16 +8,33 @@ import { json } from '@/lib/response'
  * This endpoint now works with Clerk authentication instead of JWT tokens.
  */
 export async function GET(request: Request) {
-  const { auth, error } = await parseRequest(request)
+	console.log("🔍 /api/me called");
+	const { auth, error } = await parseRequest(request);
 
-  if (error) {
-    return error()
-  }
+	console.log("🔍 Auth check result:", {
+		hasAuth: !!auth,
+		hasUser: !!auth?.user,
+		clerkUserId: auth?.clerkUserId,
+		userId: auth?.user?.userId,
+		error: error ? "YES" : "NO",
+	});
 
-  // Return user data with Clerk information
-  return json({
-    user: auth.user,
-    clerkUserId: auth.clerkUserId,
-    orgId: auth.orgId,
-  })
+	if (error) {
+		console.log("🚨 /api/me returning error");
+		return error();
+	}
+
+	const response = {
+		user: auth.user,
+		clerkUserId: auth.clerkUserId,
+		orgId: auth.orgId,
+	};
+
+	console.log("✅ /api/me returning user data:", {
+		hasUser: !!response.user,
+		userFields: response.user ? Object.keys(response.user) : [],
+		clerkUserId: response.clerkUserId,
+	});
+
+	return json(response);
 }

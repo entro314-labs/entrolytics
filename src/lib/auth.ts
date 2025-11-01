@@ -1,159 +1,134 @@
-import { auth, currentUser } from '@clerk/nextjs/server'
-import debug from 'debug'
-import { ROLE_PERMISSIONS, ROLES, SHARE_TOKEN_HEADER } from '@/lib/constants'
-import { parseToken } from '@/lib/jwt'
-import { secret, uuid } from '@/lib/crypto'
-import { ensureArray } from '@/lib/utils'
-import { getUser, createUser, getUserByClerkId } from '@/queries/drizzle/user'
+import { auth, currentUser, clerkClient } from "@clerk/nextjs/server";
+import debug from "debug";
+import { ROLE_PERMISSIONS, ROLES, SHARE_TOKEN_HEADER } from "@/lib/constants";
+import { parseToken } from "@/lib/jwt";
+import { secret, uuid } from "@/lib/crypto";
+import { ensureArray } from "@/lib/utils";
+import { getUser, createUser, getUserByClerkId } from "@/queries/drizzle/user";
+import type { AuthContext, PlatformRole } from "@/types/clerk";
+import type { User } from "@/lib/db";
+import type { Role } from "@/lib/types";
 
-const log = debug('entrolytics:auth')
+// Enhanced user type with computed properties
+type EnhancedUser = User & {
+	isAdmin?: boolean;
+	platformRole?: PlatformRole;
+	orgId?: string | null;
+	orgRole?: string | null;
+};
 
-/**
- * Get current authenticated user
- *
- * Uses Clerk's auth() function and syncs user to local database.
- * This function assumes the route is already protected by middleware.
- *
- * @returns User object or null if not authenticated
- */
-export async function getCurrentUser() {
-  try {
-    const { userId: clerkUserId } = await auth()
-
-    if (!clerkUserId) {
-      return null
-    }
-
-    // Get user from database using Clerk ID
-    let user = await getUserByClerkId(clerkUserId)
-
-    // If user doesn't exist in our database, sync from Clerk
-    if (!user) {
-      const clerkUser = await currentUser()
-      if (clerkUser) {
-        user = await syncUserFromClerk(clerkUser)
-      }
-    }
-
-    if (user) {
-      user.isAdmin = user.role === ROLES.admin
-    }
-
-    return user
-  } catch (error) {
-    log('getCurrentUser error:', error)
-    return null
-  }
-}
+const log = debug("entrolytics:auth");
 
 /**
- * Legacy checkAuth function for backward compatibility
+ * Get current authenticated user with enhanced role information
  *
- * @param request - The incoming request (optional, for share token parsing)
- * @returns Authentication object with user, shareToken, and clerk data
+ * Uses Clerk's auth() function, syncs user to local database,
+ * and enriches with role data from Clerk's publicMetadata.
+ *
+ * @returns Enhanced user object with role information or null if not authenticated
  */
-export async function checkAuth(request?: Request) {
-  try {
-    // During build time, Clerk auth might not be available
-    if (
-      !request ||
-      !request.url ||
-      typeof request.url !== 'string' ||
-      process.env.NEXT_PHASE === 'phase-production-build'
-    ) {
-      return null
-    }
+export async function getCurrentUser(): Promise<EnhancedUser | null> {
+	try {
+		const { userId: clerkUserId, orgId, orgRole } = await auth();
 
-    const { userId: clerkUserId, orgId } = await auth()
-    const shareToken = request ? await parseShareToken(request.headers) : null
+		if (!clerkUserId) {
+			return null;
+		}
 
-    // Log auth info in development
-    if (process.env.NODE_ENV === 'development') {
-      log('checkAuth:', {
-        clerkUserId,
-        orgId,
-        shareToken,
-        url: request?.url || 'build-time',
-      })
-    }
+		// Get Clerk user data including publicMetadata
+		const client = await clerkClient();
+		const clerkUser = await client.users.getUser(clerkUserId);
+		const platformRole =
+			(clerkUser.publicMetadata?.role as PlatformRole) || ROLES.user;
 
-    // If no Clerk user and no share token, return null
-    if (!clerkUserId && !shareToken) {
-      log('checkAuth: User not authorized')
-      return null
-    }
+		// Get user from database using Clerk ID
+		let user = await getUserByClerkId(clerkUserId);
 
-    // Get user data more efficiently to avoid double auth() calls
-    let user = null
-    if (clerkUserId) {
-      try {
-        // Try to get user from database using Clerk ID
-        user = await getUserByClerkId(clerkUserId)
+		// If user doesn't exist in our database, sync from Clerk
+		if (!user) {
+			const currentClerkUser = await currentUser();
+			if (currentClerkUser) {
+				user = await syncUserFromClerk(currentClerkUser, platformRole);
+			}
+		} else {
+			// Update role from Clerk's publicMetadata if different
+			if (user.role !== platformRole) {
+				user.role = platformRole;
+				// Could update database here if needed for consistency
+			}
+		}
 
-        // If user doesn't exist, sync from Clerk
-        if (!user) {
-          const clerkUser = await currentUser()
-          if (clerkUser) {
-            user = await syncUserFromClerk(clerkUser)
-          }
-        }
+		if (user) {
+			// Return enhanced user object with computed properties
+			return {
+				...user,
+				isAdmin: platformRole === ROLES.admin,
+				platformRole,
+				orgId: orgId || null,
+				orgRole: orgRole || null,
+			} as EnhancedUser;
+		}
 
-        if (user) {
-          user.isAdmin = user.role === ROLES.admin
-        }
-      } catch (userError) {
-        log('Error getting user in checkAuth:', userError)
-        user = null
-      }
-    }
-
-    return {
-      user,
-      shareToken,
-      clerkUserId,
-      orgId,
-    }
-  } catch (error) {
-    log('checkAuth error:', error)
-    return null
-  }
+		return null;
+	} catch (error) {
+		log("getCurrentUser error:", error);
+		return null;
+	}
 }
 
 /**
  * Sync user data from Clerk to our database
  * Creates a new user record with Clerk data using Clerk ID as primary key
+ * Now takes role from Clerk's publicMetadata for consistency
  */
-async function syncUserFromClerk(clerkUser: any) {
-  try {
-    const userData = {
-      user_id: uuid(), // Generate proper UUID for primary key
-      clerk_id: clerkUser.id, // Store Clerk ID in clerk_id field
-      email: clerkUser.emailAddresses[0]?.emailAddress || '',
-      first_name: clerkUser.firstName,
-      last_name: clerkUser.lastName,
-      image_url: clerkUser.imageUrl,
-      role: ROLES.user, // Default role
-      display_name:
-        `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim() ||
-        clerkUser.emailAddresses[0]?.emailAddress?.split('@')?.[0] ||
-        'User',
-    }
+async function syncUserFromClerk(
+	clerkUser: any,
+	platformRole?: PlatformRole,
+): Promise<User> {
+	try {
+		const userData = {
+			user_id: uuid(), // Generate proper UUID for primary key
+			clerk_id: clerkUser.id, // Store Clerk ID in clerk_id field
+			email: clerkUser.emailAddresses[0]?.emailAddress || "",
+			first_name: clerkUser.firstName || null,
+			last_name: clerkUser.lastName || null,
+			image_url: clerkUser.imageUrl || null,
+			role: (platformRole ||
+				(clerkUser.publicMetadata?.role as PlatformRole) ||
+				ROLES.user) as Role,
+			display_name:
+				`${clerkUser.firstName || ""} ${clerkUser.lastName || ""}`.trim() ||
+				clerkUser.emailAddresses[0]?.emailAddress?.split("@")?.[0] ||
+				"User",
+		};
 
-    const user = await createUser(userData)
-    log('User synced from Clerk:', user.user_id)
-    return user
-  } catch (error) {
-    log('Error syncing user from Clerk:', error)
-    throw error
-  }
+		const newUser = await createUser(userData);
+		log("User synced from Clerk:", newUser.userId);
+
+		// Get the full user object from database after creation
+		const fullUser = await getUserByClerkId(clerkUser.id);
+		if (!fullUser) {
+			throw new Error("Failed to retrieve created user from database");
+		}
+
+		return fullUser as User;
+	} catch (error) {
+		log("Error syncing user from Clerk:", error);
+		throw error;
+	}
 }
 
 /**
  * Check if user has specific permission(s)
  * Maintains the existing permission system
  */
-export async function hasPermission(role: string, permission: string | string[]) {
-  return ensureArray(permission).some((e) => ROLE_PERMISSIONS[role]?.includes(e))
+export async function hasPermission(
+	role: string,
+	permission: string | string[],
+) {
+	return ensureArray(permission).some((e) =>
+		ROLE_PERMISSIONS[role]?.includes(e),
+	);
 }
 
 /**
@@ -161,15 +136,47 @@ export async function hasPermission(role: string, permission: string | string[])
  * Maintains compatibility with existing share functionality
  */
 export function parseShareToken(headers: Headers) {
-  try {
-    return parseToken(headers.get(SHARE_TOKEN_HEADER), secret())
-  } catch (e) {
-    log('Share token parse error:', e)
-    return null
-  }
+	try {
+		return parseToken(headers.get(SHARE_TOKEN_HEADER), secret());
+	} catch (e) {
+		log("Share token parse error:", e);
+		return null;
+	}
 }
 
 /**
- * Entrolytics uses Clerk for all password and session management.
- * No additional auth utilities needed.
+ * Get enhanced auth context with role information from Clerk
+ * This provides a unified interface for checking authentication and roles
+ */
+export async function getAuthContext(): Promise<AuthContext | null> {
+	try {
+		const { userId: clerkUserId, orgId, orgRole } = await auth();
+
+		if (!clerkUserId) {
+			return null;
+		}
+
+		// Get platform role from Clerk's publicMetadata
+		const client = await clerkClient();
+		const clerkUser = await client.users.getUser(clerkUserId);
+		const platformRole =
+			(clerkUser.publicMetadata?.role as PlatformRole) || ROLES.user;
+
+		return {
+			userId: clerkUserId,
+			orgId: orgId || null,
+			orgRole: (orgRole as any) || null,
+			platformRole,
+			isAdmin: platformRole === ROLES.admin,
+		};
+	} catch (error) {
+		log("Error getting auth context:", error);
+		return null;
+	}
+}
+
+/**
+ * Entrolytics now uses Clerk with enhanced RBAC for authentication and authorization.
+ * Platform roles are stored in Clerk's publicMetadata.
+ * Organization roles use Clerk's native organization system.
  */

@@ -1,19 +1,19 @@
-import { useEffect } from 'react'
-import { useApp, setConfig } from '@/store/app'
-import { getConfig, Config } from '@/app/actions/getConfig'
+import { useEffect } from "react";
+import { useApp, setConfig } from "@/store/app";
+import { getConfig, Config } from "@/app/actions/getConfig";
 
 export function useConfig(): Config {
-  const { config } = useApp()
+	const { config } = useApp();
 
-  async function loadConfig() {
-    setConfig(await getConfig())
-  }
+	async function loadConfig() {
+		setConfig(await getConfig());
+	}
 
-  useEffect(() => {
-    if (!config) {
-      loadConfig()
-    }
-  }, [])
+	useEffect(() => {
+		if (!config) {
+			loadConfig();
+		}
+	}, []);
 
-  return config
+	return config;
 }

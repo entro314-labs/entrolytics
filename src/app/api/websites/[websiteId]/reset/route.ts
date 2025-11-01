@@ -1,25 +1,25 @@
-import { canUpdateWebsite } from '@/validations'
-import { resetWebsite } from '@/queries'
-import { unauthorized, ok } from '@/lib/response'
-import { parseRequest } from '@/lib/request'
+import { canUpdateWebsite } from "@/validations";
+import { resetWebsite } from "@/queries";
+import { unauthorized, ok } from "@/lib/response";
+import { parseRequest } from "@/lib/request";
 
 export async function POST(
-  request: Request,
-  { params }: { params: Promise<{ websiteId: string }> }
+	request: Request,
+	{ params }: { params: Promise<{ websiteId: string }> },
 ) {
-  const { auth, error } = await parseRequest(request)
+	const { auth, error } = await parseRequest(request);
 
-  if (error) {
-    return error()
-  }
+	if (error) {
+		return error();
+	}
 
-  const { websiteId } = await params
+	const { websiteId } = await params;
 
-  if (!(await canUpdateWebsite(auth, websiteId))) {
-    return unauthorized()
-  }
+	if (!(await canUpdateWebsite(auth, websiteId))) {
+		return unauthorized();
+	}
 
-  await resetWebsite(websiteId)
+	await resetWebsite(websiteId);
 
-  return ok()
+	return ok();
 }

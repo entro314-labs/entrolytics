@@ -1,43 +1,50 @@
-import { ReactNode } from 'react'
-import { Heading, Icon, Row, RowProps, Text, Column } from '@entro314labs/entro-zen'
+import { ReactNode } from "react";
+import {
+	Heading,
+	Icon,
+	Row,
+	RowProps,
+	Text,
+	Column,
+} from "@entro314labs/entro-zen";
 
 export function PageHeader({
-  title,
-  description,
-  icon,
-  showBorder = true,
-  children,
-  ...props
+	title,
+	description,
+	icon,
+	showBorder = true,
+	children,
+	...props
 }: {
-  title: string
-  description?: string
-  icon?: ReactNode
-  showBorder?: boolean
-  allowEdit?: boolean
-  className?: string
-  children?: ReactNode
+	title: string;
+	description?: string;
+	icon?: ReactNode;
+	showBorder?: boolean;
+	allowEdit?: boolean;
+	className?: string;
+	children?: ReactNode;
 } & RowProps) {
-  return (
-    <Row
-      justifyContent="space-between"
-      alignItems="center"
-      paddingY="6"
-      border={showBorder ? 'bottom' : undefined}
-      width="100%"
-      {...props}
-    >
-      <Column>
-        <Row alignItems="center" gap="3">
-          {icon && (
-            <Icon size="md" color="muted">
-              {icon}
-            </Icon>
-          )}
-          {title && <Heading size="4">{title}</Heading>}
-        </Row>
-        {description && <Text color="muted">{description}</Text>}
-      </Column>
-      <Row justifyContent="flex-end">{children}</Row>
-    </Row>
-  )
+	return (
+		<Row
+			justifyContent="space-between"
+			alignItems="center"
+			paddingY="6"
+			border={showBorder ? "bottom" : undefined}
+			width="100%"
+			{...props}
+		>
+			<Column>
+				<Row alignItems="center" gap="3">
+					{icon && (
+						<Icon size="md" color="muted">
+							{icon}
+						</Icon>
+					)}
+					{title && <Heading size="4">{title}</Heading>}
+				</Row>
+				{description && <Text color="muted">{description}</Text>}
+			</Column>
+			<Row justifyContent="flex-end">{children}</Row>
+		</Row>
+	);
 }

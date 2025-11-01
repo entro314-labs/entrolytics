@@ -10,6 +10,9 @@ node_modules
 
 # next.js
 /.next/
+.next
+.husky
+
 /out/
 /src/generated/
 
@@ -54,3 +57,8 @@ entrolytics-integration.md
 MIGRATION_HISTORY.md
 ADMIN_SETUP.md
 AUTHENTICATION.md
+CLERK_MIGRATION_FIXES.md
+CLERK_RBAC_GUIDE.md
+FINAL_CLERK_CLEANUP.md
+dashboard-crashes.md
+issues.md

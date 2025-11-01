@@ -1,20 +1,28 @@
-'use client'
-import { createContext, ReactNode } from 'react'
-import { usePixelQuery } from '@/components/hooks'
-import { Loading } from '@entro314labs/entro-zen'
+"use client";
+import { createContext, ReactNode } from "react";
+import { usePixelQuery } from "@/components/hooks";
+import { Loading } from "@entro314labs/entro-zen";
 
-export const PixelContext = createContext(null)
+export const PixelContext = createContext(null);
 
-export function PixelProvider({ pixelId, children }: { pixelId?: string; children: ReactNode }) {
-  const { data: pixel, isLoading, isFetching } = usePixelQuery(pixelId)
+export function PixelProvider({
+	pixelId,
+	children,
+}: {
+	pixelId?: string;
+	children: ReactNode;
+}) {
+	const { data: pixel, isLoading, isFetching } = usePixelQuery(pixelId);
 
-  if (isFetching && isLoading) {
-    return <Loading position="page" />
-  }
+	if (isFetching && isLoading) {
+		return <Loading position="page" />;
+	}
 
-  if (!pixel) {
-    return null
-  }
+	if (!pixel) {
+		return null;
+	}
 
-  return <PixelContext.Provider value={pixel}>{children}</PixelContext.Provider>
+	return (
+		<PixelContext.Provider value={pixel}>{children}</PixelContext.Provider>
+	);
 }

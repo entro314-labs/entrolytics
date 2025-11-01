@@ -1,41 +1,56 @@
-import clickhouse from '@/lib/clickhouse'
-import { CLICKHOUSE, DRIZZLE, runQuery, db, websiteEvent } from '@/lib/db'
-import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
-import { eq, and, gte, lte, desc } from 'drizzle-orm'
+import clickhouse from "@/lib/clickhouse";
+import { CLICKHOUSE, DRIZZLE, runQuery, db, websiteEvent } from "@/lib/db";
+import {
+	getTimestampDiffSQL,
+	getDateSQL,
+	parseFilters,
+	rawQuery,
+} from "@/lib/analytics-utils";
+import { eq, and, gte, lte, desc } from "drizzle-orm";
 
-import { QueryFilters } from '@/lib/types'
+import { QueryFilters } from "@/lib/types";
 
 export async function getSessionActivity(
-  ...args: [websiteId: string, sessionId: string, filters: QueryFilters]
+	...args: [websiteId: string, sessionId: string, filters: QueryFilters]
 ) {
-  return runQuery({
-    [DRIZZLE]: () => relationalQuery(...args),
-    [CLICKHOUSE]: () => clickhouseQuery(...args),
-  })
+	return runQuery({
+		[DRIZZLE]: () => relationalQuery(...args),
+		[CLICKHOUSE]: () => clickhouseQuery(...args),
+	});
 }
 
-async function relationalQuery(websiteId: string, sessionId: string, filters: QueryFilters) {
-  const { startDate, endDate } = filters
+async function relationalQuery(
+	websiteId: string,
+	sessionId: string,
+	filters: QueryFilters,
+) {
+	const { startDate, endDate } = filters;
 
-  return db.select().from(websiteEvent)
-    .where(
-      and(
-        eq(websiteEvent.sessionId, sessionId),
-        eq(websiteEvent.websiteId, websiteId),
-        gte(websiteEvent.createdAt, startDate),
-        lte(websiteEvent.createdAt, endDate)
-      )
-    )
-    .limit(500)
-    .orderBy(desc(websiteEvent.createdAt))
+	return db
+		.select()
+		.from(websiteEvent)
+		.where(
+			and(
+				eq(websiteEvent.sessionId, sessionId),
+				eq(websiteEvent.websiteId, websiteId),
+				gte(websiteEvent.createdAt, startDate),
+				lte(websiteEvent.createdAt, endDate),
+			),
+		)
+		.limit(500)
+		.orderBy(desc(websiteEvent.createdAt));
 }
 
-async function clickhouseQuery(websiteId: string, sessionId: string, filters: QueryFilters) {
-  const { rawQuery } = clickhouse
-  const { startDate, endDate } = filters
+async function clickhouseQuery(
+	websiteId: string,
+	sessionId: string,
+	filters: QueryFilters,
+) {
+	const { rawQuery } = clickhouse;
+	const { startDate, endDate } = filters;
 
-  return rawQuery(
-    `
+	return rawQuery(
+		`
     SELECT
       created_at as createdAt,
       url_path as urlPath,
@@ -53,6 +68,6 @@ async function clickhouseQuery(websiteId: string, sessionId: string, filters: Qu
     ORDER BY e.created_at desc
     limit 500
     `,
-    { websiteId, sessionId, startDate, endDate }
-  )
+		{ websiteId, sessionId, startDate, endDate },
+	);
 }

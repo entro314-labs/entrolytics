@@ -1,48 +1,55 @@
-import clickhouse from '@/lib/clickhouse'
-import { EVENT_TYPE } from '@/lib/constants'
-import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
-import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
+import clickhouse from "@/lib/clickhouse";
+import { EVENT_TYPE } from "@/lib/constants";
+import { CLICKHOUSE, DRIZZLE, runQuery } from "@/lib/db";
+import {
+	getTimestampDiffSQL,
+	getDateSQL,
+	parseFilters,
+	rawQuery,
+} from "@/lib/analytics-utils";
 
-import { QueryFilters } from '@/lib/types'
+import { QueryFilters } from "@/lib/types";
 
 export interface GoalParameters {
-  startDate: Date
-  endDate: Date
-  type: string
-  value: string
-  operator?: string
-  property?: string
+	startDate: Date;
+	endDate: Date;
+	type: string;
+	value: string;
+	operator?: string;
+	property?: string;
 }
 
 export async function getGoal(
-  ...args: [websiteId: string, params: GoalParameters, filters: QueryFilters]
+	...args: [websiteId: string, params: GoalParameters, filters: QueryFilters]
 ) {
-  return runQuery({
-    [DRIZZLE]: () => relationalQuery(...args),
-    [CLICKHOUSE]: () => clickhouseQuery(...args),
-  })
+	return runQuery({
+		[DRIZZLE]: () => relationalQuery(...args),
+		[CLICKHOUSE]: () => clickhouseQuery(...args),
+	});
 }
 
 async function relationalQuery(
-  websiteId: string,
-  parameters: GoalParameters,
-  filters: QueryFilters
+	websiteId: string,
+	parameters: GoalParameters,
+	filters: QueryFilters,
 ) {
-  const { startDate, endDate, type, value } = parameters
-  // Using rawQuery FROM analytics-utils
-  const eventType = type === 'path' ? EVENT_TYPE.pageView : EVENT_TYPE.customEvent
-  const column = type === 'path' ? 'url_path' : 'event_name'
-  const { filterQuery, dateQuery, joinSessionQuery, cohortQuery, queryParams } = parseFilters({
-    ...filters,
-    websiteId,
-    value,
-    startDate,
-    endDate,
-    eventType,
-  })
+	const { startDate, endDate, type, value } = parameters;
+	// Using rawQuery FROM analytics-utils
+	const eventType =
+		type === "path" ? EVENT_TYPE.pageView : EVENT_TYPE.customEvent;
+	const column = type === "path" ? "url_path" : "event_name";
+	const { filterQuery, dateQuery, joinSessionQuery, cohortQuery, queryParams } =
+		parseFilters({
+			...filters,
+			websiteId,
+			value,
+			startDate,
+			endDate,
+			eventType,
+		});
 
-  return rawQuery(
-    `
+	return rawQuery(
+		`
     SELECT COUNT(*) as num,
     (
       SELECT COUNT(DISTINCT session_id)
@@ -61,30 +68,31 @@ async function relationalQuery(
       ${dateQuery}
       ${filterQuery}
     `,
-    queryParams
-  )
+		queryParams,
+	);
 }
 
 async function clickhouseQuery(
-  websiteId: string,
-  parameters: GoalParameters,
-  filters: QueryFilters
+	websiteId: string,
+	parameters: GoalParameters,
+	filters: QueryFilters,
 ) {
-  const { startDate, endDate, type, value } = parameters
-  const { rawQuery, parseFilters } = clickhouse
-  const eventType = type === 'path' ? EVENT_TYPE.pageView : EVENT_TYPE.customEvent
-  const column = type === 'path' ? 'url_path' : 'event_name'
-  const { filterQuery, dateQuery, cohortQuery, queryParams } = parseFilters({
-    ...filters,
-    websiteId,
-    value,
-    startDate,
-    endDate,
-    eventType,
-  })
+	const { startDate, endDate, type, value } = parameters;
+	const { rawQuery, parseFilters } = clickhouse;
+	const eventType =
+		type === "path" ? EVENT_TYPE.pageView : EVENT_TYPE.customEvent;
+	const column = type === "path" ? "url_path" : "event_name";
+	const { filterQuery, dateQuery, cohortQuery, queryParams } = parseFilters({
+		...filters,
+		websiteId,
+		value,
+		startDate,
+		endDate,
+		eventType,
+	});
 
-  return rawQuery(
-    `
+	return rawQuery(
+		`
     SELECT COUNT(*) as num,
     (
       SELECT COUNT(DISTINCT session_id)
@@ -101,6 +109,6 @@ async function clickhouseQuery(
       ${dateQuery}
       ${filterQuery}
     `,
-    queryParams
-  ).then((results) => results?.[0])
+		queryParams,
+	).then((results) => results?.[0]);
 }

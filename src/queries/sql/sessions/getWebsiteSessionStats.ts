@@ -1,39 +1,44 @@
-import clickhouse from '@/lib/clickhouse'
-import { EVENT_COLUMNS } from '@/lib/constants'
-import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
-import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
+import clickhouse from "@/lib/clickhouse";
+import { EVENT_COLUMNS } from "@/lib/constants";
+import { CLICKHOUSE, DRIZZLE, runQuery } from "@/lib/db";
+import {
+	getTimestampDiffSQL,
+	getDateSQL,
+	parseFilters,
+	rawQuery,
+} from "@/lib/analytics-utils";
 
-import { QueryFilters } from '@/lib/types'
+import { QueryFilters } from "@/lib/types";
 
 export interface WebsiteSessionStatsData {
-  pageviews: number
-  visitors: number
-  visits: number
-  countries: number
-  events: number
+	pageviews: number;
+	visitors: number;
+	visits: number;
+	countries: number;
+	events: number;
 }
 
 export async function getWebsiteSessionStats(
-  ...args: [websiteId: string, filters: QueryFilters]
+	...args: [websiteId: string, filters: QueryFilters]
 ): Promise<WebsiteSessionStatsData[]> {
-  return runQuery({
-    [DRIZZLE]: () => relationalQuery(...args),
-    [CLICKHOUSE]: () => clickhouseQuery(...args),
-  })
+	return runQuery({
+		[DRIZZLE]: () => relationalQuery(...args),
+		[CLICKHOUSE]: () => clickhouseQuery(...args),
+	});
 }
 
 async function relationalQuery(
-  websiteId: string,
-  filters: QueryFilters
+	websiteId: string,
+	filters: QueryFilters,
 ): Promise<WebsiteSessionStatsData[]> {
-  // Using rawQuery FROM analytics-utils
-  const { filterQuery, cohortQuery, queryParams } = parseFilters({
-    ...filters,
-    websiteId,
-  })
+	// Using rawQuery FROM analytics-utils
+	const { filterQuery, cohortQuery, queryParams } = parseFilters({
+		...filters,
+		websiteId,
+	});
 
-  return rawQuery(
-    `
+	return rawQuery(
+		`
     SELECT
       COUNT(*) as "pageviews",
       COUNT(DISTINCT website_event.session_id) as "visitors",
@@ -47,21 +52,28 @@ async function relationalQuery(
       AND website_event.created_at between {{startDate}} AND {{endDate}}
       ${filterQuery}
     `,
-    queryParams
-  )
+		queryParams,
+	);
 }
 
 async function clickhouseQuery(
-  websiteId: string,
-  filters: QueryFilters
+	websiteId: string,
+	filters: QueryFilters,
 ): Promise<WebsiteSessionStatsData[]> {
-  const { rawQuery, parseFilters } = clickhouse
-  const { filterQuery, cohortQuery, queryParams } = parseFilters({ ...filters, websiteId })
+	const { rawQuery, parseFilters } = clickhouse;
+	const { filterQuery, cohortQuery, queryParams } = parseFilters({
+		...filters,
+		websiteId,
+	});
 
-  let sql = ''
+	let sql = "";
 
-  if (filters && typeof filters === 'object' && EVENT_COLUMNS.some((item) => Object.keys(filters).includes(item))) {
-    sql = `
+	if (
+		filters &&
+		typeof filters === "object" &&
+		EVENT_COLUMNS.some((item) => Object.keys(filters).includes(item))
+	) {
+		sql = `
     SELECT
       sumIf(1, event_type = 1) as "pageviews",
       uniq(session_id) as "visitors",
@@ -73,9 +85,9 @@ async function clickhouseQuery(
     WHERE website_id = {websiteId:UUID}
         AND created_at between {startDate:DateTime64} AND {endDate:DateTime64}
         ${filterQuery}
-    `
-  } else {
-    sql = `
+    `;
+	} else {
+		sql = `
     SELECT
       SUM(views) as "pageviews",
       uniq(session_id) as "visitors",
@@ -87,8 +99,8 @@ async function clickhouseQuery(
     WHERE website_id = {websiteId:UUID}
         AND created_at between {startDate:DateTime64} AND {endDate:DateTime64}
         ${filterQuery}
-    `
-  }
+    `;
+	}
 
-  return rawQuery(sql, queryParams)
+	return rawQuery(sql, queryParams);
 }

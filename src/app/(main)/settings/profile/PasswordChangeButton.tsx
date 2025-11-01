@@ -1,29 +1,25 @@
-import { Button, Icon, Text, useToast, DialogTrigger, Dialog, Modal } from '@entro314labs/entro-zen'
-import { PasswordEditForm } from './PasswordEditForm'
-import { LockKeyhole } from '@/components/icons'
-import { useMessages } from '@/components/hooks'
+import { Button, Icon, Text } from "@entro314labs/entro-zen";
+import { Settings } from "@/components/icons";
+import { useMessages } from "@/components/hooks";
+import { useClerk } from "@clerk/nextjs";
 
 export function PasswordChangeButton() {
-  const { formatMessage, labels, messages } = useMessages()
-  const { toast } = useToast()
+	const { formatMessage, labels } = useMessages();
+	const { openUserProfile } = useClerk();
 
-  const handleSave = () => {
-    toast(formatMessage(messages.saved))
-  }
+	const handleManageAccount = () => {
+		// Open Clerk's user profile modal for account management
+		openUserProfile({
+			appearance: { elements: { rootBox: { zIndex: 9999 } } },
+		});
+	};
 
-  return (
-    <DialogTrigger>
-      <Button>
-        <Icon>
-          <LockKeyhole />
-        </Icon>
-        <Text>{formatMessage(labels.changePassword)}</Text>
-      </Button>
-      <Modal>
-        <Dialog title={formatMessage(labels.changePassword)} style={{ width: 400 }}>
-          {({ close }) => <PasswordEditForm onSave={handleSave} onClose={close} />}
-        </Dialog>
-      </Modal>
-    </DialogTrigger>
-  )
+	return (
+		<Button onPress={handleManageAccount}>
+			<Icon>
+				<Settings />
+			</Icon>
+			<Text>{formatMessage(labels.changePassword)}</Text>
+		</Button>
+	);
 }

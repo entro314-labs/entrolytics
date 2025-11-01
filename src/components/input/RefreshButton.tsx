@@ -1,33 +1,38 @@
-import { LoadingButton, Icon, Tooltip, TooltipTrigger } from '@entro314labs/entro-zen'
-import { setWebsiteDateRange } from '@/store/websites'
-import { useDateRange } from '@/components/hooks'
-import { Refresh } from '@/components/icons'
-import { useMessages } from '@/components/hooks'
+import {
+	LoadingButton,
+	Icon,
+	Tooltip,
+	TooltipTrigger,
+} from "@entro314labs/entro-zen";
+import { setWebsiteDateRange } from "@/store/websites";
+import { useDateRange } from "@/components/hooks";
+import { Refresh } from "@/components/icons";
+import { useMessages } from "@/components/hooks";
 
 export function RefreshButton({
-  websiteId,
-  isLoading,
+	websiteId,
+	isLoading,
 }: {
-  websiteId: string
-  isLoading?: boolean
+	websiteId: string;
+	isLoading?: boolean;
 }) {
-  const { formatMessage, labels } = useMessages()
-  const { dateRange } = useDateRange(websiteId)
+	const { formatMessage, labels } = useMessages();
+	const { dateRange } = useDateRange(websiteId);
 
-  function handleClick() {
-    if (!isLoading && dateRange) {
-      setWebsiteDateRange(websiteId, dateRange)
-    }
-  }
+	function handleClick() {
+		if (!isLoading && dateRange) {
+			setWebsiteDateRange(websiteId, dateRange);
+		}
+	}
 
-  return (
-    <TooltipTrigger>
-      <LoadingButton isLoading={isLoading} onPress={handleClick}>
-        <Icon>
-          <Refresh />
-        </Icon>
-      </LoadingButton>
-      <Tooltip>{formatMessage(labels.refresh)}</Tooltip>
-    </TooltipTrigger>
-  )
+	return (
+		<TooltipTrigger>
+			<LoadingButton isLoading={isLoading} onPress={handleClick}>
+				<Icon>
+					<Refresh />
+				</Icon>
+			</LoadingButton>
+			<Tooltip>{formatMessage(labels.refresh)}</Tooltip>
+		</TooltipTrigger>
+	);
 }

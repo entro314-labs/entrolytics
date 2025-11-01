@@ -1,41 +1,47 @@
-import { NextResponse } from 'next/server'
-import { notFound } from '@/lib/response'
-import { findPixelBySlug } from '@/queries'
-import { POST } from '@/app/api/send/route'
+import { NextResponse } from "next/server";
+import { notFound } from "@/lib/response";
+import { findPixelBySlug } from "@/queries";
+import { POST } from "@/app/api/send/route";
 
-const image = Buffer.from('R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw', 'base64')
+const image = Buffer.from(
+	"R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw",
+	"base64",
+);
 
-export async function GET(request: Request, { params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params
+export async function GET(
+	request: Request,
+	{ params }: { params: Promise<{ slug: string }> },
+) {
+	const { slug } = await params;
 
-  const pixel = await findPixelBySlug(slug)
+	const pixel = await findPixelBySlug(slug);
 
-  if (!pixel) {
-    return notFound()
-  }
+	if (!pixel) {
+		return notFound();
+	}
 
-  const payload = {
-    type: 'event',
-    payload: {
-      pixel: pixel.id,
-      url: request.url,
-      referrer: request.referrer,
-    },
-  }
+	const payload = {
+		type: "event",
+		payload: {
+			pixel: pixel.pixelId, // FIX: use pixel.pixelId instead of pixel.id
+			url: request.url,
+			referrer: request.referrer,
+		},
+	};
 
-  const req = new Request(request.url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-  })
+	const req = new Request(request.url, {
+		method: "POST",
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify(payload),
+	});
 
-  const res = await POST(req)
+	const res = await POST(req);
 
-  return new NextResponse(image, {
-    headers: {
-      'Content-Type': 'image/gif',
-      'Content-Length': image.length.toString(),
-      'x-entrolytics-collect': JSON.stringify(res),
-    },
-  })
+	return new NextResponse(image, {
+		headers: {
+			"Content-Type": "image/gif",
+			"Content-Length": image.length.toString(),
+			"x-entrolytics-collect": JSON.stringify(res),
+		},
+	});
 }

@@ -1,14 +1,19 @@
-import { usePixelsQuery, useNavigation } from '@/components/hooks'
-import { PixelsTable } from './PixelsTable'
-import { DataGrid } from '@/components/common/DataGrid'
+import { usePixelsQuery, useNavigation } from "@/components/hooks";
+import { PixelsTable } from "./PixelsTable";
+import { DataGrid } from "@/components/common/DataGrid";
 
 export function PixelsDataTable() {
-  const { orgId } = useNavigation()
-  const query = usePixelsQuery({ orgId })
+	const { orgId } = useNavigation();
+	const query = usePixelsQuery({ orgId });
 
-  return (
-    <DataGrid query={query} allowSearch={true} autoFocus={false} allowPaging={true}>
-      {({ data }) => <PixelsTable data={data} />}
-    </DataGrid>
-  )
+	return (
+		<DataGrid
+			query={query}
+			allowSearch={true}
+			autoFocus={false}
+			allowPaging={true}
+		>
+			{({ data }) => <PixelsTable data={data} />}
+		</DataGrid>
+	);
 }

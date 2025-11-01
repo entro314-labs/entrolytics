@@ -1,41 +1,50 @@
-import { Auth } from '@/lib/types'
+import { Auth } from "@/lib/types";
+import {
+	hasRole,
+	hasPermission,
+	isAdmin,
+	getAuthContext,
+} from "@/lib/permissions";
+import { ROLES, PERMISSIONS } from "@/lib/constants";
 
 export async function canCreateUser({ user }: Auth) {
-  return user.isAdmin
+	return user?.isAdmin || (await hasRole(ROLES.admin));
 }
 
 export async function canViewUser(auth: Auth, viewedUserId: string) {
-  const { user, clerkUserId } = auth
+	const { user, clerkUserId } = auth;
 
-  if (user.isAdmin) {
-    return true
-  }
+	// Admin can view any user
+	if (user?.isAdmin || (await isAdmin())) {
+		return true;
+	}
 
-  // Check if userId is a Clerk ID or internal database ID
-  const isClerkId = viewedUserId.startsWith('user_')
-  const userIdToCompare = isClerkId ? clerkUserId : user.userId
+	// Users can view their own profile
+	const isClerkId = viewedUserId.startsWith("user_");
+	const userIdToCompare = isClerkId ? clerkUserId : user?.userId;
 
-  return userIdToCompare === viewedUserId
+	return userIdToCompare === viewedUserId;
 }
 
 export async function canViewUsers({ user }: Auth) {
-  return user.isAdmin
+	return user?.isAdmin || (await hasRole(ROLES.admin));
 }
 
 export async function canUpdateUser(auth: Auth, viewedUserId: string) {
-  const { user, clerkUserId } = auth
+	const { user, clerkUserId } = auth;
 
-  if (user.isAdmin) {
-    return true
-  }
+	// Admin can update any user
+	if (user?.isAdmin || (await isAdmin())) {
+		return true;
+	}
 
-  // Check if userId is a Clerk ID or internal database ID
-  const isClerkId = viewedUserId.startsWith('user_')
-  const userIdToCompare = isClerkId ? clerkUserId : user.userId
+	// Users can update their own profile
+	const isClerkId = viewedUserId.startsWith("user_");
+	const userIdToCompare = isClerkId ? clerkUserId : user?.userId;
 
-  return userIdToCompare === viewedUserId
+	return userIdToCompare === viewedUserId;
 }
 
 export async function canDeleteUser({ user }: Auth) {
-  return user.isAdmin
+	return user?.isAdmin || (await hasRole(ROLES.admin));
 }

@@ -1,74 +1,77 @@
-import { z } from 'zod'
-import { canCreateOrgWebsite, canCreateWebsite } from '@/validations'
-import { json, unauthorized } from '@/lib/response'
-import { uuid } from '@/lib/crypto'
-import { getQueryFilters, parseRequest } from '@/lib/request'
-import { pagingParams, searchParams } from '@/lib/schema'
-import { createLink, getUserLinks } from '@/queries'
+import { z } from "zod";
+import { canCreateOrgWebsite, canCreateWebsite } from "@/validations";
+import { json, unauthorized } from "@/lib/response";
+import { uuid } from "@/lib/crypto";
+import { getQueryFilters, parseRequest } from "@/lib/request";
+import { pagingParams, searchParams } from "@/lib/schema";
+import { createLink, getUserLinks } from "@/queries";
 
 export async function GET(request: Request) {
-  // Check if we're in a build context
-  if (!request || typeof request !== 'object' || !('url' in request)) {
-    return new Response('Build time', { status: 200 })
-  }
+	// Check if we're in a build context
+	if (!request || typeof request !== "object" || !("url" in request)) {
+		return new Response("Build time", { status: 200 });
+	}
 
-  const schema = z.object({
-    ...pagingParams,
-    ...searchParams,
-  })
+	const schema = z.object({
+		...pagingParams,
+		...searchParams,
+	});
 
-  const { auth, query, error } = (await parseRequest(request, schema)) || {}
+	const { auth, query, error } = (await parseRequest(request, schema)) || {};
 
-  if (error) {
-    return error()
-  }
+	if (error) {
+		return error();
+	}
 
-  const filters = await getQueryFilters(query)
+	const filters = await getQueryFilters(query);
 
-  const links = await getUserLinks(auth?.user.userId, filters)
+	const links = await getUserLinks(auth?.user.userId, filters);
 
-  return json(links)
+	return json(links);
 }
 
 export async function POST(request: Request) {
-  // Check if we're in a build context
-  if (!request || typeof request !== 'object' || !('url' in request)) {
-    return new Response('Build time', { status: 200 })
-  }
+	// Check if we're in a build context
+	if (!request || typeof request !== "object" || !("url" in request)) {
+		return new Response("Build time", { status: 200 });
+	}
 
-  const schema = z.object({
-    name: z.string().max(100),
-    url: z.string().max(500),
-    slug: z.string().max(100),
-    orgId: z.string().nullable().optional(),
-    id: z.string().uuid().nullable().optional(),
-  })
+	const schema = z.object({
+		name: z.string().max(100),
+		url: z.string().max(500),
+		slug: z.string().max(100),
+		orgId: z.string().nullable().optional(),
+		id: z.string().uuid().nullable().optional(),
+	});
 
-  const { auth, body, error } = (await parseRequest(request, schema)) || {}
+	const { auth, body, error } = (await parseRequest(request, schema)) || {};
 
-  if (error) {
-    return error()
-  }
+	if (error) {
+		return error();
+	}
 
-  const { id, name, url, slug, orgId } = body || {}
+	const { id, name, url, slug, orgId } = body || {};
 
-  if ((orgId && !(await canCreateOrgWebsite(auth, orgId))) || !(await canCreateWebsite(auth))) {
-    return unauthorized()
-  }
+	if (
+		(orgId && !(await canCreateOrgWebsite(auth, orgId))) ||
+		!(await canCreateWebsite(auth))
+	) {
+		return unauthorized();
+	}
 
-  const data: any = {
-    id: id ?? uuid(),
-    name,
-    url,
-    slug,
-    org_id: orgId,
-  }
+	const data: any = {
+		id: id ?? uuid(),
+		name,
+		url,
+		slug,
+		org_id: orgId,
+	};
 
-  if (!orgId) {
-    data.user_id = auth?.user.userId
-  }
+	if (!orgId) {
+		data.user_id = auth?.user.userId;
+	}
 
-  const result = await createLink(data)
+	const result = await createLink(data);
 
-  return json(result)
+	return json(result);
 }

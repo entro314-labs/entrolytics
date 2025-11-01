@@ -1,41 +1,47 @@
-import clickhouse from '@/lib/clickhouse'
-import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
-import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
-import { QueryFilters } from '@/lib/types'
+import clickhouse from "@/lib/clickhouse";
+import { CLICKHOUSE, DRIZZLE, runQuery } from "@/lib/db";
+import {
+	getTimestampDiffSQL,
+	getDateSQL,
+	parseFilters,
+	rawQuery,
+} from "@/lib/analytics-utils";
+import { QueryFilters } from "@/lib/types";
 
 interface WebsiteEventData {
-  value: string
-  total: number
+	value: string;
+	total: number;
 }
 
 export async function getEventDataValues(
-  ...args: [
-    websiteId: string,
-    filters: QueryFilters & { eventName?: string; propertyName?: string },
-  ]
+	...args: [
+		websiteId: string,
+		filters: QueryFilters & { eventName?: string; propertyName?: string },
+	]
 ): Promise<WebsiteEventData[]> {
-  return runQuery({
-    [DRIZZLE]: () => relationalQuery(...args),
-    [CLICKHOUSE]: () => clickhouseQuery(...args),
-  })
+	return runQuery({
+		[DRIZZLE]: () => relationalQuery(...args),
+		[CLICKHOUSE]: () => clickhouseQuery(...args),
+	});
 }
 
 async function relationalQuery(
-  websiteId: string,
-  filters: QueryFilters & { eventName?: string; propertyName?: string }
+	websiteId: string,
+	filters: QueryFilters & { eventName?: string; propertyName?: string },
 ) {
-  // Using rawQuery FROM analytics-utils
-  const { filterQuery, joinSessionQuery, cohortQuery, queryParams } = parseFilters({
-    ...filters,
-    websiteId,
-  })
+	// Using rawQuery FROM analytics-utils
+	const { filterQuery, joinSessionQuery, cohortQuery, queryParams } =
+		parseFilters({
+			...filters,
+			websiteId,
+		});
 
-  return rawQuery(
-    `
+	return rawQuery(
+		`
     SELECT
       CASE 
         WHEN data_type = 2 THEN replace(string_value, '.0000', '') 
-        WHEN data_type = 4 THEN ${getDateSQL('date_value', 'hour')} 
+        WHEN data_type = 4 THEN ${getDateSQL("date_value", "hour", "UTC")}
         ELSE string_value
       END as "value",
       COUNT(*) as "total"
@@ -54,19 +60,22 @@ async function relationalQuery(
     ORDER BY 2 desc
     limit 100
     `,
-    queryParams
-  )
+		queryParams,
+	);
 }
 
 async function clickhouseQuery(
-  websiteId: string,
-  filters: QueryFilters & { eventName?: string; propertyName?: string }
+	websiteId: string,
+	filters: QueryFilters & { eventName?: string; propertyName?: string },
 ): Promise<{ value: string; total: number }[]> {
-  const { rawQuery, parseFilters } = clickhouse
-  const { filterQuery, cohortQuery, queryParams } = parseFilters({ ...filters, websiteId })
+	const { rawQuery, parseFilters } = clickhouse;
+	const { filterQuery, cohortQuery, queryParams } = parseFilters({
+		...filters,
+		websiteId,
+	});
 
-  return rawQuery(
-    `
+	return rawQuery(
+		`
     SELECT
       multiIf(data_type = 2, replaceAll(string_value, '.0000', ''),
               data_type = 4, toString(date_trunc('hour', date_value)),
@@ -83,6 +92,6 @@ async function clickhouseQuery(
     ORDER BY 2 desc
     limit 100
     `,
-    queryParams
-  )
+		queryParams,
+	);
 }

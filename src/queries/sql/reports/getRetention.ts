@@ -1,54 +1,66 @@
-import clickhouse from '@/lib/clickhouse'
-import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
-import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
+import clickhouse from "@/lib/clickhouse";
+import { CLICKHOUSE, DRIZZLE, runQuery } from "@/lib/db";
+import {
+	getTimestampDiffSQL,
+	getDateSQL,
+	parseFilters,
+	rawQuery,
+	getDayDiffQuery,
+	getCastColumnQuery,
+} from "@/lib/analytics-utils";
 
-import { QueryFilters } from '@/lib/types'
+import { QueryFilters } from "@/lib/types";
 
 export interface RetentionParameters {
-  startDate: Date
-  endDate: Date
-  timezone?: string
+	startDate: Date;
+	endDate: Date;
+	timezone?: string;
 }
 
 export interface RetentionResult {
-  date: string
-  day: number
-  visitors: number
-  returnVisitors: number
-  percentage: number
+	date: string;
+	day: number;
+	visitors: number;
+	returnVisitors: number;
+	percentage: number;
 }
 
 export async function getRetention(
-  ...args: [websiteId: string, parameters: RetentionParameters, filters: QueryFilters]
+	...args: [
+		websiteId: string,
+		parameters: RetentionParameters,
+		filters: QueryFilters,
+	]
 ) {
-  return runQuery({
-    [DRIZZLE]: () => relationalQuery(...args),
-    [CLICKHOUSE]: () => clickhouseQuery(...args),
-  })
+	return runQuery({
+		[DRIZZLE]: () => relationalQuery(...args),
+		[CLICKHOUSE]: () => clickhouseQuery(...args),
+	});
 }
 
 async function relationalQuery(
-  websiteId: string,
-  parameters: RetentionParameters,
-  filters: QueryFilters
+	websiteId: string,
+	parameters: RetentionParameters,
+	filters: QueryFilters,
 ): Promise<RetentionResult[]> {
-  const { startDate, endDate, timezone } = parameters
-  // Using rawQuery FROM analytics-utils
-  const unit = 'day'
+	const { startDate, endDate, timezone } = parameters;
+	// Using rawQuery FROM analytics-utils
+	const unit = "day";
 
-  const { filterQuery, joinSessionQuery, cohortQuery, queryParams } = parseFilters({
-    ...filters,
-    websiteId,
-    startDate,
-    endDate,
-    timezone,
-  })
+	const { filterQuery, joinSessionQuery, cohortQuery, queryParams } =
+		parseFilters({
+			...filters,
+			websiteId,
+			startDate,
+			endDate,
+			timezone,
+		});
 
-  return rawQuery(
-    `
+	return rawQuery(
+		`
     WITH cohort_items AS (
       SELECT session_id,
-        ${getDateSQL('created_at', unit)} as cohort_date  
+        ${getDateSQL("created_at", unit, timezone)} as cohort_date  
       FROM session 
       WHERE website_id = {{websiteId::uuid}}
         AND created_at between {{startDate}} AND {{endDate}}
@@ -56,7 +68,7 @@ async function relationalQuery(
     user_activities AS (
       SELECT DISTINCT
         website_event.session_id,
-        ${getDayDiffQuery(getDateSQL('created_at', unit, timezone), 'cohort_items.cohort_date')} as day_number
+        ${getDayDiffQuery(getDateSQL("created_at", unit, timezone), "cohort_items.cohort_date")} as day_number
       FROM website_event
       JOIN cohort_items
       on website_event.session_id = cohort_items.session_id
@@ -88,38 +100,38 @@ async function relationalQuery(
       c.day_number as day,
       s.visitors,
       c.visitors as "returnVisitors",
-      ${getCastColumnQuery('c.visitors', 'float')} * 100 / s.visitors  as percentage
+      ${getCastColumnQuery("c.visitors", "float")} * 100 / s.visitors  as percentage
     FROM cohort_date c
     JOIN cohort_size s
     on c.cohort_date = s.cohort_date
     WHERE c.day_number <= 31
     ORDER BY 1, 2`,
-    queryParams
-  )
+		queryParams,
+	);
 }
 
 async function clickhouseQuery(
-  websiteId: string,
-  parameters: RetentionParameters,
-  filters: QueryFilters
+	websiteId: string,
+	parameters: RetentionParameters,
+	filters: QueryFilters,
 ): Promise<RetentionResult[]> {
-  const { startDate, endDate, timezone } = parameters
-  const { getDateSQL, rawQuery, parseFilters } = clickhouse
-  const unit = 'day'
+	const { startDate, endDate, timezone } = parameters;
+	const { getDateSQL, rawQuery, parseFilters } = clickhouse;
+	const unit = "day";
 
-  const { filterQuery, cohortQuery, queryParams } = parseFilters({
-    ...filters,
-    websiteId,
-    startDate,
-    endDate,
-    timezone,
-  })
+	const { filterQuery, cohortQuery, queryParams } = parseFilters({
+		...filters,
+		websiteId,
+		startDate,
+		endDate,
+		timezone,
+	});
 
-  return rawQuery(
-    `
+	return rawQuery(
+		`
     WITH cohort_items AS (
       SELECT
-        MIN(${getDateSQL('created_at', unit, timezone)}) as cohort_date,
+        MIN(${getDateSQL("created_at", unit, timezone)}) as cohort_date,
         session_id
       FROM website_event
       WHERE website_id = {websiteId:UUID}
@@ -129,7 +141,7 @@ async function clickhouseQuery(
     user_activities AS (
       SELECT DISTINCT
         website_event.session_id,
-        (${getDateSQL('created_at', unit, timezone)} - cohort_items.cohort_date) / 86400 as day_number
+        (${getDateSQL("created_at", unit, timezone)} - cohort_items.cohort_date) / 86400 as day_number
       FROM website_event
       JOIN cohort_items
       on website_event.session_id = cohort_items.session_id
@@ -166,6 +178,6 @@ async function clickhouseQuery(
     on c.cohort_date = s.cohort_date
     WHERE c.day_number <= 31
     ORDER BY 1, 2`,
-    queryParams
-  )
+		queryParams,
+	);
 }

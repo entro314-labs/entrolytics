@@ -1,10 +1,10 @@
-import { Metadata } from 'next'
-import { ProfilePage } from './ProfilePage'
+import { Metadata } from "next";
+import { ProfilePage } from "./ProfilePage";
 
 export default function () {
-  return <ProfilePage />
+	return <ProfilePage />;
 }
 
 export const metadata: Metadata = {
-  title: 'Profile',
-}
+	title: "Profile",
+};

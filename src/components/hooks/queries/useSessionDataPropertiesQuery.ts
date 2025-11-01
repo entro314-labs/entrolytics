@@ -1,17 +1,28 @@
-import { useApi } from '../useApi'
-import { useFilterParameters } from '../useFilterParameters'
-import { useDateParameters } from '../useDateParameters'
-import { ReactQueryOptions } from '@/lib/types'
+import { useApi } from "../useApi";
+import { useFilterParameters } from "../useFilterParameters";
+import { useDateParameters } from "../useDateParameters";
+import { ReactQueryOptions } from "@/lib/types";
+import { isValidUuid } from "@/lib/uuid";
 
-export function useSessionDataPropertiesQuery(websiteId: string, options?: ReactQueryOptions) {
-  const { get, useQuery } = useApi()
-  const date = useDateParameters(websiteId)
-  const filters = useFilterParameters()
+export function useSessionDataPropertiesQuery(
+	websiteId: string,
+	options?: ReactQueryOptions,
+) {
+	const { get, useQuery } = useApi();
+	const date = useDateParameters(websiteId);
+	const filters = useFilterParameters();
 
-  return useQuery<any>({
-    queryKey: ['websites:session-data:properties', { websiteId, ...date, ...filters }],
-    queryFn: () => get(`/websites/${websiteId}/session-data/properties`, { ...date, ...filters }),
-    enabled: !!websiteId,
-    ...options,
-  })
+	return useQuery<any>({
+		queryKey: [
+			"websites:session-data:properties",
+			{ websiteId, ...date, ...filters },
+		],
+		queryFn: () =>
+			get(`/websites/${websiteId}/session-data/properties`, {
+				...date,
+				...filters,
+			}),
+		enabled: !!websiteId && isValidUuid(websiteId),
+		...options,
+	});
 }

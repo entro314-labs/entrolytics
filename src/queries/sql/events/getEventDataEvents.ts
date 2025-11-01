@@ -1,33 +1,38 @@
-import clickhouse from '@/lib/clickhouse'
-import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
-import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
-import { QueryFilters } from '@/lib/types'
+import clickhouse from "@/lib/clickhouse";
+import { CLICKHOUSE, DRIZZLE, runQuery } from "@/lib/db";
+import {
+	getTimestampDiffSQL,
+	getDateSQL,
+	parseFilters,
+	rawQuery,
+} from "@/lib/analytics-utils";
+import { QueryFilters } from "@/lib/types";
 
 export interface WebsiteEventData {
-  eventName?: string
-  propertyName: string
-  dataType: number
-  propertyValue?: string
-  total: number
+	eventName?: string;
+	propertyName: string;
+	dataType: number;
+	propertyValue?: string;
+	total: number;
 }
 
 export async function getEventDataEvents(
-  ...args: [websiteId: string, filters: QueryFilters]
+	...args: [websiteId: string, filters: QueryFilters]
 ): Promise<WebsiteEventData[]> {
-  return runQuery({
-    [DRIZZLE]: () => relationalQuery(...args),
-    [CLICKHOUSE]: () => clickhouseQuery(...args),
-  })
+	return runQuery({
+		[DRIZZLE]: () => relationalQuery(...args),
+		[CLICKHOUSE]: () => clickhouseQuery(...args),
+	});
 }
 
 async function relationalQuery(websiteId: string, filters: QueryFilters) {
-  // Using rawQuery FROM analytics-utils
-  const { event } = filters
-  const { queryParams } = parseFilters(filters)
+	// Using rawQuery FROM analytics-utils
+	const { event } = filters;
+	const { queryParams } = parseFilters({ ...filters, websiteId });
 
-  if (event) {
-    return rawQuery(
-      `
+	if (event) {
+		return rawQuery(
+			`
       SELECT
         website_event.event_name as "eventName",
         event_data.data_key as "propertyName",
@@ -43,12 +48,12 @@ async function relationalQuery(websiteId: string, filters: QueryFilters) {
       GROUP BY website_event.event_name, event_data.data_key, event_data.data_type, event_data.string_value
       ORDER BY 1 asc, 2 asc, 3 asc, 5 desc
       `,
-      queryParams
-    )
-  }
+			queryParams,
+		);
+	}
 
-  return rawQuery(
-    `
+	return rawQuery(
+		`
     SELECT
       website_event.event_name as "eventName",
       event_data.data_key as "propertyName",
@@ -63,21 +68,23 @@ async function relationalQuery(websiteId: string, filters: QueryFilters) {
     ORDER BY 1 asc, 2 asc
     limit 500
     `,
-    queryParams
-  )
+		queryParams,
+	);
 }
 
 async function clickhouseQuery(
-  websiteId: string,
-  filters: QueryFilters
-): Promise<{ eventName: string; propertyName: string; dataType: number; total: number }[]> {
-  const { rawQuery, parseFilters } = clickhouse
-  const { event } = filters
-  const { queryParams } = parseFilters(filters)
+	websiteId: string,
+	filters: QueryFilters,
+): Promise<
+	{ eventName: string; propertyName: string; dataType: number; total: number }[]
+> {
+	const { rawQuery, parseFilters } = clickhouse;
+	const { event } = filters;
+	const { queryParams } = parseFilters({ ...filters, websiteId });
 
-  if (event) {
-    return rawQuery(
-      `
+	if (event) {
+		return rawQuery(
+			`
       SELECT
         event_name as eventName,
         data_key as propertyName,
@@ -92,12 +99,12 @@ async function clickhouseQuery(
       ORDER BY 1 asc, 2 asc, 3 asc, 5 desc
       limit 500
       `,
-      queryParams
-    )
-  }
+			queryParams,
+		);
+	}
 
-  return rawQuery(
-    `
+	return rawQuery(
+		`
     SELECT
       event_name as eventName,
       data_key as propertyName,
@@ -110,6 +117,6 @@ async function clickhouseQuery(
     ORDER BY 1 asc, 2 asc
     limit 500
     `,
-    queryParams
-  )
+		queryParams,
+	);
 }

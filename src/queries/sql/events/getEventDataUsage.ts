@@ -1,24 +1,31 @@
-import clickhouse from '@/lib/clickhouse'
-import { CLICKHOUSE, DRIZZLE, runQuery, notImplemented } from '@/lib/db'
-import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
-import { QueryFilters } from '@/lib/types'
+import clickhouse from "@/lib/clickhouse";
+import { CLICKHOUSE, DRIZZLE, runQuery, notImplemented } from "@/lib/db";
+import {
+	getTimestampDiffSQL,
+	getDateSQL,
+	parseFilters,
+	rawQuery,
+} from "@/lib/analytics-utils";
+import { QueryFilters } from "@/lib/types";
 
-export function getEventDataUsage(...args: [websiteIds: string[], filters: QueryFilters]) {
-  return runQuery({
-    [DRIZZLE]: notImplemented,
-    [CLICKHOUSE]: () => clickhouseQuery(...args),
-  })
+export function getEventDataUsage(
+	...args: [websiteIds: string[], filters: QueryFilters]
+) {
+	return runQuery({
+		[DRIZZLE]: notImplemented,
+		[CLICKHOUSE]: () => clickhouseQuery(...args),
+	});
 }
 
 function clickhouseQuery(
-  websiteIds: string[],
-  filters: QueryFilters
+	websiteIds: string[],
+	filters: QueryFilters,
 ): Promise<{ websiteId: string; COUNT: number }[]> {
-  const { rawQuery } = clickhouse
-  const { startDate, endDate } = filters
+	const { rawQuery } = clickhouse;
+	const { startDate, endDate } = filters;
 
-  return rawQuery(
-    `
+	return rawQuery(
+		`
     SELECT 
       website_id as websiteId,
       COUNT(*) as COUNT
@@ -27,10 +34,10 @@ function clickhouseQuery(
       AND website_id in {websiteIds:Array(UUID)}
     GROUP BY website_id
     `,
-    {
-      websiteIds,
-      startDate,
-      endDate,
-    }
-  )
+		{
+			websiteIds,
+			startDate,
+			endDate,
+		},
+	);
 }

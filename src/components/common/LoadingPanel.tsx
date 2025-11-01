@@ -1,65 +1,73 @@
-import { ReactNode } from 'react'
-import { Loading, Column, type ColumnProps } from '@entro314labs/entro-zen'
-import { ErrorMessage } from '@/components/common/ErrorMessage'
-import { Empty } from '@/components/common/Empty'
+import { ReactNode } from "react";
+import { Loading, Column, type ColumnProps } from "@entro314labs/entro-zen";
+import { ErrorMessage } from "@/components/common/ErrorMessage";
+import { Empty } from "@/components/common/Empty";
 
 export interface LoadingPanelProps extends ColumnProps {
-  data?: any
-  error?: Error
-  isEmpty?: boolean
-  isLoading?: boolean
-  isFetching?: boolean
-  loadingIcon?: 'dots' | 'spinner'
-  loadingPosition?: 'center' | 'page' | 'inline'
-  renderEmpty?: () => ReactNode
-  children: ReactNode
+	data?: any;
+	error?: Error;
+	isEmpty?: boolean;
+	isLoading?: boolean;
+	isFetching?: boolean;
+	loadingIcon?: "dots" | "spinner";
+	loadingPosition?: "center" | "page" | "inline";
+	renderEmpty?: () => ReactNode;
+	children: ReactNode;
 }
 
 export function LoadingPanel({
-  data,
-  error,
-  isEmpty,
-  isLoading,
-  isFetching,
-  loadingIcon = 'dots',
-  loadingPosition = 'page',
-  renderEmpty = () => <Empty />,
-  children,
-  ...props
+	data,
+	error,
+	isEmpty,
+	isLoading,
+	isFetching,
+	loadingIcon = "dots",
+	loadingPosition = "page",
+	renderEmpty = () => <Empty />,
+	children,
+	...props
 }: LoadingPanelProps) {
-  const empty = isEmpty ?? checkEmpty(data)
+	const empty = isEmpty ?? checkEmpty(data);
 
-  return (
-    <>
-      {/* Show loading spinner only if no data exists */}
-      {(isLoading || isFetching) && (
-        <Column position="relative" height="100%" {...props}>
-          <Loading icon={loadingIcon} position={loadingPosition} />
-        </Column>
-      )}
+	// Defensive guard: if data becomes null/undefined while not loading, keep showing loading
+	const isActuallyLoading = isLoading || isFetching || (!data && !error);
 
-      {/* Show error */}
-      {error && <ErrorMessage />}
+	return (
+		<>
+			{/* Show loading spinner */}
+			{isActuallyLoading && (
+				<Column position="relative" height="100%" {...props}>
+					<Loading icon={loadingIcon} position={loadingPosition} />
+				</Column>
+			)}
 
-      {/* Show empty state (once loaded) */}
-      {!error && !isLoading && !isFetching && empty && renderEmpty()}
+			{/* Show error */}
+			{error && <ErrorMessage />}
 
-      {/* Show main content when data exists */}
-      {!isLoading && !isFetching && !error && !empty && children}
-    </>
-  )
+			{/* Show empty state (once loaded) */}
+			{!error && !isActuallyLoading && empty && renderEmpty()}
+
+			{/* Show main content when data exists and stable */}
+			{!isActuallyLoading && !error && !empty && data && children}
+		</>
+	);
 }
 
 function checkEmpty(data: any) {
-  if (!data) return false
+	if (!data) return true;
 
-  if (Array.isArray(data)) {
-    return data.length <= 0
-  }
+	// Handle PageResult objects (has data array and pagination info)
+	if (typeof data === "object" && "data" in data && Array.isArray(data.data)) {
+		return data.data.length <= 0;
+	}
 
-  if (typeof data === 'object') {
-    return Object.keys(data).length <= 0
-  }
+	if (Array.isArray(data)) {
+		return data.length <= 0;
+	}
 
-  return !!data
+	if (typeof data === "object") {
+		return Object.keys(data).length <= 0;
+	}
+
+	return !data;
 }

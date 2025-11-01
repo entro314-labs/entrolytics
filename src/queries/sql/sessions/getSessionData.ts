@@ -1,19 +1,26 @@
-import clickhouse from '@/lib/clickhouse'
-import { runQuery, DRIZZLE, CLICKHOUSE } from '@/lib/db'
-import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
+import clickhouse from "@/lib/clickhouse";
+import { runQuery, DRIZZLE, CLICKHOUSE } from "@/lib/db";
+import {
+	getTimestampDiffSQL,
+	getDateSQL,
+	parseFilters,
+	rawQuery,
+} from "@/lib/analytics-utils";
 
-export async function getSessionData(...args: [websiteId: string, sessionId: string]) {
-  return runQuery({
-    [DRIZZLE]: () => relationalQuery(...args),
-    [CLICKHOUSE]: () => clickhouseQuery(...args),
-  })
+export async function getSessionData(
+	...args: [websiteId: string, sessionId: string]
+) {
+	return runQuery({
+		[DRIZZLE]: () => relationalQuery(...args),
+		[CLICKHOUSE]: () => clickhouseQuery(...args),
+	});
 }
 
 async function relationalQuery(websiteId: string, sessionId: string) {
-  // Using rawQuery FROM analytics-utils
+	// Using rawQuery FROM analytics-utils
 
-  return rawQuery(
-    `
+	return rawQuery(
+		`
     SELECT
         website_id as "websiteId",
         session_id as "sessionId",
@@ -28,15 +35,15 @@ async function relationalQuery(websiteId: string, sessionId: string) {
       AND session_id = {{sessionId::uuid}}
     ORDER BY data_key asc
     `,
-    { websiteId, sessionId }
-  )
+		{ websiteId, sessionId },
+	);
 }
 
 async function clickhouseQuery(websiteId: string, sessionId: string) {
-  const { rawQuery } = clickhouse
+	const { rawQuery } = clickhouse;
 
-  return rawQuery(
-    `
+	return rawQuery(
+		`
     SELECT
         website_id as websiteId,
         session_id as sessionId,
@@ -51,6 +58,6 @@ async function clickhouseQuery(websiteId: string, sessionId: string) {
     AND session_id = {sessionId:UUID}
     ORDER BY data_key asc
     `,
-    { websiteId, sessionId }
-  )
+		{ websiteId, sessionId },
+	);
 }

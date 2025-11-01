@@ -1,66 +1,66 @@
-import { z } from 'zod'
-import { uuid } from '@/lib/crypto'
-import { pagingParams, reportSchema } from '@/lib/schema'
-import { parseRequest } from '@/lib/request'
-import { canViewWebsite, canUpdateWebsite } from '@/validations'
-import { unauthorized, json } from '@/lib/response'
-import { getReports, createReport } from '@/queries'
+import { z } from "zod";
+import { uuid } from "@/lib/crypto";
+import { pagingParams, reportSchema } from "@/lib/schema";
+import { parseRequest } from "@/lib/request";
+import { canViewWebsite, canUpdateWebsite } from "@/validations";
+import { unauthorized, json } from "@/lib/response";
+import { getReports, createReport } from "@/queries";
 
 export async function GET(request: Request) {
-  const schema = z.object({
-    websiteId: z.string().uuid().optional(),
-    type: z.string().optional(),
-    ...pagingParams,
-  })
+	const schema = z.object({
+		websiteId: z.string().uuid().optional(),
+		type: z.string().optional(),
+		...pagingParams,
+	});
 
-  const { auth, query, error } = await parseRequest(request, schema)
+	const { auth, query, error } = await parseRequest(request, schema);
 
-  if (error) {
-    return error()
-  }
+	if (error) {
+		return error();
+	}
 
-  const { page, search, pageSize, websiteId, type } = query
-  const filters = {
-    page,
-    pageSize,
-    search,
-  }
+	const { page, search, pageSize, websiteId, type } = query;
+	const filters = {
+		page,
+		pageSize,
+		search,
+	};
 
-  if (websiteId && !(await canViewWebsite(auth, websiteId))) {
-    return unauthorized()
-  }
+	if (websiteId && !(await canViewWebsite(auth, websiteId))) {
+		return unauthorized();
+	}
 
-  const whereClause: any = {}
-  if (websiteId) whereClause.websiteId = websiteId
-  if (type) whereClause.type = type
+	const whereClause: any = {};
+	if (websiteId) whereClause.websiteId = websiteId;
+	if (type) whereClause.type = type;
 
-  const data = await getReports(whereClause, filters)
+	const data = await getReports(whereClause, filters);
 
-  return json(data)
+	return json(data);
 }
 
 export async function POST(request: Request) {
-  const { auth, body, error } = await parseRequest(request, reportSchema)
+	const { auth, body, error } = await parseRequest(request, reportSchema);
 
-  if (error) {
-    return error()
-  }
+	if (error) {
+		return error();
+	}
 
-  const { websiteId, type, name, description, parameters } = body
+	const { websiteId, type, name, description, parameters } = body;
 
-  if (!(await canUpdateWebsite(auth, websiteId))) {
-    return unauthorized()
-  }
+	if (!(await canUpdateWebsite(auth, websiteId))) {
+		return unauthorized();
+	}
 
-  const result = await createReport({
-    id: uuid(),
-    userId: auth.user.userId,
-    websiteId,
-    type,
-    name,
-    description: description || '',
-    parameters,
-  })
+	const result = await createReport({
+		id: uuid(),
+		userId: auth.user.userId,
+		websiteId,
+		type,
+		name,
+		description: description || "",
+		parameters,
+	});
 
-  return json(result)
+	return json(result);
 }

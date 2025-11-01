@@ -1,24 +1,31 @@
-import clickhouse from '@/lib/clickhouse'
-import { runQuery, CLICKHOUSE, DRIZZLE } from '@/lib/db'
-import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
-import { QueryFilters } from '@/lib/types'
+import clickhouse from "@/lib/clickhouse";
+import { runQuery, CLICKHOUSE, DRIZZLE } from "@/lib/db";
+import {
+	getTimestampDiffSQL,
+	getDateSQL,
+	parseFilters,
+	rawQuery,
+} from "@/lib/analytics-utils";
+import { QueryFilters } from "@/lib/types";
 
-export async function getRealtimeActivity(...args: [websiteId: string, filters: QueryFilters]) {
-  return runQuery({
-    [DRIZZLE]: () => relationalQuery(...args),
-    [CLICKHOUSE]: () => clickhouseQuery(...args),
-  })
+export async function getRealtimeActivity(
+	...args: [websiteId: string, filters: QueryFilters]
+) {
+	return runQuery({
+		[DRIZZLE]: () => relationalQuery(...args),
+		[CLICKHOUSE]: () => clickhouseQuery(...args),
+	});
 }
 
 async function relationalQuery(websiteId: string, filters: QueryFilters) {
-  // Using rawQuery FROM analytics-utils
-  const { queryParams, filterQuery, cohortQuery, dateQuery } = parseFilters({
-    ...filters,
-    websiteId,
-  })
+	// Using rawQuery FROM analytics-utils
+	const { queryParams, filterQuery, cohortQuery, dateQuery } = parseFilters({
+		...filters,
+		websiteId,
+	});
 
-  return rawQuery(
-    `
+	return rawQuery(
+		`
     SELECT
         website_event.session_id as "sessionId",
         website_event.event_name as "eventName",
@@ -39,19 +46,22 @@ async function relationalQuery(websiteId: string, filters: QueryFilters) {
     ORDER BY website_event.created_at desc
     limit 100
     `,
-    queryParams
-  )
+		queryParams,
+	);
 }
 
-async function clickhouseQuery(websiteId: string, filters: QueryFilters): Promise<{ x: number }> {
-  const { rawQuery, parseFilters } = clickhouse
-  const { queryParams, filterQuery, cohortQuery, dateQuery } = parseFilters({
-    ...filters,
-    websiteId,
-  })
+async function clickhouseQuery(
+	websiteId: string,
+	filters: QueryFilters,
+): Promise<{ x: number }> {
+	const { rawQuery, parseFilters } = clickhouse;
+	const { queryParams, filterQuery, cohortQuery, dateQuery } = parseFilters({
+		...filters,
+		websiteId,
+	});
 
-  return rawQuery(
-    `
+	return rawQuery(
+		`
         SELECT
             session_id as sessionId,
             event_name as eventName,
@@ -70,6 +80,6 @@ async function clickhouseQuery(websiteId: string, filters: QueryFilters): Promis
         ORDER BY createdAt desc
         limit 100
     `,
-    queryParams
-  )
+		queryParams,
+	);
 }

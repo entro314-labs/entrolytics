@@ -1,20 +1,26 @@
-'use client'
-import { createContext, ReactNode } from 'react'
-import { useLinkQuery } from '@/components/hooks'
-import { Loading } from '@entro314labs/entro-zen'
+"use client";
+import { createContext, ReactNode } from "react";
+import { useLinkQuery } from "@/components/hooks";
+import { Loading } from "@entro314labs/entro-zen";
 
-export const LinkContext = createContext(null)
+export const LinkContext = createContext(null);
 
-export function LinkProvider({ linkId, children }: { linkId?: string; children: ReactNode }) {
-  const { data: link, isLoading, isFetching } = useLinkQuery(linkId)
+export function LinkProvider({
+	linkId,
+	children,
+}: {
+	linkId?: string;
+	children: ReactNode;
+}) {
+	const { data: link, isLoading, isFetching } = useLinkQuery(linkId);
 
-  if (isFetching && isLoading) {
-    return <Loading position="page" />
-  }
+	if (isFetching && isLoading) {
+		return <Loading position="page" />;
+	}
 
-  if (!link) {
-    return null
-  }
+	if (!link) {
+		return null;
+	}
 
-  return <LinkContext.Provider value={link}>{children}</LinkContext.Provider>
+	return <LinkContext.Provider value={link}>{children}</LinkContext.Provider>;
 }

@@ -191,9 +191,6 @@ export default {
 	},
 	basePath,
 	output: "standalone",
-	eslint: {
-		ignoreDuringBuilds: true,
-	},
 	typescript: {
 		ignoreBuildErrors: true,
 	},

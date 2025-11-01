@@ -50,6 +50,7 @@ export function WebsiteSelect({
 			onSearch={handleSearch}
 			onChange={handleSelect}
 			onOpenChange={handleOpenChange}
+			aria-label="Website selector"
 			listProps={{
 				renderEmptyState: () => (
 					<Empty message={formatMessage(messages.noResultsFound)} />
@@ -61,11 +62,11 @@ export function WebsiteSelect({
 				</Text>
 			)}
 		>
-			{({ id, name }: any, index: number) => {
-				const itemId = id || `website-${index}`;
+			{(item: any) => {
+				const itemId = item.id || `website-${item.name}`;
 				return (
 					<ListItem key={itemId} id={itemId}>
-						{name}
+						{item.name}
 					</ListItem>
 				);
 			}}

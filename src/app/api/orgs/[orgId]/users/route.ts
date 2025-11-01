@@ -1,4 +1,6 @@
 import { z } from "zod";
+import { eq } from "drizzle-orm";
+import { orgUser } from "@/lib/db";
 import { unauthorized, json, badRequest } from "@/lib/response";
 import { canAddUserToOrg, canViewOrg } from "@/validations";
 import { getQueryFilters, parseRequest } from "@/lib/request";
@@ -28,7 +30,7 @@ export async function GET(
 
 	const filters = await getQueryFilters(query);
 
-	const users = await getOrgUsers({ orgId }, filters);
+	const users = await getOrgUsers(eq(orgUser.orgId, orgId), filters);
 
 	return json(users);
 }

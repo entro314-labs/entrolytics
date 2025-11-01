@@ -87,15 +87,15 @@ async function relationalQuery(
 		`
     SELECT
       session.country as name,
-      SUM(r.revenue) value
-    FROM revenue 
+      SUM(revenue.revenue) value
+    FROM revenue
     JOIN website_event
       on website_event.website_id = revenue.website_id
         AND website_event.session_id = revenue.session_id
         AND website_event.event_id = revenue.event_id
         AND website_event.website_id = {{websiteId::uuid}}
         AND website_event.created_at between {{startDate}} AND {{endDate}}
-    JOIN session 
+    JOIN session
       on session.website_id = revenue.website_id
         AND session.session_id = revenue.session_id
     ${cohortQuery}

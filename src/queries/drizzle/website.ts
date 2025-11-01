@@ -239,8 +239,6 @@ export async function createWebsite(data: any) {
 }
 
 export async function updateWebsite(websiteId: string, data: any) {
-	console.log("🔍 updateWebsite called with:", { websiteId, data });
-
 	const updateData: any = {};
 
 	if (data.name) updateData.name = data.name;
@@ -250,8 +248,6 @@ export async function updateWebsite(websiteId: string, data: any) {
 	if (data.user_id) updateData.userId = data.user_id;
 	if (data.org_id) updateData.orgId = data.org_id;
 	if (data.updated_at) updateData.updatedAt = data.updated_at;
-
-	console.log("🔍 updateWebsite processed data:", updateData);
 
 	const [updatedWebsite] = await db
 		.update(website)

@@ -36,32 +36,32 @@ async function relationalQuery(websiteId: string, filters: QueryFilters) {
 	return pagedRawQuery(
 		`
     SELECT
-      event_id as "id",
-      website_id as "websiteId", 
-      session_id as "sessionId",
-      created_at as "createdAt",
-      hostname,
-      url_path as "urlPath",
-      url_query as "urlQuery",
-      referrer_path as "referrerPath",
-      referrer_query as "referrerQuery",
-      referrer_domain as "referrerDomain",
-      country as country,
-      city as city,
-      device as  device,
-      os as os,
-      browser as browser,
-      page_title as "pageTitle",
-      event_type as "eventType",
-      event_name as "eventName"
+      website_event.event_id as "id",
+      website_event.website_id as "websiteId",
+      website_event.session_id as "sessionId",
+      website_event.created_at as "createdAt",
+      website_event.hostname,
+      website_event.url_path as "urlPath",
+      website_event.url_query as "urlQuery",
+      website_event.referrer_path as "referrerPath",
+      website_event.referrer_query as "referrerQuery",
+      website_event.referrer_domain as "referrerDomain",
+      session.country as country,
+      session.city as city,
+      session.device as  device,
+      session.os as os,
+      session.browser as browser,
+      website_event.page_title as "pageTitle",
+      website_event.event_type as "eventType",
+      website_event.event_name as "eventName"
     FROM website_event
     ${cohortQuery}
-    JOIN session on website_event.session_id = session.session_id 
-    WHERE website_id = {{websiteId::uuid}}
+    JOIN session on website_event.session_id = session.session_id
+    WHERE website_event.website_id = {{websiteId::uuid}}
     ${dateQuery}
     ${filterQuery}
     ${searchQuery}
-    ORDER BY created_at desc
+    ORDER BY website_event.created_at desc
     `,
 		queryParams,
 		filters,
@@ -85,7 +85,7 @@ async function clickhouseQuery(websiteId: string, filters: QueryFilters) {
 		`
     SELECT
       event_id as id,
-      website_id as websiteId, 
+      website_id as websiteId,
       session_id as sessionId,
       created_at as createdAt,
       hostname,

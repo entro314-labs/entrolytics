@@ -113,6 +113,7 @@ export function DateFilter({
 				onChange={handleChange}
 				renderValue={renderValue}
 				popoverProps={{ placement: placement as any }}
+				aria-label={formatMessage(labels.selectDate)}
 			>
 				{options.map(({ label, value, divider }: any) => {
 					return (

@@ -22,7 +22,7 @@ export async function getOrgUser(orgId: string, userId: string) {
 }
 
 export async function getOrgUsers(
-	whereClause: any = {},
+	whereClause: any = null,
 	filters: QueryFilters = {},
 ): Promise<PageResult<any[]>> {
 	const {

@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { getQueryFilters, parseRequest } from "@/lib/request";
-import { unauthorized, json } from "@/lib/response";
+import { unauthorized, json, serverError } from "@/lib/response";
 import { canViewWebsite } from "@/validations";
 import {
 	dateRangeParams,
@@ -14,14 +14,16 @@ export async function GET(
 	request: Request,
 	{ params }: { params: Promise<{ websiteId: string }> },
 ) {
-	const schema = z.object({
-		...dateRangeParams,
-		...filterParams,
-		...pagingParams,
-		...searchParams,
-	});
+	console.log('[events] GET request started');
+	try {
+		const schema = z.object({
+			...dateRangeParams,
+			...filterParams,
+			...pagingParams,
+			...searchParams,
+		});
 
-	const { auth, query, error } = await parseRequest(request, schema);
+		const { auth, query, error } = await parseRequest(request, schema);
 
 	if (error) {
 		return error();
@@ -33,9 +35,23 @@ export async function GET(
 		return unauthorized();
 	}
 
-	const filters = await getQueryFilters(query, websiteId);
-
-	const data = await getWebsiteEvents(websiteId, filters);
-
-	return json(data);
+	try {
+		const filters = await getQueryFilters(query, websiteId);
+		const data = await getWebsiteEvents(websiteId, filters);
+		return json(data);
+	} catch (err) {
+		const error = err as Error;
+		console.error('[API Error] /api/websites/[websiteId]/events:', {
+			websiteId,
+			query,
+			error: error.message,
+			stack: error.stack,
+		});
+		return serverError({ message: error.message, stack: error.stack });
+	}
+	} catch (err) {
+		const error = err as Error;
+		console.error('[FATAL] Unhandled error in events route:', error);
+		return serverError({ message: error.message, stack: error.stack });
+	}
 }

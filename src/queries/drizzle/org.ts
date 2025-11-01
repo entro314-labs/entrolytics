@@ -235,8 +235,6 @@ export async function createOrg(data: any, userId: string) {
 }
 
 export async function updateOrg(orgId: string, data: any) {
-	console.log("🔍 updateOrg called with:", { orgId, data });
-
 	const updateData: any = {
 		updatedAt: new Date(),
 	};
@@ -244,8 +242,6 @@ export async function updateOrg(orgId: string, data: any) {
 	if (data.name) updateData.name = data.name;
 	if (data.access_code) updateData.accessCode = data.access_code;
 	if (data.logo_url) updateData.logoUrl = data.logo_url;
-
-	console.log("🔍 updateOrg processed data:", updateData);
 
 	const [updatedOrg] = await db
 		.update(org)

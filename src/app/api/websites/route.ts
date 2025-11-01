@@ -11,7 +11,6 @@ import { createWebsite, getWebsites, getUserWebsites } from "@/queries";
 import { pagingParams, searchParams } from "@/lib/schema";
 
 export async function GET(request: Request) {
-	console.log("🔍 /api/websites called");
 	const schema = z.object({
 		...pagingParams,
 		...searchParams,
@@ -19,38 +18,18 @@ export async function GET(request: Request) {
 
 	const { auth, query, error } = await parseRequest(request, schema);
 
-	console.log("🔍 Websites auth check result:", {
-		hasAuth: !!auth,
-		hasUser: !!auth?.user,
-		clerkUserId: auth?.clerkUserId,
-		userId: auth?.user?.userId,
-		error: error ? "YES" : "NO",
-	});
-
 	if (error) {
-		console.log("🚨 /api/websites returning error");
 		return error();
 	}
 
 	const filters = await getQueryFilters(query);
-	console.log("🔍 Query filters:", filters);
 
 	// If user is admin, return all websites, otherwise return user's websites
 	if (await canViewAllWebsites(auth)) {
-		console.log("✅ User can view all websites (admin)");
 		const websites = await getWebsites({}, filters);
-		console.log("✅ Returning all websites:", {
-			count: websites?.data?.length || 0,
-			firstWebsite: websites?.data?.[0] ? Object.keys(websites.data[0]) : [],
-		});
 		return json(websites);
 	} else {
-		console.log("✅ Getting user websites for userId:", auth?.user?.userId);
 		const websites = await getUserWebsites(auth?.user?.userId, filters);
-		console.log("✅ Returning user websites:", {
-			count: websites?.data?.length || 0,
-			firstWebsite: websites?.data?.[0] ? Object.keys(websites.data[0]) : [],
-		});
 		return json(websites);
 	}
 }

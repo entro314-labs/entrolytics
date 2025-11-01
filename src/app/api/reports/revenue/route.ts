@@ -1,5 +1,5 @@
 import { canViewWebsite } from "@/validations";
-import { unauthorized, json } from "@/lib/response";
+import { unauthorized, json, serverError } from "@/lib/response";
 import { parseRequest, getQueryFilters, setWebsiteDate } from "@/lib/request";
 import { reportResultSchema } from "@/lib/schema";
 import { getRevenue, RevenuParameters } from "@/queries/sql/reports/getRevenue";
@@ -17,14 +17,25 @@ export async function POST(request: Request) {
 		return unauthorized();
 	}
 
-	const parameters = await setWebsiteDate(websiteId, body.parameters);
-	const filters = await getQueryFilters(body.filters, websiteId);
+	try {
+		const parameters = await setWebsiteDate(websiteId, body.parameters);
+		const filters = await getQueryFilters(body.filters, websiteId);
 
-	const data = await getRevenue(
-		websiteId,
-		parameters as RevenuParameters,
-		filters,
-	);
+		const data = await getRevenue(
+			websiteId,
+			parameters as RevenuParameters,
+			filters,
+		);
 
-	return json(data);
+		return json(data);
+	} catch (err) {
+		const error = err as Error;
+		console.error('[API Error] /api/reports/revenue:', {
+			websiteId,
+			body,
+			error: error.message,
+			stack: error.stack,
+		});
+		return serverError({ message: error.message, stack: error.stack });
+	}
 }

@@ -1,10 +1,12 @@
 import { z } from "zod";
+import { eq, and } from "drizzle-orm";
 import { uuid } from "@/lib/crypto";
 import { pagingParams, reportSchema } from "@/lib/schema";
 import { parseRequest } from "@/lib/request";
 import { canViewWebsite, canUpdateWebsite } from "@/validations";
 import { unauthorized, json } from "@/lib/response";
 import { getReports, createReport } from "@/queries";
+import { report } from "@/lib/db";
 
 export async function GET(request: Request) {
 	const schema = z.object({
@@ -30,9 +32,12 @@ export async function GET(request: Request) {
 		return unauthorized();
 	}
 
-	const whereClause: any = {};
-	if (websiteId) whereClause.websiteId = websiteId;
-	if (type) whereClause.type = type;
+	// Build Drizzle ORM conditions
+	const conditions = [];
+	if (websiteId) conditions.push(eq(report.websiteId, websiteId));
+	if (type) conditions.push(eq(report.type, type));
+
+	const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
 
 	const data = await getReports(whereClause, filters);
 

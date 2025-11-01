@@ -36,39 +36,7 @@ export function DataGrid({
 	const { router, updateParams, query: queryParams } = useNavigation();
 	const [search, setSearch] = useState(
 		queryParams?.search || data?.search || "",
-	);
-
-	// Enhanced debugging for DataGrid query state with auth context
-	console.log("🔍 DataGrid query state:", {
-		hasData: !!data,
-		dataType: typeof data,
-		dataIsPageResult: data && "data" in data && "count" in data,
-		dataArrayLength: Array.isArray(data?.data) ? data.data.length : "NOT_ARRAY",
-		dataStructure: data ? Object.keys(data) : [],
-		dataContent: data,
-		isLoading,
-		isFetching,
-		hasError: !!error,
-		errorMessage: error?.message,
-	});
-
-	// Defensive check: Ensure data is a proper PageResult structure
-	if (data && !isLoading && !isFetching) {
-		if (!data.data) {
-			console.error(
-				"🚨 DataGrid: Invalid PageResult - missing data property!",
-				data,
-			);
-		} else if (!Array.isArray(data.data)) {
-			console.error(
-				"🚨 DataGrid: Invalid PageResult - data property is not an array!",
-				{
-					dataType: typeof data.data,
-					dataValue: data.data,
-				},
-			);
-		}
-	}
+	)
 
 	const handleSearch = (value: string) => {
 		if (value !== search) {
@@ -94,6 +62,7 @@ export function DataGrid({
 						delay={searchDelay || DEFAULT_SEARCH_DELAY}
 						autoFocus={autoFocus}
 						placeholder={formatMessage(labels.search)}
+						aria-label={formatMessage(labels.search)}
 						style={{ width: "280px" }}
 					/>
 					{renderActions?.()}

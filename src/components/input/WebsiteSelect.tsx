@@ -61,7 +61,14 @@ export function WebsiteSelect({
 				</Text>
 			)}
 		>
-			{({ id, name }: any) => <ListItem key={id}>{name}</ListItem>}
+			{({ id, name }: any, index: number) => {
+				const itemId = id || `website-${index}`;
+				return (
+					<ListItem key={itemId} id={itemId}>
+						{name}
+					</ListItem>
+				);
+			}}
 		</Select>
 	);
 }

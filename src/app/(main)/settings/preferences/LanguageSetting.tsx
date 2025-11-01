@@ -6,7 +6,7 @@ import { languages } from "@/lib/lang";
 
 export function LanguageSetting() {
 	const [search, setSearch] = useState("");
-	const { formatMessage, labels } = useMessages();
+	const { formatMessage, labels, messages } = useMessages();
 	const { locale, saveLocale } = useLocale();
 	const items = search
 		? Object.keys(languages).filter((n) => {
@@ -40,7 +40,11 @@ export function LanguageSetting() {
 						{languages[item].label}
 					</ListItem>
 				))}
-				{!items.length && <ListItem></ListItem>}
+				{!items.length && (
+					<ListItem key="no-results" id="no-results" isDisabled>
+						{formatMessage(messages.noResultsFound)}
+					</ListItem>
+				)}
 			</Select>
 			<Button onPress={handleReset}>{formatMessage(labels.reset)}</Button>
 		</Row>

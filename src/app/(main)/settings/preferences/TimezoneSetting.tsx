@@ -7,7 +7,7 @@ const timezones = Intl.supportedValuesOf("timeZone");
 
 export function TimezoneSetting() {
 	const [search, setSearch] = useState("");
-	const { formatMessage, labels } = useMessages();
+	const { formatMessage, labels, messages } = useMessages();
 	const { timezone, saveTimezone } = useTimezone();
 	const items = search
 		? timezones.filter((n) => n.toLowerCase().includes(search.toLowerCase()))
@@ -36,7 +36,11 @@ export function TimezoneSetting() {
 						{item}
 					</ListItem>
 				))}
-				{!items.length && <ListItem></ListItem>}
+				{!items.length && (
+					<ListItem key="no-results" id="no-results" isDisabled>
+						{formatMessage(messages.noResultsFound)}
+					</ListItem>
+				)}
 			</Select>
 			<Button onPress={handleReset}>{formatMessage(labels.reset)}</Button>
 		</Row>

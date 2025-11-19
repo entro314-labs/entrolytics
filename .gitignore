@@ -62,3 +62,5 @@ CLERK_RBAC_GUIDE.md
 FINAL_CLERK_CLEANUP.md
 dashboard-crashes.md
 issues.md
+.claude/settings.local.json
+neon-drizzle.md

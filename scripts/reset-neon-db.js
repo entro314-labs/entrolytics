@@ -39,7 +39,7 @@ async function resetDatabase() {
 			// Drop all tables with CASCADE to handle dependencies
 			console.log("🗑️  Dropping all existing tables...");
 			for (const table of tables) {
-				await sql.unsafe(`DROP TABLE IF EXISTS "${table.tablename}" CASCADE`);
+				await sql.query(`DROP TABLE IF EXISTS "${table.tablename}" CASCADE`);
 				console.log(`   ✅ Dropped table: ${table.tablename}`);
 			}
 		} else {
@@ -48,7 +48,7 @@ async function resetDatabase() {
 
 		// Drop Drizzle migration table if it exists
 		console.log("🗑️  Dropping Drizzle migration tracking...");
-		await sql.unsafe(`DROP TABLE IF EXISTS "__drizzle_migrations" CASCADE`);
+		await sql.query(`DROP TABLE IF EXISTS "__drizzle_migrations" CASCADE`);
 
 		// Read and apply the comprehensive migration
 		console.log("📖 Reading comprehensive migration file...");
@@ -63,16 +63,32 @@ async function resetDatabase() {
 		const statements = migrationSQL
 			.split("--> statement-breakpoint")
 			.map((stmt) => stmt.trim())
-			.filter((stmt) => stmt && !stmt.startsWith("--"));
+			.filter((stmt) => {
+				if (!stmt) return false;
+				// Remove comment-only lines but keep statements that have SQL after comments
+				const lines = stmt.split('\n').filter(line => line.trim() && !line.trim().startsWith('--'));
+				return lines.length > 0;
+			});
 
 		console.log(`📝 Executing ${statements.length} migration statements...`);
 
 		for (let i = 0; i < statements.length; i++) {
-			const statement = statements[i].trim();
+			// Remove comment lines, keep only SQL
+			const statement = statements[i]
+				.split('\n')
+				.filter(line => line.trim() && !line.trim().startsWith('--'))
+				.join('\n')
+				.trim();
+
 			if (statement) {
 				try {
-					await sql.unsafe(statement);
-					if (statement.toLowerCase().includes("create table")) {
+					// Use sql.query() for all DDL/DML statements to ensure proper commit
+					await sql.query(statement);
+
+					// Log appropriate message based on statement type
+					if (statement.toLowerCase().includes("insert into")) {
+						console.log(`   📝 Inserted system data`);
+					} else if (statement.toLowerCase().includes("create table")) {
 						const tableName = statement.match(/create table\s+"?(\w+)"?/i)?.[1];
 						console.log(`   ✅ Created table: ${tableName}`);
 					} else if (statement.toLowerCase().includes("create index")) {
@@ -80,14 +96,14 @@ async function resetDatabase() {
 							/create.*?index\s+"?(\w+)"?/i,
 						)?.[1];
 						console.log(`   📊 Created index: ${indexName}`);
-					} else if (statement.toLowerCase().includes("insert into")) {
-						console.log(`   📝 Inserted system data`);
+					} else if (statement.toLowerCase().includes("create extension")) {
+						console.log(`   🔧 Created extension`);
 					}
 				} catch (error) {
-					if (error.message.includes("already exists")) {
-						console.log(
-							`   ⚠️  Skipped (already exists): ${statement.substring(0, 50)}...`,
-						);
+					if (error.message.includes("already exists") || error.code === '23505') {
+						// Skip if already exists or duplicate key
+						const desc = statement.substring(0, 50).replace(/\s+/g, ' ');
+						console.log(`   ⚠️  Skipped (already exists): ${desc}...`);
 					} else {
 						console.error(
 							`   ❌ Error executing statement: ${statement.substring(0, 100)}...`,

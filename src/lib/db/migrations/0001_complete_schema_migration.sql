@@ -379,7 +379,7 @@ CREATE INDEX "pixel_created_at_idx" ON "pixel"("created_at");
 --> statement-breakpoint
 
 -- AddSystemUser
-INSERT INTO "user" (user_id, clerk_id, email, role) VALUES ('41e2b680-648e-4b09-bcd7-3e2b10c06264', 'admin_clerk_id', 'admin@entrolytics.system', 'admin');
+INSERT INTO "user" (user_id, clerk_id, email, role) VALUES ('41e2b680-648e-4b09-bcd7-3e2b10c06264', 'admin_clerk_id', 'dominikos.pritis@gmail.com', 'admin');
 --> statement-breakpoint
 
 -- EventData migration (from migration 02)

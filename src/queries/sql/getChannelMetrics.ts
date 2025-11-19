@@ -38,8 +38,23 @@ async function relationalQuery(websiteId: string, filters: QueryFilters) {
 
 	return rawQuery(
 		`
-    WITH channels as (
-      SELECT CASE WHEN ${toPostgresPositionClause("utm_medium", ["cp", "ppc", "retargeting", "paid"])} THEN 'paid' ELSE 'organic' END prefix,
+    WITH base_data AS (
+      SELECT
+        session_id,
+        referrer_domain,
+        url_query,
+        utm_medium,
+        utm_source,
+        CASE WHEN ${toPostgresPositionClause("utm_medium", ["cp", "ppc", "retargeting", "paid"])} THEN 'paid' ELSE 'organic' END as prefix
+      FROM website_event
+      ${cohortQuery}
+      ${joinSessionQuery}
+      WHERE website_id = {{websiteId::uuid}}
+        ${dateQuery}
+        ${filterQuery}
+    ),
+    channels as (
+      SELECT
           CASE
           WHEN referrer_domain = '' AND url_query = '' THEN 'direct'
           WHEN ${toPostgresPositionClause("url_query", PAID_AD_PARAMS)} THEN 'paidAds'
@@ -53,13 +68,8 @@ async function relationalQuery(websiteId: string, filters: QueryFilters) {
           WHEN ${toPostgresPositionClause("referrer_domain", VIDEO_DOMAINS)} OR position(utm_medium, 'video') > 0 THEN concat(prefix, 'Video')
           ELSE '' END AS x,
         COUNT(DISTINCT session_id) y
-      FROM website_event
-      ${cohortQuery}
-      ${joinSessionQuery}
-      WHERE website_id = {{websiteId::uuid}}
-        ${dateQuery}
-        ${filterQuery}
-      GROUP BY 1, 2
+      FROM base_data
+      GROUP BY prefix, referrer_domain, url_query, utm_medium, utm_source
       ORDER BY y desc)
 
     SELECT x, SUM(y) y

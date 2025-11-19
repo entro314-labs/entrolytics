@@ -9,4 +9,6 @@ ignoredBuiltDependencies:
 onlyBuiltDependencies:
   - '@clerk/shared'
   - drizzle-kit
+  - rollup
   - unrs-resolver
+

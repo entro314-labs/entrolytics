@@ -24,7 +24,6 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "incremental": false,
-    "baseUrl": ".",
     "outDir": "./build",
     "paths": {
       "@/*": [

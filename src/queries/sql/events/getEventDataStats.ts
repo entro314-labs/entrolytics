@@ -1,36 +1,30 @@
-import clickhouse from "@/lib/clickhouse";
-import { CLICKHOUSE, DRIZZLE, runQuery } from "@/lib/db";
-import {
-	getTimestampDiffSQL,
-	getDateSQL,
-	parseFilters,
-	rawQuery,
-} from "@/lib/analytics-utils";
-import { QueryFilters } from "@/lib/types";
+import clickhouse from '@/lib/clickhouse'
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
+import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
+import { QueryFilters } from '@/lib/types'
 
 export async function getEventDataStats(
-	...args: [websiteId: string, filters: QueryFilters]
+  ...args: [websiteId: string, filters: QueryFilters]
 ): Promise<{
-	events: number;
-	properties: number;
-	records: number;
+  events: number
+  properties: number
+  records: number
 }> {
-	return runQuery({
-		[DRIZZLE]: () => relationalQuery(...args),
-		[CLICKHOUSE]: () => clickhouseQuery(...args),
-	}).then((results) => results?.[0]);
+  return runQuery({
+    [DRIZZLE]: () => relationalQuery(...args),
+    [CLICKHOUSE]: () => clickhouseQuery(...args),
+  }).then((results) => results?.[0])
 }
 
 async function relationalQuery(websiteId: string, filters: QueryFilters) {
-	// Using rawQuery FROM analytics-utils
-	const { filterQuery, joinSessionQuery, cohortQuery, queryParams } =
-		parseFilters({
-			...filters,
-			websiteId,
-		});
+  // Using rawQuery FROM analytics-utils
+  const { filterQuery, joinSessionQuery, cohortQuery, queryParams } = parseFilters({
+    ...filters,
+    websiteId,
+  })
 
-	return rawQuery(
-		`
+  return rawQuery(
+    `
     SELECT 
       COUNT(DISTINCT t.website_event_id) as "events",
       COUNT(DISTINCT t.data_key) as "properties",
@@ -52,23 +46,23 @@ async function relationalQuery(websiteId: string, filters: QueryFilters) {
       GROUP BY website_event_id, data_key
       ) as t
     `,
-		queryParams,
-	);
+    queryParams
+  )
 }
 
 async function clickhouseQuery(
-	websiteId: string,
-	filters: QueryFilters,
+  websiteId: string,
+  filters: QueryFilters
 ): Promise<{ events: number; properties: number; records: number }[]> {
-	const { rawQuery, parseFilters } = clickhouse;
-	const { filterQuery, cohortQuery, queryParams } = parseFilters({
-		...filters,
-		websiteId,
-	});
+  const { rawQuery, parseFilters } = clickhouse
+  const { filterQuery, cohortQuery, queryParams } = parseFilters({
+    ...filters,
+    websiteId,
+  })
 
-	return rawQuery(
-		`
-    SELECT 
+  return rawQuery(
+    `
+    SELECT
       COUNT(DISTINCT t.event_id) as "events",
       COUNT(DISTINCT t.data_key) as "properties",
       SUM(t.total) as "records"
@@ -76,15 +70,20 @@ async function clickhouseQuery(
       SELECT
         event_id,
         data_key,
-        COUNT(*) as "total"
-      FROM event_data website_event
+        count(*) as "total"
+      from event_data
+      join website_event
+      on website_event.event_id = event_data.event_id
+        and website_event.website_id = event_data.website_id
+        and website_event.website_id = {websiteId:UUID}
+        and website_event.created_at between {startDate:DateTime64} and {endDate:DateTime64}
       ${cohortQuery}
-      WHERE website_id = {websiteId:UUID}
-        AND created_at between {startDate:DateTime64} AND {endDate:DateTime64}
+      where event_data.website_id = {websiteId:UUID}
+        and event_data.created_at between {startDate:DateTime64} and {endDate:DateTime64}
       ${filterQuery}
-      GROUP BY event_id, data_key
+      group by event_id, data_key
       ) as t
     `,
-		queryParams,
-	);
+    queryParams
+  )
 }

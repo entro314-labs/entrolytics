@@ -1,24 +1,24 @@
 {
-	"name": "@umami/components",
-	"version": "0.1.0",
-	"description": "Entrolytics React components.",
-	"author": "Mike Cao <mike@mikecao.com>",
-	"license": "MIT",
-	"type": "module",
-	"main": "./index.js",
-	"types": "./index.d.ts",
-	"peerDependencies": {
-		"@tanstack/react-query": "^5.90.10",
-		"classnames": "^2.5.1",
-		"colord": "^2.9.3",
-		"date-fns-tz": "^3.2.0",
-		"immer": "^10.1.3",
-		"moment-timezone": "^0.6.0",
-		"next": "^16.0.3",
-		"next-basics": "^0.40.0",
-		"react": "^19.2.0",
-		"react-dom": "^19.2.0",
-		"react-intl": "^7.1.14",
-		"zustand": "^5.0.8"
-	}
+  "name": "@entro314labs/entro-components",
+  "version": "1.0.0",
+  "description": "Entrolytics React components.",
+  "author": "Entrolytics <hey@entrolytics.click>",
+  "license": "MIT",
+  "type": "module",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "peerDependencies": {
+    "@tanstack/react-query": "^5.90.10",
+    "classnames": "^2.5.1",
+    "colord": "^2.9.3",
+    "date-fns-tz": "^3.2.0",
+    "immer": "^10.1.3",
+    "moment-timezone": "^0.6.0",
+    "next": "^16.0.3",
+    "next-basics": "^0.40.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-intl": "^7.1.14",
+    "zustand": "^5.0.8"
+  }
 }

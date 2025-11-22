@@ -1,99 +1,91 @@
-import { canViewWebsite } from "@/validations";
-import { EVENT_COLUMNS, SESSION_COLUMNS } from "@/lib/constants";
-import { getQueryFilters, parseRequest } from "@/lib/request";
-import { badRequest, json, unauthorized, serverError } from "@/lib/response";
+import { canViewWebsite } from '@/validations'
+import { EVENT_COLUMNS, EVENT_TYPE, FILTER_COLUMNS, SESSION_COLUMNS } from '@/lib/constants'
+import { getQueryFilters, parseRequest } from '@/lib/request'
+import { badRequest, json, unauthorized, serverError } from '@/lib/response'
 import {
-	getChannelMetrics,
-	getEventMetrics,
-	getPageviewMetrics,
-	getSessionMetrics,
-} from "@/queries";
-import { z } from "zod";
-import { dateRangeParams, filterParams, searchParams } from "@/lib/schema";
+  getChannelMetrics,
+  getEventMetrics,
+  getPageviewMetrics,
+  getSessionMetrics,
+} from '@/queries/sql'
+import { z } from 'zod'
+import { dateRangeParams, filterParams, searchParams } from '@/lib/schema'
 
 export async function GET(
-	request: Request,
-	{ params }: { params: Promise<{ websiteId: string }> },
+  request: Request,
+  { params }: { params: Promise<{ websiteId: string }> }
 ) {
-	console.log('[metrics] GET request started');
-	try {
-		const schema = z.object({
-			type: z.string(),
-			limit: z.coerce.number().optional(),
-			offset: z.coerce.number().optional(),
-			...dateRangeParams,
-			...searchParams,
-			...filterParams,
-		});
+  console.log('[metrics] GET request started')
+  try {
+    const schema = z.object({
+      type: z.string(),
+      limit: z.coerce.number().optional(),
+      offset: z.coerce.number().optional(),
+      ...dateRangeParams,
+      ...searchParams,
+      ...filterParams,
+    })
 
-		const { auth, query, error } = await parseRequest(request, schema);
+    const { auth, query, error } = await parseRequest(request, schema)
 
-	if (error) {
-		return error();
-	}
+    if (error) {
+      return error()
+    }
 
-	const { websiteId } = await params;
+    const { websiteId } = await params
 
-	if (!(await canViewWebsite(auth, websiteId))) {
-		return unauthorized();
-	}
+    if (!(await canViewWebsite(auth, websiteId))) {
+      return unauthorized()
+    }
 
-	const { type, limit, offset, search } = query;
+    const { type, limit, offset, search } = query
 
-	try {
-		const filters = await getQueryFilters(query, websiteId);
+    try {
+      const filters = await getQueryFilters(query, websiteId)
 
-		if (search) {
-			filters[type] = `c.${search}`;
-		}
+      if (search) {
+        filters[type] = `c.${search}`
+      }
 
-		if (SESSION_COLUMNS.includes(type)) {
-			const data = await getSessionMetrics(
-				websiteId,
-				{ type, limit, offset },
-				filters,
-			);
+      if (SESSION_COLUMNS.includes(type)) {
+        const data = await getSessionMetrics(websiteId, { type, limit, offset }, filters)
 
-			return json(data);
-		}
+        return json(data)
+      }
 
-		if (EVENT_COLUMNS.includes(type)) {
-			let data;
+      if (EVENT_COLUMNS.includes(type)) {
+        const column = FILTER_COLUMNS[type] || type
 
-			if (type === "event") {
-				data = await getEventMetrics(websiteId, { type, limit, offset }, filters);
-			} else {
-				data = await getPageviewMetrics(
-					websiteId,
-					{ type, limit, offset },
-					filters,
-				);
-			}
+        if (column === 'event_name') {
+          filters.eventType = EVENT_TYPE.customEvent
+        }
 
-			return json(data);
-		}
+        if (type === 'event') {
+          return json(await getEventMetrics(websiteId, { type, limit, offset }, filters))
+        } else {
+          return json(await getPageviewMetrics(websiteId, { type, limit, offset }, filters))
+        }
+      }
 
-		if (type === "channel") {
-			const data = await getChannelMetrics(websiteId, filters);
+      if (type === 'channel') {
+        return json(await getChannelMetrics(websiteId, filters))
+      }
 
-			return json(data);
-		}
-
-		return badRequest();
-	} catch (err) {
-		const error = err as Error;
-		console.error('[API Error] /api/websites/[websiteId]/metrics:', {
-			websiteId,
-			type,
-			query,
-			error: error.message,
-			stack: error.stack,
-		});
-		return serverError({ message: error.message, stack: error.stack });
-	}
-	} catch (err) {
-		const error = err as Error;
-		console.error('[FATAL] Unhandled error in metrics route:', error);
-		return serverError({ message: error.message, stack: error.stack });
-	}
+      return badRequest()
+    } catch (err) {
+      const error = err as Error
+      console.error('[API Error] /api/websites/[websiteId]/metrics:', {
+        websiteId,
+        type,
+        query,
+        error: error.message,
+        stack: error.stack,
+      })
+      return serverError({ message: error.message, stack: error.stack })
+    }
+  } catch (err) {
+    const error = err as Error
+    console.error('[FATAL] Unhandled error in metrics route:', error)
+    return serverError({ message: error.message, stack: error.stack })
+  }
 }

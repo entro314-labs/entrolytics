@@ -64,3 +64,9 @@ dashboard-crashes.md
 issues.md
 .claude/settings.local.json
 neon-drizzle.md
+umami patches
+UPSTREAM_COMMITS.md
+CODE_CLEANUP_AUDIT.md
+EDGE_IMPLEMENTATION_CHECKLIST.md
+EDGE_SUPPORT_SPECIFICATION.md
+entrolytics-edge-implementation-plan.md

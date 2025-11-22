@@ -1,14 +1,14 @@
-import { ReactNode } from "react";
-import { Grid, GridProps } from "@entro314labs/entro-zen";
+import { ReactNode } from 'react'
+import { Grid, GridProps } from '@entro314labs/entro-zen'
 
 export interface MetricsBarProps extends GridProps {
-	children?: ReactNode;
+  children?: ReactNode
 }
 
 export function MetricsBar({ children, ...props }: MetricsBarProps) {
-	return (
-		<Grid columns="repeat(auto-fit, minmax(200px, 1fr))" gap {...props}>
-			{children}
-		</Grid>
-	);
+  return (
+    <Grid columns="repeat(auto-fit, minmax(140px, 1fr))" gap {...props}>
+      {children}
+    </Grid>
+  )
 }

@@ -1,25 +1,28 @@
-import { useApi } from "../useApi";
-import { useFilterParameters } from "../useFilterParameters";
-import { useDateParameters } from "../useDateParameters";
-import { ReactQueryOptions } from "@/lib/types";
-import { isValidUuid } from "@/lib/uuid";
+import { useApi } from '../useApi'
+import { useFilterParameters } from '../useFilterParameters'
+import { useDateParameters } from '../useDateParameters'
+import { ReactQueryOptions } from '@/lib/types'
+import { isValidUuid } from '@/lib/uuid'
 
-export function useEventDataEventsQuery(
-	websiteId: string,
-	options?: ReactQueryOptions,
-) {
-	const { get, useQuery } = useApi();
-	const date = useDateParameters(websiteId);
-	const filters = useFilterParameters();
+export function useEventDataEventsQuery(websiteId: string, options?: ReactQueryOptions) {
+  const { get, useQuery } = useApi()
+  const { startAt, endAt, unit, timezone } = useDateParameters()
+  const filters = useFilterParameters()
 
-	return useQuery({
-		queryKey: [
-			"websites:event-data:events",
-			{ websiteId, ...date, ...filters },
-		],
-		queryFn: () =>
-			get(`/websites/${websiteId}/event-data/events`, { ...date, ...filters }),
-		enabled: !!websiteId && isValidUuid(websiteId),
-		...options,
-	});
+  return useQuery({
+    queryKey: [
+      'websites:event-data:events',
+      { websiteId, startAt, endAt, unit, timezone, ...filters },
+    ],
+    queryFn: () =>
+      get(`/websites/${websiteId}/event-data/events`, {
+        startAt,
+        endAt,
+        unit,
+        timezone,
+        ...filters,
+      }),
+    enabled: !!websiteId && isValidUuid(websiteId),
+    ...options,
+  })
 }

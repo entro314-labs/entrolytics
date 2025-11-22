@@ -1,112 +1,96 @@
-import { useState } from "react";
-import {
-	Column,
-	Tabs,
-	TabList,
-	Tab,
-	TabPanel,
-	Row,
-	Button,
-} from "@entro314labs/entro-zen";
-import { useFilters, useMessages, useNavigation } from "@/components/hooks";
-import { FieldFilters } from "@/components/input/FieldFilters";
-import { SegmentFilters } from "@/components/input/SegmentFilters";
+import { useState } from 'react'
+import { Column, Tabs, TabList, Tab, TabPanel, Row, Button } from '@entro314labs/entro-zen'
+import { useFilters, useMessages, useNavigation } from '@/components/hooks'
+import { FieldFilters } from '@/components/input/FieldFilters'
+import { SegmentFilters } from '@/components/input/SegmentFilters'
 
 export interface FilterEditFormProps {
-	websiteId?: string;
-	onChange?: (params: {
-		filters: any[];
-		segment?: string;
-		cohort?: string;
-	}) => void;
-	onClose?: () => void;
+  websiteId?: string
+  onChange?: (params: { filters: any[]; segment?: string; cohort?: string }) => void
+  onClose?: () => void
 }
 
-export function FilterEditForm({
-	websiteId,
-	onChange,
-	onClose,
-}: FilterEditFormProps) {
-	const {
-		query: { segment, cohort },
-	} = useNavigation();
-	const { filters } = useFilters();
-	const { formatMessage, labels } = useMessages();
-	const [currentFilters, setCurrentFilters] = useState(filters);
-	const [currentSegment, setCurrentSegment] = useState(segment);
-	const [currentCohort, setCurrentCohort] = useState(cohort);
+export function FilterEditForm({ websiteId, onChange, onClose }: FilterEditFormProps) {
+  const {
+    query: { segment, cohort },
+    pathname,
+  } = useNavigation()
+  const { filters } = useFilters()
+  const { formatMessage, labels } = useMessages()
+  const [currentFilters, setCurrentFilters] = useState(filters)
+  const [currentSegment, setCurrentSegment] = useState(segment)
+  const [currentCohort, setCurrentCohort] = useState(cohort)
 
-	const handleReset = () => {
-		setCurrentFilters([]);
-		setCurrentSegment(undefined);
-		setCurrentCohort(undefined);
-	};
+  const panelProps = {
+    style: { height: 500 },
+  }
+  const excludeFilters = pathname.includes('/pixels') || pathname.includes('/links')
 
-	const handleSave = () => {
-		onChange?.({
-			filters: currentFilters.filter((f) => f.value),
-			segment: currentSegment,
-			cohort: currentCohort,
-		});
-		onClose?.();
-	};
+  const handleReset = () => {
+    setCurrentFilters([])
+    setCurrentSegment(undefined)
+    setCurrentCohort(undefined)
+  }
 
-	const handleSegmentChange = (id: string, type: string) => {
-		setCurrentSegment(type === "segment" ? id : undefined);
-		setCurrentCohort(type === "cohort" ? id : undefined);
-	};
+  const handleSave = () => {
+    onChange?.({
+      filters: currentFilters.filter((f) => f.value),
+      segment: currentSegment,
+      cohort: currentCohort,
+    })
+    onClose?.()
+  }
 
-	return (
-		<Column>
-			<Tabs>
-				<TabList>
-					<Tab id="fields">{formatMessage(labels.fields)}</Tab>
-					<Tab id="segments">{formatMessage(labels.segments)}</Tab>
-					<Tab id="cohorts">{formatMessage(labels.cohorts)}</Tab>
-				</TabList>
-				<TabPanel id="fields">
-					<FieldFilters
-						websiteId={websiteId}
-						value={currentFilters}
-						onChange={setCurrentFilters}
-					/>
-				</TabPanel>
-				<TabPanel id="segments" style={{ height: 400 }}>
-					<SegmentFilters
-						websiteId={websiteId}
-						segmentId={currentSegment}
-						onChange={handleSegmentChange}
-					/>
-				</TabPanel>
-				<TabPanel id="cohorts" style={{ height: 400 }}>
-					<SegmentFilters
-						type="cohort"
-						websiteId={websiteId}
-						segmentId={currentCohort}
-						onChange={handleSegmentChange}
-					/>
-				</TabPanel>
-			</Tabs>
-			<Row
-				alignItems="center"
-				justifyContent="space-between"
-				gridColumn="span 2"
-				marginTop="6"
-				gap
-			>
-				<Button onPress={handleReset}>{formatMessage(labels.reset)}</Button>
-				<Row
-					alignItems="center"
-					justifyContent="flex-end"
-					gridColumn="span 2"
-					gap
-				>
-					<Button onPress={onClose}>{formatMessage(labels.cancel)}</Button>
-					<Button variant="primary" onPress={handleSave}>
-						{formatMessage(labels.apply)}
-					</Button>
-				</Row>
-			</Row>
-		</Column>
-	);
+  const handleSegmentChange = (id: string, type: string) => {
+    setCurrentSegment(type === 'segment' ? id : undefined)
+    setCurrentCohort(type === 'cohort' ? id : undefined)
+  }
+
+  return (
+    <Column>
+      <Tabs>
+        <TabList>
+          <Tab id="fields">{formatMessage(labels.fields)}</Tab>
+          {!excludeFilters && (
+            <>
+              <Tab id="segments">{formatMessage(labels.segments)}</Tab>
+              <Tab id="cohorts">{formatMessage(labels.cohorts)}</Tab>
+            </>
+          )}
+        </TabList>
+        <TabPanel id="fields" {...panelProps}>
+          <FieldFilters
+            websiteId={websiteId}
+            value={currentFilters}
+            onChange={setCurrentFilters}
+            exclude={excludeFilters ? ['path', 'title', 'hostname', 'tag', 'event'] : []}
+          />
+        </TabPanel>
+        <TabPanel id="segments" {...panelProps}>
+          <SegmentFilters
+            websiteId={websiteId}
+            segmentId={currentSegment}
+            onChange={handleSegmentChange}
+          />
+        </TabPanel>
+        <TabPanel id="cohorts" {...panelProps}>
+          <SegmentFilters
+            type="cohort"
+            websiteId={websiteId}
+            segmentId={currentCohort}
+            onChange={handleSegmentChange}
+          />
+        </TabPanel>
+      </Tabs>
+      <Row alignItems="center" justifyContent="space-between" gridColumn="span 2" marginTop="6" gap>
+        <Button onPress={handleReset}>{formatMessage(labels.reset)}</Button>
+        <Row alignItems="center" justifyContent="flex-end" gridColumn="span 2" gap>
+          <Button onPress={onClose}>{formatMessage(labels.cancel)}</Button>
+          <Button variant="primary" onPress={handleSave}>
+            {formatMessage(labels.apply)}
+          </Button>
+        </Row>
+      </Row>
+    </Column>
+  )
 }

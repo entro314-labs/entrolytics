@@ -1,52 +1,52 @@
-import { useState } from "react";
-import { Button, Select, ListItem, Row } from "@entro314labs/entro-zen";
-import { useLocale, useMessages } from "@/components/hooks";
-import { DEFAULT_LOCALE } from "@/lib/constants";
-import { languages } from "@/lib/lang";
+import { useState } from 'react'
+import { Button, Select, ListItem, Row } from '@entro314labs/entro-zen'
+import { useLocale, useMessages } from '@/components/hooks'
+import { DEFAULT_LOCALE } from '@/lib/constants'
+import { languages } from '@/lib/lang'
 
 export function LanguageSetting() {
-	const [search, setSearch] = useState("");
-	const { formatMessage, labels, messages } = useMessages();
-	const { locale, saveLocale } = useLocale();
-	const items = search
-		? Object.keys(languages).filter((n) => {
-				return (
-					n.toLowerCase().includes(search.toLowerCase()) ||
-					languages[n].label.toLowerCase().includes(search.toLowerCase())
-				);
-			})
-		: Object.keys(languages);
+  const [search, setSearch] = useState('')
+  const { formatMessage, labels, messages } = useMessages()
+  const { locale, saveLocale } = useLocale()
+  const items = search
+    ? Object.keys(languages).filter((n) => {
+        return (
+          n.toLowerCase().includes(search.toLowerCase()) ||
+          languages[n].label.toLowerCase().includes(search.toLowerCase())
+        )
+      })
+    : Object.keys(languages)
 
-	const handleReset = () => saveLocale(DEFAULT_LOCALE);
+  const handleReset = () => saveLocale(DEFAULT_LOCALE)
 
-	const handleOpen = (isOpen: boolean) => {
-		if (isOpen) {
-			setSearch("");
-		}
-	};
+  const handleOpen = (isOpen: boolean) => {
+    if (isOpen) {
+      setSearch('')
+    }
+  }
 
-	return (
-		<Row gap="3">
-			<Select
-				value={locale}
-				onChange={(val) => saveLocale(val as string)}
-				allowSearch
-				onSearch={setSearch}
-				onOpenChange={handleOpen}
-				listProps={{ style: { maxHeight: 300 } }}
-			>
-				{items.map((item) => (
-					<ListItem key={item} id={item}>
-						{languages[item].label}
-					</ListItem>
-				))}
-				{!items.length && (
-					<ListItem key="no-results" id="no-results" isDisabled>
-						{formatMessage(messages.noResultsFound)}
-					</ListItem>
-				)}
-			</Select>
-			<Button onPress={handleReset}>{formatMessage(labels.reset)}</Button>
-		</Row>
-	);
+  return (
+    <Row gap="3">
+      <Select
+        value={locale}
+        onChange={(val) => saveLocale(val as string)}
+        allowSearch
+        onSearch={setSearch}
+        onOpenChange={handleOpen}
+        listProps={{ style: { maxHeight: 300 } }}
+      >
+        {items.map((item) => (
+          <ListItem key={item} id={item}>
+            {languages[item].label}
+          </ListItem>
+        ))}
+        {!items.length && (
+          <ListItem key="no-results" id="no-results" isDisabled>
+            {formatMessage(messages.noResultsFound)}
+          </ListItem>
+        )}
+      </Select>
+      <Button onPress={handleReset}>{formatMessage(labels.reset)}</Button>
+    </Row>
+  )
 }

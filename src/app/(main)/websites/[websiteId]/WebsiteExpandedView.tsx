@@ -1,157 +1,213 @@
-import { Grid, Column } from "@entro314labs/entro-zen";
-import { useMessages, useNavigation } from "@/components/hooks";
-import { MetricsExpandedTable } from "@/components/metrics/MetricsExpandedTable";
-import { SideMenu } from "@/components/common/SideMenu";
+import { Grid, Column } from '@entro314labs/entro-zen'
+import { useMessages, useNavigation } from '@/components/hooks'
+import { MetricsExpandedTable } from '@/components/metrics/MetricsExpandedTable'
+import { SideMenu } from '@/components/common/SideMenu'
+import {
+  SquareSlash,
+  LogOut,
+  LogIn,
+  Search,
+  Type,
+  SquareArrowRight,
+  Megaphone,
+  Earth,
+  Globe,
+  Landmark,
+  MapPin,
+  AppWindow,
+  Laptop,
+  Languages,
+  Monitor,
+  Cpu,
+  LightningSvg,
+  CaseSensitive,
+  Tag,
+} from '@/components/icons'
 
 export function WebsiteExpandedView({
-	websiteId,
-	onClose,
+  websiteId,
+  excludedIds = [],
+  onClose,
 }: {
-	websiteId: string;
-	onClose?: () => void;
+  websiteId: string
+  excludedIds?: string[]
+  onClose?: () => void
 }) {
-	const { formatMessage, labels } = useMessages();
-	const {
-		updateParams,
-		query: { view },
-	} = useNavigation();
+  const { formatMessage, labels } = useMessages()
+  const {
+    updateParams,
+    query: { view },
+  } = useNavigation()
 
-	const items = [
-		{
-			label: formatMessage(labels.pages),
-			items: [
-				{
-					id: "path",
-					label: formatMessage(labels.path),
-					path: updateParams({ view: "path" }),
-				},
-				{
-					id: "entry",
-					label: formatMessage(labels.entry),
-					path: updateParams({ view: "entry" }),
-				},
-				{
-					id: "exit",
-					label: formatMessage(labels.exit),
-					path: updateParams({ view: "exit" }),
-				},
-				{
-					id: "title",
-					label: formatMessage(labels.title),
-					path: updateParams({ view: "title" }),
-				},
-				{
-					id: "query",
-					label: formatMessage(labels.query),
-					path: updateParams({ view: "query" }),
-				},
-			],
-		},
-		{
-			label: formatMessage(labels.sources),
-			items: [
-				{
-					id: "referrer",
-					label: formatMessage(labels.referrer),
-					path: updateParams({ view: "referrer" }),
-				},
-				{
-					id: "channel",
-					label: formatMessage(labels.channel),
-					path: updateParams({ view: "channel" }),
-				},
-				{
-					id: "domain",
-					label: formatMessage(labels.domain),
-					path: updateParams({ view: "domain" }),
-				},
-			],
-		},
-		{
-			label: formatMessage(labels.location),
-			items: [
-				{
-					id: "country",
-					label: formatMessage(labels.country),
-					path: updateParams({ view: "country" }),
-				},
-				{
-					id: "region",
-					label: formatMessage(labels.region),
-					path: updateParams({ view: "region" }),
-				},
-				{
-					id: "city",
-					label: formatMessage(labels.city),
-					path: updateParams({ view: "city" }),
-				},
-			],
-		},
-		{
-			label: formatMessage(labels.environment),
-			items: [
-				{
-					id: "browser",
-					label: formatMessage(labels.browser),
-					path: updateParams({ view: "browser" }),
-				},
-				{
-					id: "os",
-					label: formatMessage(labels.os),
-					path: updateParams({ view: "os" }),
-				},
-				{
-					id: "device",
-					label: formatMessage(labels.device),
-					path: updateParams({ view: "device" }),
-				},
-				{
-					id: "language",
-					label: formatMessage(labels.language),
-					path: updateParams({ view: "language" }),
-				},
-				{
-					id: "screen",
-					label: formatMessage(labels.screen),
-					path: updateParams({ view: "screen" }),
-				},
-			],
-		},
-		{
-			label: formatMessage(labels.other),
-			items: [
-				{
-					id: "event",
-					label: formatMessage(labels.event),
-					path: updateParams({ view: "event" }),
-				},
-				{
-					id: "hostname",
-					label: formatMessage(labels.hostname),
-					path: updateParams({ view: "hostname" }),
-				},
-				{
-					id: "tag",
-					label: formatMessage(labels.tag),
-					path: updateParams({ view: "tag" }),
-				},
-			],
-		},
-	];
+  const filterExcluded = (item: { id: string }) => !excludedIds.includes(item.id)
 
-	return (
-		<Grid columns="auto 1fr" gap="6" height="100%" overflow="hidden">
-			<Column gap="6" border="right" paddingRight="3">
-				<SideMenu items={items} selectedKey={view} />
-			</Column>
-			<Column overflow="hidden">
-				<MetricsExpandedTable
-					title={formatMessage(labels[view])}
-					type={view}
-					websiteId={websiteId}
-					onClose={onClose}
-				/>
-			</Column>
-		</Grid>
-	);
+  const items = [
+    {
+      label: 'URL',
+      items: [
+        {
+          id: 'path',
+          label: formatMessage(labels.path),
+          path: updateParams({ view: 'path' }),
+          icon: <SquareSlash />,
+        },
+        {
+          id: 'entry',
+          label: formatMessage(labels.entry),
+          path: updateParams({ view: 'entry' }),
+          icon: <LogIn />,
+        },
+        {
+          id: 'exit',
+          label: formatMessage(labels.exit),
+          path: updateParams({ view: 'exit' }),
+          icon: <LogOut />,
+        },
+        {
+          id: 'title',
+          label: formatMessage(labels.title),
+          path: updateParams({ view: 'title' }),
+          icon: <Type />,
+        },
+        {
+          id: 'query',
+          label: formatMessage(labels.query),
+          path: updateParams({ view: 'query' }),
+          icon: <Search />,
+        },
+      ].filter(filterExcluded),
+    },
+    {
+      label: formatMessage(labels.sources),
+      items: [
+        {
+          id: 'referrer',
+          label: formatMessage(labels.referrer),
+          path: updateParams({ view: 'referrer' }),
+          icon: <SquareArrowRight />,
+        },
+        {
+          id: 'channel',
+          label: formatMessage(labels.channel),
+          path: updateParams({ view: 'channel' }),
+          icon: <Megaphone />,
+        },
+        {
+          id: 'domain',
+          label: formatMessage(labels.domain),
+          path: updateParams({ view: 'domain' }),
+          icon: <Globe />,
+        },
+      ].filter(filterExcluded),
+    },
+    {
+      label: formatMessage(labels.location),
+      items: [
+        {
+          id: 'country',
+          label: formatMessage(labels.country),
+          path: updateParams({ view: 'country' }),
+          icon: <Earth />,
+        },
+        {
+          id: 'region',
+          label: formatMessage(labels.region),
+          path: updateParams({ view: 'region' }),
+          icon: <MapPin />,
+        },
+        {
+          id: 'city',
+          label: formatMessage(labels.city),
+          path: updateParams({ view: 'city' }),
+          icon: <Landmark />,
+        },
+      ].filter(filterExcluded),
+    },
+    {
+      label: formatMessage(labels.environment),
+      items: [
+        {
+          id: 'browser',
+          label: formatMessage(labels.browser),
+          path: updateParams({ view: 'browser' }),
+          icon: <AppWindow />,
+        },
+        {
+          id: 'os',
+          label: formatMessage(labels.os),
+          path: updateParams({ view: 'os' }),
+          icon: <Cpu />,
+        },
+        {
+          id: 'device',
+          label: formatMessage(labels.device),
+          path: updateParams({ view: 'device' }),
+          icon: <Laptop />,
+        },
+        {
+          id: 'language',
+          label: formatMessage(labels.language),
+          path: updateParams({ view: 'language' }),
+          icon: <Languages />,
+        },
+        {
+          id: 'screen',
+          label: formatMessage(labels.screen),
+          path: updateParams({ view: 'screen' }),
+          icon: <Monitor />,
+        },
+      ].filter(filterExcluded),
+    },
+    {
+      label: formatMessage(labels.other),
+      items: [
+        {
+          id: 'event',
+          label: formatMessage(labels.event),
+          path: updateParams({ view: 'event' }),
+          icon: <LightningSvg />,
+        },
+        {
+          id: 'hostname',
+          label: formatMessage(labels.hostname),
+          path: updateParams({ view: 'hostname' }),
+          icon: <CaseSensitive />,
+        },
+        {
+          id: 'tag',
+          label: formatMessage(labels.tag),
+          path: updateParams({ view: 'tag' }),
+          icon: <Tag />,
+        },
+      ].filter(filterExcluded),
+    },
+  ]
+
+  return (
+    <Grid
+      columns={{ xs: '1fr', md: 'auto 1fr' }}
+      gap="6"
+      height="100%"
+      overflowX="auto"
+      minWidth="500px"
+    >
+      <Column
+        display={{ xs: 'none', md: 'flex' }}
+        gap="6"
+        border="right"
+        paddingRight="3"
+        overflowY="auto"
+      >
+        <SideMenu items={items} selectedKey={view} />
+      </Column>
+      <Column overflow="hidden">
+        <MetricsExpandedTable
+          title={formatMessage(labels[view])}
+          type={view}
+          websiteId={websiteId}
+          onClose={onClose}
+        />
+      </Column>
+    </Grid>
+  )
 }

@@ -1,35 +1,35 @@
-import { z } from "zod";
-import { canViewWebsite } from "@/validations";
-import { getReports } from "@/queries";
-import { filterParams, pagingParams } from "@/lib/schema";
-import { parseRequest } from "@/lib/request";
-import { unauthorized, json } from "@/lib/response";
+import { z } from 'zod'
+import { canViewWebsite } from '@/validations'
+import { getReports } from '@/queries/drizzle'
+import { filterParams, pagingParams } from '@/lib/schema'
+import { parseRequest } from '@/lib/request'
+import { unauthorized, json } from '@/lib/response'
 
 export async function GET(
-	request: Request,
-	{ params }: { params: Promise<{ websiteId: string }> },
+  request: Request,
+  { params }: { params: Promise<{ websiteId: string }> }
 ) {
-	const schema = z.object({
-		...filterParams,
-		...pagingParams,
-	});
+  const schema = z.object({
+    ...filterParams,
+    ...pagingParams,
+  })
 
-	const { auth, query, error } = await parseRequest(request, schema);
+  const { auth, query, error } = await parseRequest(request, schema)
 
-	if (error) {
-		return error();
-	}
+  if (error) {
+    return error()
+  }
 
-	const { websiteId } = await params;
-	const { page, pageSize, search } = query;
+  const { websiteId } = await params
+  const { page, pageSize, search } = query
 
-	if (!(await canViewWebsite(auth, websiteId))) {
-		return unauthorized();
-	}
+  if (!(await canViewWebsite(auth, websiteId))) {
+    return unauthorized()
+  }
 
-	const whereClause: any = { websiteId };
+  const whereClause: any = { websiteId }
 
-	const data = await getReports(whereClause, { page, pageSize, search });
+  const data = await getReports(whereClause, { page, pageSize, search })
 
-	return json(data);
+  return json(data)
 }

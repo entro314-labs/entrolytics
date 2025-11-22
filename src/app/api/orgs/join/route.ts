@@ -1,44 +1,40 @@
-import { z } from "zod";
-import { unauthorized, json, badRequest, notFound } from "@/lib/response";
-import { canCreateOrg } from "@/validations";
-import { parseRequest } from "@/lib/request";
-import { ROLES } from "@/lib/constants";
-import { createOrgUser, findOrgByAccessCode, getOrgUser } from "@/queries";
+import { z } from 'zod'
+import { unauthorized, json, badRequest, notFound } from '@/lib/response'
+import { canCreateOrg } from '@/validations'
+import { parseRequest } from '@/lib/request'
+import { ROLES } from '@/lib/constants'
+import { createOrgUser, findOrgByAccessCode, getOrgUser } from '@/queries/drizzle'
 
 export async function POST(request: Request) {
-	const schema = z.object({
-		accessCode: z.string().max(50),
-	});
+  const schema = z.object({
+    accessCode: z.string().max(50),
+  })
 
-	const { auth, body, error } = await parseRequest(request, schema);
+  const { auth, body, error } = await parseRequest(request, schema)
 
-	if (error) {
-		return error();
-	}
+  if (error) {
+    return error()
+  }
 
-	if (!(await canCreateOrg(auth))) {
-		return unauthorized();
-	}
+  if (!(await canCreateOrg(auth))) {
+    return unauthorized()
+  }
 
-	const { accessCode } = body;
+  const { accessCode } = body
 
-	const org = await findOrgByAccessCode(accessCode);
+  const org = await findOrgByAccessCode(accessCode)
 
-	if (!org) {
-		return notFound("Org not found.");
-	}
+  if (!org) {
+    return notFound('Org not found.')
+  }
 
-	const orgUser = await getOrgUser(org.orgId, auth.user.userId);
+  const orgUser = await getOrgUser(org.orgId, auth.user.userId)
 
-	if (orgUser) {
-		return badRequest("User is already a org member.");
-	}
+  if (orgUser) {
+    return badRequest('User is already a org member.')
+  }
 
-	const user = await createOrgUser(
-		auth.user.userId,
-		org.orgId,
-		ROLES.orgMember,
-	);
+  const user = await createOrgUser(auth.user.userId, org.orgId, ROLES.orgMember)
 
-	return json(user);
+  return json(user)
 }

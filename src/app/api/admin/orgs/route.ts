@@ -1,27 +1,27 @@
-import { z } from "zod";
-import { parseRequest } from "@/lib/request";
-import { json, unauthorized } from "@/lib/response";
-import { pagingParams, searchParams } from "@/lib/schema";
-import { canViewAllOrgs } from "@/validations";
-import { getOrgs } from "@/queries";
+import { z } from 'zod'
+import { parseRequest } from '@/lib/request'
+import { json, unauthorized } from '@/lib/response'
+import { pagingParams, searchParams } from '@/lib/schema'
+import { canViewAllOrgs } from '@/validations'
+import { getOrgs } from '@/queries/drizzle'
 
 export async function GET(request: Request) {
-	const schema = z.object({
-		...pagingParams,
-		...searchParams,
-	});
+  const schema = z.object({
+    ...pagingParams,
+    ...searchParams,
+  })
 
-	const { auth, query, error } = await parseRequest(request, schema);
+  const { auth, query, error } = await parseRequest(request, schema)
 
-	if (error) {
-		return error();
-	}
+  if (error) {
+    return error()
+  }
 
-	if (!(await canViewAllOrgs(auth))) {
-		return unauthorized();
-	}
+  if (!(await canViewAllOrgs(auth))) {
+    return unauthorized()
+  }
 
-	const orgs = await getOrgs({}, query);
+  const orgs = await getOrgs({}, query)
 
-	return json(orgs);
+  return json(orgs)
 }

@@ -1,39 +1,39 @@
-import { useTimezone } from "@/components/hooks/useTimezone";
-import { REALTIME_INTERVAL } from "@/lib/constants";
-import { useApi } from "../useApi";
-import { isValidUuid } from "@/lib/uuid";
+import { useTimezone } from '@/components/hooks/useTimezone'
+import { REALTIME_INTERVAL } from '@/lib/constants'
+import { useApi } from '../useApi'
+import { isValidUuid } from '@/lib/uuid'
 
 export interface RealtimeData {
-	countries: Record<string, number>;
-	events: any[];
-	pageviews: any[];
-	referrers: Record<string, number>;
-	timestamp: number;
-	series: {
-		views: any[];
-		visitors: any[];
-	};
-	totals: {
-		views: number;
-		visitors: number;
-		events: number;
-		countries: number;
-	};
-	urls: Record<string, number>;
-	visitors: any[];
+  countries: Record<string, number>
+  events: any[]
+  pageviews: any[]
+  referrers: Record<string, number>
+  timestamp: number
+  series: {
+    views: any[]
+    visitors: any[]
+  }
+  totals: {
+    views: number
+    visitors: number
+    events: number
+    countries: number
+  }
+  urls: Record<string, number>
+  visitors: any[]
 }
 
 export function useRealtimeQuery(websiteId: string) {
-	const { get, useQuery } = useApi();
-	const { timezone } = useTimezone();
-	const { data, isLoading, error } = useQuery<RealtimeData>({
-		queryKey: ["realtime", { websiteId, timezone }],
-		queryFn: async () => {
-			return get(`/realtime/${websiteId}`, { timezone });
-		},
-		enabled: !!websiteId && isValidUuid(websiteId),
-		refetchInterval: REALTIME_INTERVAL,
-	});
+  const { get, useQuery } = useApi()
+  const { timezone } = useTimezone()
+  const { data, isLoading, error } = useQuery<RealtimeData>({
+    queryKey: ['realtime', { websiteId, timezone }],
+    queryFn: async () => {
+      return get(`/realtime/${websiteId}`, { timezone })
+    },
+    enabled: !!websiteId && isValidUuid(websiteId),
+    refetchInterval: REALTIME_INTERVAL,
+  })
 
-	return { data, isLoading, error };
+  return { data, isLoading, error }
 }

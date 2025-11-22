@@ -1,36 +1,21 @@
-import {
-	Button,
-	DialogTrigger,
-	Modal,
-	Text,
-	Icon,
-	Dialog,
-} from "@entro314labs/entro-zen";
-import { useMessages } from "@/components/hooks";
-import { Plus } from "@/components/icons";
-import { CohortEditForm } from "./CohortEditForm";
+import { useMessages } from '@/components/hooks'
+import { Plus } from '@/components/icons'
+import { CohortEditForm } from './CohortEditForm'
+import { DialogButton } from '@/components/input/DialogButton'
 
 export function CohortAddButton({ websiteId }: { websiteId: string }) {
-	const { formatMessage, labels } = useMessages();
+  const { formatMessage, labels } = useMessages()
 
-	return (
-		<DialogTrigger>
-			<Button variant="primary">
-				<Icon>
-					<Plus />
-				</Icon>
-				<Text>{formatMessage(labels.cohort)}</Text>
-			</Button>
-			<Modal>
-				<Dialog
-					title={formatMessage(labels.cohort)}
-					style={{ width: 800, minHeight: 300 }}
-				>
-					{({ close }) => {
-						return <CohortEditForm websiteId={websiteId} onClose={close} />;
-					}}
-				</Dialog>
-			</Modal>
-		</DialogTrigger>
-	);
+  return (
+    <DialogButton
+      icon={<Plus />}
+      label={formatMessage(labels.cohort)}
+      variant="primary"
+      width="800px"
+    >
+      {({ close }) => {
+        return <CohortEditForm websiteId={websiteId} onClose={close} />
+      }}
+    </DialogButton>
+  )
 }

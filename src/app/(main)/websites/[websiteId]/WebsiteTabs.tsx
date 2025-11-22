@@ -1,68 +1,63 @@
-import { Tabs, TabList, Tab, Icon, Text, Row } from "@entro314labs/entro-zen";
-import { useMessages, useNavigation, useWebsite } from "@/components/hooks";
-import { Clock, Eye, Lightning, User, ChartPie } from "@/components/icons";
+import { Tabs, TabList, Tab, Icon, Text, Row } from '@entro314labs/entro-zen'
+import { useMessages, useNavigation, useWebsite } from '@/components/hooks'
+import { Clock, Eye, LightningSvg as Lightning, User, ChartPie } from '@/components/icons'
 
 export function WebsiteTabs() {
-	const website = useWebsite();
-	const { pathname, renderUrl } = useNavigation();
-	const { formatMessage, labels } = useMessages();
+  const website = useWebsite()
+  const { pathname, renderUrl } = useNavigation()
+  const { formatMessage, labels } = useMessages()
 
-	const links = [
-		{
-			id: "overview",
-			label: formatMessage(labels.overview),
-			icon: <Eye />,
-			path: "",
-		},
-		{
-			id: "events",
-			label: formatMessage(labels.events),
-			icon: <Lightning />,
-			path: "/events",
-		},
-		{
-			id: "sessions",
-			label: formatMessage(labels.sessions),
-			icon: <User />,
-			path: "/sessions",
-		},
-		{
-			id: "realtime",
-			label: formatMessage(labels.realtime),
-			icon: <Clock />,
-			path: "/realtime",
-		},
-		{
-			id: "reports",
-			label: formatMessage(labels.reports),
-			icon: <ChartPie />,
-			path: "/reports",
-		},
-	];
+  const links = [
+    {
+      id: 'overview',
+      label: formatMessage(labels.overview),
+      icon: <Eye />,
+      path: '',
+    },
+    {
+      id: 'events',
+      label: formatMessage(labels.events),
+      icon: <Lightning />,
+      path: '/events',
+    },
+    {
+      id: 'sessions',
+      label: formatMessage(labels.sessions),
+      icon: <User />,
+      path: '/sessions',
+    },
+    {
+      id: 'realtime',
+      label: formatMessage(labels.realtime),
+      icon: <Clock />,
+      path: '/realtime',
+    },
+    {
+      id: 'reports',
+      label: formatMessage(labels.reports),
+      icon: <ChartPie />,
+      path: '/reports',
+    },
+  ]
 
-	const selectedKey =
-		links.find(({ path }) => path && pathname.includes(path))?.id || "overview";
+  const selectedKey = links.find(({ path }) => path && pathname.includes(path))?.id || 'overview'
 
-	return (
-		<Row marginBottom="6">
-			<Tabs selectedKey={selectedKey}>
-				<TabList>
-					{links.map(({ id, label, icon, path }) => {
-						return (
-							<Tab
-								key={id}
-								id={id}
-								href={renderUrl(`/websites/${website.websiteId}${path}`)}
-							>
-								<Row alignItems="center" gap>
-									<Icon>{icon}</Icon>
-									<Text>{label}</Text>
-								</Row>
-							</Tab>
-						);
-					})}
-				</TabList>
-			</Tabs>
-		</Row>
-	);
+  return (
+    <Row marginBottom="6">
+      <Tabs selectedKey={selectedKey}>
+        <TabList>
+          {links.map(({ id, label, icon, path }) => {
+            return (
+              <Tab key={id} id={id} href={renderUrl(`/websites/${website.websiteId}${path}`)}>
+                <Row alignItems="center" gap>
+                  <Icon>{icon}</Icon>
+                  <Text>{label}</Text>
+                </Row>
+              </Tab>
+            )
+          })}
+        </TabList>
+      </Tabs>
+    </Row>
+  )
 }

@@ -1,283 +1,280 @@
-import { z } from "zod";
-import debug from "debug";
-import { isbot } from "isbot";
-import { startOfHour, startOfMonth } from "date-fns";
-import clickhouse from "@/lib/clickhouse";
-import { parseRequest } from "@/lib/request";
-import { badRequest, json, forbidden, serverError } from "@/lib/response";
-import { fetchWebsite } from "@/lib/load";
-import { getClientInfo, hasBlockedIp } from "@/lib/detect";
-import { createToken, parseToken } from "@/lib/jwt";
-import { secret, uuid, hash } from "@/lib/crypto";
-import { COLLECTION_TYPE, EVENT_TYPE } from "@/lib/constants";
-import { anyObjectParam, urlOrPathParam } from "@/lib/schema";
-import { safeDecodeURI, safeDecodeURIComponent } from "@/lib/url";
-import { createSession, saveEvent, saveSessionData } from "@/queries";
+import { z } from 'zod'
+import debug from 'debug'
+import { isbot } from 'isbot'
+import { startOfHour, startOfMonth } from 'date-fns'
+import clickhouse from '@/lib/clickhouse'
+import { parseRequest } from '@/lib/request'
+import { badRequest, json, forbidden, serverError } from '@/lib/response'
+import { fetchWebsite } from '@/lib/load'
+import { getClientInfo, hasBlockedIp } from '@/lib/detect'
+import { createToken, parseToken } from '@/lib/jwt'
+import { secret, uuid, hash } from '@/lib/crypto'
+import { COLLECTION_TYPE, EVENT_TYPE } from '@/lib/constants'
+import { anyObjectParam, urlOrPathParam } from '@/lib/schema'
+import { safeDecodeURI, safeDecodeURIComponent } from '@/lib/url'
+import { createSession, saveEvent, saveSessionData } from '@/queries/sql'
 
-const log = debug("entrolytics:send");
+const log = debug('entrolytics:send')
 
 interface Cache {
-	websiteId: string;
-	sessionId: string;
-	visitId: string;
-	iat: number;
+  websiteId: string
+  sessionId: string
+  visitId: string
+  iat: number
 }
 
 const schema = z.object({
-	type: z.enum(["event", "identify"]),
-	payload: z
-		.object({
-			website: z.string().uuid().optional(),
-			link: z.string().uuid().optional(),
-			pixel: z.string().uuid().optional(),
-			data: anyObjectParam.optional(),
-			hostname: z.string().max(100).optional(),
-			language: z.string().max(35).optional(),
-			referrer: urlOrPathParam.optional(),
-			screen: z.string().max(11).optional(),
-			title: z.string().optional(),
-			url: urlOrPathParam.optional(),
-			name: z.string().max(50).optional(),
-			tag: z.string().max(50).optional(),
-			ip: z.union([z.ipv4(), z.ipv6()]).optional(),
-			userAgent: z.string().optional(),
-			timestamp: z.coerce.number().int().optional(),
-			id: z.string().optional(),
-		})
-		.refine(
-			(data) => {
-				const keys = [data.website, data.link, data.pixel];
-				const count = keys.filter(Boolean).length;
-				return count === 1;
-			},
-			{
-				message: "Exactly one of website, link, or pixel must be provided",
-				path: ["website"],
-			},
-		),
-});
+  type: z.enum(['event', 'identify']),
+  payload: z
+    .object({
+      website: z.string().uuid().optional(),
+      link: z.string().uuid().optional(),
+      pixel: z.string().uuid().optional(),
+      data: anyObjectParam.optional(),
+      hostname: z.string().max(100).optional(),
+      language: z.string().max(35).optional(),
+      referrer: urlOrPathParam.optional(),
+      screen: z.string().max(11).optional(),
+      title: z.string().optional(),
+      url: urlOrPathParam.optional(),
+      name: z.string().max(50).optional(),
+      tag: z.string().max(50).optional(),
+      ip: z.union([z.ipv4(), z.ipv6()]).optional(),
+      userAgent: z.string().optional(),
+      timestamp: z.coerce.number().int().optional(),
+      id: z.string().optional(),
+    })
+    .refine(
+      (data) => {
+        const keys = [data.website, data.link, data.pixel]
+        const count = keys.filter(Boolean).length
+        return count === 1
+      },
+      {
+        message: 'Exactly one of website, link, or pixel must be provided',
+        path: ['website'],
+      }
+    ),
+})
 
 export async function POST(request: Request) {
-	try {
-		const { body, error } = await parseRequest(request, schema, {
-			skipAuth: true,
-		});
+  try {
+    const { body, error } = await parseRequest(request, schema, {
+      skipAuth: true,
+    })
 
-		if (error) {
-			return error();
-		}
+    if (error) {
+      return error()
+    }
 
-		const { type, payload } = body;
+    const { type, payload } = body
 
-		const {
-			website: websiteId,
-			pixel: pixelId,
-			link: linkId,
-			hostname,
-			screen,
-			language,
-			url,
-			referrer,
-			name,
-			data,
-			title,
-			tag,
-			timestamp,
-			id,
-		} = payload;
+    const {
+      website: websiteId,
+      pixel: pixelId,
+      link: linkId,
+      hostname,
+      screen,
+      language,
+      url,
+      referrer,
+      name,
+      data,
+      title,
+      tag,
+      timestamp,
+      id,
+    } = payload
 
-		// Cache check
-		let cache: Cache | null = null;
+    // Cache check
+    let cache: Cache | null = null
 
-		if (websiteId) {
-			const cacheHeader = request.headers.get("x-entrolytics-cache");
+    if (websiteId) {
+      const cacheHeader = request.headers.get('x-entrolytics-cache')
 
-			if (cacheHeader) {
-				const result = await parseToken(cacheHeader, secret());
+      if (cacheHeader) {
+        const result = await parseToken(cacheHeader, secret())
 
-				if (result) {
-					cache = result;
-				}
-			}
+        if (result) {
+          cache = result
+        }
+      }
 
-			// Find website
-			if (!cache?.websiteId) {
-				const website = await fetchWebsite(websiteId);
+      // Find website
+      if (!cache?.websiteId) {
+        const website = await fetchWebsite(websiteId)
 
-				if (!website) {
-					return badRequest("Website not found.");
-				}
-			}
-		}
+        if (!website) {
+          return badRequest('Website not found.')
+        }
+      }
+    }
 
-		// Client info
-		const { ip, userAgent, device, browser, os, country, region, city } =
-			await getClientInfo(request, payload);
+    // Client info
+    const { ip, userAgent, device, browser, os, country, region, city } = await getClientInfo(
+      request,
+      payload
+    )
 
-		// Bot check
-		if (!process.env.DISABLE_BOT_CHECK && isbot(userAgent)) {
-			return json({ beep: "boop" });
-		}
+    // Bot check
+    if (!process.env.DISABLE_BOT_CHECK && isbot(userAgent)) {
+      return json({ beep: 'boop' })
+    }
 
-		// IP block
-		if (hasBlockedIp(ip)) {
-			return forbidden();
-		}
+    // IP block
+    if (hasBlockedIp(ip)) {
+      return forbidden()
+    }
 
-		const createdAt = timestamp ? new Date(timestamp * 1000) : new Date();
-		const now = Math.floor(new Date().getTime() / 1000);
+    const sourceId = websiteId || pixelId || linkId
 
-		const sessionSalt = hash(startOfMonth(createdAt).toUTCString());
-		const visitSalt = hash(startOfHour(createdAt).toUTCString());
+    const createdAt = timestamp ? new Date(timestamp * 1000) : new Date()
+    const now = Math.floor(new Date().getTime() / 1000)
 
-		const sessionId = id
-			? uuid(websiteId, id)
-			: uuid(websiteId, ip, userAgent, sessionSalt);
+    const sessionSalt = hash(startOfMonth(createdAt).toUTCString())
+    const visitSalt = hash(startOfHour(createdAt).toUTCString())
 
-		// Create a session if not found
-		if (!clickhouse.enabled && !cache?.sessionId) {
-			await createSession({
-				sessionId: sessionId,
-				websiteId,
-				browser,
-				os,
-				device,
-				screen,
-				language,
-				country,
-				region,
-				city,
-				distinctId: id,
-			});
-		}
+    const sessionId = id ? uuid(sourceId, id) : uuid(sourceId, ip, userAgent, sessionSalt)
 
-		// Visit info
-		let visitId = cache?.visitId || uuid(sessionId, visitSalt);
-		let iat = cache?.iat || now;
+    // Create a session if not found
+    if (!clickhouse.enabled && !cache?.sessionId) {
+      await createSession({
+        sessionId: sessionId,
+        websiteId: sourceId,
+        browser,
+        os,
+        device,
+        screen,
+        language,
+        country,
+        region,
+        city,
+        distinctId: id,
+      })
+    }
 
-		// Expire visit after 30 minutes
-		if (!timestamp && now - iat > 1800) {
-			visitId = uuid(sessionId, visitSalt);
-			iat = now;
-		}
+    // Visit info
+    let visitId = cache?.visitId || uuid(sessionId, visitSalt)
+    let iat = cache?.iat || now
 
-		if (type === COLLECTION_TYPE.event) {
-			const base = hostname ? `https://${hostname}` : "https://localhost";
-			const currentUrl = new URL(url, base);
+    // Expire visit after 30 minutes
+    if (!timestamp && now - iat > 1800) {
+      visitId = uuid(sessionId, visitSalt)
+      iat = now
+    }
 
-			let urlPath =
-				currentUrl.pathname === "/undefined"
-					? ""
-					: currentUrl.pathname + currentUrl.hash;
-			const urlQuery = currentUrl.search.substring(1);
-			const urlDomain = currentUrl.hostname.replace(/^www./, "");
+    if (type === COLLECTION_TYPE.event) {
+      const base = hostname ? `https://${hostname}` : 'https://localhost'
+      const currentUrl = new URL(url, base)
 
-			let referrerPath: string;
-			let referrerQuery: string;
-			let referrerDomain: string;
+      let urlPath =
+        currentUrl.pathname === '/undefined' ? '' : currentUrl.pathname + currentUrl.hash
+      const urlQuery = currentUrl.search.substring(1)
+      const urlDomain = currentUrl.hostname.replace(/^www./, '')
 
-			// UTM Params
-			const utmSource = currentUrl.searchParams.get("utm_source");
-			const utmMedium = currentUrl.searchParams.get("utm_medium");
-			const utmCampaign = currentUrl.searchParams.get("utm_campaign");
-			const utmContent = currentUrl.searchParams.get("utm_content");
-			const utmTerm = currentUrl.searchParams.get("utm_term");
+      let referrerPath: string
+      let referrerQuery: string
+      let referrerDomain: string
 
-			// Click IDs
-			const gclid = currentUrl.searchParams.get("gclid");
-			const fbclid = currentUrl.searchParams.get("fbclid");
-			const msclkid = currentUrl.searchParams.get("msclkid");
-			const ttclid = currentUrl.searchParams.get("ttclid");
-			const lifatid = currentUrl.searchParams.get("li_fat_id");
-			const twclid = currentUrl.searchParams.get("twclid");
+      // UTM Params
+      const utmSource = currentUrl.searchParams.get('utm_source')
+      const utmMedium = currentUrl.searchParams.get('utm_medium')
+      const utmCampaign = currentUrl.searchParams.get('utm_campaign')
+      const utmContent = currentUrl.searchParams.get('utm_content')
+      const utmTerm = currentUrl.searchParams.get('utm_term')
 
-			if (process.env.REMOVE_TRAILING_SLASH) {
-				urlPath = urlPath.replace(/\/(?=(#.*)?$)/, "");
-			}
+      // Click IDs
+      const gclid = currentUrl.searchParams.get('gclid')
+      const fbclid = currentUrl.searchParams.get('fbclid')
+      const msclkid = currentUrl.searchParams.get('msclkid')
+      const ttclid = currentUrl.searchParams.get('ttclid')
+      const lifatid = currentUrl.searchParams.get('li_fat_id')
+      const twclid = currentUrl.searchParams.get('twclid')
 
-			if (referrer) {
-				const referrerUrl = new URL(referrer, base);
+      if (process.env.REMOVE_TRAILING_SLASH) {
+        urlPath = urlPath.replace(/\/(?=(#.*)?$)/, '')
+      }
 
-				referrerPath = referrerUrl.pathname;
-				referrerQuery = referrerUrl.search.substring(1);
+      if (referrer) {
+        const referrerUrl = new URL(referrer, base)
 
-				if (referrerUrl.hostname !== "localhost") {
-					referrerDomain = referrerUrl.hostname.replace(/^www\./, "");
-				}
-			}
+        referrerPath = referrerUrl.pathname
+        referrerQuery = referrerUrl.search.substring(1)
+        referrerDomain = referrerUrl.hostname.replace(/^www\./, '')
+      }
 
-			const eventType = linkId
-				? EVENT_TYPE.linkEvent
-				: pixelId
-					? EVENT_TYPE.pixelEvent
-					: name
-						? EVENT_TYPE.customEvent
-						: EVENT_TYPE.pageView;
+      const eventType = linkId
+        ? EVENT_TYPE.linkEvent
+        : pixelId
+          ? EVENT_TYPE.pixelEvent
+          : name
+            ? EVENT_TYPE.customEvent
+            : EVENT_TYPE.pageView
 
-			await saveEvent({
-				websiteId: websiteId || linkId || pixelId,
-				sessionId,
-				visitId,
-				eventType,
-				createdAt,
+      await saveEvent({
+        websiteId: sourceId,
+        sessionId,
+        visitId,
+        eventType,
+        createdAt,
 
-				// Page
-				pageTitle: safeDecodeURIComponent(title),
-				hostname: hostname || urlDomain,
-				urlPath: safeDecodeURI(urlPath),
-				urlQuery,
-				referrerPath: safeDecodeURI(referrerPath),
-				referrerQuery,
-				referrerDomain,
+        // Page
+        pageTitle: safeDecodeURIComponent(title),
+        hostname: hostname || urlDomain,
+        urlPath: safeDecodeURI(urlPath),
+        urlQuery,
+        referrerPath: safeDecodeURI(referrerPath),
+        referrerQuery,
+        referrerDomain,
 
-				// Session
-				distinctId: id,
-				browser,
-				os,
-				device,
-				screen,
-				language,
-				country,
-				region,
-				city,
+        // Session
+        distinctId: id,
+        browser,
+        os,
+        device,
+        screen,
+        language,
+        country,
+        region,
+        city,
 
-				// Events
-				eventName: name,
-				eventData: data,
-				tag,
+        // Events
+        eventName: name,
+        eventData: data,
+        tag,
 
-				// UTM
-				utmSource,
-				utmMedium,
-				utmCampaign,
-				utmContent,
-				utmTerm,
+        // UTM
+        utmSource,
+        utmMedium,
+        utmCampaign,
+        utmContent,
+        utmTerm,
 
-				// Click IDs
-				gclid,
-				fbclid,
-				msclkid,
-				ttclid,
-				lifatid,
-				twclid,
-			});
-		} else if (type === COLLECTION_TYPE.identify) {
-			if (data) {
-				await saveSessionData({
-					websiteId,
-					sessionId,
-					sessionData: data,
-					distinctId: id,
-					createdAt,
-				});
-			}
-		}
+        // Click IDs
+        gclid,
+        fbclid,
+        msclkid,
+        ttclid,
+        lifatid,
+        twclid,
+      })
+    } else if (type === COLLECTION_TYPE.identify) {
+      if (data) {
+        await saveSessionData({
+          websiteId,
+          sessionId,
+          sessionData: data,
+          distinctId: id,
+          createdAt,
+        })
+      }
+    }
 
-		const token = createToken({ websiteId, sessionId, visitId, iat }, secret());
+    const token = createToken({ websiteId, sessionId, visitId, iat }, secret())
 
-		return json({ cache: token, sessionId, visitId });
-	} catch (e) {
-		log.error(e);
-		return serverError(e);
-	}
+    return json({ cache: token, sessionId, visitId })
+  } catch (e) {
+    log.error(e)
+    return serverError(e)
+  }
 }

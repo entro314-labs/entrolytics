@@ -1,25 +1,25 @@
-import { parseRequest } from "@/lib/request";
-import { unauthorized, json } from "@/lib/response";
-import { canViewWebsite } from "@/validations";
-import { getEventData } from "@/queries/sql/events/getEventData";
+import { parseRequest } from '@/lib/request'
+import { unauthorized, json } from '@/lib/response'
+import { canViewWebsite } from '@/validations'
+import { getEventData } from '@/queries/sql/events/getEventData'
 
 export async function GET(
-	request: Request,
-	{ params }: { params: Promise<{ websiteId: string; eventId: string }> },
+  request: Request,
+  { params }: { params: Promise<{ websiteId: string; eventId: string }> }
 ) {
-	const { auth, error } = await parseRequest(request);
+  const { auth, error } = await parseRequest(request)
 
-	if (error) {
-		return error();
-	}
+  if (error) {
+    return error()
+  }
 
-	const { websiteId, eventId } = await params;
+  const { websiteId, eventId } = await params
 
-	if (!(await canViewWebsite(auth, websiteId))) {
-		return unauthorized();
-	}
+  if (!(await canViewWebsite(auth, websiteId))) {
+    return unauthorized()
+  }
 
-	const data = await getEventData(eventId);
+  const data = await getEventData(websiteId, eventId)
 
-	return json(data);
+  return json(data)
 }

@@ -1,23 +1,23 @@
-import { auth, currentUser, clerkClient } from "@clerk/nextjs/server";
-import debug from "debug";
-import { ROLE_PERMISSIONS, ROLES, SHARE_TOKEN_HEADER } from "@/lib/constants";
-import { parseToken } from "@/lib/jwt";
-import { secret, uuid } from "@/lib/crypto";
-import { ensureArray } from "@/lib/utils";
-import { getUser, createUser, getUserByClerkId } from "@/queries/drizzle/user";
-import type { AuthContext, PlatformRole } from "@/types/clerk";
-import type { User } from "@/lib/db";
-import type { Role } from "@/lib/types";
+import { auth, currentUser, clerkClient } from '@clerk/nextjs/server'
+import debug from 'debug'
+import { ROLE_PERMISSIONS, ROLES, SHARE_TOKEN_HEADER } from '@/lib/constants'
+import { parseToken } from '@/lib/jwt'
+import { secret, uuid } from '@/lib/crypto'
+import { ensureArray } from '@/lib/utils'
+import { getUser, createUser, getUserByClerkId } from '@/queries/drizzle/user'
+import type { AuthContext, PlatformRole } from '@/types/clerk'
+import type { User } from '@/lib/db'
+import type { Role } from '@/lib/types'
 
 // Enhanced user type with computed properties
 type EnhancedUser = User & {
-	isAdmin?: boolean;
-	platformRole?: PlatformRole;
-	orgId?: string | null;
-	orgRole?: string | null;
-};
+  isAdmin?: boolean
+  platformRole?: PlatformRole
+  orgId?: string | null
+  orgRole?: string | null
+}
 
-const log = debug("entrolytics:auth");
+const log = debug('entrolytics:auth')
 
 /**
  * Get current authenticated user with enhanced role information
@@ -28,52 +28,51 @@ const log = debug("entrolytics:auth");
  * @returns Enhanced user object with role information or null if not authenticated
  */
 export async function getCurrentUser(): Promise<EnhancedUser | null> {
-	try {
-		const { userId: clerkUserId, orgId, orgRole } = await auth();
+  try {
+    const { userId: clerkUserId, orgId, orgRole } = await auth()
 
-		if (!clerkUserId) {
-			return null;
-		}
+    if (!clerkUserId) {
+      return null
+    }
 
-		// Get Clerk user data including publicMetadata
-		const client = await clerkClient();
-		const clerkUser = await client.users.getUser(clerkUserId);
-		const platformRole =
-			(clerkUser.publicMetadata?.role as PlatformRole) || ROLES.user;
+    // Get Clerk user data including publicMetadata
+    const client = await clerkClient()
+    const clerkUser = await client.users.getUser(clerkUserId)
+    const platformRole = (clerkUser.publicMetadata?.role as PlatformRole) || ROLES.user
 
-		// Get user from database using Clerk ID
-		let user = await getUserByClerkId(clerkUserId);
+    // Get user from database using Clerk ID
+    let user = await getUserByClerkId(clerkUserId)
 
-		// If user doesn't exist in our database, sync from Clerk
-		if (!user) {
-			const currentClerkUser = await currentUser();
-			if (currentClerkUser) {
-				user = await syncUserFromClerk(currentClerkUser, platformRole);
-			}
-		} else {
-			// Update role from Clerk's publicMetadata if different
-			if (user.role !== platformRole) {
-				user.role = platformRole;
-				// Could update database here if needed for consistency
-			}
-		}
+    // If user doesn't exist in our database, sync from Clerk
+    if (!user) {
+      const currentClerkUser = await currentUser()
+      if (currentClerkUser) {
+        user = await syncUserFromClerk(currentClerkUser, platformRole)
+      }
+    } else {
+      // Update role from Clerk's publicMetadata if different
+      if (user.role !== platformRole) {
+        user.role = platformRole
+        // Could update database here if needed for consistency
+      }
+    }
 
-		if (user) {
-			// Return enhanced user object with computed properties
-			return {
-				...user,
-				isAdmin: platformRole === ROLES.admin,
-				platformRole,
-				orgId: orgId || null,
-				orgRole: orgRole || null,
-			} as EnhancedUser;
-		}
+    if (user) {
+      // Return enhanced user object with computed properties
+      return {
+        ...user,
+        isAdmin: platformRole === ROLES.admin,
+        platformRole,
+        orgId: orgId || null,
+        orgRole: orgRole || null,
+      } as EnhancedUser
+    }
 
-		return null;
-	} catch (error) {
-		log("getCurrentUser error:", error);
-		return null;
-	}
+    return null
+  } catch (error) {
+    log('getCurrentUser error:', error)
+    return null
+  }
 }
 
 /**
@@ -81,54 +80,46 @@ export async function getCurrentUser(): Promise<EnhancedUser | null> {
  * Creates a new user record with Clerk data using Clerk ID as primary key
  * Now takes role from Clerk's publicMetadata for consistency
  */
-async function syncUserFromClerk(
-	clerkUser: any,
-	platformRole?: PlatformRole,
-): Promise<User> {
-	try {
-		const userData = {
-			user_id: uuid(), // Generate proper UUID for primary key
-			clerk_id: clerkUser.id, // Store Clerk ID in clerk_id field
-			email: clerkUser.emailAddresses[0]?.emailAddress || "",
-			first_name: clerkUser.firstName || null,
-			last_name: clerkUser.lastName || null,
-			image_url: clerkUser.imageUrl || null,
-			role: (platformRole ||
-				(clerkUser.publicMetadata?.role as PlatformRole) ||
-				ROLES.user) as Role,
-			display_name:
-				`${clerkUser.firstName || ""} ${clerkUser.lastName || ""}`.trim() ||
-				clerkUser.emailAddresses[0]?.emailAddress?.split("@")?.[0] ||
-				"User",
-		};
+async function syncUserFromClerk(clerkUser: any, platformRole?: PlatformRole): Promise<User> {
+  try {
+    const userData = {
+      user_id: uuid(), // Generate proper UUID for primary key
+      clerk_id: clerkUser.id, // Store Clerk ID in clerk_id field
+      email: clerkUser.emailAddresses[0]?.emailAddress || '',
+      first_name: clerkUser.firstName || null,
+      last_name: clerkUser.lastName || null,
+      image_url: clerkUser.imageUrl || null,
+      role: (platformRole ||
+        (clerkUser.publicMetadata?.role as PlatformRole) ||
+        ROLES.user) as Role,
+      display_name:
+        `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim() ||
+        clerkUser.emailAddresses[0]?.emailAddress?.split('@')?.[0] ||
+        'User',
+    }
 
-		const newUser = await createUser(userData);
-		log("User synced from Clerk:", newUser.userId);
+    const newUser = await createUser(userData)
+    log('User synced from Clerk:', newUser.userId)
 
-		// Get the full user object from database after creation
-		const fullUser = await getUserByClerkId(clerkUser.id);
-		if (!fullUser) {
-			throw new Error("Failed to retrieve created user from database");
-		}
+    // Get the full user object from database after creation
+    const fullUser = await getUserByClerkId(clerkUser.id)
+    if (!fullUser) {
+      throw new Error('Failed to retrieve created user from database')
+    }
 
-		return fullUser as User;
-	} catch (error) {
-		log("Error syncing user from Clerk:", error);
-		throw error;
-	}
+    return fullUser as User
+  } catch (error) {
+    log('Error syncing user from Clerk:', error)
+    throw error
+  }
 }
 
 /**
  * Check if user has specific permission(s)
  * Maintains the existing permission system
  */
-export async function hasPermission(
-	role: string,
-	permission: string | string[],
-) {
-	return ensureArray(permission).some((e) =>
-		ROLE_PERMISSIONS[role]?.includes(e),
-	);
+export async function hasPermission(role: string, permission: string | string[]) {
+  return ensureArray(permission).some((e) => ROLE_PERMISSIONS[role]?.includes(e))
 }
 
 /**
@@ -136,12 +127,12 @@ export async function hasPermission(
  * Maintains compatibility with existing share functionality
  */
 export function parseShareToken(headers: Headers) {
-	try {
-		return parseToken(headers.get(SHARE_TOKEN_HEADER), secret());
-	} catch (e) {
-		log("Share token parse error:", e);
-		return null;
-	}
+  try {
+    return parseToken(headers.get(SHARE_TOKEN_HEADER), secret())
+  } catch (e) {
+    log('Share token parse error:', e)
+    return null
+  }
 }
 
 /**
@@ -149,30 +140,29 @@ export function parseShareToken(headers: Headers) {
  * This provides a unified interface for checking authentication and roles
  */
 export async function getAuthContext(): Promise<AuthContext | null> {
-	try {
-		const { userId: clerkUserId, orgId, orgRole } = await auth();
+  try {
+    const { userId: clerkUserId, orgId, orgRole } = await auth()
 
-		if (!clerkUserId) {
-			return null;
-		}
+    if (!clerkUserId) {
+      return null
+    }
 
-		// Get platform role from Clerk's publicMetadata
-		const client = await clerkClient();
-		const clerkUser = await client.users.getUser(clerkUserId);
-		const platformRole =
-			(clerkUser.publicMetadata?.role as PlatformRole) || ROLES.user;
+    // Get platform role from Clerk's publicMetadata
+    const client = await clerkClient()
+    const clerkUser = await client.users.getUser(clerkUserId)
+    const platformRole = (clerkUser.publicMetadata?.role as PlatformRole) || ROLES.user
 
-		return {
-			userId: clerkUserId,
-			orgId: orgId || null,
-			orgRole: (orgRole as any) || null,
-			platformRole,
-			isAdmin: platformRole === ROLES.admin,
-		};
-	} catch (error) {
-		log("Error getting auth context:", error);
-		return null;
-	}
+    return {
+      userId: clerkUserId,
+      orgId: orgId || null,
+      orgRole: (orgRole as any) || null,
+      platformRole,
+      isAdmin: platformRole === ROLES.admin,
+    }
+  } catch (error) {
+    log('Error getting auth context:', error)
+    return null
+  }
 }
 
 /**

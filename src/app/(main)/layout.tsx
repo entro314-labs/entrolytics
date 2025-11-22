@@ -1,13 +1,18 @@
-import { Metadata } from "next";
-import { App } from "./App";
+import { Suspense } from 'react'
+import { Metadata } from 'next'
+import { App } from './App'
 
 export default function ({ children }) {
-	return <App>{children}</App>;
+  return (
+    <Suspense>
+      <App>{children}</App>
+    </Suspense>
+  )
 }
 
 export const metadata: Metadata = {
-	title: {
-		template: "%s | Entrolytics",
-		default: "Entrolytics",
-	},
-};
+  title: {
+    template: '%s | Entrolytics',
+    default: 'Entrolytics',
+  },
+}

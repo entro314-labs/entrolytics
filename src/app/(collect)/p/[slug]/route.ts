@@ -1,47 +1,60 @@
-import { NextResponse } from "next/server";
-import { notFound } from "@/lib/response";
-import { findPixelBySlug } from "@/queries";
-import { POST } from "@/app/api/send/route";
+export const dynamic = 'force-dynamic'
 
-const image = Buffer.from(
-	"R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw",
-	"base64",
-);
+import { NextResponse } from 'next/server'
+import { notFound } from '@/lib/response'
+import redis from '@/lib/redis'
+import { findPixelBySlug } from '@/queries/drizzle'
+import { POST } from '@/app/api/send/route'
+import type { Pixel } from '@/lib/db/schema'
 
-export async function GET(
-	request: Request,
-	{ params }: { params: Promise<{ slug: string }> },
-) {
-	const { slug } = await params;
+const image = Buffer.from('R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw', 'base64')
 
-	const pixel = await findPixelBySlug(slug);
+export async function GET(request: Request, { params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
 
-	if (!pixel) {
-		return notFound();
-	}
+  let pixel: Pixel | null
 
-	const payload = {
-		type: "event",
-		payload: {
-			pixel: pixel.pixelId, // FIX: use pixel.pixelId instead of pixel.id
-			url: request.url,
-			referrer: request.referrer,
-		},
-	};
+  if (redis.enabled) {
+    pixel = await redis.client.fetch(
+      `pixel:${slug}`,
+      async () => {
+        return findPixelBySlug(slug)
+      },
+      86400,
+    )
 
-	const req = new Request(request.url, {
-		method: "POST",
-		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify(payload),
-	});
+    if (!pixel) {
+      return notFound()
+    }
+  } else {
+    pixel = await findPixelBySlug(slug)
 
-	const res = await POST(req);
+    if (!pixel) {
+      return notFound()
+    }
+  }
 
-	return new NextResponse(image, {
-		headers: {
-			"Content-Type": "image/gif",
-			"Content-Length": image.length.toString(),
-			"x-entrolytics-collect": JSON.stringify(res),
-		},
-	});
+  const payload = {
+    type: 'event',
+    payload: {
+      pixel: pixel.pixelId,
+      url: request.url,
+      referrer: request.headers.get('referer'),
+    },
+  }
+
+  const req = new Request(request.url, {
+    method: 'POST',
+    headers: request.headers,
+    body: JSON.stringify(payload),
+  })
+
+  await POST(req)
+
+  return new NextResponse(image, {
+    headers: {
+      'Content-Type': 'image/gif',
+      'Content-Length': image.length.toString(),
+    },
+  })
 }

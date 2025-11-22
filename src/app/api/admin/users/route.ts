@@ -1,27 +1,27 @@
-import { z } from "zod";
-import { parseRequest } from "@/lib/request";
-import { json, unauthorized } from "@/lib/response";
-import { pagingParams, searchParams } from "@/lib/schema";
-import { canViewUsers } from "@/validations";
-import { getUsers } from "@/queries";
+import { z } from 'zod'
+import { parseRequest } from '@/lib/request'
+import { json, unauthorized } from '@/lib/response'
+import { pagingParams, searchParams } from '@/lib/schema'
+import { canViewUsers } from '@/validations'
+import { getUsers } from '@/queries/drizzle'
 
 export async function GET(request: Request) {
-	const schema = z.object({
-		...pagingParams,
-		...searchParams,
-	});
+  const schema = z.object({
+    ...pagingParams,
+    ...searchParams,
+  })
 
-	const { auth, query, error } = await parseRequest(request, schema);
+  const { auth, query, error } = await parseRequest(request, schema)
 
-	if (error) {
-		return error();
-	}
+  if (error) {
+    return error()
+  }
 
-	if (!(await canViewUsers(auth))) {
-		return unauthorized();
-	}
+  if (!(await canViewUsers(auth))) {
+    return unauthorized()
+  }
 
-	const users = await getUsers({}, query);
+  const users = await getUsers({}, query)
 
-	return json(users);
+  return json(users)
 }

@@ -1,2396 +1,2396 @@
 {
-	"label.access-code": [
-		{
-			"type": 0,
-			"value": "Koda za dostop"
-		}
-	],
-	"label.account": [
-		{
-			"type": 0,
-			"value": "Account"
-		}
-	],
-	"label.action": [
-		{
-			"type": 0,
-			"value": "Action"
-		}
-	],
-	"label.actions": [
-		{
-			"type": 0,
-			"value": "Dejanja"
-		}
-	],
-	"label.activity": [
-		{
-			"type": 0,
-			"value": "Dnevnik dejavnosti"
-		}
-	],
-	"label.add": [
-		{
-			"type": 0,
-			"value": "Dodaj"
-		}
-	],
-	"label.add-board": [
-		{
-			"type": 0,
-			"value": "Dodaj tablo"
-		}
-	],
-	"label.add-description": [
-		{
-			"type": 0,
-			"value": "Dodaj opis"
-		}
-	],
-	"label.add-link": [
-		{
-			"type": 0,
-			"value": "Add link"
-		}
-	],
-	"label.add-member": [
-		{
-			"type": 0,
-			"value": "Dodaj člana"
-		}
-	],
-	"label.add-pixel": [
-		{
-			"type": 0,
-			"value": "Add pixel"
-		}
-	],
-	"label.add-step": [
-		{
-			"type": 0,
-			"value": "Dodaj korak"
-		}
-	],
-	"label.add-website": [
-		{
-			"type": 0,
-			"value": "Dodaj spletno mesto"
-		}
-	],
-	"label.admin": [
-		{
-			"type": 0,
-			"value": "Administrator"
-		}
-	],
-	"label.affiliate": [
-		{
-			"type": 0,
-			"value": "Partner"
-		}
-	],
-	"label.after": [
-		{
-			"type": 0,
-			"value": "Po"
-		}
-	],
-	"label.all": [
-		{
-			"type": 0,
-			"value": "Vsi"
-		}
-	],
-	"label.all-time": [
-		{
-			"type": 0,
-			"value": "Ves čas"
-		}
-	],
-	"label.analysis": [
-		{
-			"type": 0,
-			"value": "Analysis"
-		}
-	],
-	"label.analytics": [
-		{
-			"type": 0,
-			"value": "Analitika"
-		}
-	],
-	"label.application": [
-		{
-			"type": 0,
-			"value": "Application"
-		}
-	],
-	"label.apply": [
-		{
-			"type": 0,
-			"value": "Uporabi"
-		}
-	],
-	"label.attribution": [
-		{
-			"type": 0,
-			"value": "Pripis"
-		}
-	],
-	"label.attribution-description": [
-		{
-			"type": 0,
-			"value": "Oglejte si, kako uporabniki sodelujejo z vašim marketingom in kaj spodbuja konverzije."
-		}
-	],
-	"label.audience": [
-		{
-			"type": 0,
-			"value": "Audience"
-		}
-	],
-	"label.average": [
-		{
-			"type": 0,
-			"value": "Povprečno"
-		}
-	],
-	"label.back": [
-		{
-			"type": 0,
-			"value": "Nazaj"
-		}
-	],
-	"label.before": [
-		{
-			"type": 0,
-			"value": "Pred"
-		}
-	],
-	"label.behavior": [
-		{
-			"type": 0,
-			"value": "Behavior"
-		}
-	],
-	"label.boards": [
-		{
-			"type": 0,
-			"value": "Table"
-		}
-	],
-	"label.bounce-rate": [
-		{
-			"type": 0,
-			"value": "Odbojna stopnja"
-		}
-	],
-	"label.breakdown": [
-		{
-			"type": 0,
-			"value": "Razčlenitev"
-		}
-	],
-	"label.browser": [
-		{
-			"type": 0,
-			"value": "Brskalnik"
-		}
-	],
-	"label.browsers": [
-		{
-			"type": 0,
-			"value": "Brskalniki"
-		}
-	],
-	"label.campaigns": [
-		{
-			"type": 0,
-			"value": "Kampanje"
-		}
-	],
-	"label.cancel": [
-		{
-			"type": 0,
-			"value": "Prekliči"
-		}
-	],
-	"label.change-password": [
-		{
-			"type": 0,
-			"value": "Zamenjaj geslo"
-		}
-	],
-	"label.channel": [
-		{
-			"type": 0,
-			"value": "Channel"
-		}
-	],
-	"label.channels": [
-		{
-			"type": 0,
-			"value": "Kanali"
-		}
-	],
-	"label.chart": [
-		{
-			"type": 0,
-			"value": "Chart"
-		}
-	],
-	"label.cities": [
-		{
-			"type": 0,
-			"value": "Mesta"
-		}
-	],
-	"label.city": [
-		{
-			"type": 0,
-			"value": "Mesto"
-		}
-	],
-	"label.clear-all": [
-		{
-			"type": 0,
-			"value": "Počisti vse"
-		}
-	],
-	"label.cohort": [
-		{
-			"type": 0,
-			"value": "Kohorta"
-		}
-	],
-	"label.cohorts": [
-		{
-			"type": 0,
-			"value": "Cohorts"
-		}
-	],
-	"label.compare": [
-		{
-			"type": 0,
-			"value": "Primerjaj"
-		}
-	],
-	"label.compare-dates": [
-		{
-			"type": 0,
-			"value": "Primerjaj datume"
-		}
-	],
-	"label.confirm": [
-		{
-			"type": 0,
-			"value": "Potrdi"
-		}
-	],
-	"label.confirm-password": [
-		{
-			"type": 0,
-			"value": "Potrdi geslo"
-		}
-	],
-	"label.contains": [
-		{
-			"type": 0,
-			"value": "Vsebuje"
-		}
-	],
-	"label.content": [
-		{
-			"type": 0,
-			"value": "Vsebina"
-		}
-	],
-	"label.continue": [
-		{
-			"type": 0,
-			"value": "Nadaljuj"
-		}
-	],
-	"label.conversion": [
-		{
-			"type": 0,
-			"value": "Konverzija"
-		}
-	],
-	"label.conversion-rate": [
-		{
-			"type": 0,
-			"value": "Stopnja konverzije"
-		}
-	],
-	"label.conversion-step": [
-		{
-			"type": 0,
-			"value": "Korak konverzije"
-		}
-	],
-	"label.count": [
-		{
-			"type": 0,
-			"value": "Števec"
-		}
-	],
-	"label.countries": [
-		{
-			"type": 0,
-			"value": "Države"
-		}
-	],
-	"label.country": [
-		{
-			"type": 0,
-			"value": "Država"
-		}
-	],
-	"label.create": [
-		{
-			"type": 0,
-			"value": "Create"
-		}
-	],
-	"label.create-org": [
-		{
-			"type": 0,
-			"value": "Ustvari ekipo"
-		}
-	],
-	"label.create-report": [
-		{
-			"type": 0,
-			"value": "Ustvari poročilo"
-		}
-	],
-	"label.create-user": [
-		{
-			"type": 0,
-			"value": "Ustvari uporabnika"
-		}
-	],
-	"label.created": [
-		{
-			"type": 0,
-			"value": "Ustvarjeno"
-		}
-	],
-	"label.created-by": [
-		{
-			"type": 0,
-			"value": "Ustvaril"
-		}
-	],
-	"label.criteria": [
-		{
-			"type": 0,
-			"value": "Criteria"
-		}
-	],
-	"label.currency": [
-		{
-			"type": 0,
-			"value": "Valuta"
-		}
-	],
-	"label.current": [
-		{
-			"type": 0,
-			"value": "Trenutno"
-		}
-	],
-	"label.current-password": [
-		{
-			"type": 0,
-			"value": "Trenutno geslo"
-		}
-	],
-	"label.custom-range": [
-		{
-			"type": 0,
-			"value": "Obdobje po meri"
-		}
-	],
-	"label.dashboard": [
-		{
-			"type": 0,
-			"value": "Nadzorna plošča"
-		}
-	],
-	"label.data": [
-		{
-			"type": 0,
-			"value": "Podatki"
-		}
-	],
-	"label.date": [
-		{
-			"type": 0,
-			"value": "Datum"
-		}
-	],
-	"label.date-range": [
-		{
-			"type": 0,
-			"value": "Časovno obdobje"
-		}
-	],
-	"label.day": [
-		{
-			"type": 0,
-			"value": "Dan"
-		}
-	],
-	"label.default-date-range": [
-		{
-			"type": 0,
-			"value": "Privzeto časovno obdobje"
-		}
-	],
-	"label.delete": [
-		{
-			"type": 0,
-			"value": "Izbriši"
-		}
-	],
-	"label.delete-org": [
-		{
-			"type": 0,
-			"value": "Izbriši ekipo"
-		}
-	],
-	"label.delete-report": [
-		{
-			"type": 0,
-			"value": "Izbriši poročilo"
-		}
-	],
-	"label.delete-user": [
-		{
-			"type": 0,
-			"value": "Izbriši uporabnika"
-		}
-	],
-	"label.delete-website": [
-		{
-			"type": 0,
-			"value": "Izbriši spletno mesto"
-		}
-	],
-	"label.description": [
-		{
-			"type": 0,
-			"value": "Opis"
-		}
-	],
-	"label.desktop": [
-		{
-			"type": 0,
-			"value": "Namizni računalnik"
-		}
-	],
-	"label.destination-url": [
-		{
-			"type": 0,
-			"value": "Destination URL"
-		}
-	],
-	"label.details": [
-		{
-			"type": 0,
-			"value": "Podrobnosti"
-		}
-	],
-	"label.device": [
-		{
-			"type": 0,
-			"value": "Naprava"
-		}
-	],
-	"label.devices": [
-		{
-			"type": 0,
-			"value": "Naprave"
-		}
-	],
-	"label.direct": [
-		{
-			"type": 0,
-			"value": "Neposredno"
-		}
-	],
-	"label.dismiss": [
-		{
-			"type": 0,
-			"value": "Prezri"
-		}
-	],
-	"label.distinct-id": [
-		{
-			"type": 0,
-			"value": "Unikatni ID"
-		}
-	],
-	"label.does-not-contain": [
-		{
-			"type": 0,
-			"value": "Ne vsebuje"
-		}
-	],
-	"label.does-not-include": [
-		{
-			"type": 0,
-			"value": "Ne vključuje"
-		}
-	],
-	"label.doest-not-exist": [
-		{
-			"type": 0,
-			"value": "Ne obstaja"
-		}
-	],
-	"label.domain": [
-		{
-			"type": 0,
-			"value": "Domena"
-		}
-	],
-	"label.download": [
-		{
-			"type": 0,
-			"value": "Download"
-		}
-	],
-	"label.dropoff": [
-		{
-			"type": 0,
-			"value": "Zapustitev"
-		}
-	],
-	"label.edit": [
-		{
-			"type": 0,
-			"value": "Uredi"
-		}
-	],
-	"label.edit-dashboard": [
-		{
-			"type": 0,
-			"value": "Uredi nadzorno ploščo"
-		}
-	],
-	"label.edit-member": [
-		{
-			"type": 0,
-			"value": "Uredi člana"
-		}
-	],
-	"label.email": [
-		{
-			"type": 0,
-			"value": "Email"
-		}
-	],
-	"label.enable-share-url": [
-		{
-			"type": 0,
-			"value": "Uredi povezavo za deljenje"
-		}
-	],
-	"label.end-step": [
-		{
-			"type": 0,
-			"value": "Končni korak"
-		}
-	],
-	"label.entry": [
-		{
-			"type": 0,
-			"value": "Vhodni URL"
-		}
-	],
-	"label.environment": [
-		{
-			"type": 0,
-			"value": "Environment"
-		}
-	],
-	"label.event": [
-		{
-			"type": 0,
-			"value": "Dogodek"
-		}
-	],
-	"label.event-data": [
-		{
-			"type": 0,
-			"value": "Podatki dogodka"
-		}
-	],
-	"label.event-name": [
-		{
-			"type": 0,
-			"value": "Ime dogodka"
-		}
-	],
-	"label.events": [
-		{
-			"type": 0,
-			"value": "Dogodki"
-		}
-	],
-	"label.exists": [
-		{
-			"type": 0,
-			"value": "Obstaja"
-		}
-	],
-	"label.exit": [
-		{
-			"type": 0,
-			"value": "Exit URL"
-		}
-	],
-	"label.false": [
-		{
-			"type": 0,
-			"value": "Napačno"
-		}
-	],
-	"label.field": [
-		{
-			"type": 0,
-			"value": "Polje"
-		}
-	],
-	"label.fields": [
-		{
-			"type": 0,
-			"value": "Polja"
-		}
-	],
-	"label.filter": [
-		{
-			"type": 0,
-			"value": "Filter"
-		}
-	],
-	"label.filter-combined": [
-		{
-			"type": 0,
-			"value": "Skupaj"
-		}
-	],
-	"label.filter-raw": [
-		{
-			"type": 0,
-			"value": "Neobdelano"
-		}
-	],
-	"label.filters": [
-		{
-			"type": 0,
-			"value": "Filtri"
-		}
-	],
-	"label.first-click": [
-		{
-			"type": 0,
-			"value": "Prvi klik"
-		}
-	],
-	"label.first-seen": [
-		{
-			"type": 0,
-			"value": "First seen"
-		}
-	],
-	"label.funnel": [
-		{
-			"type": 0,
-			"value": "Prodajni lijak"
-		}
-	],
-	"label.funnel-description": [
-		{
-			"type": 0,
-			"value": "Understand the conversion and drop-off rate of users."
-		}
-	],
-	"label.funnels": [
-		{
-			"type": 0,
-			"value": "Lijaki"
-		}
-	],
-	"label.goal": [
-		{
-			"type": 0,
-			"value": "Cilj"
-		}
-	],
-	"label.goals": [
-		{
-			"type": 0,
-			"value": "Cilji"
-		}
-	],
-	"label.goals-description": [
-		{
-			"type": 0,
-			"value": "Spremljajte svoje cilje za oglede strani in dogodke."
-		}
-	],
-	"label.greater-than": [
-		{
-			"type": 0,
-			"value": "Večje od"
-		}
-	],
-	"label.greater-than-equals": [
-		{
-			"type": 0,
-			"value": "Večje ali enako kot"
-		}
-	],
-	"label.grouped": [
-		{
-			"type": 0,
-			"value": "Združeno"
-		}
-	],
-	"label.growth": [
-		{
-			"type": 0,
-			"value": "Growth"
-		}
-	],
-	"label.hostname": [
-		{
-			"type": 0,
-			"value": "Ime gostitelja"
-		}
-	],
-	"label.includes": [
-		{
-			"type": 0,
-			"value": "Vključuje"
-		}
-	],
-	"label.insight": [
-		{
-			"type": 0,
-			"value": "Vpogled"
-		}
-	],
-	"label.insights": [
-		{
-			"type": 0,
-			"value": "Vpogled"
-		}
-	],
-	"label.insights-description": [
-		{
-			"type": 0,
-			"value": "Dive deeper into your data by using segments and filters."
-		}
-	],
-	"label.invalid-url": [
-		{
-			"type": 0,
-			"value": "Invalid URL"
-		}
-	],
-	"label.is": [
-		{
-			"type": 0,
-			"value": "Je"
-		}
-	],
-	"label.is-false": [
-		{
-			"type": 0,
-			"value": "Je napačno"
-		}
-	],
-	"label.is-not": [
-		{
-			"type": 0,
-			"value": "Ni"
-		}
-	],
-	"label.is-not-set": [
-		{
-			"type": 0,
-			"value": "Ni nastavljeno"
-		}
-	],
-	"label.is-set": [
-		{
-			"type": 0,
-			"value": "Je nastavljeno"
-		}
-	],
-	"label.is-true": [
-		{
-			"type": 0,
-			"value": "Je res"
-		}
-	],
-	"label.join": [
-		{
-			"type": 0,
-			"value": "Pridruži se"
-		}
-	],
-	"label.join-org": [
-		{
-			"type": 0,
-			"value": "Pridruži se ekipi"
-		}
-	],
-	"label.journey": [
-		{
-			"type": 0,
-			"value": "Potovanje"
-		}
-	],
-	"label.journey-description": [
-		{
-			"type": 0,
-			"value": "Razumite, kako uporabniki krmarijo po vašem spletnem mestu."
-		}
-	],
-	"label.journeys": [
-		{
-			"type": 0,
-			"value": "Potovanja"
-		}
-	],
-	"label.language": [
-		{
-			"type": 0,
-			"value": "Jezik"
-		}
-	],
-	"label.languages": [
-		{
-			"type": 0,
-			"value": "Jeziki"
-		}
-	],
-	"label.laptop": [
-		{
-			"type": 0,
-			"value": "Prenosni računalnik"
-		}
-	],
-	"label.last-click": [
-		{
-			"type": 0,
-			"value": "Zadnji klik"
-		}
-	],
-	"label.last-days": [
-		{
-			"type": 0,
-			"value": "Zadnjih "
-		},
-		{
-			"type": 1,
-			"value": "x"
-		},
-		{
-			"type": 0,
-			"value": " dni"
-		}
-	],
-	"label.last-hours": [
-		{
-			"type": 0,
-			"value": "Zadnjih "
-		},
-		{
-			"type": 1,
-			"value": "x"
-		},
-		{
-			"type": 0,
-			"value": " ur"
-		}
-	],
-	"label.last-months": [
-		{
-			"type": 0,
-			"value": "Zadnjih "
-		},
-		{
-			"type": 1,
-			"value": "x"
-		},
-		{
-			"type": 0,
-			"value": " mesecev"
-		}
-	],
-	"label.last-seen": [
-		{
-			"type": 0,
-			"value": "Zadnjič videno"
-		}
-	],
-	"label.leave": [
-		{
-			"type": 0,
-			"value": "Zapusti"
-		}
-	],
-	"label.leave-org": [
-		{
-			"type": 0,
-			"value": "Zapusti ekipo"
-		}
-	],
-	"label.less-than": [
-		{
-			"type": 0,
-			"value": "Manjše kot"
-		}
-	],
-	"label.less-than-equals": [
-		{
-			"type": 0,
-			"value": "Manjše ali enako kot"
-		}
-	],
-	"label.link": [
-		{
-			"type": 0,
-			"value": "Link"
-		}
-	],
-	"label.links": [
-		{
-			"type": 0,
-			"value": "Povezave"
-		}
-	],
-	"label.location": [
-		{
-			"type": 0,
-			"value": "Location"
-		}
-	],
-	"label.login": [
-		{
-			"type": 0,
-			"value": "Prijava"
-		}
-	],
-	"label.logout": [
-		{
-			"type": 0,
-			"value": "Odjava"
-		}
-	],
-	"label.manage": [
-		{
-			"type": 0,
-			"value": "Manage"
-		}
-	],
-	"label.manager": [
-		{
-			"type": 0,
-			"value": "Manager"
-		}
-	],
-	"label.max": [
-		{
-			"type": 0,
-			"value": "Največ"
-		}
-	],
-	"label.maximize": [
-		{
-			"type": 0,
-			"value": "Razširi"
-		}
-	],
-	"label.medium": [
-		{
-			"type": 0,
-			"value": "Srednje"
-		}
-	],
-	"label.member": [
-		{
-			"type": 0,
-			"value": "Član"
-		}
-	],
-	"label.members": [
-		{
-			"type": 0,
-			"value": "Člani"
-		}
-	],
-	"label.min": [
-		{
-			"type": 0,
-			"value": "Najmanj"
-		}
-	],
-	"label.mobile": [
-		{
-			"type": 0,
-			"value": "Mobilne naprave"
-		}
-	],
-	"label.model": [
-		{
-			"type": 0,
-			"value": "Model"
-		}
-	],
-	"label.more": [
-		{
-			"type": 0,
-			"value": "Več"
-		}
-	],
-	"label.my-account": [
-		{
-			"type": 0,
-			"value": "Moj račun"
-		}
-	],
-	"label.my-websites": [
-		{
-			"type": 0,
-			"value": "Moja spletna mesta"
-		}
-	],
-	"label.name": [
-		{
-			"type": 0,
-			"value": "Ime"
-		}
-	],
-	"label.new-password": [
-		{
-			"type": 0,
-			"value": "Novo geslo"
-		}
-	],
-	"label.none": [
-		{
-			"type": 0,
-			"value": "Noben"
-		}
-	],
-	"label.number-of-records": [
-		{
-			"type": 1,
-			"value": "x"
-		},
-		{
-			"type": 0,
-			"value": " "
-		},
-		{
-			"offset": 0,
-			"options": {
-				"one": {
-					"value": [
-						{
-							"type": 0,
-							"value": "record"
-						}
-					]
-				},
-				"other": {
-					"value": [
-						{
-							"type": 0,
-							"value": "records"
-						}
-					]
-				}
-			},
-			"pluralType": "cardinal",
-			"type": 6,
-			"value": "x"
-		}
-	],
-	"label.ok": [
-		{
-			"type": 0,
-			"value": "OK"
-		}
-	],
-	"label.online": [
-		{
-			"type": 0,
-			"value": "Online"
-		}
-	],
-	"label.org": [
-		{
-			"type": 0,
-			"value": "Ekipa"
-		}
-	],
-	"label.org-id": [
-		{
-			"type": 0,
-			"value": "ID ekipe"
-		}
-	],
-	"label.org-manager": [
-		{
-			"type": 0,
-			"value": "Vodja ekipe"
-		}
-	],
-	"label.org-member": [
-		{
-			"type": 0,
-			"value": "Član ekipe"
-		}
-	],
-	"label.org-name": [
-		{
-			"type": 0,
-			"value": "Ime ekipe"
-		}
-	],
-	"label.org-owner": [
-		{
-			"type": 0,
-			"value": "Lastnik ekipe"
-		}
-	],
-	"label.org-settings": [
-		{
-			"type": 0,
-			"value": "Nastavitve ekipe"
-		}
-	],
-	"label.org-view-only": [
-		{
-			"type": 0,
-			"value": "Org view only"
-		}
-	],
-	"label.org-websites": [
-		{
-			"type": 0,
-			"value": "Spletna mesta ekipe"
-		}
-	],
-	"label.organic-search": [
-		{
-			"type": 0,
-			"value": "Organsko iskanje"
-		}
-	],
-	"label.organic-shopping": [
-		{
-			"type": 0,
-			"value": "Organski nakupi"
-		}
-	],
-	"label.organic-social": [
-		{
-			"type": 0,
-			"value": "Organska družbena omrežja"
-		}
-	],
-	"label.organic-video": [
-		{
-			"type": 0,
-			"value": "Organski video"
-		}
-	],
-	"label.orgs": [
-		{
-			"type": 0,
-			"value": "Ekipe"
-		}
-	],
-	"label.os": [
-		{
-			"type": 0,
-			"value": "OS"
-		}
-	],
-	"label.other": [
-		{
-			"type": 0,
-			"value": "Drugo"
-		}
-	],
-	"label.overview": [
-		{
-			"type": 0,
-			"value": "Pregled"
-		}
-	],
-	"label.owner": [
-		{
-			"type": 0,
-			"value": "Lastnik"
-		}
-	],
-	"label.page": [
-		{
-			"type": 0,
-			"value": "Stran"
-		}
-	],
-	"label.page-of": [
-		{
-			"type": 0,
-			"value": "Stran "
-		},
-		{
-			"type": 1,
-			"value": "current"
-		},
-		{
-			"type": 0,
-			"value": " od "
-		},
-		{
-			"type": 1,
-			"value": "total"
-		}
-	],
-	"label.page-views": [
-		{
-			"type": 0,
-			"value": "Obiski strani"
-		}
-	],
-	"label.pageTitle": [
-		{
-			"type": 0,
-			"value": "Naslov strani"
-		}
-	],
-	"label.pages": [
-		{
-			"type": 0,
-			"value": "Strani"
-		}
-	],
-	"label.paid-ads": [
-		{
-			"type": 0,
-			"value": "Plačani oglasi"
-		}
-	],
-	"label.paid-search": [
-		{
-			"type": 0,
-			"value": "Plačano iskanje"
-		}
-	],
-	"label.paid-shopping": [
-		{
-			"type": 0,
-			"value": "Plačani nakupi"
-		}
-	],
-	"label.paid-social": [
-		{
-			"type": 0,
-			"value": "Plačana družbena omrežja"
-		}
-	],
-	"label.paid-video": [
-		{
-			"type": 0,
-			"value": "Plačani video"
-		}
-	],
-	"label.password": [
-		{
-			"type": 0,
-			"value": "Geslo"
-		}
-	],
-	"label.path": [
-		{
-			"type": 0,
-			"value": "Pot"
-		}
-	],
-	"label.paths": [
-		{
-			"type": 0,
-			"value": "Poti"
-		}
-	],
-	"label.pixel": [
-		{
-			"type": 0,
-			"value": "Pixel"
-		}
-	],
-	"label.pixels": [
-		{
-			"type": 0,
-			"value": "Pikslov"
-		}
-	],
-	"label.powered-by": [
-		{
-			"type": 0,
-			"value": "Poganja "
-		},
-		{
-			"type": 1,
-			"value": "name"
-		}
-	],
-	"label.preferences": [
-		{
-			"type": 0,
-			"value": "Preferences"
-		}
-	],
-	"label.previous": [
-		{
-			"type": 0,
-			"value": "Prejšnji"
-		}
-	],
-	"label.previous-period": [
-		{
-			"type": 0,
-			"value": "Prejšnje obdobje"
-		}
-	],
-	"label.previous-year": [
-		{
-			"type": 0,
-			"value": "Prejšnje leto"
-		}
-	],
-	"label.profile": [
-		{
-			"type": 0,
-			"value": "Profil"
-		}
-	],
-	"label.profiles": [
-		{
-			"type": 0,
-			"value": "Profiles"
-		}
-	],
-	"label.properties": [
-		{
-			"type": 0,
-			"value": "Lastnosti"
-		}
-	],
-	"label.property": [
-		{
-			"type": 0,
-			"value": "Lastnost"
-		}
-	],
-	"label.queries": [
-		{
-			"type": 0,
-			"value": "Poizvedbe"
-		}
-	],
-	"label.query": [
-		{
-			"type": 0,
-			"value": "Poizvedba"
-		}
-	],
-	"label.query-parameters": [
-		{
-			"type": 0,
-			"value": "Parametri poizvedbe"
-		}
-	],
-	"label.realtime": [
-		{
-			"type": 0,
-			"value": "V živo"
-		}
-	],
-	"label.referral": [
-		{
-			"type": 0,
-			"value": "Napoten"
-		}
-	],
-	"label.referrer": [
-		{
-			"type": 0,
-			"value": "Vir"
-		}
-	],
-	"label.referrers": [
-		{
-			"type": 0,
-			"value": "Viri"
-		}
-	],
-	"label.refresh": [
-		{
-			"type": 0,
-			"value": "Osveži"
-		}
-	],
-	"label.regenerate": [
-		{
-			"type": 0,
-			"value": "Ponovno generiraj"
-		}
-	],
-	"label.region": [
-		{
-			"type": 0,
-			"value": "Regija"
-		}
-	],
-	"label.regions": [
-		{
-			"type": 0,
-			"value": "Regije"
-		}
-	],
-	"label.remaining": [
-		{
-			"type": 0,
-			"value": "Preostalo"
-		}
-	],
-	"label.remove": [
-		{
-			"type": 0,
-			"value": "Odstrani"
-		}
-	],
-	"label.remove-member": [
-		{
-			"type": 0,
-			"value": "Remove member"
-		}
-	],
-	"label.reports": [
-		{
-			"type": 0,
-			"value": "Poročila"
-		}
-	],
-	"label.required": [
-		{
-			"type": 0,
-			"value": "Zahtevano"
-		}
-	],
-	"label.reset": [
-		{
-			"type": 0,
-			"value": "Ponastavi"
-		}
-	],
-	"label.reset-website": [
-		{
-			"type": 0,
-			"value": "Ponastavi statistiko"
-		}
-	],
-	"label.retention": [
-		{
-			"type": 0,
-			"value": "Ohranjanje uporabnikov"
-		}
-	],
-	"label.retention-description": [
-		{
-			"type": 0,
-			"value": "Measure your website stickiness by tracking how often users return."
-		}
-	],
-	"label.revenue": [
-		{
-			"type": 0,
-			"value": "Prihodek"
-		}
-	],
-	"label.revenue-description": [
-		{
-			"type": 0,
-			"value": "Oglejte si svoj prihodek skozi čas."
-		}
-	],
-	"label.role": [
-		{
-			"type": 0,
-			"value": "Vloga"
-		}
-	],
-	"label.run-query": [
-		{
-			"type": 0,
-			"value": "Izvedi poizvedbo"
-		}
-	],
-	"label.save": [
-		{
-			"type": 0,
-			"value": "Shrani"
-		}
-	],
-	"label.save-cohort": [
-		{
-			"type": 0,
-			"value": "Save as cohort"
-		}
-	],
-	"label.save-segment": [
-		{
-			"type": 0,
-			"value": "Save as segment"
-		}
-	],
-	"label.screen": [
-		{
-			"type": 0,
-			"value": "Screen"
-		}
-	],
-	"label.screens": [
-		{
-			"type": 0,
-			"value": "Zasloni"
-		}
-	],
-	"label.search": [
-		{
-			"type": 0,
-			"value": "Search"
-		}
-	],
-	"label.segment": [
-		{
-			"type": 0,
-			"value": "Segment"
-		}
-	],
-	"label.segments": [
-		{
-			"type": 0,
-			"value": "Segments"
-		}
-	],
-	"label.select": [
-		{
-			"type": 0,
-			"value": "Select"
-		}
-	],
-	"label.select-date": [
-		{
-			"type": 0,
-			"value": "Izberi datum"
-		}
-	],
-	"label.select-filter": [
-		{
-			"type": 0,
-			"value": "Izberi filter"
-		}
-	],
-	"label.select-role": [
-		{
-			"type": 0,
-			"value": "Select role"
-		}
-	],
-	"label.select-website": [
-		{
-			"type": 0,
-			"value": "Izberi spletno mesto"
-		}
-	],
-	"label.session": [
-		{
-			"type": 0,
-			"value": "Seja"
-		}
-	],
-	"label.session-data": [
-		{
-			"type": 0,
-			"value": "Podatki seje"
-		}
-	],
-	"label.sessions": [
-		{
-			"type": 0,
-			"value": "Seje"
-		}
-	],
-	"label.settings": [
-		{
-			"type": 0,
-			"value": "Nastavitve"
-		}
-	],
-	"label.share": [
-		{
-			"type": 0,
-			"value": "Deli"
-		}
-	],
-	"label.share-url": [
-		{
-			"type": 0,
-			"value": "Deli povezavo"
-		}
-	],
-	"label.single-day": [
-		{
-			"type": 0,
-			"value": "En dan"
-		}
-	],
-	"label.sms": [
-		{
-			"type": 0,
-			"value": "SMS"
-		}
-	],
-	"label.sources": [
-		{
-			"type": 0,
-			"value": "Viri"
-		}
-	],
-	"label.start-step": [
-		{
-			"type": 0,
-			"value": "Start Step"
-		}
-	],
-	"label.steps": [
-		{
-			"type": 0,
-			"value": "Steps"
-		}
-	],
-	"label.sum": [
-		{
-			"type": 0,
-			"value": "Seštevek"
-		}
-	],
-	"label.table": [
-		{
-			"type": 0,
-			"value": "Table"
-		}
-	],
-	"label.tablet": [
-		{
-			"type": 0,
-			"value": "Tablični računalnik"
-		}
-	],
-	"label.tag": [
-		{
-			"type": 0,
-			"value": "Oznaka"
-		}
-	],
-	"label.tags": [
-		{
-			"type": 0,
-			"value": "Oznake"
-		}
-	],
-	"label.terms": [
-		{
-			"type": 0,
-			"value": "Pogoji"
-		}
-	],
-	"label.theme": [
-		{
-			"type": 0,
-			"value": "Tema"
-		}
-	],
-	"label.this-month": [
-		{
-			"type": 0,
-			"value": "Ta mesec"
-		}
-	],
-	"label.this-week": [
-		{
-			"type": 0,
-			"value": "Ta teden"
-		}
-	],
-	"label.this-year": [
-		{
-			"type": 0,
-			"value": "To leto"
-		}
-	],
-	"label.timezone": [
-		{
-			"type": 0,
-			"value": "Časovni pas"
-		}
-	],
-	"label.title": [
-		{
-			"type": 0,
-			"value": "Naslov"
-		}
-	],
-	"label.today": [
-		{
-			"type": 0,
-			"value": "Danes"
-		}
-	],
-	"label.toggle-charts": [
-		{
-			"type": 0,
-			"value": "Preklopi grafe"
-		}
-	],
-	"label.total": [
-		{
-			"type": 0,
-			"value": "Skupaj"
-		}
-	],
-	"label.total-records": [
-		{
-			"type": 0,
-			"value": "Skupni zapisi"
-		}
-	],
-	"label.tracking-code": [
-		{
-			"type": 0,
-			"value": "Koda za sledenje"
-		}
-	],
-	"label.traffic": [
-		{
-			"type": 0,
-			"value": "Traffic"
-		}
-	],
-	"label.transactions": [
-		{
-			"type": 0,
-			"value": "Transactions"
-		}
-	],
-	"label.transfer": [
-		{
-			"type": 0,
-			"value": "Transfer"
-		}
-	],
-	"label.transfer-website": [
-		{
-			"type": 0,
-			"value": "Transfer website"
-		}
-	],
-	"label.true": [
-		{
-			"type": 0,
-			"value": "Pravilno"
-		}
-	],
-	"label.type": [
-		{
-			"type": 0,
-			"value": "Vrsta"
-		}
-	],
-	"label.unique": [
-		{
-			"type": 0,
-			"value": "Unikatni"
-		}
-	],
-	"label.unique-visitors": [
-		{
-			"type": 0,
-			"value": "Unikatni obiskovalci"
-		}
-	],
-	"label.uniqueCustomers": [
-		{
-			"type": 0,
-			"value": "Unique Customers"
-		}
-	],
-	"label.unknown": [
-		{
-			"type": 0,
-			"value": "Neznano"
-		}
-	],
-	"label.untitled": [
-		{
-			"type": 0,
-			"value": "Brez naslova"
-		}
-	],
-	"label.update": [
-		{
-			"type": 0,
-			"value": "Update"
-		}
-	],
-	"label.user": [
-		{
-			"type": 0,
-			"value": "Uporabnik"
-		}
-	],
-	"label.username": [
-		{
-			"type": 0,
-			"value": "Uporabniško ime"
-		}
-	],
-	"label.users": [
-		{
-			"type": 0,
-			"value": "Uporabniki"
-		}
-	],
-	"label.utm": [
-		{
-			"type": 0,
-			"value": "UTM"
-		}
-	],
-	"label.utm-description": [
-		{
-			"type": 0,
-			"value": "Track your campaigns through UTM parameters."
-		}
-	],
-	"label.value": [
-		{
-			"type": 0,
-			"value": "Vrednost"
-		}
-	],
-	"label.view": [
-		{
-			"type": 0,
-			"value": "Poglej"
-		}
-	],
-	"label.view-details": [
-		{
-			"type": 0,
-			"value": "Poglej podrobnosti"
-		}
-	],
-	"label.view-only": [
-		{
-			"type": 0,
-			"value": "Samo ogledovanje"
-		}
-	],
-	"label.views": [
-		{
-			"type": 0,
-			"value": "Obiski"
-		}
-	],
-	"label.views-per-visit": [
-		{
-			"type": 0,
-			"value": "Views per visit"
-		}
-	],
-	"label.visit-duration": [
-		{
-			"type": 0,
-			"value": "Povprečni čas obiska"
-		}
-	],
-	"label.visitors": [
-		{
-			"type": 0,
-			"value": "Obiskovalci"
-		}
-	],
-	"label.visits": [
-		{
-			"type": 0,
-			"value": "Visits"
-		}
-	],
-	"label.website": [
-		{
-			"type": 0,
-			"value": "Spletno mesto"
-		}
-	],
-	"label.website-id": [
-		{
-			"type": 0,
-			"value": "ID spletnega mesta"
-		}
-	],
-	"label.websites": [
-		{
-			"type": 0,
-			"value": "Spletnih mest"
-		}
-	],
-	"label.window": [
-		{
-			"type": 0,
-			"value": "Okno"
-		}
-	],
-	"label.yesterday": [
-		{
-			"type": 0,
-			"value": "Včeraj"
-		}
-	],
-	"message.action-confirmation": [
-		{
-			"type": 0,
-			"value": "Type "
-		},
-		{
-			"type": 1,
-			"value": "confirmation"
-		},
-		{
-			"type": 0,
-			"value": " in the box below to confirm."
-		}
-	],
-	"message.active-users": [
-		{
-			"type": 1,
-			"value": "x"
-		},
-		{
-			"type": 0,
-			"value": " trenutni "
-		},
-		{
-			"offset": 0,
-			"options": {
-				"one": {
-					"value": [
-						{
-							"type": 0,
-							"value": "obiskovalec"
-						}
-					]
-				},
-				"other": {
-					"value": [
-						{
-							"type": 0,
-							"value": "obiskovalcev"
-						}
-					]
-				}
-			},
-			"pluralType": "cardinal",
-			"type": 6,
-			"value": "x"
-		}
-	],
-	"message.bad-request": [
-		{
-			"type": 0,
-			"value": "Bad request"
-		}
-	],
-	"message.collected-data": [
-		{
-			"type": 0,
-			"value": "Collected data"
-		}
-	],
-	"message.confirm-delete": [
-		{
-			"type": 0,
-			"value": "Ste prepričani, da želite izbrisati "
-		},
-		{
-			"type": 1,
-			"value": "target"
-		},
-		{
-			"type": 0,
-			"value": "?"
-		}
-	],
-	"message.confirm-leave": [
-		{
-			"type": 0,
-			"value": "Ste prepričani, da želite zapustiti "
-		},
-		{
-			"type": 1,
-			"value": "target"
-		},
-		{
-			"type": 0,
-			"value": "?"
-		}
-	],
-	"message.confirm-remove": [
-		{
-			"type": 0,
-			"value": "Are you sure you want to remove "
-		},
-		{
-			"type": 1,
-			"value": "target"
-		},
-		{
-			"type": 0,
-			"value": "?"
-		}
-	],
-	"message.confirm-reset": [
-		{
-			"type": 0,
-			"value": "Ste prepričani, da želite ponastaviti statistiko "
-		},
-		{
-			"type": 1,
-			"value": "target"
-		},
-		{
-			"type": 0,
-			"value": "?"
-		}
-	],
-	"message.delete-org-warning": [
-		{
-			"type": 0,
-			"value": "Deleting a org will also delete all org websites."
-		}
-	],
-	"message.delete-website-warning": [
-		{
-			"type": 0,
-			"value": "Izbrisani bodo tudi vsi pripadajoči podatki."
-		}
-	],
-	"message.error": [
-		{
-			"type": 0,
-			"value": "Nekaj je šlo narobe."
-		}
-	],
-	"message.event-log": [
-		{
-			"type": 1,
-			"value": "event"
-		},
-		{
-			"type": 0,
-			"value": " na "
-		},
-		{
-			"type": 1,
-			"value": "url"
-		}
-	],
-	"message.forbidden": [
-		{
-			"type": 0,
-			"value": "Forbidden"
-		}
-	],
-	"message.go-to-settings": [
-		{
-			"type": 0,
-			"value": "Pojdi v nastavitve"
-		}
-	],
-	"message.incorrect-username-password": [
-		{
-			"type": 0,
-			"value": "Nepravilno uporabniško ime/geslo."
-		}
-	],
-	"message.invalid-domain": [
-		{
-			"type": 0,
-			"value": "Neveljavna domena"
-		}
-	],
-	"message.min-password-length": [
-		{
-			"type": 0,
-			"value": "Najmanjša dolžina je "
-		},
-		{
-			"type": 1,
-			"value": "n"
-		},
-		{
-			"type": 0,
-			"value": " znakov"
-		}
-	],
-	"message.new-version-available": [
-		{
-			"type": 0,
-			"value": "Na voljo je nova verzija programa Entrolytics "
-		},
-		{
-			"type": 1,
-			"value": "version"
-		},
-		{
-			"type": 0,
-			"value": "!"
-		}
-	],
-	"message.no-data-available": [
-		{
-			"type": 0,
-			"value": "Podatki niso na voljo."
-		}
-	],
-	"message.no-event-data": [
-		{
-			"type": 0,
-			"value": "Podatki o dogodku niso na voljo."
-		}
-	],
-	"message.no-match-password": [
-		{
-			"type": 0,
-			"value": "Gesli se ne ujemata"
-		}
-	],
-	"message.no-org-websites": [
-		{
-			"type": 0,
-			"value": "Ta ekipa nima spletnih mest."
-		}
-	],
-	"message.no-orgs": [
-		{
-			"type": 0,
-			"value": "Niste še ustvarili nobene ekipe."
-		}
-	],
-	"message.no-results-found": [
-		{
-			"type": 0,
-			"value": "Rezultatov ni bilo mogoče najti."
-		}
-	],
-	"message.no-users": [
-		{
-			"type": 0,
-			"value": "Ni uporabnikov."
-		}
-	],
-	"message.no-websites-configured": [
-		{
-			"type": 0,
-			"value": "Nimate nastavljenih nobenih spletnih mest."
-		}
-	],
-	"message.not-found": [
-		{
-			"type": 0,
-			"value": "Not found"
-		}
-	],
-	"message.nothing-selected": [
-		{
-			"type": 0,
-			"value": "Nothing selected."
-		}
-	],
-	"message.org-already-member": [
-		{
-			"type": 0,
-			"value": "Ste že član ekipe."
-		}
-	],
-	"message.org-not-found": [
-		{
-			"type": 0,
-			"value": "Ekipa ni bila najdena."
-		}
-	],
-	"message.org-websites-info": [
-		{
-			"type": 0,
-			"value": "Spletne strani si lahko ogleda vsak član ekipe."
-		}
-	],
-	"message.page-not-found": [
-		{
-			"type": 0,
-			"value": "Stran ni bila najdena."
-		}
-	],
-	"message.reset-website": [
-		{
-			"type": 0,
-			"value": "Za ponastavitev izbrisa tega spletnega mesta vnesite "
-		},
-		{
-			"type": 1,
-			"value": "confirmation"
-		},
-		{
-			"type": 0,
-			"value": " v spodnje polje."
-		}
-	],
-	"message.reset-website-warning": [
-		{
-			"type": 0,
-			"value": "Vse statistike za to spletno mesto bodo izbrisane, koda za sledenje pa bo ostala nespremenjena."
-		}
-	],
-	"message.saved": [
-		{
-			"type": 0,
-			"value": "Uspešno shranjeno."
-		}
-	],
-	"message.sever-error": [
-		{
-			"type": 0,
-			"value": "Server error"
-		}
-	],
-	"message.share-url": [
-		{
-			"type": 0,
-			"value": "To je javno dostopna povezava za "
-		},
-		{
-			"type": 1,
-			"value": "target"
-		},
-		{
-			"type": 0,
-			"value": "."
-		}
-	],
-	"message.tracking-code": [
-		{
-			"type": 0,
-			"value": "Koda za sledenje"
-		}
-	],
-	"message.transfer-org-website-to-user": [
-		{
-			"type": 0,
-			"value": "Transfer this website to your account?"
-		}
-	],
-	"message.transfer-user-website-to-org": [
-		{
-			"type": 0,
-			"value": "Select the org to transfer this website to."
-		}
-	],
-	"message.transfer-website": [
-		{
-			"type": 0,
-			"value": "Transfer website ownership to your account or another org."
-		}
-	],
-	"message.triggered-event": [
-		{
-			"type": 0,
-			"value": "Triggered event"
-		}
-	],
-	"message.unauthorized": [
-		{
-			"type": 0,
-			"value": "Unauthorized"
-		}
-	],
-	"message.user-deleted": [
-		{
-			"type": 0,
-			"value": "Uporabnik je izbrisan."
-		}
-	],
-	"message.viewed-page": [
-		{
-			"type": 0,
-			"value": "Viewed page"
-		}
-	],
-	"message.visitor-log": [
-		{
-			"type": 0,
-			"value": "Obiskovalec iz "
-		},
-		{
-			"type": 1,
-			"value": "country"
-		},
-		{
-			"type": 0,
-			"value": " uporablja "
-		},
-		{
-			"type": 1,
-			"value": "browser"
-		},
-		{
-			"type": 0,
-			"value": " na "
-		},
-		{
-			"type": 1,
-			"value": "os"
-		},
-		{
-			"type": 0,
-			"value": " "
-		},
-		{
-			"type": 1,
-			"value": "device"
-		}
-	]
+  "label.access-code": [
+    {
+      "type": 0,
+      "value": "Koda za dostop"
+    }
+  ],
+  "label.account": [
+    {
+      "type": 0,
+      "value": "Account"
+    }
+  ],
+  "label.action": [
+    {
+      "type": 0,
+      "value": "Action"
+    }
+  ],
+  "label.actions": [
+    {
+      "type": 0,
+      "value": "Dejanja"
+    }
+  ],
+  "label.activity": [
+    {
+      "type": 0,
+      "value": "Dnevnik dejavnosti"
+    }
+  ],
+  "label.add": [
+    {
+      "type": 0,
+      "value": "Dodaj"
+    }
+  ],
+  "label.add-board": [
+    {
+      "type": 0,
+      "value": "Dodaj tablo"
+    }
+  ],
+  "label.add-description": [
+    {
+      "type": 0,
+      "value": "Dodaj opis"
+    }
+  ],
+  "label.add-link": [
+    {
+      "type": 0,
+      "value": "Add link"
+    }
+  ],
+  "label.add-member": [
+    {
+      "type": 0,
+      "value": "Dodaj člana"
+    }
+  ],
+  "label.add-pixel": [
+    {
+      "type": 0,
+      "value": "Add pixel"
+    }
+  ],
+  "label.add-step": [
+    {
+      "type": 0,
+      "value": "Dodaj korak"
+    }
+  ],
+  "label.add-website": [
+    {
+      "type": 0,
+      "value": "Dodaj spletno mesto"
+    }
+  ],
+  "label.admin": [
+    {
+      "type": 0,
+      "value": "Administrator"
+    }
+  ],
+  "label.affiliate": [
+    {
+      "type": 0,
+      "value": "Partner"
+    }
+  ],
+  "label.after": [
+    {
+      "type": 0,
+      "value": "Po"
+    }
+  ],
+  "label.all": [
+    {
+      "type": 0,
+      "value": "Vsi"
+    }
+  ],
+  "label.all-time": [
+    {
+      "type": 0,
+      "value": "Ves čas"
+    }
+  ],
+  "label.analysis": [
+    {
+      "type": 0,
+      "value": "Analysis"
+    }
+  ],
+  "label.analytics": [
+    {
+      "type": 0,
+      "value": "Analitika"
+    }
+  ],
+  "label.application": [
+    {
+      "type": 0,
+      "value": "Application"
+    }
+  ],
+  "label.apply": [
+    {
+      "type": 0,
+      "value": "Uporabi"
+    }
+  ],
+  "label.attribution": [
+    {
+      "type": 0,
+      "value": "Pripis"
+    }
+  ],
+  "label.attribution-description": [
+    {
+      "type": 0,
+      "value": "Oglejte si, kako uporabniki sodelujejo z vašim marketingom in kaj spodbuja konverzije."
+    }
+  ],
+  "label.audience": [
+    {
+      "type": 0,
+      "value": "Audience"
+    }
+  ],
+  "label.average": [
+    {
+      "type": 0,
+      "value": "Povprečno"
+    }
+  ],
+  "label.back": [
+    {
+      "type": 0,
+      "value": "Nazaj"
+    }
+  ],
+  "label.before": [
+    {
+      "type": 0,
+      "value": "Pred"
+    }
+  ],
+  "label.behavior": [
+    {
+      "type": 0,
+      "value": "Behavior"
+    }
+  ],
+  "label.boards": [
+    {
+      "type": 0,
+      "value": "Table"
+    }
+  ],
+  "label.bounce-rate": [
+    {
+      "type": 0,
+      "value": "Odbojna stopnja"
+    }
+  ],
+  "label.breakdown": [
+    {
+      "type": 0,
+      "value": "Razčlenitev"
+    }
+  ],
+  "label.browser": [
+    {
+      "type": 0,
+      "value": "Brskalnik"
+    }
+  ],
+  "label.browsers": [
+    {
+      "type": 0,
+      "value": "Brskalniki"
+    }
+  ],
+  "label.campaigns": [
+    {
+      "type": 0,
+      "value": "Kampanje"
+    }
+  ],
+  "label.cancel": [
+    {
+      "type": 0,
+      "value": "Prekliči"
+    }
+  ],
+  "label.change-password": [
+    {
+      "type": 0,
+      "value": "Zamenjaj geslo"
+    }
+  ],
+  "label.channel": [
+    {
+      "type": 0,
+      "value": "Channel"
+    }
+  ],
+  "label.channels": [
+    {
+      "type": 0,
+      "value": "Kanali"
+    }
+  ],
+  "label.chart": [
+    {
+      "type": 0,
+      "value": "Chart"
+    }
+  ],
+  "label.cities": [
+    {
+      "type": 0,
+      "value": "Mesta"
+    }
+  ],
+  "label.city": [
+    {
+      "type": 0,
+      "value": "Mesto"
+    }
+  ],
+  "label.clear-all": [
+    {
+      "type": 0,
+      "value": "Počisti vse"
+    }
+  ],
+  "label.cohort": [
+    {
+      "type": 0,
+      "value": "Kohorta"
+    }
+  ],
+  "label.cohorts": [
+    {
+      "type": 0,
+      "value": "Cohorts"
+    }
+  ],
+  "label.compare": [
+    {
+      "type": 0,
+      "value": "Primerjaj"
+    }
+  ],
+  "label.compare-dates": [
+    {
+      "type": 0,
+      "value": "Primerjaj datume"
+    }
+  ],
+  "label.confirm": [
+    {
+      "type": 0,
+      "value": "Potrdi"
+    }
+  ],
+  "label.confirm-password": [
+    {
+      "type": 0,
+      "value": "Potrdi geslo"
+    }
+  ],
+  "label.contains": [
+    {
+      "type": 0,
+      "value": "Vsebuje"
+    }
+  ],
+  "label.content": [
+    {
+      "type": 0,
+      "value": "Vsebina"
+    }
+  ],
+  "label.continue": [
+    {
+      "type": 0,
+      "value": "Nadaljuj"
+    }
+  ],
+  "label.conversion": [
+    {
+      "type": 0,
+      "value": "Konverzija"
+    }
+  ],
+  "label.conversion-rate": [
+    {
+      "type": 0,
+      "value": "Stopnja konverzije"
+    }
+  ],
+  "label.conversion-step": [
+    {
+      "type": 0,
+      "value": "Korak konverzije"
+    }
+  ],
+  "label.count": [
+    {
+      "type": 0,
+      "value": "Števec"
+    }
+  ],
+  "label.countries": [
+    {
+      "type": 0,
+      "value": "Države"
+    }
+  ],
+  "label.country": [
+    {
+      "type": 0,
+      "value": "Država"
+    }
+  ],
+  "label.create": [
+    {
+      "type": 0,
+      "value": "Create"
+    }
+  ],
+  "label.create-org": [
+    {
+      "type": 0,
+      "value": "Ustvari ekipo"
+    }
+  ],
+  "label.create-report": [
+    {
+      "type": 0,
+      "value": "Ustvari poročilo"
+    }
+  ],
+  "label.create-user": [
+    {
+      "type": 0,
+      "value": "Ustvari uporabnika"
+    }
+  ],
+  "label.created": [
+    {
+      "type": 0,
+      "value": "Ustvarjeno"
+    }
+  ],
+  "label.created-by": [
+    {
+      "type": 0,
+      "value": "Ustvaril"
+    }
+  ],
+  "label.criteria": [
+    {
+      "type": 0,
+      "value": "Criteria"
+    }
+  ],
+  "label.currency": [
+    {
+      "type": 0,
+      "value": "Valuta"
+    }
+  ],
+  "label.current": [
+    {
+      "type": 0,
+      "value": "Trenutno"
+    }
+  ],
+  "label.current-password": [
+    {
+      "type": 0,
+      "value": "Trenutno geslo"
+    }
+  ],
+  "label.custom-range": [
+    {
+      "type": 0,
+      "value": "Obdobje po meri"
+    }
+  ],
+  "label.dashboard": [
+    {
+      "type": 0,
+      "value": "Nadzorna plošča"
+    }
+  ],
+  "label.data": [
+    {
+      "type": 0,
+      "value": "Podatki"
+    }
+  ],
+  "label.date": [
+    {
+      "type": 0,
+      "value": "Datum"
+    }
+  ],
+  "label.date-range": [
+    {
+      "type": 0,
+      "value": "Časovno obdobje"
+    }
+  ],
+  "label.day": [
+    {
+      "type": 0,
+      "value": "Dan"
+    }
+  ],
+  "label.default-date-range": [
+    {
+      "type": 0,
+      "value": "Privzeto časovno obdobje"
+    }
+  ],
+  "label.delete": [
+    {
+      "type": 0,
+      "value": "Izbriši"
+    }
+  ],
+  "label.delete-org": [
+    {
+      "type": 0,
+      "value": "Izbriši ekipo"
+    }
+  ],
+  "label.delete-report": [
+    {
+      "type": 0,
+      "value": "Izbriši poročilo"
+    }
+  ],
+  "label.delete-user": [
+    {
+      "type": 0,
+      "value": "Izbriši uporabnika"
+    }
+  ],
+  "label.delete-website": [
+    {
+      "type": 0,
+      "value": "Izbriši spletno mesto"
+    }
+  ],
+  "label.description": [
+    {
+      "type": 0,
+      "value": "Opis"
+    }
+  ],
+  "label.desktop": [
+    {
+      "type": 0,
+      "value": "Namizni računalnik"
+    }
+  ],
+  "label.destination-url": [
+    {
+      "type": 0,
+      "value": "Destination URL"
+    }
+  ],
+  "label.details": [
+    {
+      "type": 0,
+      "value": "Podrobnosti"
+    }
+  ],
+  "label.device": [
+    {
+      "type": 0,
+      "value": "Naprava"
+    }
+  ],
+  "label.devices": [
+    {
+      "type": 0,
+      "value": "Naprave"
+    }
+  ],
+  "label.direct": [
+    {
+      "type": 0,
+      "value": "Neposredno"
+    }
+  ],
+  "label.dismiss": [
+    {
+      "type": 0,
+      "value": "Prezri"
+    }
+  ],
+  "label.distinct-id": [
+    {
+      "type": 0,
+      "value": "Unikatni ID"
+    }
+  ],
+  "label.does-not-contain": [
+    {
+      "type": 0,
+      "value": "Ne vsebuje"
+    }
+  ],
+  "label.does-not-include": [
+    {
+      "type": 0,
+      "value": "Ne vključuje"
+    }
+  ],
+  "label.doest-not-exist": [
+    {
+      "type": 0,
+      "value": "Ne obstaja"
+    }
+  ],
+  "label.domain": [
+    {
+      "type": 0,
+      "value": "Domena"
+    }
+  ],
+  "label.download": [
+    {
+      "type": 0,
+      "value": "Download"
+    }
+  ],
+  "label.dropoff": [
+    {
+      "type": 0,
+      "value": "Zapustitev"
+    }
+  ],
+  "label.edit": [
+    {
+      "type": 0,
+      "value": "Uredi"
+    }
+  ],
+  "label.edit-dashboard": [
+    {
+      "type": 0,
+      "value": "Uredi nadzorno ploščo"
+    }
+  ],
+  "label.edit-member": [
+    {
+      "type": 0,
+      "value": "Uredi člana"
+    }
+  ],
+  "label.email": [
+    {
+      "type": 0,
+      "value": "Email"
+    }
+  ],
+  "label.enable-share-url": [
+    {
+      "type": 0,
+      "value": "Uredi povezavo za deljenje"
+    }
+  ],
+  "label.end-step": [
+    {
+      "type": 0,
+      "value": "Končni korak"
+    }
+  ],
+  "label.entry": [
+    {
+      "type": 0,
+      "value": "Vhodni URL"
+    }
+  ],
+  "label.environment": [
+    {
+      "type": 0,
+      "value": "Environment"
+    }
+  ],
+  "label.event": [
+    {
+      "type": 0,
+      "value": "Dogodek"
+    }
+  ],
+  "label.event-data": [
+    {
+      "type": 0,
+      "value": "Podatki dogodka"
+    }
+  ],
+  "label.event-name": [
+    {
+      "type": 0,
+      "value": "Ime dogodka"
+    }
+  ],
+  "label.events": [
+    {
+      "type": 0,
+      "value": "Dogodki"
+    }
+  ],
+  "label.exists": [
+    {
+      "type": 0,
+      "value": "Obstaja"
+    }
+  ],
+  "label.exit": [
+    {
+      "type": 0,
+      "value": "Exit URL"
+    }
+  ],
+  "label.false": [
+    {
+      "type": 0,
+      "value": "Napačno"
+    }
+  ],
+  "label.field": [
+    {
+      "type": 0,
+      "value": "Polje"
+    }
+  ],
+  "label.fields": [
+    {
+      "type": 0,
+      "value": "Polja"
+    }
+  ],
+  "label.filter": [
+    {
+      "type": 0,
+      "value": "Filter"
+    }
+  ],
+  "label.filter-combined": [
+    {
+      "type": 0,
+      "value": "Skupaj"
+    }
+  ],
+  "label.filter-raw": [
+    {
+      "type": 0,
+      "value": "Neobdelano"
+    }
+  ],
+  "label.filters": [
+    {
+      "type": 0,
+      "value": "Filtri"
+    }
+  ],
+  "label.first-click": [
+    {
+      "type": 0,
+      "value": "Prvi klik"
+    }
+  ],
+  "label.first-seen": [
+    {
+      "type": 0,
+      "value": "First seen"
+    }
+  ],
+  "label.funnel": [
+    {
+      "type": 0,
+      "value": "Prodajni lijak"
+    }
+  ],
+  "label.funnel-description": [
+    {
+      "type": 0,
+      "value": "Understand the conversion and drop-off rate of users."
+    }
+  ],
+  "label.funnels": [
+    {
+      "type": 0,
+      "value": "Lijaki"
+    }
+  ],
+  "label.goal": [
+    {
+      "type": 0,
+      "value": "Cilj"
+    }
+  ],
+  "label.goals": [
+    {
+      "type": 0,
+      "value": "Cilji"
+    }
+  ],
+  "label.goals-description": [
+    {
+      "type": 0,
+      "value": "Spremljajte svoje cilje za oglede strani in dogodke."
+    }
+  ],
+  "label.greater-than": [
+    {
+      "type": 0,
+      "value": "Večje od"
+    }
+  ],
+  "label.greater-than-equals": [
+    {
+      "type": 0,
+      "value": "Večje ali enako kot"
+    }
+  ],
+  "label.grouped": [
+    {
+      "type": 0,
+      "value": "Združeno"
+    }
+  ],
+  "label.growth": [
+    {
+      "type": 0,
+      "value": "Growth"
+    }
+  ],
+  "label.hostname": [
+    {
+      "type": 0,
+      "value": "Ime gostitelja"
+    }
+  ],
+  "label.includes": [
+    {
+      "type": 0,
+      "value": "Vključuje"
+    }
+  ],
+  "label.insight": [
+    {
+      "type": 0,
+      "value": "Vpogled"
+    }
+  ],
+  "label.insights": [
+    {
+      "type": 0,
+      "value": "Vpogled"
+    }
+  ],
+  "label.insights-description": [
+    {
+      "type": 0,
+      "value": "Dive deeper into your data by using segments and filters."
+    }
+  ],
+  "label.invalid-url": [
+    {
+      "type": 0,
+      "value": "Invalid URL"
+    }
+  ],
+  "label.is": [
+    {
+      "type": 0,
+      "value": "Je"
+    }
+  ],
+  "label.is-false": [
+    {
+      "type": 0,
+      "value": "Je napačno"
+    }
+  ],
+  "label.is-not": [
+    {
+      "type": 0,
+      "value": "Ni"
+    }
+  ],
+  "label.is-not-set": [
+    {
+      "type": 0,
+      "value": "Ni nastavljeno"
+    }
+  ],
+  "label.is-set": [
+    {
+      "type": 0,
+      "value": "Je nastavljeno"
+    }
+  ],
+  "label.is-true": [
+    {
+      "type": 0,
+      "value": "Je res"
+    }
+  ],
+  "label.join": [
+    {
+      "type": 0,
+      "value": "Pridruži se"
+    }
+  ],
+  "label.join-org": [
+    {
+      "type": 0,
+      "value": "Pridruži se ekipi"
+    }
+  ],
+  "label.journey": [
+    {
+      "type": 0,
+      "value": "Potovanje"
+    }
+  ],
+  "label.journey-description": [
+    {
+      "type": 0,
+      "value": "Razumite, kako uporabniki krmarijo po vašem spletnem mestu."
+    }
+  ],
+  "label.journeys": [
+    {
+      "type": 0,
+      "value": "Potovanja"
+    }
+  ],
+  "label.language": [
+    {
+      "type": 0,
+      "value": "Jezik"
+    }
+  ],
+  "label.languages": [
+    {
+      "type": 0,
+      "value": "Jeziki"
+    }
+  ],
+  "label.laptop": [
+    {
+      "type": 0,
+      "value": "Prenosni računalnik"
+    }
+  ],
+  "label.last-click": [
+    {
+      "type": 0,
+      "value": "Zadnji klik"
+    }
+  ],
+  "label.last-days": [
+    {
+      "type": 0,
+      "value": "Zadnjih "
+    },
+    {
+      "type": 1,
+      "value": "x"
+    },
+    {
+      "type": 0,
+      "value": " dni"
+    }
+  ],
+  "label.last-hours": [
+    {
+      "type": 0,
+      "value": "Zadnjih "
+    },
+    {
+      "type": 1,
+      "value": "x"
+    },
+    {
+      "type": 0,
+      "value": " ur"
+    }
+  ],
+  "label.last-months": [
+    {
+      "type": 0,
+      "value": "Zadnjih "
+    },
+    {
+      "type": 1,
+      "value": "x"
+    },
+    {
+      "type": 0,
+      "value": " mesecev"
+    }
+  ],
+  "label.last-seen": [
+    {
+      "type": 0,
+      "value": "Zadnjič videno"
+    }
+  ],
+  "label.leave": [
+    {
+      "type": 0,
+      "value": "Zapusti"
+    }
+  ],
+  "label.leave-org": [
+    {
+      "type": 0,
+      "value": "Zapusti ekipo"
+    }
+  ],
+  "label.less-than": [
+    {
+      "type": 0,
+      "value": "Manjše kot"
+    }
+  ],
+  "label.less-than-equals": [
+    {
+      "type": 0,
+      "value": "Manjše ali enako kot"
+    }
+  ],
+  "label.link": [
+    {
+      "type": 0,
+      "value": "Link"
+    }
+  ],
+  "label.links": [
+    {
+      "type": 0,
+      "value": "Povezave"
+    }
+  ],
+  "label.location": [
+    {
+      "type": 0,
+      "value": "Location"
+    }
+  ],
+  "label.login": [
+    {
+      "type": 0,
+      "value": "Prijava"
+    }
+  ],
+  "label.logout": [
+    {
+      "type": 0,
+      "value": "Odjava"
+    }
+  ],
+  "label.manage": [
+    {
+      "type": 0,
+      "value": "Manage"
+    }
+  ],
+  "label.manager": [
+    {
+      "type": 0,
+      "value": "Manager"
+    }
+  ],
+  "label.max": [
+    {
+      "type": 0,
+      "value": "Največ"
+    }
+  ],
+  "label.maximize": [
+    {
+      "type": 0,
+      "value": "Razširi"
+    }
+  ],
+  "label.medium": [
+    {
+      "type": 0,
+      "value": "Srednje"
+    }
+  ],
+  "label.member": [
+    {
+      "type": 0,
+      "value": "Član"
+    }
+  ],
+  "label.members": [
+    {
+      "type": 0,
+      "value": "Člani"
+    }
+  ],
+  "label.min": [
+    {
+      "type": 0,
+      "value": "Najmanj"
+    }
+  ],
+  "label.mobile": [
+    {
+      "type": 0,
+      "value": "Mobilne naprave"
+    }
+  ],
+  "label.model": [
+    {
+      "type": 0,
+      "value": "Model"
+    }
+  ],
+  "label.more": [
+    {
+      "type": 0,
+      "value": "Več"
+    }
+  ],
+  "label.my-account": [
+    {
+      "type": 0,
+      "value": "Moj račun"
+    }
+  ],
+  "label.my-websites": [
+    {
+      "type": 0,
+      "value": "Moja spletna mesta"
+    }
+  ],
+  "label.name": [
+    {
+      "type": 0,
+      "value": "Ime"
+    }
+  ],
+  "label.new-password": [
+    {
+      "type": 0,
+      "value": "Novo geslo"
+    }
+  ],
+  "label.none": [
+    {
+      "type": 0,
+      "value": "Noben"
+    }
+  ],
+  "label.number-of-records": [
+    {
+      "type": 1,
+      "value": "x"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "one": {
+          "value": [
+            {
+              "type": 0,
+              "value": "record"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "records"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "x"
+    }
+  ],
+  "label.ok": [
+    {
+      "type": 0,
+      "value": "OK"
+    }
+  ],
+  "label.online": [
+    {
+      "type": 0,
+      "value": "Online"
+    }
+  ],
+  "label.org": [
+    {
+      "type": 0,
+      "value": "Ekipa"
+    }
+  ],
+  "label.org-id": [
+    {
+      "type": 0,
+      "value": "ID ekipe"
+    }
+  ],
+  "label.org-manager": [
+    {
+      "type": 0,
+      "value": "Vodja ekipe"
+    }
+  ],
+  "label.org-member": [
+    {
+      "type": 0,
+      "value": "Član ekipe"
+    }
+  ],
+  "label.org-name": [
+    {
+      "type": 0,
+      "value": "Ime ekipe"
+    }
+  ],
+  "label.org-owner": [
+    {
+      "type": 0,
+      "value": "Lastnik ekipe"
+    }
+  ],
+  "label.org-settings": [
+    {
+      "type": 0,
+      "value": "Nastavitve ekipe"
+    }
+  ],
+  "label.org-view-only": [
+    {
+      "type": 0,
+      "value": "Org view only"
+    }
+  ],
+  "label.org-websites": [
+    {
+      "type": 0,
+      "value": "Spletna mesta ekipe"
+    }
+  ],
+  "label.organic-search": [
+    {
+      "type": 0,
+      "value": "Organsko iskanje"
+    }
+  ],
+  "label.organic-shopping": [
+    {
+      "type": 0,
+      "value": "Organski nakupi"
+    }
+  ],
+  "label.organic-social": [
+    {
+      "type": 0,
+      "value": "Organska družbena omrežja"
+    }
+  ],
+  "label.organic-video": [
+    {
+      "type": 0,
+      "value": "Organski video"
+    }
+  ],
+  "label.orgs": [
+    {
+      "type": 0,
+      "value": "Ekipe"
+    }
+  ],
+  "label.os": [
+    {
+      "type": 0,
+      "value": "OS"
+    }
+  ],
+  "label.other": [
+    {
+      "type": 0,
+      "value": "Drugo"
+    }
+  ],
+  "label.overview": [
+    {
+      "type": 0,
+      "value": "Pregled"
+    }
+  ],
+  "label.owner": [
+    {
+      "type": 0,
+      "value": "Lastnik"
+    }
+  ],
+  "label.page": [
+    {
+      "type": 0,
+      "value": "Stran"
+    }
+  ],
+  "label.page-of": [
+    {
+      "type": 0,
+      "value": "Stran "
+    },
+    {
+      "type": 1,
+      "value": "current"
+    },
+    {
+      "type": 0,
+      "value": " od "
+    },
+    {
+      "type": 1,
+      "value": "total"
+    }
+  ],
+  "label.page-views": [
+    {
+      "type": 0,
+      "value": "Obiski strani"
+    }
+  ],
+  "label.pageTitle": [
+    {
+      "type": 0,
+      "value": "Naslov strani"
+    }
+  ],
+  "label.pages": [
+    {
+      "type": 0,
+      "value": "Strani"
+    }
+  ],
+  "label.paid-ads": [
+    {
+      "type": 0,
+      "value": "Plačani oglasi"
+    }
+  ],
+  "label.paid-search": [
+    {
+      "type": 0,
+      "value": "Plačano iskanje"
+    }
+  ],
+  "label.paid-shopping": [
+    {
+      "type": 0,
+      "value": "Plačani nakupi"
+    }
+  ],
+  "label.paid-social": [
+    {
+      "type": 0,
+      "value": "Plačana družbena omrežja"
+    }
+  ],
+  "label.paid-video": [
+    {
+      "type": 0,
+      "value": "Plačani video"
+    }
+  ],
+  "label.password": [
+    {
+      "type": 0,
+      "value": "Geslo"
+    }
+  ],
+  "label.path": [
+    {
+      "type": 0,
+      "value": "Pot"
+    }
+  ],
+  "label.paths": [
+    {
+      "type": 0,
+      "value": "Poti"
+    }
+  ],
+  "label.pixel": [
+    {
+      "type": 0,
+      "value": "Pixel"
+    }
+  ],
+  "label.pixels": [
+    {
+      "type": 0,
+      "value": "Pikslov"
+    }
+  ],
+  "label.powered-by": [
+    {
+      "type": 0,
+      "value": "Poganja "
+    },
+    {
+      "type": 1,
+      "value": "name"
+    }
+  ],
+  "label.preferences": [
+    {
+      "type": 0,
+      "value": "Preferences"
+    }
+  ],
+  "label.previous": [
+    {
+      "type": 0,
+      "value": "Prejšnji"
+    }
+  ],
+  "label.previous-period": [
+    {
+      "type": 0,
+      "value": "Prejšnje obdobje"
+    }
+  ],
+  "label.previous-year": [
+    {
+      "type": 0,
+      "value": "Prejšnje leto"
+    }
+  ],
+  "label.profile": [
+    {
+      "type": 0,
+      "value": "Profil"
+    }
+  ],
+  "label.profiles": [
+    {
+      "type": 0,
+      "value": "Profiles"
+    }
+  ],
+  "label.properties": [
+    {
+      "type": 0,
+      "value": "Lastnosti"
+    }
+  ],
+  "label.property": [
+    {
+      "type": 0,
+      "value": "Lastnost"
+    }
+  ],
+  "label.queries": [
+    {
+      "type": 0,
+      "value": "Poizvedbe"
+    }
+  ],
+  "label.query": [
+    {
+      "type": 0,
+      "value": "Poizvedba"
+    }
+  ],
+  "label.query-parameters": [
+    {
+      "type": 0,
+      "value": "Parametri poizvedbe"
+    }
+  ],
+  "label.realtime": [
+    {
+      "type": 0,
+      "value": "V živo"
+    }
+  ],
+  "label.referral": [
+    {
+      "type": 0,
+      "value": "Napoten"
+    }
+  ],
+  "label.referrer": [
+    {
+      "type": 0,
+      "value": "Vir"
+    }
+  ],
+  "label.referrers": [
+    {
+      "type": 0,
+      "value": "Viri"
+    }
+  ],
+  "label.refresh": [
+    {
+      "type": 0,
+      "value": "Osveži"
+    }
+  ],
+  "label.regenerate": [
+    {
+      "type": 0,
+      "value": "Ponovno generiraj"
+    }
+  ],
+  "label.region": [
+    {
+      "type": 0,
+      "value": "Regija"
+    }
+  ],
+  "label.regions": [
+    {
+      "type": 0,
+      "value": "Regije"
+    }
+  ],
+  "label.remaining": [
+    {
+      "type": 0,
+      "value": "Preostalo"
+    }
+  ],
+  "label.remove": [
+    {
+      "type": 0,
+      "value": "Odstrani"
+    }
+  ],
+  "label.remove-member": [
+    {
+      "type": 0,
+      "value": "Remove member"
+    }
+  ],
+  "label.reports": [
+    {
+      "type": 0,
+      "value": "Poročila"
+    }
+  ],
+  "label.required": [
+    {
+      "type": 0,
+      "value": "Zahtevano"
+    }
+  ],
+  "label.reset": [
+    {
+      "type": 0,
+      "value": "Ponastavi"
+    }
+  ],
+  "label.reset-website": [
+    {
+      "type": 0,
+      "value": "Ponastavi statistiko"
+    }
+  ],
+  "label.retention": [
+    {
+      "type": 0,
+      "value": "Ohranjanje uporabnikov"
+    }
+  ],
+  "label.retention-description": [
+    {
+      "type": 0,
+      "value": "Measure your website stickiness by tracking how often users return."
+    }
+  ],
+  "label.revenue": [
+    {
+      "type": 0,
+      "value": "Prihodek"
+    }
+  ],
+  "label.revenue-description": [
+    {
+      "type": 0,
+      "value": "Oglejte si svoj prihodek skozi čas."
+    }
+  ],
+  "label.role": [
+    {
+      "type": 0,
+      "value": "Vloga"
+    }
+  ],
+  "label.run-query": [
+    {
+      "type": 0,
+      "value": "Izvedi poizvedbo"
+    }
+  ],
+  "label.save": [
+    {
+      "type": 0,
+      "value": "Shrani"
+    }
+  ],
+  "label.save-cohort": [
+    {
+      "type": 0,
+      "value": "Save as cohort"
+    }
+  ],
+  "label.save-segment": [
+    {
+      "type": 0,
+      "value": "Save as segment"
+    }
+  ],
+  "label.screen": [
+    {
+      "type": 0,
+      "value": "Screen"
+    }
+  ],
+  "label.screens": [
+    {
+      "type": 0,
+      "value": "Zasloni"
+    }
+  ],
+  "label.search": [
+    {
+      "type": 0,
+      "value": "Search"
+    }
+  ],
+  "label.segment": [
+    {
+      "type": 0,
+      "value": "Segment"
+    }
+  ],
+  "label.segments": [
+    {
+      "type": 0,
+      "value": "Segments"
+    }
+  ],
+  "label.select": [
+    {
+      "type": 0,
+      "value": "Select"
+    }
+  ],
+  "label.select-date": [
+    {
+      "type": 0,
+      "value": "Izberi datum"
+    }
+  ],
+  "label.select-filter": [
+    {
+      "type": 0,
+      "value": "Izberi filter"
+    }
+  ],
+  "label.select-role": [
+    {
+      "type": 0,
+      "value": "Select role"
+    }
+  ],
+  "label.select-website": [
+    {
+      "type": 0,
+      "value": "Izberi spletno mesto"
+    }
+  ],
+  "label.session": [
+    {
+      "type": 0,
+      "value": "Seja"
+    }
+  ],
+  "label.session-data": [
+    {
+      "type": 0,
+      "value": "Podatki seje"
+    }
+  ],
+  "label.sessions": [
+    {
+      "type": 0,
+      "value": "Seje"
+    }
+  ],
+  "label.settings": [
+    {
+      "type": 0,
+      "value": "Nastavitve"
+    }
+  ],
+  "label.share": [
+    {
+      "type": 0,
+      "value": "Deli"
+    }
+  ],
+  "label.share-url": [
+    {
+      "type": 0,
+      "value": "Deli povezavo"
+    }
+  ],
+  "label.single-day": [
+    {
+      "type": 0,
+      "value": "En dan"
+    }
+  ],
+  "label.sms": [
+    {
+      "type": 0,
+      "value": "SMS"
+    }
+  ],
+  "label.sources": [
+    {
+      "type": 0,
+      "value": "Viri"
+    }
+  ],
+  "label.start-step": [
+    {
+      "type": 0,
+      "value": "Start Step"
+    }
+  ],
+  "label.steps": [
+    {
+      "type": 0,
+      "value": "Steps"
+    }
+  ],
+  "label.sum": [
+    {
+      "type": 0,
+      "value": "Seštevek"
+    }
+  ],
+  "label.table": [
+    {
+      "type": 0,
+      "value": "Table"
+    }
+  ],
+  "label.tablet": [
+    {
+      "type": 0,
+      "value": "Tablični računalnik"
+    }
+  ],
+  "label.tag": [
+    {
+      "type": 0,
+      "value": "Oznaka"
+    }
+  ],
+  "label.tags": [
+    {
+      "type": 0,
+      "value": "Oznake"
+    }
+  ],
+  "label.terms": [
+    {
+      "type": 0,
+      "value": "Pogoji"
+    }
+  ],
+  "label.theme": [
+    {
+      "type": 0,
+      "value": "Tema"
+    }
+  ],
+  "label.this-month": [
+    {
+      "type": 0,
+      "value": "Ta mesec"
+    }
+  ],
+  "label.this-week": [
+    {
+      "type": 0,
+      "value": "Ta teden"
+    }
+  ],
+  "label.this-year": [
+    {
+      "type": 0,
+      "value": "To leto"
+    }
+  ],
+  "label.timezone": [
+    {
+      "type": 0,
+      "value": "Časovni pas"
+    }
+  ],
+  "label.title": [
+    {
+      "type": 0,
+      "value": "Naslov"
+    }
+  ],
+  "label.today": [
+    {
+      "type": 0,
+      "value": "Danes"
+    }
+  ],
+  "label.toggle-charts": [
+    {
+      "type": 0,
+      "value": "Preklopi grafe"
+    }
+  ],
+  "label.total": [
+    {
+      "type": 0,
+      "value": "Skupaj"
+    }
+  ],
+  "label.total-records": [
+    {
+      "type": 0,
+      "value": "Skupni zapisi"
+    }
+  ],
+  "label.tracking-code": [
+    {
+      "type": 0,
+      "value": "Koda za sledenje"
+    }
+  ],
+  "label.traffic": [
+    {
+      "type": 0,
+      "value": "Traffic"
+    }
+  ],
+  "label.transactions": [
+    {
+      "type": 0,
+      "value": "Transactions"
+    }
+  ],
+  "label.transfer": [
+    {
+      "type": 0,
+      "value": "Transfer"
+    }
+  ],
+  "label.transfer-website": [
+    {
+      "type": 0,
+      "value": "Transfer website"
+    }
+  ],
+  "label.true": [
+    {
+      "type": 0,
+      "value": "Pravilno"
+    }
+  ],
+  "label.type": [
+    {
+      "type": 0,
+      "value": "Vrsta"
+    }
+  ],
+  "label.unique": [
+    {
+      "type": 0,
+      "value": "Unikatni"
+    }
+  ],
+  "label.unique-visitors": [
+    {
+      "type": 0,
+      "value": "Unikatni obiskovalci"
+    }
+  ],
+  "label.uniqueCustomers": [
+    {
+      "type": 0,
+      "value": "Unique Customers"
+    }
+  ],
+  "label.unknown": [
+    {
+      "type": 0,
+      "value": "Neznano"
+    }
+  ],
+  "label.untitled": [
+    {
+      "type": 0,
+      "value": "Brez naslova"
+    }
+  ],
+  "label.update": [
+    {
+      "type": 0,
+      "value": "Update"
+    }
+  ],
+  "label.user": [
+    {
+      "type": 0,
+      "value": "Uporabnik"
+    }
+  ],
+  "label.username": [
+    {
+      "type": 0,
+      "value": "Uporabniško ime"
+    }
+  ],
+  "label.users": [
+    {
+      "type": 0,
+      "value": "Uporabniki"
+    }
+  ],
+  "label.utm": [
+    {
+      "type": 0,
+      "value": "UTM"
+    }
+  ],
+  "label.utm-description": [
+    {
+      "type": 0,
+      "value": "Track your campaigns through UTM parameters."
+    }
+  ],
+  "label.value": [
+    {
+      "type": 0,
+      "value": "Vrednost"
+    }
+  ],
+  "label.view": [
+    {
+      "type": 0,
+      "value": "Poglej"
+    }
+  ],
+  "label.view-details": [
+    {
+      "type": 0,
+      "value": "Poglej podrobnosti"
+    }
+  ],
+  "label.view-only": [
+    {
+      "type": 0,
+      "value": "Samo ogledovanje"
+    }
+  ],
+  "label.views": [
+    {
+      "type": 0,
+      "value": "Obiski"
+    }
+  ],
+  "label.views-per-visit": [
+    {
+      "type": 0,
+      "value": "Views per visit"
+    }
+  ],
+  "label.visit-duration": [
+    {
+      "type": 0,
+      "value": "Povprečni čas obiska"
+    }
+  ],
+  "label.visitors": [
+    {
+      "type": 0,
+      "value": "Obiskovalci"
+    }
+  ],
+  "label.visits": [
+    {
+      "type": 0,
+      "value": "Visits"
+    }
+  ],
+  "label.website": [
+    {
+      "type": 0,
+      "value": "Spletno mesto"
+    }
+  ],
+  "label.website-id": [
+    {
+      "type": 0,
+      "value": "ID spletnega mesta"
+    }
+  ],
+  "label.websites": [
+    {
+      "type": 0,
+      "value": "Spletnih mest"
+    }
+  ],
+  "label.window": [
+    {
+      "type": 0,
+      "value": "Okno"
+    }
+  ],
+  "label.yesterday": [
+    {
+      "type": 0,
+      "value": "Včeraj"
+    }
+  ],
+  "message.action-confirmation": [
+    {
+      "type": 0,
+      "value": "Type "
+    },
+    {
+      "type": 1,
+      "value": "confirmation"
+    },
+    {
+      "type": 0,
+      "value": " in the box below to confirm."
+    }
+  ],
+  "message.active-users": [
+    {
+      "type": 1,
+      "value": "x"
+    },
+    {
+      "type": 0,
+      "value": " trenutni "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "one": {
+          "value": [
+            {
+              "type": 0,
+              "value": "obiskovalec"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "obiskovalcev"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "x"
+    }
+  ],
+  "message.bad-request": [
+    {
+      "type": 0,
+      "value": "Bad request"
+    }
+  ],
+  "message.collected-data": [
+    {
+      "type": 0,
+      "value": "Collected data"
+    }
+  ],
+  "message.confirm-delete": [
+    {
+      "type": 0,
+      "value": "Ste prepričani, da želite izbrisati "
+    },
+    {
+      "type": 1,
+      "value": "target"
+    },
+    {
+      "type": 0,
+      "value": "?"
+    }
+  ],
+  "message.confirm-leave": [
+    {
+      "type": 0,
+      "value": "Ste prepričani, da želite zapustiti "
+    },
+    {
+      "type": 1,
+      "value": "target"
+    },
+    {
+      "type": 0,
+      "value": "?"
+    }
+  ],
+  "message.confirm-remove": [
+    {
+      "type": 0,
+      "value": "Are you sure you want to remove "
+    },
+    {
+      "type": 1,
+      "value": "target"
+    },
+    {
+      "type": 0,
+      "value": "?"
+    }
+  ],
+  "message.confirm-reset": [
+    {
+      "type": 0,
+      "value": "Ste prepričani, da želite ponastaviti statistiko "
+    },
+    {
+      "type": 1,
+      "value": "target"
+    },
+    {
+      "type": 0,
+      "value": "?"
+    }
+  ],
+  "message.delete-org-warning": [
+    {
+      "type": 0,
+      "value": "Deleting a org will also delete all org websites."
+    }
+  ],
+  "message.delete-website-warning": [
+    {
+      "type": 0,
+      "value": "Izbrisani bodo tudi vsi pripadajoči podatki."
+    }
+  ],
+  "message.error": [
+    {
+      "type": 0,
+      "value": "Nekaj je šlo narobe."
+    }
+  ],
+  "message.event-log": [
+    {
+      "type": 1,
+      "value": "event"
+    },
+    {
+      "type": 0,
+      "value": " na "
+    },
+    {
+      "type": 1,
+      "value": "url"
+    }
+  ],
+  "message.forbidden": [
+    {
+      "type": 0,
+      "value": "Forbidden"
+    }
+  ],
+  "message.go-to-settings": [
+    {
+      "type": 0,
+      "value": "Pojdi v nastavitve"
+    }
+  ],
+  "message.incorrect-username-password": [
+    {
+      "type": 0,
+      "value": "Nepravilno uporabniško ime/geslo."
+    }
+  ],
+  "message.invalid-domain": [
+    {
+      "type": 0,
+      "value": "Neveljavna domena"
+    }
+  ],
+  "message.min-password-length": [
+    {
+      "type": 0,
+      "value": "Najmanjša dolžina je "
+    },
+    {
+      "type": 1,
+      "value": "n"
+    },
+    {
+      "type": 0,
+      "value": " znakov"
+    }
+  ],
+  "message.new-version-available": [
+    {
+      "type": 0,
+      "value": "Na voljo je nova verzija programa Entrolytics "
+    },
+    {
+      "type": 1,
+      "value": "version"
+    },
+    {
+      "type": 0,
+      "value": "!"
+    }
+  ],
+  "message.no-data-available": [
+    {
+      "type": 0,
+      "value": "Podatki niso na voljo."
+    }
+  ],
+  "message.no-event-data": [
+    {
+      "type": 0,
+      "value": "Podatki o dogodku niso na voljo."
+    }
+  ],
+  "message.no-match-password": [
+    {
+      "type": 0,
+      "value": "Gesli se ne ujemata"
+    }
+  ],
+  "message.no-org-websites": [
+    {
+      "type": 0,
+      "value": "Ta ekipa nima spletnih mest."
+    }
+  ],
+  "message.no-orgs": [
+    {
+      "type": 0,
+      "value": "Niste še ustvarili nobene ekipe."
+    }
+  ],
+  "message.no-results-found": [
+    {
+      "type": 0,
+      "value": "Rezultatov ni bilo mogoče najti."
+    }
+  ],
+  "message.no-users": [
+    {
+      "type": 0,
+      "value": "Ni uporabnikov."
+    }
+  ],
+  "message.no-websites-configured": [
+    {
+      "type": 0,
+      "value": "Nimate nastavljenih nobenih spletnih mest."
+    }
+  ],
+  "message.not-found": [
+    {
+      "type": 0,
+      "value": "Not found"
+    }
+  ],
+  "message.nothing-selected": [
+    {
+      "type": 0,
+      "value": "Nothing selected."
+    }
+  ],
+  "message.org-already-member": [
+    {
+      "type": 0,
+      "value": "Ste že član ekipe."
+    }
+  ],
+  "message.org-not-found": [
+    {
+      "type": 0,
+      "value": "Ekipa ni bila najdena."
+    }
+  ],
+  "message.org-websites-info": [
+    {
+      "type": 0,
+      "value": "Spletne strani si lahko ogleda vsak član ekipe."
+    }
+  ],
+  "message.page-not-found": [
+    {
+      "type": 0,
+      "value": "Stran ni bila najdena."
+    }
+  ],
+  "message.reset-website": [
+    {
+      "type": 0,
+      "value": "Za ponastavitev izbrisa tega spletnega mesta vnesite "
+    },
+    {
+      "type": 1,
+      "value": "confirmation"
+    },
+    {
+      "type": 0,
+      "value": " v spodnje polje."
+    }
+  ],
+  "message.reset-website-warning": [
+    {
+      "type": 0,
+      "value": "Vse statistike za to spletno mesto bodo izbrisane, koda za sledenje pa bo ostala nespremenjena."
+    }
+  ],
+  "message.saved": [
+    {
+      "type": 0,
+      "value": "Uspešno shranjeno."
+    }
+  ],
+  "message.sever-error": [
+    {
+      "type": 0,
+      "value": "Server error"
+    }
+  ],
+  "message.share-url": [
+    {
+      "type": 0,
+      "value": "To je javno dostopna povezava za "
+    },
+    {
+      "type": 1,
+      "value": "target"
+    },
+    {
+      "type": 0,
+      "value": "."
+    }
+  ],
+  "message.tracking-code": [
+    {
+      "type": 0,
+      "value": "Koda za sledenje"
+    }
+  ],
+  "message.transfer-org-website-to-user": [
+    {
+      "type": 0,
+      "value": "Transfer this website to your account?"
+    }
+  ],
+  "message.transfer-user-website-to-org": [
+    {
+      "type": 0,
+      "value": "Select the org to transfer this website to."
+    }
+  ],
+  "message.transfer-website": [
+    {
+      "type": 0,
+      "value": "Transfer website ownership to your account or another org."
+    }
+  ],
+  "message.triggered-event": [
+    {
+      "type": 0,
+      "value": "Triggered event"
+    }
+  ],
+  "message.unauthorized": [
+    {
+      "type": 0,
+      "value": "Unauthorized"
+    }
+  ],
+  "message.user-deleted": [
+    {
+      "type": 0,
+      "value": "Uporabnik je izbrisan."
+    }
+  ],
+  "message.viewed-page": [
+    {
+      "type": 0,
+      "value": "Viewed page"
+    }
+  ],
+  "message.visitor-log": [
+    {
+      "type": 0,
+      "value": "Obiskovalec iz "
+    },
+    {
+      "type": 1,
+      "value": "country"
+    },
+    {
+      "type": 0,
+      "value": " uporablja "
+    },
+    {
+      "type": 1,
+      "value": "browser"
+    },
+    {
+      "type": 0,
+      "value": " na "
+    },
+    {
+      "type": 1,
+      "value": "os"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "type": 1,
+      "value": "device"
+    }
+  ]
 }

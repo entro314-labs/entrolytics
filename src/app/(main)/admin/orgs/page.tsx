@@ -1,9 +1,9 @@
-import { Metadata } from "next";
-import { AdminOrgsPage } from "./AdminOrgsPage";
+import { Metadata } from 'next'
+import { AdminOrgsPage } from './AdminOrgsPage'
 
 export default function () {
-	return <AdminOrgsPage />;
+  return <AdminOrgsPage />
 }
 export const metadata: Metadata = {
-	title: "Orgs",
-};
+  title: 'Orgs',
+}

@@ -1,18 +1,18 @@
-import { useDateRange } from "./useDateRange";
-import { useTimezone } from "./useTimezone";
+import { useDateRange } from './useDateRange'
+import { useTimezone } from './useTimezone'
 
-export function useDateParameters(websiteId: string) {
-	const {
-		dateRange: { startDate, endDate, unit },
-	} = useDateRange(websiteId);
-	const { timezone, toUtc } = useTimezone();
+export function useDateParameters() {
+  const {
+    dateRange: { startDate, endDate, unit },
+  } = useDateRange()
+  const { timezone, localToUtc, canonicalizeTimezone } = useTimezone()
 
-	return {
-		startAt: +toUtc(startDate),
-		endAt: +toUtc(endDate),
-		startDate: toUtc(startDate).toISOString(),
-		endDate: toUtc(endDate).toISOString(),
-		unit,
-		timezone,
-	};
+  return {
+    startAt: +localToUtc(startDate),
+    endAt: +localToUtc(endDate),
+    startDate: localToUtc(startDate).toISOString(),
+    endDate: localToUtc(endDate).toISOString(),
+    unit,
+    timezone: canonicalizeTimezone(timezone),
+  }
 }

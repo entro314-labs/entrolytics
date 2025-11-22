@@ -1,95 +1,101 @@
-import clickhouse from "@/lib/clickhouse";
-import { EVENT_TYPE, FILTER_COLUMNS, SESSION_COLUMNS } from "@/lib/constants";
-import { CLICKHOUSE, DRIZZLE, runQuery } from "@/lib/db";
-import {
-	getTimestampDiffSQL,
-	getDateSQL,
-	parseFilters,
-	rawQuery,
-} from "@/lib/analytics-utils";
+import clickhouse from '@/lib/clickhouse'
+import { EVENT_TYPE, FILTER_COLUMNS, SESSION_COLUMNS } from '@/lib/constants'
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
+import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
 
-import { QueryFilters } from "@/lib/types";
+import { QueryFilters } from '@/lib/types'
 
 export interface EventExpandedMetricParameters {
-	type: string;
-	limit?: string;
-	offset?: string;
+  type: string
+  limit?: string
+  offset?: string
 }
 
 export interface EventExpandedMetricData {
-	name: string;
-	pageviews: number;
-	visitors: number;
-	visits: number;
-	bounces: number;
-	totaltime: number;
+  name: string
+  pageviews: number
+  visitors: number
+  visits: number
+  bounces: number
+  totaltime: number
 }
 
 export async function getEventExpandedMetrics(
-	...args: [
-		websiteId: string,
-		parameters: EventExpandedMetricParameters,
-		filters: QueryFilters,
-	]
+  ...args: [websiteId: string, parameters: EventExpandedMetricParameters, filters: QueryFilters]
 ): Promise<EventExpandedMetricData[]> {
-	return runQuery({
-		[DRIZZLE]: () => relationalQuery(...args),
-		[CLICKHOUSE]: () => clickhouseQuery(...args),
-	});
+  return runQuery({
+    [DRIZZLE]: () => relationalQuery(...args),
+    [CLICKHOUSE]: () => clickhouseQuery(...args),
+  })
 }
 
 async function relationalQuery(
-	websiteId: string,
-	parameters: EventExpandedMetricParameters,
-	filters: QueryFilters,
+  websiteId: string,
+  parameters: EventExpandedMetricParameters,
+  filters: QueryFilters
 ) {
-	const { type, limit = 500, offset = 0 } = parameters;
-	const column = FILTER_COLUMNS[type] || type;
-	// Using rawQuery FROM analytics-utils
-	const { filterQuery, cohortQuery, joinSessionQuery, queryParams } =
-		parseFilters(
-			{
-				...filters,
-				websiteId,
-				eventType: EVENT_TYPE.customEvent,
-			},
-			{ joinSession: SESSION_COLUMNS.includes(type) },
-		);
+  const { type, limit = 500, offset = 0 } = parameters
+  const column = FILTER_COLUMNS[type] || type
+  // Using rawQuery FROM analytics-utils
+  const { filterQuery, cohortQuery, joinSessionQuery, queryParams } = parseFilters(
+    {
+      ...filters,
+      websiteId,
+      eventType: EVENT_TYPE.customEvent,
+    },
+    { joinSession: SESSION_COLUMNS.includes(type) }
+  )
 
-	return rawQuery(
-		`
-    SELECT ${column} x,
-      COUNT(*) as y
-    FROM website_event
-    ${cohortQuery}
-    ${joinSessionQuery}
-    WHERE website_event.website_id = {{websiteId::uuid}}
-      AND website_event.created_at between {{startDate}} AND {{endDate}}
-      ${filterQuery}
-    GROUP BY 1
-    ORDER BY 2 desc
+  return rawQuery(
+    `
+    SELECT
+      name,
+      SUM(t.c) as "pageviews",
+      COUNT(DISTINCT t.session_id) as "visitors",
+      COUNT(DISTINCT t.visit_id) as "visits",
+      SUM(CASE WHEN t.c = 1 THEN 1 ELSE 0 END) as "bounces",
+      SUM(${getTimestampDiffSQL('t.min_time', 't.max_time')}) as "totaltime"
+    FROM (
+      SELECT
+        ${column} name,
+        website_event.session_id,
+        website_event.visit_id,
+        COUNT(*) as "c",
+        MIN(website_event.created_at) as "min_time",
+        MAX(website_event.created_at) as "max_time"
+      FROM website_event
+      ${cohortQuery}
+      ${joinSessionQuery}
+      WHERE website_event.website_id = {{websiteId::uuid}}
+        AND website_event.created_at between {{startDate}} AND {{endDate}}
+        ${filterQuery}
+      GROUP BY name, website_event.session_id, website_event.visit_id
+    ) as t
+    WHERE name != ''
+    GROUP BY name
+    ORDER BY visitors desc, visits desc
     limit ${limit}
     offset ${offset}
     `,
-		queryParams,
-	);
+    queryParams
+  )
 }
 
 async function clickhouseQuery(
-	websiteId: string,
-	parameters: EventExpandedMetricParameters,
-	filters: QueryFilters,
+  websiteId: string,
+  parameters: EventExpandedMetricParameters,
+  filters: QueryFilters
 ): Promise<EventExpandedMetricData[]> {
-	const { type, limit = 500, offset = 0 } = parameters;
-	const column = FILTER_COLUMNS[type] || type;
-	const { rawQuery, parseFilters } = clickhouse;
-	const { filterQuery, cohortQuery, queryParams } = parseFilters({
-		...filters,
-		websiteId,
-	});
+  const { type, limit = 500, offset = 0 } = parameters
+  const column = FILTER_COLUMNS[type] || type
+  const { rawQuery, parseFilters } = clickhouse
+  const { filterQuery, cohortQuery, queryParams } = parseFilters({
+    ...filters,
+    websiteId,
+  })
 
-	return rawQuery(
-		`
+  return rawQuery(
+    `
     SELECT
       name,
       SUM(t.c) as "pageviews",
@@ -118,6 +124,6 @@ async function clickhouseQuery(
     limit ${limit}
     offset ${offset}
     `,
-		{ ...queryParams, ...parameters },
-	);
+    { ...queryParams, ...parameters }
+  )
 }

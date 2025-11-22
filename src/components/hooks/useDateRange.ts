@@ -1,79 +1,32 @@
-import { useMemo } from "react";
-import { getMinimumUnit, parseDateRange, getOffsetDateRange } from "@/lib/date";
-import { setItem } from "@/lib/storage";
-import {
-	DATE_RANGE_CONFIG,
-	DEFAULT_DATE_COMPARE,
-	DEFAULT_DATE_RANGE_VALUE,
-} from "@/lib/constants";
-import {
-	setWebsiteDateCompare,
-	setWebsiteDateRange,
-	useWebsites,
-} from "@/store/websites";
-import { setDateRangeValue, useApp } from "@/store/app";
-import { useLocale } from "./useLocale";
-import { useApi } from "./useApi";
-import { useNavigation } from "./useNavigation";
+import { useNavigation } from '@/components/hooks/useNavigation'
+import { useMemo } from 'react'
+import { getCompareDate, getOffsetDateRange, parseDateRange } from '@/lib/date'
+import { useLocale } from '@/components/hooks/useLocale'
+import { DEFAULT_DATE_RANGE_VALUE } from '@/lib/constants'
 
-export interface UseDateRangeOptions {
-	ignoreOffset?: boolean;
-}
+export function useDateRange(options: { ignoreOffset?: boolean; timezone?: string } = {}) {
+  const {
+    query: { date = DEFAULT_DATE_RANGE_VALUE, offset = 0, compare = 'prev', all },
+  } = useNavigation()
+  const { locale } = useLocale()
 
-export function useDateRange(
-	websiteId?: string,
-	options: UseDateRangeOptions = {},
-) {
-	const { get } = useApi();
-	const { locale } = useLocale();
-	const {
-		query: { date, offset = 0 },
-	} = useNavigation();
-	const websiteConfig = useWebsites((state) => state[websiteId]?.dateRange);
-	const globalConfig = useApp((state) => state.dateRangeValue);
-	const dateValue =
-		websiteConfig?.value || date || globalConfig || DEFAULT_DATE_RANGE_VALUE;
+  const dateRange = useMemo(() => {
+    const dateRangeObject = parseDateRange(date, locale, options.timezone)
 
-	const dateRange = useMemo(() => {
-		const dateRangeObject = parseDateRange(dateValue, locale);
+    return !options.ignoreOffset && offset
+      ? getOffsetDateRange(dateRangeObject, +offset)
+      : dateRangeObject
+  }, [date, offset, options, locale])
 
-		return !options.ignoreOffset && offset
-			? getOffsetDateRange(dateRangeObject, +offset)
-			: dateRangeObject;
-	}, [date, offset, dateValue, options]);
+  const dateCompare = getCompareDate(compare, dateRange.startDate, dateRange.endDate)
 
-	const dateCompare = useWebsites(
-		(state) => state[websiteId]?.dateCompare || DEFAULT_DATE_COMPARE,
-	);
-
-	const saveDateRange = async (value: string) => {
-		if (websiteId) {
-			if (value === "all") {
-				const result: any = await get(`/websites/${websiteId}/daterange`);
-				const { mindate, maxdate } = result;
-
-				const startDate = new Date(mindate);
-				const endDate = new Date(maxdate);
-				const unit = getMinimumUnit(startDate, endDate);
-
-				setWebsiteDateRange(websiteId, {
-					startDate,
-					endDate,
-					unit,
-					value,
-				});
-			} else {
-				setWebsiteDateRange(websiteId, parseDateRange(value, locale));
-			}
-		} else {
-			setItem(DATE_RANGE_CONFIG, value);
-			setDateRangeValue(value);
-		}
-	};
-
-	const saveDateCompare = (value: string) => {
-		setWebsiteDateCompare(websiteId, value);
-	};
-
-	return { dateRange, saveDateRange, dateCompare, saveDateCompare };
+  return {
+    date,
+    offset,
+    compare,
+    isAllTime: !!all,
+    isCustomRange: date.startsWith('range:'),
+    dateRange,
+    dateCompare,
+  }
 }

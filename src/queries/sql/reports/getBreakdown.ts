@@ -1,70 +1,58 @@
-import { CLICKHOUSE, DRIZZLE, runQuery } from "@/lib/db";
-import {
-	getTimestampDiffSQL,
-	getDateSQL,
-	parseFilters,
-	rawQuery,
-} from "@/lib/analytics-utils";
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
+import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
 
-import clickhouse from "@/lib/clickhouse";
-import { EVENT_TYPE, FILTER_COLUMNS, SESSION_COLUMNS } from "@/lib/constants";
-import { QueryFilters } from "@/lib/types";
+import clickhouse from '@/lib/clickhouse'
+import { EVENT_TYPE, FILTER_COLUMNS, SESSION_COLUMNS } from '@/lib/constants'
+import { QueryFilters } from '@/lib/types'
 
 export interface BreakdownParameters {
-	startDate: Date;
-	endDate: Date;
-	fields: string[];
+  startDate: Date
+  endDate: Date
+  fields: string[]
 }
 
 export interface BreakdownData {
-	x: string;
-	y: number;
+  x: string
+  y: number
 }
 
 export async function getBreakdown(
-	...args: [
-		websiteId: string,
-		parameters: BreakdownParameters,
-		filters: QueryFilters,
-	]
+  ...args: [websiteId: string, parameters: BreakdownParameters, filters: QueryFilters]
 ) {
-	return runQuery({
-		[DRIZZLE]: () => relationalQuery(...args),
-		[CLICKHOUSE]: () => clickhouseQuery(...args),
-	});
+  return runQuery({
+    [DRIZZLE]: () => relationalQuery(...args),
+    [CLICKHOUSE]: () => clickhouseQuery(...args),
+  })
 }
 
 async function relationalQuery(
-	websiteId: string,
-	parameters: BreakdownParameters,
-	filters: QueryFilters,
+  websiteId: string,
+  parameters: BreakdownParameters,
+  filters: QueryFilters
 ): Promise<BreakdownData[]> {
-	// Using rawQuery FROM analytics-utils
-	const { startDate, endDate, fields } = parameters;
-	const { filterQuery, joinSessionQuery, cohortQuery, queryParams } =
-		parseFilters(
-			{
-				...filters,
-				websiteId,
-				startDate,
-				endDate,
-				eventType: EVENT_TYPE.pageView,
-			},
-			{
-				joinSession: !!fields.find((name: string) =>
-					SESSION_COLUMNS.includes(name),
-				),
-			},
-		);
+  // Using rawQuery FROM analytics-utils
+  const { startDate, endDate, fields } = parameters
+  const { filterQuery, joinSessionQuery, cohortQuery, queryParams } = parseFilters(
+    {
+      ...filters,
+      websiteId,
+      startDate,
+      endDate,
+      eventType: EVENT_TYPE.pageView,
+    },
+    {
+      joinSession: !!fields.find((name: string) => SESSION_COLUMNS.includes(name)),
+    }
+  )
 
-	return rawQuery(
-		`
+  return rawQuery(
+    `
     SELECT
       SUM(t.c) as "views",
       COUNT(DISTINCT t.session_id) as "visitors",
       COUNT(DISTINCT t.visit_id) as "visits",
       SUM(CASE WHEN t.c = 1 THEN 1 ELSE 0 END) as "bounces",
-      SUM(${getTimestampDiffSQL("t.min_time", "t.max_time")}) as "totaltime",
+      SUM(${getTimestampDiffSQL('t.min_time', 't.max_time')}) as "totaltime",
       ${parseFieldsByName(fields)}
     FROM (
       SELECT
@@ -87,27 +75,27 @@ async function relationalQuery(
     ORDER BY 1 desc, 2 desc
     limit 500
     `,
-		queryParams,
-	);
+    queryParams
+  )
 }
 
 async function clickhouseQuery(
-	websiteId: string,
-	parameters: BreakdownParameters,
-	filters: QueryFilters,
+  websiteId: string,
+  parameters: BreakdownParameters,
+  filters: QueryFilters
 ): Promise<BreakdownData[]> {
-	const { parseFilters, rawQuery } = clickhouse;
-	const { startDate, endDate, fields } = parameters;
-	const { filterQuery, cohortQuery, queryParams } = parseFilters({
-		...filters,
-		websiteId,
-		startDate,
-		endDate,
-		eventType: EVENT_TYPE.pageView,
-	});
+  const { parseFilters, rawQuery } = clickhouse
+  const { startDate, endDate, fields } = parameters
+  const { filterQuery, cohortQuery, queryParams } = parseFilters({
+    ...filters,
+    websiteId,
+    startDate,
+    endDate,
+    eventType: EVENT_TYPE.pageView,
+  })
 
-	return rawQuery(
-		`
+  return rawQuery(
+    `
     SELECT
       SUM(t.c) as "views",
       COUNT(DISTINCT t.session_id) as "visitors",
@@ -135,14 +123,14 @@ async function clickhouseQuery(
     ORDER BY 1 desc, 2 desc
     limit 500
     `,
-		queryParams,
-	);
+    queryParams
+  )
 }
 
 function parseFields(fields: string[]) {
-	return fields.map((name) => `${FILTER_COLUMNS[name]} as "${name}"`).join(",");
+  return fields.map((name) => `${FILTER_COLUMNS[name]} as "${name}"`).join(',')
 }
 
 function parseFieldsByName(fields: string[]) {
-	return `${fields.map((name) => name).join(",")}`;
+  return `${fields.map((name) => name).join(',')}`
 }

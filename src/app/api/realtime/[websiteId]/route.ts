@@ -1,36 +1,42 @@
-import { json, unauthorized } from "@/lib/response";
-import { getRealtimeData } from "@/queries";
-import { canViewWebsite } from "@/validations";
-import { startOfMinute, subMinutes } from "date-fns";
-import { REALTIME_RANGE } from "@/lib/constants";
-import { parseRequest, getQueryFilters } from "@/lib/request";
+import { REALTIME_RANGE } from '@/lib/constants'
+import { getQueryFilters, parseRequest } from '@/lib/request'
+import { json, unauthorized } from '@/lib/response'
+import { timezoneParam } from '@/lib/schema'
+import { canViewWebsite } from '@/validations'
+import { getRealtimeData } from '@/queries/sql'
+import { startOfMinute, subMinutes } from 'date-fns'
+import { z } from 'zod'
 
 export async function GET(
-	request: Request,
-	{ params }: { params: Promise<{ websiteId: string }> },
+  request: Request,
+  { params }: { params: Promise<{ websiteId: string }> }
 ) {
-	const { auth, query, error } = await parseRequest(request);
+  const schema = z.object({
+    timezone: timezoneParam,
+  })
 
-	if (error) {
-		return error();
-	}
+  const { auth, query, error } = await parseRequest(request, schema)
 
-	const { websiteId } = await params;
+  if (error) {
+    return error()
+  }
 
-	if (!(await canViewWebsite(auth, websiteId))) {
-		return unauthorized();
-	}
+  const { websiteId } = await params
 
-	const filters = await getQueryFilters(
-		{
-			...query,
-			startAt: subMinutes(startOfMinute(new Date()), REALTIME_RANGE).getTime(),
-			endAt: Date.now(),
-		},
-		websiteId,
-	);
+  if (!(await canViewWebsite(auth, websiteId))) {
+    return unauthorized()
+  }
 
-	const data = await getRealtimeData(websiteId, filters);
+  const filters = await getQueryFilters(
+    {
+      ...query,
+      startAt: subMinutes(startOfMinute(new Date()), REALTIME_RANGE).getTime(),
+      endAt: Date.now(),
+    },
+    websiteId
+  )
 
-	return json(data);
+  const data = await getRealtimeData(websiteId, filters)
+
+  return json(data)
 }

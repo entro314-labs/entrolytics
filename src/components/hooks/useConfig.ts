@@ -1,19 +1,34 @@
-import { useEffect } from "react";
-import { useApp, setConfig } from "@/store/app";
-import { getConfig, Config } from "@/app/actions/getConfig";
+import { useEffect } from 'react'
+import { useApp, setConfig } from '@/store/app'
+import { useApi } from '@/components/hooks/useApi'
+
+export type Config = {
+  edgeMode: boolean
+  edgeUrl?: string
+  faviconUrl?: string
+  linksUrl?: string
+  pixelsUrl?: string
+  privateMode: boolean
+  telemetryDisabled: boolean
+  trackerScriptName?: string
+  updatesDisabled: boolean
+}
 
 export function useConfig(): Config {
-	const { config } = useApp();
+  const { config } = useApp()
+  const { get } = useApi()
 
-	async function loadConfig() {
-		setConfig(await getConfig());
-	}
+  async function loadConfig() {
+    const data = await get(`/config`)
 
-	useEffect(() => {
-		if (!config) {
-			loadConfig();
-		}
-	}, []);
+    setConfig(data)
+  }
 
-	return config;
+  useEffect(() => {
+    if (!config) {
+      loadConfig()
+    }
+  }, [])
+
+  return config
 }

@@ -1,78 +1,60 @@
-import clickhouse from "@/lib/clickhouse";
-import {
-	EVENT_COLUMNS,
-	EVENT_TYPE,
-	FILTER_COLUMNS,
-	SESSION_COLUMNS,
-} from "@/lib/constants";
-import { CLICKHOUSE, DRIZZLE, runQuery } from "@/lib/db";
-import {
-	getTimestampDiffSQL,
-	getDateSQL,
-	parseFilters,
-	rawQuery,
-} from "@/lib/analytics-utils";
+import clickhouse from '@/lib/clickhouse'
+import { EVENT_COLUMNS, EVENT_TYPE, FILTER_COLUMNS, SESSION_COLUMNS } from '@/lib/constants'
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
+import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
 
-import { QueryFilters } from "@/lib/types";
+import { QueryFilters } from '@/lib/types'
 
 export interface PageviewMetricsParameters {
-	type: string;
-	limit?: number | string;
-	offset?: number | string;
+  type: string
+  limit?: number | string
+  offset?: number | string
 }
 
 export interface PageviewMetricsData {
-	x: string;
-	y: number;
+  x: string
+  y: number
 }
 
 export async function getPageviewMetrics(
-	...args: [
-		websiteId: string,
-		parameters: PageviewMetricsParameters,
-		filters: QueryFilters,
-	]
+  ...args: [websiteId: string, parameters: PageviewMetricsParameters, filters: QueryFilters]
 ) {
-	return runQuery({
-		[DRIZZLE]: () => relationalQuery(...args),
-		[CLICKHOUSE]: () => clickhouseQuery(...args),
-	});
+  return runQuery({
+    [DRIZZLE]: () => relationalQuery(...args),
+    [CLICKHOUSE]: () => clickhouseQuery(...args),
+  })
 }
 
 async function relationalQuery(
-	websiteId: string,
-	parameters: PageviewMetricsParameters,
-	filters: QueryFilters,
+  websiteId: string,
+  parameters: PageviewMetricsParameters,
+  filters: QueryFilters
 ): Promise<PageviewMetricsData[]> {
-	const { type, limit = 500, offset = 0 } = parameters;
-	let column = FILTER_COLUMNS[type] || type;
-	// Using rawQuery FROM analytics-utils
-	const { filterQuery, joinSessionQuery, cohortQuery, queryParams } =
-		parseFilters(
-			{
-				...filters,
-				websiteId,
-				eventType:
-					column === "event_name"
-						? EVENT_TYPE.customEvent
-						: EVENT_TYPE.pageView,
-			},
-			{ joinSession: SESSION_COLUMNS.includes(type) },
-		);
+  const { type, limit = 500, offset = 0 } = parameters
+  let column = FILTER_COLUMNS[type] || type
+  // Using rawQuery FROM analytics-utils
+  const { filterQuery, joinSessionQuery, cohortQuery, queryParams } = parseFilters(
+    {
+      ...filters,
+      websiteId,
+      eventType: column === 'event_name' ? EVENT_TYPE.customEvent : EVENT_TYPE.pageView,
+    },
+    { joinSession: SESSION_COLUMNS.includes(type) }
+  )
 
-	let entryExitQuery = "";
-	let excludeDomain = "";
+  let entryExitQuery = ''
+  let excludeDomain = ''
 
-	if (column === "referrer_domain") {
-		excludeDomain = `AND website_event.referrer_domain != website_event.hostname
-      AND website_event.referrer_domain != ''`;
-	}
+  if (column === 'referrer_domain') {
+    excludeDomain = `AND website_event.referrer_domain != website_event.hostname
+      AND website_event.referrer_domain != ''`
+  }
 
-	if (type === "entry" || type === "exit") {
-		const order = type === "entry" ? "asc" : "desc";
-		column = `x.${column}`;
+  if (type === 'entry' || type === 'exit') {
+    const order = type === 'entry' ? 'asc' : 'desc'
+    column = `x.${column}`
 
-		entryExitQuery = `
+    entryExitQuery = `
       JOIN (
         SELECT DISTINCT on (visit_id)
           visit_id,
@@ -84,11 +66,11 @@ async function relationalQuery(
         ORDER BY visit_id, created_at ${order}
       ) x
       on x.visit_id = website_event.visit_id
-    `;
-	}
+    `
+  }
 
-	return rawQuery(
-		`
+  return rawQuery(
+    `
     SELECT ${column} x,
       COUNT(DISTINCT website_event.session_id) as y
     FROM website_event
@@ -104,44 +86,43 @@ async function relationalQuery(
     limit ${limit}
     offset ${offset}
     `,
-		{ ...queryParams, ...parameters },
-	);
+    { ...queryParams, ...parameters }
+  )
 }
 
 async function clickhouseQuery(
-	websiteId: string,
-	parameters: PageviewMetricsParameters,
-	filters: QueryFilters,
+  websiteId: string,
+  parameters: PageviewMetricsParameters,
+  filters: QueryFilters
 ): Promise<{ x: string; y: number }[]> {
-	const { type, limit = 500, offset = 0 } = parameters;
-	let column = FILTER_COLUMNS[type] || type;
-	const { rawQuery, parseFilters } = clickhouse;
-	const { filterQuery, cohortQuery, queryParams } = parseFilters({
-		...filters,
-		websiteId,
-		eventType:
-			column === "event_name" ? EVENT_TYPE.customEvent : EVENT_TYPE.pageView,
-	});
+  const { type, limit = 500, offset = 0 } = parameters
+  let column = FILTER_COLUMNS[type] || type
+  const { rawQuery, parseFilters } = clickhouse
+  const { filterQuery, cohortQuery, queryParams } = parseFilters({
+    ...filters,
+    websiteId,
+    eventType: column === 'event_name' ? EVENT_TYPE.customEvent : EVENT_TYPE.pageView,
+  })
 
-	let sql = "";
-	let excludeDomain = "";
+  let sql = ''
+  let excludeDomain = ''
 
-	if (
-		filters &&
-		typeof filters === "object" &&
-		EVENT_COLUMNS.some((item) => Object.keys(filters).includes(item))
-	) {
-		let entryExitQuery = "";
+  if (
+    filters &&
+    typeof filters === 'object' &&
+    EVENT_COLUMNS.some((item) => Object.keys(filters).includes(item))
+  ) {
+    let entryExitQuery = ''
 
-		if (column === "referrer_domain") {
-			excludeDomain = `AND referrer_domain != hostname AND referrer_domain != ''`;
-		}
+    if (column === 'referrer_domain') {
+      excludeDomain = `AND referrer_domain != hostname AND referrer_domain != ''`
+    }
 
-		if (type === "entry" || type === "exit") {
-			const aggregrate = type === "entry" ? "argMin" : "argMax";
-			column = `x.${column}`;
+    if (type === 'entry' || type === 'exit') {
+      const aggregrate = type === 'entry' ? 'argMin' : 'argMax'
+      column = `x.${column}`
 
-			entryExitQuery = `
+      entryExitQuery = `
       JOIN (SELECT visit_id,
           ${aggregrate}(url_path, created_at) url_path
       FROM website_event
@@ -149,10 +130,10 @@ async function clickhouseQuery(
         AND created_at between {startDate:DateTime64} AND {endDate:DateTime64}
         AND event_type = {eventType:UInt32}
       GROUP BY visit_id) x
-      ON x.visit_id = website_event.visit_id`;
-		}
+      ON x.visit_id = website_event.visit_id`
+    }
 
-		sql = `
+    sql = `
     SELECT ${column} x, 
       uniq(website_event.session_id) as y
     FROM website_event
@@ -166,28 +147,28 @@ async function clickhouseQuery(
     ORDER BY y desc
     limit ${limit}
     offset ${offset}
-    `;
-	} else {
-		let groupByQuery = "";
-		let columnQuery = `arrayJoin(${column})`;
+    `
+  } else {
+    let groupByQuery = ''
+    let columnQuery = `arrayJoin(${column})`
 
-		if (column === "referrer_domain") {
-			excludeDomain = `AND t != ''`;
-		}
+    if (column === 'referrer_domain') {
+      excludeDomain = `AND t != ''`
+    }
 
-		if (type === "entry") {
-			columnQuery = `argMinMerge(entry_url)`;
-		}
+    if (type === 'entry') {
+      columnQuery = `argMinMerge(entry_url)`
+    }
 
-		if (type === "exit") {
-			columnQuery = `argMaxMerge(exit_url)`;
-		}
+    if (type === 'exit') {
+      columnQuery = `argMaxMerge(exit_url)`
+    }
 
-		if (type === "entry" || type === "exit") {
-			groupByQuery = "GROUP BY s";
-		}
+    if (type === 'entry' || type === 'exit') {
+      groupByQuery = 'GROUP BY s'
+    }
 
-		sql = `
+    sql = `
     SELECT g.t as x,
       uniq(s) as y
     FROM (
@@ -204,8 +185,8 @@ async function clickhouseQuery(
     ORDER BY y desc
     limit ${limit}
     offset ${offset}
-    `;
-	}
+    `
+  }
 
-	return rawQuery(sql, { ...queryParams, ...parameters });
+  return rawQuery(sql, { ...queryParams, ...parameters })
 }

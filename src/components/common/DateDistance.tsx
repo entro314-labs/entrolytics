@@ -1,14 +1,19 @@
-import { Text } from "@entro314labs/entro-zen";
-import { formatDistanceToNow } from "date-fns";
-import { useLocale, useTimezone } from "@/components/hooks";
+import { Text } from '@entro314labs/entro-zen'
+import { formatDistanceToNow } from 'date-fns'
+import { useLocale, useTimezone } from '@/components/hooks'
+import { isInvalidDate } from '@/lib/date'
 
 export function DateDistance({ date }: { date: Date }) {
-	const { formatTimezoneDate } = useTimezone();
-	const { dateLocale } = useLocale();
+  const { formatTimezoneDate } = useTimezone()
+  const { dateLocale } = useLocale()
 
-	return (
-		<Text title={formatTimezoneDate(date.toISOString(), "PPPpp")}>
-			{formatDistanceToNow(date, { addSuffix: true, locale: dateLocale })}
-		</Text>
-	);
+  if (isInvalidDate(date)) {
+    return null
+  }
+
+  return (
+    <Text title={formatTimezoneDate(date?.toISOString(), 'PPPpp')}>
+      {formatDistanceToNow(date, { addSuffix: true, locale: dateLocale })}
+    </Text>
+  )
 }

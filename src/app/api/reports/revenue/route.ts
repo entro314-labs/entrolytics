@@ -1,41 +1,37 @@
-import { canViewWebsite } from "@/validations";
-import { unauthorized, json, serverError } from "@/lib/response";
-import { parseRequest, getQueryFilters, setWebsiteDate } from "@/lib/request";
-import { reportResultSchema } from "@/lib/schema";
-import { getRevenue, RevenuParameters } from "@/queries/sql/reports/getRevenue";
+import { canViewWebsite } from '@/validations'
+import { unauthorized, json, serverError } from '@/lib/response'
+import { parseRequest, getQueryFilters, setWebsiteDate } from '@/lib/request'
+import { reportResultSchema } from '@/lib/schema'
+import { getRevenue, RevenuParameters } from '@/queries/sql/reports/getRevenue'
 
 export async function POST(request: Request) {
-	const { auth, body, error } = await parseRequest(request, reportResultSchema);
+  const { auth, body, error } = await parseRequest(request, reportResultSchema)
 
-	if (error) {
-		return error();
-	}
+  if (error) {
+    return error()
+  }
 
-	const { websiteId } = body;
+  const { websiteId } = body
 
-	if (!(await canViewWebsite(auth, websiteId))) {
-		return unauthorized();
-	}
+  if (!(await canViewWebsite(auth, websiteId))) {
+    return unauthorized()
+  }
 
-	try {
-		const parameters = await setWebsiteDate(websiteId, body.parameters);
-		const filters = await getQueryFilters(body.filters, websiteId);
+  try {
+    const parameters = await setWebsiteDate(websiteId, body.parameters)
+    const filters = await getQueryFilters(body.filters, websiteId)
 
-		const data = await getRevenue(
-			websiteId,
-			parameters as RevenuParameters,
-			filters,
-		);
+    const data = await getRevenue(websiteId, parameters as RevenuParameters, filters)
 
-		return json(data);
-	} catch (err) {
-		const error = err as Error;
-		console.error('[API Error] /api/reports/revenue:', {
-			websiteId,
-			body,
-			error: error.message,
-			stack: error.stack,
-		});
-		return serverError({ message: error.message, stack: error.stack });
-	}
+    return json(data)
+  } catch (err) {
+    const error = err as Error
+    console.error('[API Error] /api/reports/revenue:', {
+      websiteId,
+      body,
+      error: error.message,
+      stack: error.stack,
+    })
+    return serverError({ message: error.message, stack: error.stack })
+  }
 }

@@ -36,7 +36,7 @@ export function NavButton({ showText = true, onAction }: NavButtonProps) {
   const { orgId, renderUrl } = useNavigation()
   const { isMobile } = useMobile()
   const router = useRouter()
-  const org = data?.data?.find(({ id }) => id === orgId)
+  const org = data?.data?.find((o) => o.orgId === orgId)
   const selectedKeys = new Set([orgId || user.id])
   const label = orgId ? org?.name : user.displayName || user.email
 
@@ -95,8 +95,8 @@ export function NavButton({ showText = true, onAction }: NavButtonProps) {
             <MenuSeparator />
             <MenuSection title={formatMessage(labels.orgs)}>
               {Array.isArray(data?.data) &&
-                data.data.map(({ id, name }) => (
-                  <MenuItem key={id} id={id}>
+                data.data.map(({ orgId, name }) => (
+                  <MenuItem key={orgId} id={orgId}>
                     <IconLabel icon={<Users />}>
                       <Text wrap="nowrap">{name}</Text>
                     </IconLabel>

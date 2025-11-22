@@ -66,7 +66,7 @@ export function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.34, 1.56, 0.64, 1] }}
         >
-          Privacy-First Analytics <span className={styles.gradient}>That Respects</span> Your Users
+          First-party growth analytics <span className={styles.gradient}>for the edge</span>
         </motion.h1>
 
         <motion.p
@@ -75,8 +75,7 @@ export function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          Powerful web analytics without compromising user privacy. GDPR compliant, cookie-free, and
-          open source.
+          One platform. Every touchpoint. Your data.
         </motion.p>
 
         <motion.div

@@ -12,6 +12,50 @@ import {
 } from 'drizzle-orm/pg-core'
 import { sql } from 'drizzle-orm'
 
+export const board = pgTable(
+  'board',
+  {
+    boardId: uuid('board_id').primaryKey().default(sql`gen_random_uuid()`),
+    name: varchar('name', { length: 100 }).notNull(),
+    description: varchar('description', { length: 500 }),
+    config: json('config'),
+    userId: uuid('user_id'),
+    orgId: uuid('org_id'),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }),
+    deletedAt: timestamp('deleted_at', { withTimezone: true }),
+  },
+  (table) => {
+    return {
+      createdAtIdx: index('board_created_at_idx').on(table.createdAt),
+      orgIdIdx: index('board_org_id_idx').on(table.orgId),
+      userIdIdx: index('board_user_id_idx').on(table.userId),
+    }
+  }
+)
+
+export const boardWidget = pgTable(
+  'board_widget',
+  {
+    widgetId: uuid('widget_id').primaryKey().default(sql`gen_random_uuid()`),
+    boardId: uuid('board_id').notNull(),
+    websiteId: uuid('website_id').notNull(),
+    type: varchar('type', { length: 50 }).notNull(), // stats, chart, list, map, heatmap
+    title: varchar('title', { length: 100 }),
+    config: json('config'), // type-specific config (metrics, listType, limit, etc.)
+    position: integer('position').default(0),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }),
+  },
+  (table) => {
+    return {
+      boardIdIdx: index('board_widget_board_id_idx').on(table.boardId),
+      websiteIdIdx: index('board_widget_website_id_idx').on(table.websiteId),
+      boardIdPositionIdx: index('board_widget_board_id_position_idx').on(table.boardId, table.position),
+    }
+  }
+)
+
 export const eventData = pgTable(
   'event_data',
   {
@@ -424,6 +468,12 @@ export const websiteEvent = pgTable(
 )
 
 // Type exports for TypeScript inference
+export type Board = typeof board.$inferSelect
+export type NewBoard = typeof board.$inferInsert
+
+export type BoardWidget = typeof boardWidget.$inferSelect
+export type NewBoardWidget = typeof boardWidget.$inferInsert
+
 export type EventData = typeof eventData.$inferSelect
 export type NewEventData = typeof eventData.$inferInsert
 

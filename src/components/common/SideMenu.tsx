@@ -37,6 +37,7 @@ export function SideMenu({
       gap
       padding
       width="240px"
+      maxHeight="100vh"
       overflowY="auto"
       justifyContent="space-between"
       position="sticky"

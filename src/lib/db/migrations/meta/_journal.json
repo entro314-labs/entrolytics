@@ -15,6 +15,20 @@
       "when": 1758187490758,
       "tag": "0002_add_uuid_defaults",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1763779829468,
+      "tag": "0003_add_board_table",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1763780774605,
+      "tag": "0004_add_board_widget_table",
+      "breakpoints": true
     }
   ]
 }

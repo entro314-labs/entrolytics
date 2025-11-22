@@ -1,0 +1,81 @@
+'use client'
+import { useDateRange, useMessages, useWebsiteStatsQuery } from '@/components/hooks'
+import { MetricCard } from '@/components/metrics/MetricCard'
+import { MetricsBar } from '@/components/metrics/MetricsBar'
+import { formatShortTime, formatLongNumber } from '@/lib/format'
+import { LoadingPanel } from '@/components/common/LoadingPanel'
+
+export interface StatsWidgetProps {
+  websiteId: string
+}
+
+export function StatsWidget({ websiteId }: StatsWidgetProps) {
+  const { dateRange } = useDateRange()
+  const { formatMessage, labels } = useMessages()
+  const { data, isLoading, isFetching, error } = useWebsiteStatsQuery(websiteId)
+  const isAllTime = dateRange.value === 'all'
+
+  const { pageviews, visitors, visits, bounces, totaltime, comparison } = data || {}
+
+  const metrics = data
+    ? [
+        {
+          value: visitors,
+          label: formatMessage(labels.visitors),
+          change: visitors - comparison.visitors,
+          formatValue: formatLongNumber,
+        },
+        {
+          value: visits,
+          label: formatMessage(labels.visits),
+          change: visits - comparison.visits,
+          formatValue: formatLongNumber,
+        },
+        {
+          value: pageviews,
+          label: formatMessage(labels.views),
+          change: pageviews - comparison.pageviews,
+          formatValue: formatLongNumber,
+        },
+        {
+          label: formatMessage(labels.bounceRate),
+          value: (Math.min(visits, bounces) / visits) * 100,
+          prev: (Math.min(comparison.visits, comparison.bounces) / comparison.visits) * 100,
+          change:
+            (Math.min(visits, bounces) / visits) * 100 -
+            (Math.min(comparison.visits, comparison.bounces) / comparison.visits) * 100,
+          formatValue: (n: number) => Math.round(+n) + '%',
+          reverseColors: true,
+        },
+        {
+          label: formatMessage(labels.visitDuration),
+          value: totaltime / visits,
+          prev: comparison.totaltime / comparison.visits,
+          change: totaltime / visits - comparison.totaltime / comparison.visits,
+          formatValue: (n: number) =>
+            `${+n < 0 ? '-' : ''}${formatShortTime(Math.abs(~~n), ['m', 's'], ' ')}`,
+        },
+      ]
+    : null
+
+  return (
+    <LoadingPanel data={metrics} isLoading={isLoading} isFetching={isFetching} error={error}>
+      <MetricsBar>
+        {metrics?.map(({ label, value, prev, change, formatValue, reverseColors }) => {
+          return (
+            <MetricCard
+              key={label}
+              value={value}
+              previousValue={prev}
+              label={label}
+              change={change}
+              formatValue={formatValue}
+              reverseColors={reverseColors}
+              showChange={!isAllTime}
+            />
+          )
+        })}
+      </MetricsBar>
+    </LoadingPanel>
+  )
+}

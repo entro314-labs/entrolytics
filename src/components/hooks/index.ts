@@ -1,6 +1,7 @@
 'use client'
 
 // Context hooks
+export * from './context/useBoard'
 export * from './context/useLink'
 export * from './context/usePixel'
 export * from './context/useOrg'
@@ -9,6 +10,9 @@ export * from './context/useWebsite'
 
 // Query hooks
 export * from './queries/useActiveUsersQuery'
+export * from './queries/useBoardQuery'
+export * from './queries/useBoardsQuery'
+export * from './queries/useBoardWidgetsQuery'
 export * from './queries/useDeleteQuery'
 export * from './queries/useEventDataEventsQuery'
 export * from './queries/useEventDataPropertiesQuery'

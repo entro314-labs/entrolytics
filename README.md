@@ -1,22 +1,24 @@
 # Entrolytics
 
-**Entrolytics** is a privacy-focused web analytics platform that provides powerful insights while respecting user privacy. Built as an independent fork with modern features, enhanced performance, and improved developer experience.
+**First-party growth analytics for the edge. One platform. Every touchpoint. Your data.**
+
+Entrolytics unifies web analytics, link tracking, and conversion pixels into a single first-party data plane. Built for modern edge infrastructure with sub-50ms tracking globally.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.18-brightgreen.svg)](https://nodejs.org/)
 
 ## ✨ Features
 
-- 🔒 **Privacy-focused** - GDPR compliant, no cookies required, respects Do Not Track
-- 📊 **Real-time analytics** - Live dashboard updates with WebSocket support
-- 🏢 **Org collaboration** - Multi-user support with role-based access control
-- 💰 **Revenue tracking** - Built-in e-commerce and conversion tracking
+- 🌐 **Unified platform** - Web analytics, link tracking, and conversion pixels in one place
+- ⚡ **Edge-native** - Built for Vercel Edge, Cloudflare Workers, Deno Deploy
+- 📊 **Growth analytics** - Funnels, attribution, retention, revenue tracking
+- 🔗 **Link shortener** - Track campaigns with branded short links
+- 📍 **Tracking pixels** - Conversion tracking across channels
+- 🔒 **First-party data** - GDPR compliant, cookieless, no sampling
+- 🏢 **Team collaboration** - Multi-org support with role-based access control
 - 🎯 **Custom events** - Track any user interaction or business metric
-- 🌍 **Geolocation** - Country and region analytics with privacy protection
 - 📱 **Device insights** - Browser, OS, and device analytics
-- 🔧 **Self-hosted** - Full control over your data and infrastructure
-- ⚡ **High performance** - Optimized for high-traffic websites
-- 🌐 **Multi-language** - Support for 40+ languages
+- 🌍 **Global performance** - Sub-50ms tracking worldwide
 
 ## 🚀 Quick Start
 
@@ -321,4 +323,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Entrolytics** - Privacy-focused analytics that respect your users and grow your business.
+**Entrolytics** - First-party growth analytics for the edge. One platform. Every touchpoint. Your data.

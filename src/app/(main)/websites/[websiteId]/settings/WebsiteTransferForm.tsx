@@ -77,9 +77,9 @@ export function WebsiteTransferForm({
       <FormField name="orgId">
         {!isOrgWebsite && (
           <Select onSelectionChange={handleChange} selectedKey={orgId}>
-            {items.map(({ id, name }) => {
+            {items.map(({ orgId, name }) => {
               return (
-                <ListItem key={`${id}!!!!`} id={`${id}????`}>
+                <ListItem key={orgId} id={orgId}>
                   {name}
                 </ListItem>
               )

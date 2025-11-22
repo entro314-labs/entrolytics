@@ -10,7 +10,7 @@ const testimonials = [
     role: 'CEO at TechStart',
     avatar: 'SC',
     content:
-      'Entrolytics completely transformed how we understand our users. The privacy-first approach means we can finally do analytics without compromising on values.',
+      'Entrolytics completely transformed how we understand our users. Having analytics, links, and pixels in one platform means we finally see the full customer journey.',
     rating: 5,
   },
   {
@@ -64,7 +64,7 @@ export function TestimonialsSection() {
             Loved by <span className={styles.gradient}>thousands</span> of teams
           </h2>
           <p className={styles.subtitle}>
-            Join companies of all sizes using Entrolytics for privacy-first analytics
+            Join companies of all sizes using Entrolytics for first-party growth analytics
           </p>
         </motion.div>
 

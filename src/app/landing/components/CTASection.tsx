@@ -172,7 +172,7 @@ export function CTASection() {
         <div className={styles.footerContent}>
           <div className={styles.footerBrand}>
             <div className={styles.logo}>Entrolytics</div>
-            <p className={styles.footerText}>Privacy-first web analytics for the modern web</p>
+            <p className={styles.footerText}>First-party growth analytics for the edge</p>
           </div>
 
           <div className={styles.footerLinks}>

@@ -1,22 +1,27 @@
-import { serializeError } from 'serialize-error';
-import debug from 'debug';
-import { Kafka, Producer, RecordMetadata, SASLOptions, logLevel } from 'kafkajs';
-import { KAFKA, KAFKA_PRODUCER } from '@/lib/db';
-import * as tls from 'tls';
+import { serializeError } from 'serialize-error'
+import debug from 'debug'
+import { Kafka, Producer, RecordMetadata, SASLOptions, logLevel } from 'kafkajs'
+import { KAFKA, KAFKA_PRODUCER } from '@/lib/db'
+import * as tls from 'tls'
 
-const log = debug('umami:kafka');
-const CONNECT_TIMEOUT = 5000;
-const SEND_TIMEOUT = 3000;
-const ACKS = 1;
+const log = debug('entrolytics:kafka')
+const CONNECT_TIMEOUT = 5000
+const SEND_TIMEOUT = 3000
+const ACKS = 1
 
-let kafka: Kafka;
-let producer: Producer;
-const enabled = Boolean(process.env.KAFKA_URL && process.env.KAFKA_BROKER);
+let kafka: Kafka
+let producer: Producer
+const enabled = Boolean(process.env.KAFKA_URL && process.env.KAFKA_BROKER)
 
 function getClient() {
-  const { username, password } = new URL(process.env.KAFKA_URL);
-  const brokers = process.env.KAFKA_BROKER.split(',');
-  const mechanism = process.env.KAFKA_SASL_MECHANISM as 'plain' | 'scram-sha-256' | 'scram-sha-512';
+  if (!process.env.KAFKA_URL || !process.env.KAFKA_BROKER) {
+    throw new Error('KAFKA_URL and KAFKA_BROKER environment variables are required')
+  }
+
+  const { username, password } = new URL(process.env.KAFKA_URL)
+  const brokers = process.env.KAFKA_BROKER.split(',')
+  const mechanism =
+    (process.env.KAFKA_SASL_MECHANISM as 'plain' | 'scram-sha-256' | 'scram-sha-512') || 'plain'
 
   const ssl: { ssl?: tls.ConnectionOptions | boolean; sasl?: SASLOptions } =
     username && password
@@ -30,50 +35,50 @@ function getClient() {
             password,
           },
         }
-      : {};
+      : {}
 
   const client: Kafka = new Kafka({
-    clientId: 'umami',
+    clientId: 'entrolytics',
     brokers: brokers,
     connectionTimeout: CONNECT_TIMEOUT,
     logLevel: logLevel.ERROR,
     ...ssl,
-  });
+  })
 
   if (process.env.NODE_ENV !== 'production') {
-    global[KAFKA] = client;
+    globalThis[KAFKA] = client
   }
 
-  log('Kafka initialized');
+  log('Kafka initialized')
 
-  return client;
+  return client
 }
 
 async function getProducer(): Promise<Producer> {
-  const producer = kafka.producer();
-  await producer.connect();
+  const producer = kafka.producer()
+  await producer.connect()
 
   if (process.env.NODE_ENV !== 'production') {
-    global[KAFKA_PRODUCER] = producer;
+    globalThis[KAFKA_PRODUCER] = producer
   }
 
-  log('Kafka producer initialized');
+  log('Kafka producer initialized')
 
-  return producer;
+  return producer
 }
 
 async function sendMessage(
   topic: string,
-  message: { [key: string]: string | number } | { [key: string]: string | number }[],
+  message: Record<string, string | number> | Record<string, string | number>[]
 ): Promise<RecordMetadata[]> {
   try {
-    await connect();
+    await connect()
 
     return producer.send({
       topic,
       messages: Array.isArray(message)
-        ? message.map(a => {
-            return { value: JSON.stringify(a) };
+        ? message.map((a) => {
+            return { value: JSON.stringify(a) }
           })
         : [
             {
@@ -82,23 +87,23 @@ async function sendMessage(
           ],
       timeout: SEND_TIMEOUT,
       acks: ACKS,
-    });
+    })
   } catch (e) {
     // eslint-disable-next-line no-console
-    console.log('KAFKA ERROR:', serializeError(e));
+    console.log('KAFKA ERROR:', serializeError(e))
   }
 }
 
 async function connect(): Promise<Kafka> {
   if (!kafka) {
-    kafka = process.env.KAFKA_URL && process.env.KAFKA_BROKER && (global[KAFKA] || getClient());
+    kafka = process.env.KAFKA_URL && process.env.KAFKA_BROKER && (globalThis[KAFKA] || getClient())
 
     if (kafka) {
-      producer = global[KAFKA_PRODUCER] || (await getProducer());
+      producer = globalThis[KAFKA_PRODUCER] || (await getProducer())
     }
   }
 
-  return kafka;
+  return kafka
 }
 
 export default {
@@ -108,4 +113,4 @@ export default {
   log,
   connect,
   sendMessage,
-};
+}

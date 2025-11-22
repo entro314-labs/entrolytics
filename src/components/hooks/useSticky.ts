@@ -1,26 +1,25 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react'
 
 export function useSticky({ enabled = true, threshold = 1 }) {
-  const [isSticky, setIsSticky] = useState(false);
-  const ref = useRef(null);
+  const [isSticky, setIsSticky] = useState(false)
+  const ref = useRef(null)
 
   useEffect(() => {
-    let observer: IntersectionObserver | undefined;
+    let observer: IntersectionObserver | undefined
+    // eslint-disable-next-line no-undef
     const handler: IntersectionObserverCallback = ([entry]) =>
-      setIsSticky(entry.intersectionRatio < threshold);
+      setIsSticky(entry.intersectionRatio < threshold)
 
     if (enabled && ref.current) {
-      observer = new IntersectionObserver(handler, { threshold: [threshold] });
-      observer.observe(ref.current);
+      observer = new IntersectionObserver(handler, { threshold: [threshold] })
+      observer.observe(ref.current)
     }
     return () => {
       if (observer) {
-        observer.disconnect();
+        observer.disconnect()
       }
-    };
-  }, [ref, enabled, threshold]);
+    }
+  }, [ref, enabled, threshold])
 
-  return { ref, isSticky };
+  return { ref, isSticky }
 }
-
-export default useSticky;

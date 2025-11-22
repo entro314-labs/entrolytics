@@ -1,27 +1,45 @@
-import { useIntl } from 'react-intl';
-import { messages, labels } from '@/components/messages';
+import { useIntl, FormattedMessage, type MessageDescriptor } from 'react-intl'
+import { messages, labels } from '@/components/messages'
 
-export function useMessages(): any {
-  const intl = useIntl();
+type FormatMessage = (
+  descriptor: MessageDescriptor,
+  values?: Record<string, string | number | boolean | null | undefined>,
+  opts?: any
+) => string | null
 
-  const getMessage = (id: string) => {
-    const message = Object.values(messages).find(value => value.id === id);
-
-    return message ? formatMessage(message) : id;
-  };
-
-  const formatMessage = (
-    descriptor: {
-      id: string;
-      defaultMessage: string;
-    },
-    values?: { [key: string]: string },
-    opts?: any,
-  ) => {
-    return descriptor ? intl.formatMessage(descriptor, values, opts) : null;
-  };
-
-  return { formatMessage, messages, labels, getMessage };
+interface UseMessages {
+  formatMessage: FormatMessage
+  messages: typeof messages
+  labels: typeof labels
+  getMessage: (id: string) => string
+  getErrorMessage: (error: unknown) => string | undefined
+  FormattedMessage: typeof FormattedMessage
 }
 
-export default useMessages;
+export function useMessages(): UseMessages {
+  const intl = useIntl()
+
+  const getMessage = (id: string) => {
+    const message = Object.values(messages).find((value) => value.id === `message.${id}`)
+
+    return message ? formatMessage(message) : id
+  }
+
+  const getErrorMessage = (error: unknown): string | undefined => {
+    if (error && typeof error === 'object' && 'message' in error) {
+      const errorMessage = (error as { message: string }).message
+      return getMessage(errorMessage) || errorMessage
+    }
+    return undefined
+  }
+
+  const formatMessage = (
+    descriptor: MessageDescriptor,
+    values?: Record<string, string | number | boolean | null | undefined>,
+    opts?: any
+  ) => {
+    return descriptor ? intl.formatMessage(descriptor, values, opts) : null
+  }
+
+  return { formatMessage, messages, labels, getMessage, getErrorMessage, FormattedMessage }
+}

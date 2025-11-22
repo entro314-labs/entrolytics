@@ -1,32 +1,27 @@
-import { Button, Icon, PopupTrigger, Popup, Form, FormRow } from 'react-basics';
-import TimezoneSetting from '@/app/(main)/profile/TimezoneSetting';
-import DateRangeSetting from '@/app/(main)/profile/DateRangeSetting';
-import Icons from '@/components/icons';
-import { useMessages } from '@/components/hooks';
-import styles from './SettingsButton.module.css';
+import { Button, Icon, DialogTrigger, Popover, Column, Label } from '@entro314labs/entro-zen'
+import { TimezoneSetting } from '@/app/(main)/settings/preferences/TimezoneSetting'
+import { DateRangeSetting } from '@/app/(main)/settings/preferences/DateRangeSetting'
+import { Settings as Gear } from '@/components/icons'
+import { useMessages } from '@/components/hooks'
 
 export function SettingsButton() {
-  const { formatMessage, labels } = useMessages();
+  const { formatMessage, labels } = useMessages()
 
   return (
-    <PopupTrigger>
+    <DialogTrigger>
       <Button variant="quiet">
         <Icon>
-          <Icons.Gear />
+          <Gear />
         </Icon>
       </Button>
-      <Popup className={styles.popup} position="bottom" alignment="end">
-        <Form>
-          <FormRow label={formatMessage(labels.timezone)}>
-            <TimezoneSetting />
-          </FormRow>
-          <FormRow label={formatMessage(labels.defaultDateRange)}>
-            <DateRangeSetting />
-          </FormRow>
-        </Form>
-      </Popup>
-    </PopupTrigger>
-  );
+      <Popover placement="bottom end">
+        <Column gap="3">
+          <Label>{formatMessage(labels.timezone)}</Label>
+          <TimezoneSetting />
+          <Label>{formatMessage(labels.defaultDateRange)}</Label>
+          <DateRangeSetting />
+        </Column>
+      </Popover>
+    </DialogTrigger>
+  )
 }
-
-export default SettingsButton;

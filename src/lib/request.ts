@@ -1,112 +1,191 @@
-import { z, ZodSchema } from 'zod';
-import { FILTER_COLUMNS, FILTER_GROUPS } from '@/lib/constants';
-import { badRequest, unauthorized } from '@/lib/response';
-import { getAllowedUnits, getMinimumUnit } from '@/lib/date';
-import { checkAuth } from '@/lib/auth';
-import { getWebsiteSegment, getWebsiteDateRange } from '@/queries';
+import { getCurrentUser } from '@/lib/auth'
+import { DEFAULT_PAGE_SIZE, FILTER_COLUMNS, ROLE_PERMISSIONS } from '@/lib/constants'
+import { getAllowedUnits, getMinimumUnit, maxDate, parseDateRange } from '@/lib/date'
+import { fetchWebsite } from '@/lib/load'
+import { badRequest, unauthorized } from '@/lib/response'
+import { QueryFilters } from '@/lib/types'
+import { getWebsiteSegment } from '@/queries/drizzle'
+import { z } from 'zod/v4'
+import { filtersArrayToObject } from '@/lib/params'
 
-export async function getJsonBody(request: Request) {
-  try {
-    return await request.clone().json();
-  } catch {
-    return undefined;
+/**
+ * Get permissions (grant array) for a user based on their platform and org roles
+ * Implements Clerk RBAC with proper permission mapping
+ */
+function getGrantsFromRoles(platformRole: string, orgRole?: string): string[] {
+  const platformPermissions = ROLE_PERMISSIONS[platformRole] || []
+
+  // If user has org role, add org-specific permissions
+  if (orgRole) {
+    const orgPermissions = ROLE_PERMISSIONS[orgRole] || []
+    // Combine platform and org permissions, remove duplicates
+    return Array.from(new Set([...platformPermissions, ...orgPermissions]))
   }
+
+  return platformPermissions
 }
 
 export async function parseRequest(
   request: Request,
-  schema?: ZodSchema,
-  options?: { skipAuth: boolean },
+  schema?: any,
+  options?: { skipAuth: boolean }
 ): Promise<any> {
-  const url = new URL(request.url);
-  let query = Object.fromEntries(url.searchParams);
-  let body = await getJsonBody(request);
-  let error: () => void | undefined;
-  let auth = null;
+  // Handle build-time scenarios where request or request.url might be undefined
+  if (
+    !request ||
+    !request.url ||
+    typeof request.url !== 'string' ||
+    process.env.NEXT_PHASE === 'phase-production-build'
+  ) {
+    return { url: null, query: {}, body: {}, auth: null, error: null }
+  }
 
-  const getErrorMessages = (error: z.ZodError) => {
-    return Object.entries(error.format())
-      .map(([key, value]) => {
-        const messages = (value as any)._errors;
-        return messages ? `${key}: ${messages.join(', ')}` : null;
-      })
-      .filter(Boolean);
-  };
+  const url = new URL(request.url)
+  let query = Object.fromEntries(url.searchParams)
+  let body = await getJsonBody(request)
+  let error: () => void | undefined
+  let auth = null
 
   if (schema) {
-    const isGet = request.method === 'GET';
-    const result = schema.safeParse(isGet ? query : body);
+    const isGet = request.method === 'GET'
+    const result = schema.safeParse(isGet ? query : body)
 
     if (!result.success) {
-      error = () => badRequest(getErrorMessages(result.error));
+      error = () => badRequest(z.treeifyError(result.error))
     } else if (isGet) {
-      query = result.data;
+      query = result.data
     } else {
-      body = result.data;
+      body = result.data
     }
   }
 
   if (!options?.skipAuth && !error) {
-    auth = await checkAuth(request);
+    // Skip auth during build time
+    if (request && request.url && typeof request.url === 'string') {
+      const currentUser = await getCurrentUser()
 
-    if (!auth) {
-      error = () => unauthorized();
+      if (!currentUser) {
+        error = () => unauthorized()
+        auth = null
+      } else {
+        // Get user permissions based on platform and org roles
+        const grant = getGrantsFromRoles(currentUser.role, currentUser.orgRole || undefined)
+
+        // Wrap user in Auth interface structure
+        auth = {
+          user: currentUser,
+          clerkUserId: currentUser.clerkId,
+          grant,
+          shareToken: null,
+        }
+      }
     }
   }
+  // When skipAuth is true, auth remains null but no error is set
 
-  return { url, query, body, auth, error };
+  return { url, query, body, auth, error }
 }
 
-export async function getRequestDateRange(query: Record<string, any>) {
-  const { websiteId, startAt, endAt, unit } = query;
-
-  // All-time
-  if (+startAt === 0 && +endAt === 1) {
-    const result = await getWebsiteDateRange(websiteId as string);
-    const { min, max } = result[0];
-    const startDate = new Date(min);
-    const endDate = new Date(max);
-
-    return {
-      startDate,
-      endDate,
-      unit: getMinimumUnit(startDate, endDate),
-    };
+export async function getJsonBody(request: Request) {
+  try {
+    if (!request || typeof request.clone !== 'function') {
+      return {}
+    }
+    return await request.clone().json()
+  } catch {
+    return {}
   }
+}
 
-  const startDate = new Date(+startAt);
-  const endDate = new Date(+endAt);
-  const minUnit = getMinimumUnit(startDate, endDate);
+export function getRequestDateRange(query: Record<string, string>) {
+  const { startAt, endAt, unit, timezone } = query
+
+  const startDate = new Date(+startAt)
+  const endDate = new Date(+endAt)
 
   return {
     startDate,
     endDate,
-    unit: (getAllowedUnits(startDate, endDate).includes(unit as string) ? unit : minUnit) as string,
-  };
+    timezone,
+    unit: getAllowedUnits(startDate, endDate).includes(unit)
+      ? unit
+      : getMinimumUnit(startDate, endDate),
+  }
 }
 
-export async function getRequestFilters(query: Record<string, any>, websiteId?: string) {
-  const result: Record<string, any> = {};
+export function getRequestFilters(query: Record<string, any>) {
+  const result: Record<string, any> = {}
 
   for (const key of Object.keys(FILTER_COLUMNS)) {
-    const value = query[key];
+    const value = query[key]
     if (value !== undefined) {
-      result[key] = value;
+      result[key] = value
     }
   }
 
-  for (const key of Object.keys(FILTER_GROUPS)) {
-    const value = query[key];
-    if (value !== undefined) {
-      const segment = await getWebsiteSegment(websiteId, key, value);
-      if (key === 'segment') {
-        // merge filters into result
-        Object.assign(result, segment.parameters);
-      } else {
-        result[key] = segment.parameters;
-      }
+  return result
+}
+
+export async function setWebsiteDate(websiteId: string, data: Record<string, any>) {
+  const website = await fetchWebsite(websiteId)
+
+  if (website?.resetAt) {
+    data.startDate = maxDate(data.startDate, new Date(website.resetAt))
+  }
+
+  return data
+}
+
+export async function getQueryFilters(
+  params: Record<string, any>,
+  websiteId?: string
+): Promise<QueryFilters> {
+  const dateRange = getRequestDateRange(params)
+  const filters = getRequestFilters(params)
+
+  if (websiteId) {
+    await setWebsiteDate(websiteId, dateRange)
+
+    if (params.segment) {
+      const segmentParams = (await getWebsiteSegment(websiteId, params.segment))
+        ?.parameters as Record<string, any>
+
+      Object.assign(filters, filtersArrayToObject(segmentParams.filters))
+    }
+
+    if (params.cohort) {
+      const cohortParams = (await getWebsiteSegment(websiteId, params.cohort))
+        ?.parameters as Record<string, any>
+
+      const { startDate, endDate } = parseDateRange(cohortParams.dateRange)
+
+      const cohortFilters = cohortParams.filters.map(({ name, ...props }) => ({
+        ...props,
+        name: `cohort_${name}`,
+      }))
+
+      cohortFilters.push({
+        name: `cohort_${cohortParams.action.type}`,
+        operator: 'eq',
+        value: cohortParams.action.value,
+      })
+
+      Object.assign(filters, {
+        ...filtersArrayToObject(cohortFilters),
+        cohort_startDate: startDate,
+        cohort_endDate: endDate,
+      })
     }
   }
 
-  return result;
+  return {
+    ...dateRange,
+    ...filters,
+    page: params?.page,
+    pageSize: params?.pageSize ? params?.pageSize || DEFAULT_PAGE_SIZE : undefined,
+    orderBy: params?.orderBy,
+    sortDescending: params?.sortDescending,
+    search: params?.search,
+    compare: params?.compare,
+  }
 }

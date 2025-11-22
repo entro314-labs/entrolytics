@@ -1,49 +1,14 @@
-import { Prisma } from '@prisma/client';
-import prisma from '@/lib/prisma';
+import { db, session, NewSession } from '@/lib/db'
 
-export async function createSession(
-  data: Prisma.SessionCreateInput,
-  options = { skipDuplicates: false },
-) {
-  const {
-    id,
-    websiteId,
-    browser,
-    os,
-    device,
-    screen,
-    language,
-    country,
-    region,
-    city,
-    distinctId,
-  } = data;
-
+export async function createSession(data: NewSession) {
   try {
-    return await prisma.client.session.create({
-      data: {
-        id,
-        websiteId,
-        browser,
-        os,
-        device,
-        screen,
-        language,
-        country,
-        region,
-        city,
-        distinctId,
-      },
-    });
+    const [newSession] = await db.insert(session).values(data).returning().onConflictDoNothing()
+
+    return newSession
   } catch (e: any) {
-    // With skipDuplicates flag: ignore unique constraint error and return null
-    if (
-      options.skipDuplicates &&
-      e instanceof Prisma.PrismaClientKnownRequestError &&
-      e.code === 'P2002'
-    ) {
-      return null;
+    if (e.message.toLowerCase().includes('unique constraint')) {
+      return null
     }
-    throw e;
+    throw e
   }
 }

@@ -1,20 +1,20 @@
-import prisma from '@/lib/prisma';
-import clickhouse from '@/lib/clickhouse';
-import { runQuery, PRISMA, CLICKHOUSE } from '@/lib/db';
+import clickhouse from '@/lib/clickhouse'
+import { runQuery, DRIZZLE, CLICKHOUSE } from '@/lib/db'
+import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
 
 export async function getWebsiteSession(...args: [websiteId: string, sessionId: string]) {
   return runQuery({
-    [PRISMA]: () => relationalQuery(...args),
+    [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  });
+  })
 }
 
 async function relationalQuery(websiteId: string, sessionId: string) {
-  const { rawQuery, getTimestampDiffSQL } = prisma;
+  // Using rawQuery FROM analytics-utils
 
   return rawQuery(
     `
-    select id,
+    SELECT id,
       distinct_id as "distinctId",
       website_id as "websiteId",
       browser,
@@ -25,13 +25,13 @@ async function relationalQuery(websiteId: string, sessionId: string) {
       country,
       region,
       city,
-      min(min_time) as "firstAt",
-      max(max_time) as "lastAt",
-      count(distinct visit_id) as visits,
-      sum(views) as views,
-      sum(events) as events,
-      sum(${getTimestampDiffSQL('min_time', 'max_time')}) as "totaltime" 
-    from (select
+      MIN(min_time) as "firstAt",
+      MAX(max_time) as "lastAt",
+      COUNT(DISTINCT visit_id) as visits,
+      SUM(views) as views,
+      SUM(events) as events,
+      SUM(${getTimestampDiffSQL('min_time', 'max_time')}) as "totaltime" 
+    FROM (SELECT
           session.session_id as id,
           session.distinct_id,
           website_event.visit_id,
@@ -44,27 +44,27 @@ async function relationalQuery(websiteId: string, sessionId: string) {
           session.country,
           session.region,
           session.city,
-          min(website_event.created_at) as min_time,
-          max(website_event.created_at) as max_time,
-          sum(case when website_event.event_type = 1 then 1 else 0 end) as views,
-          sum(case when website_event.event_type = 2 then 1 else 0 end) as events
-    from session
-    join website_event on website_event.session_id = session.session_id
-    where session.website_id = {{websiteId::uuid}}
-      and session.session_id = {{sessionId::uuid}}
-    group by session.session_id, session.distinct_id, visit_id, session.website_id, session.browser, session.os, session.device, session.screen, session.language, session.country, session.region, session.city) t
-    group by id, distinct_id, website_id, browser, os, device, screen, language, country, region, city;
+          MIN(website_event.created_at) as min_time,
+          MAX(website_event.created_at) as max_time,
+          SUM(CASE WHEN website_event.event_type = 1 THEN 1 ELSE 0 END) as views,
+          SUM(CASE WHEN website_event.event_type = 2 THEN 1 ELSE 0 END) as events
+    FROM session
+    JOIN website_event on website_event.session_id = session.session_id
+    WHERE session.website_id = {{websiteId::uuid}}
+      AND session.session_id = {{sessionId::uuid}}
+    GROUP BY session.session_id, session.distinct_id, visit_id, session.website_id, session.browser, session.os, session.device, session.screen, session.language, session.country, session.region, session.city) t
+    GROUP BY id, distinct_id, website_id, browser, os, device, screen, language, country, region, city;
     `,
-    { websiteId, sessionId },
-  ).then(result => result?.[0]);
+    { websiteId, sessionId }
+  ).then((result) => result?.[0])
 }
 
 async function clickhouseQuery(websiteId: string, sessionId: string) {
-  const { rawQuery, getDateStringSQL } = clickhouse;
+  const { rawQuery, getDateStringSQL } = clickhouse
 
   return rawQuery(
     `
-    select id,
+    SELECT id,
       websiteId,
       distinctId,
       browser,
@@ -75,13 +75,13 @@ async function clickhouseQuery(websiteId: string, sessionId: string) {
       country,
       region,
       city,
-      ${getDateStringSQL('min(min_time)')} as firstAt,
-      ${getDateStringSQL('max(max_time)')} as lastAt,
+      ${getDateStringSQL('MIN(min_time)')} as firstAt,
+      ${getDateStringSQL('MAX(max_time)')} as lastAt,
       uniq(visit_id) visits,
-      sum(views) as views,
-      sum(events) as events,
-      sum(max_time-min_time) as totaltime
-    from (select
+      SUM(views) as views,
+      SUM(events) as events,
+      SUM(max_time-min_time) as totaltime
+    FROM (SELECT
               session_id as id,
               distinct_id as distinctId,
               visit_id,
@@ -94,16 +94,16 @@ async function clickhouseQuery(websiteId: string, sessionId: string) {
               country,
               region,
               city,
-              min(min_time) as min_time,
-              max(max_time) as max_time,
-              sum(views) as views,
+              MIN(min_time) as min_time,
+              MAX(max_time) as max_time,
+              SUM(views) as views,
               length(groupArrayArray(event_name)) as events
-        from website_event_stats_hourly
-        where website_id = {websiteId:UUID}
-          and session_id = {sessionId:UUID}
-        group by session_id, distinct_id, visit_id, website_id, browser, os, device, screen, language, country, region, city) t
-    group by id, websiteId, distinctId, browser, os, device, screen, language, country, region, city;
+        FROM website_event_stats_hourly
+        WHERE website_id = {websiteId:UUID}
+          AND session_id = {sessionId:UUID}
+        GROUP BY session_id, distinct_id, visit_id, website_id, browser, os, device, screen, language, country, region, city) t
+    GROUP BY id, websiteId, distinctId, browser, os, device, screen, language, country, region, city;
     `,
-    { websiteId, sessionId },
-  ).then(result => result?.[0]);
+    { websiteId, sessionId }
+  ).then((result) => result?.[0])
 }

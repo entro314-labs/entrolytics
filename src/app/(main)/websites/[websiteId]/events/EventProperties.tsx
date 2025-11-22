@@ -1,28 +1,92 @@
-import { useMemo } from 'react';
-import { GridColumn, GridTable, Flexbox, Button, ButtonGroup, Loading } from 'react-basics';
-import { useEventDataProperties, useEventDataValues, useMessages } from '@/components/hooks';
-import { LoadingPanel } from '@/components/common/LoadingPanel';
-import PieChart from '@/components/charts/PieChart';
-import ListTable from '@/components/metrics/ListTable';
-import { useState } from 'react';
-import { CHART_COLORS } from '@/lib/constants';
-import styles from './EventProperties.module.css';
+import { useMemo, useState } from 'react'
+import { Select, ListItem, Grid } from '@entro314labs/entro-zen'
+import {
+  useEventDataPropertiesQuery,
+  useEventDataValuesQuery,
+  useMessages,
+} from '@/components/hooks'
+import { LoadingPanel } from '@/components/common/LoadingPanel'
+import { PieChart } from '@/components/charts/PieChart'
+import { CHART_COLORS } from '@/lib/constants'
+import { ListTable } from '@/components/metrics/ListTable'
 
 export function EventProperties({ websiteId }: { websiteId: string }) {
-  const [propertyName, setPropertyName] = useState('');
-  const [eventName, setEventName] = useState('');
-  const [propertyView, setPropertyView] = useState('table');
+  const [propertyName, setPropertyName] = useState('')
+  const [eventName, setEventName] = useState('')
 
-  const { formatMessage, labels } = useMessages();
-  const { data, isLoading, isFetched, error } = useEventDataProperties(websiteId);
-  const { data: values } = useEventDataValues(websiteId, eventName, propertyName);
+  const { formatMessage, labels } = useMessages()
+  const { data, isLoading, isFetching, error } = useEventDataPropertiesQuery(websiteId)
+
+  const events: string[] =
+    data && Array.isArray(data)
+      ? data.reduce((arr: string[], e: { eventName: any }) => {
+          return !arr.includes(e.eventName) ? arr.concat(e.eventName) : arr
+        }, [])
+      : []
+  const properties: string[] =
+    eventName && data && Array.isArray(data)
+      ? data.filter((e) => e.eventName === eventName).map((e) => e.propertyName)
+      : []
+
+  return (
+    <LoadingPanel
+      data={data}
+      isLoading={isLoading}
+      isFetching={isFetching}
+      error={error}
+      minHeight="300px"
+      gap="6"
+    >
+      {data && (
+        <Grid columns="repeat(auto-fill, minmax(300px, 1fr))" marginBottom="3" gap>
+          <Select
+            label={formatMessage(labels.event)}
+            value={eventName}
+            onChange={setEventName}
+            placeholder=""
+          >
+            {events?.map((p) => (
+              <ListItem key={p} id={p}>
+                {p}
+              </ListItem>
+            ))}
+          </Select>
+          <Select
+            label={formatMessage(labels.property)}
+            value={propertyName}
+            onChange={setPropertyName}
+            isDisabled={!eventName}
+            placeholder=""
+          >
+            {properties?.map((p) => (
+              <ListItem key={p} id={p}>
+                {p}
+              </ListItem>
+            ))}
+          </Select>
+        </Grid>
+      )}
+      {eventName && propertyName && (
+        <EventValues websiteId={websiteId} eventName={eventName} propertyName={propertyName} />
+      )}
+    </LoadingPanel>
+  )
+}
+
+const EventValues = ({ websiteId, eventName, propertyName }) => {
+  const {
+    data: values,
+    isLoading,
+    isFetching,
+    error,
+  } = useEventDataValuesQuery(websiteId, eventName, propertyName)
 
   const propertySum = useMemo(() => {
-    return values?.reduce((sum, { total }) => sum + total, 0) ?? 0;
-  }, [values]);
+    return values && Array.isArray(values) ? values.reduce((sum, { total }) => sum + total, 0) : 0
+  }, [values])
 
   const chartData = useMemo(() => {
-    if (!propertyName || !values) return null;
+    if (!propertyName || !values || !Array.isArray(values)) return null
     return {
       labels: values.map(({ value }) => value),
       datasets: [
@@ -32,68 +96,33 @@ export function EventProperties({ websiteId }: { websiteId: string }) {
           borderWidth: 0,
         },
       ],
-    };
-  }, [propertyName, values]);
+    }
+  }, [propertyName, values])
 
   const tableData = useMemo(() => {
-    if (!propertyName || !values || propertySum === 0) return [];
+    if (!propertyName || !values || !Array.isArray(values) || propertySum === 0) return []
     return values.map(({ value, total }) => ({
-      x: value,
-      y: total,
-      z: 100 * (total / propertySum),
-    }));
-  }, [propertyName, values, propertySum]);
-
-  const handleRowClick = row => {
-    setEventName(row.eventName);
-    setPropertyName(row.propertyName);
-  };
+      label: value,
+      count: total,
+      percent: 100 * (total / propertySum),
+    }))
+  }, [propertyName, values, propertySum])
 
   return (
-    <LoadingPanel isLoading={isLoading} isFetched={isFetched} data={data} error={error}>
-      <div className={styles.container}>
-        <GridTable data={data} cardMode={false} className={styles.table}>
-          <GridColumn name="eventName" label={formatMessage(labels.name)}>
-            {row => (
-              <div className={styles.link} onClick={() => handleRowClick(row)}>
-                {row.eventName}
-              </div>
-            )}
-          </GridColumn>
-          <GridColumn name="propertyName" label={formatMessage(labels.property)}>
-            {row => (
-              <div className={styles.link} onClick={() => handleRowClick(row)}>
-                {row.propertyName}
-              </div>
-            )}
-          </GridColumn>
-          <GridColumn name="total" label={formatMessage(labels.count)} alignment="end" />
-        </GridTable>
-        {propertyName && (
-          <div className={styles.data}>
-            <Flexbox className={styles.header} gap={12} justifyContent="space-between">
-              <div className={styles.title}>{`${eventName}: ${propertyName}`}</div>
-              <ButtonGroup
-                selectedKey={propertyView}
-                onSelect={key => setPropertyView(key as string)}
-              >
-                <Button key="table">{formatMessage(labels.table)}</Button>
-                <Button key="chart">{formatMessage(labels.chart)}</Button>
-              </ButtonGroup>
-            </Flexbox>
-
-            {!values ? (
-              <Loading icon="dots" />
-            ) : propertyView === 'table' ? (
-              <ListTable data={tableData} />
-            ) : (
-              <PieChart key={propertyName + eventName} type="doughnut" data={chartData} />
-            )}
-          </div>
-        )}
-      </div>
+    <LoadingPanel
+      isLoading={isLoading}
+      isFetching={isFetching}
+      data={values}
+      error={error}
+      minHeight="300px"
+      gap="6"
+    >
+      {values && (
+        <Grid columns="1fr 1fr" gap>
+          <ListTable title={propertyName} data={tableData} />
+          <PieChart type="doughnut" chartData={chartData} />
+        </Grid>
+      )}
     </LoadingPanel>
-  );
+  )
 }
-
-export default EventProperties;

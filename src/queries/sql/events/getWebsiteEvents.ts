@@ -1,94 +1,119 @@
-import clickhouse from '@/lib/clickhouse';
-import { CLICKHOUSE, getDatabaseType, POSTGRESQL, PRISMA, runQuery } from '@/lib/db';
-import prisma from '@/lib/prisma';
-import { PageParams, QueryFilters } from '@/lib/types';
+import clickhouse from '@/lib/clickhouse'
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
+import {
+  getTimestampDiffSQL,
+  getDateSQL,
+  parseFilters,
+  rawQuery,
+  pagedRawQuery,
+} from '@/lib/analytics-utils'
 
-export function getWebsiteEvents(
-  ...args: [websiteId: string, filters: QueryFilters, pageParams?: PageParams]
-) {
+import { QueryFilters } from '@/lib/types'
+
+export function getWebsiteEvents(...args: [websiteId: string, filters: QueryFilters]) {
   return runQuery({
-    [PRISMA]: () => relationalQuery(...args),
+    [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  });
+  })
 }
 
-async function relationalQuery(websiteId: string, filters: QueryFilters, pageParams?: PageParams) {
-  const { pagedRawQuery, parseFilters } = prisma;
-  const { search } = pageParams;
-  const { filterQuery, cohortQuery, params } = await parseFilters(websiteId, {
+async function relationalQuery(websiteId: string, filters: QueryFilters) {
+  // Using pagedRawQuery and parseFilters from analytics-utils
+  const { search } = filters
+  const { filterQuery, dateQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
-  });
+    websiteId,
+    search: `%${search}%`,
+  })
 
-  const db = getDatabaseType();
-  const like = db === POSTGRESQL ? 'ilike' : 'like';
+  const searchQuery = search
+    ? `AND ((event_name ilike {{search}} AND event_type = 2)
+           OR (url_path ilike {{search}} AND event_type = 1))`
+    : ''
 
   return pagedRawQuery(
     `
-    select
-      event_id as "id",
-      website_id as "websiteId", 
-      session_id as "sessionId",
-      created_at as "createdAt",
-      url_path as "urlPath",
-      url_query as "urlQuery",
-      referrer_path as "referrerPath",
-      referrer_query as "referrerQuery",
-      referrer_domain as "referrerDomain",
-      page_title as "pageTitle",
-      event_type as "eventType",
-      event_name as "eventName"
-    from website_event
+    SELECT
+      website_event.event_id as "id",
+      website_event.website_id as "websiteId",
+      website_event.session_id as "sessionId",
+      website_event.created_at as "createdAt",
+      website_event.hostname,
+      website_event.url_path as "urlPath",
+      website_event.url_query as "urlQuery",
+      website_event.referrer_path as "referrerPath",
+      website_event.referrer_query as "referrerQuery",
+      website_event.referrer_domain as "referrerDomain",
+      session.country as country,
+      session.city as city,
+      session.device as  device,
+      session.os as os,
+      session.browser as browser,
+      website_event.page_title as "pageTitle",
+      website_event.event_type as "eventType",
+      website_event.event_name as "eventName"
+    FROM website_event
     ${cohortQuery}
-    where website_id = {{websiteId::uuid}}
-        and created_at between {{startDate}} and {{endDate}}
+    JOIN session on website_event.session_id = session.session_id
+      AND website_event.website_id = session.website_id
+    WHERE website_event.website_id = {{websiteId::uuid}}
+    ${dateQuery}
     ${filterQuery}
-    ${
-      search
-        ? `and ((event_name ${like} {{search}} and event_type = 2)
-           or (url_path ${like} {{search}} and event_type = 1))`
-        : ''
-    }
-    order by created_at desc
+    ${searchQuery}
+    ORDER BY website_event.created_at desc
     `,
-    { ...params, search: `%${search}%` },
-    pageParams,
-  );
+    queryParams,
+    filters
+  )
 }
 
-async function clickhouseQuery(websiteId: string, filters: QueryFilters, pageParams?: PageParams) {
-  const { pagedQuery, parseFilters } = clickhouse;
-  const { params, dateQuery, filterQuery, cohortQuery } = await parseFilters(websiteId, filters);
-  const { search } = pageParams;
+async function clickhouseQuery(websiteId: string, filters: QueryFilters) {
+  const { pagedRawQuery, parseFilters } = clickhouse
+  const { search } = filters
+  const { queryParams, dateQuery, cohortQuery, filterQuery } = parseFilters({
+    ...filters,
+    websiteId,
+  })
 
-  return pagedQuery(
+  const searchQuery = search
+    ? `AND ((positionCaseInsensitive(event_name, {search:String}) > 0 AND event_type = 2)
+           OR (positionCaseInsensitive(url_path, {search:String}) > 0 AND event_type = 1))`
+    : ''
+
+  return pagedRawQuery(
     `
-    select
+    SELECT
       event_id as id,
-      website_id as websiteId, 
+      website_id as websiteId,
       session_id as sessionId,
       created_at as createdAt,
+      hostname,
       url_path as urlPath,
       url_query as urlQuery,
       referrer_path as referrerPath,
       referrer_query as referrerQuery,
       referrer_domain as referrerDomain,
+      country as country,
+      city as city,
+      device as device,
+      os as os,
+      browser as browser,
       page_title as pageTitle,
       event_type as eventType,
-      event_name as eventName
-    from website_event
+      event_name as eventName,
+      event_id IN (SELECT event_id
+                   FROM event_data
+                   WHERE website_id = {websiteId:UUID}
+                   ${dateQuery}) as hasData
+    FROM website_event
     ${cohortQuery}
-    where website_id = {websiteId:UUID}
+    WHERE website_id = {websiteId:UUID}
     ${dateQuery}
     ${filterQuery}
-    ${
-      search
-        ? `and ((positionCaseInsensitive(event_name, {search:String}) > 0 and event_type = 2)
-           or (positionCaseInsensitive(url_path, {search:String}) > 0 and event_type = 1))`
-        : ''
-    }
-    order by created_at desc
+    ${searchQuery}
+    ORDER BY created_at desc
     `,
-    { ...params, search },
-    pageParams,
-  );
+    queryParams,
+    filters
+  )
 }

@@ -1,103 +1,119 @@
-import { canDeleteUser, canUpdateUser, canViewUser, hashPassword } from '@/lib/auth';
-import { parseRequest } from '@/lib/request';
-import { badRequest, json, ok, unauthorized } from '@/lib/response';
-import { deleteUser, getUser, getUserByUsername, updateUser } from '@/queries';
-import { z } from 'zod';
+import { z } from 'zod'
+import { canUpdateUser, canViewUser, canDeleteUser } from '@/validations'
+import {
+  getUser,
+  getUserByEmail,
+  getUserByClerkId,
+  updateUser,
+  deleteUser,
+} from '@/queries/drizzle'
+import { json, unauthorized, badRequest, ok, notFound } from '@/lib/response'
+import { parseRequest } from '@/lib/request'
+import { userRoleParam } from '@/lib/schema'
 
 export async function GET(request: Request, { params }: { params: Promise<{ userId: string }> }) {
-  const { auth, error } = await parseRequest(request);
+  const { auth, error } = await parseRequest(request)
 
   if (error) {
-    return error();
+    return error()
   }
 
-  const { userId } = await params;
+  const { userId } = await params
 
   if (!(await canViewUser(auth, userId))) {
-    return unauthorized();
+    return unauthorized()
   }
 
-  const user = await getUser(userId);
+  // userId parameter is the Clerk ID from URL
+  const user = await getUserByClerkId(userId)
 
-  return json(user);
+  if (!user) {
+    return notFound()
+  }
+
+  return json(user)
 }
 
 export async function POST(request: Request, { params }: { params: Promise<{ userId: string }> }) {
   const schema = z.object({
-    username: z.string().max(255),
-    password: z.string().max(255).optional(),
-    role: z
-      .string()
-      .regex(/admin|user|view-only/i)
-      .optional(),
-  });
+    firstName: z.string().max(255).optional(),
+    lastName: z.string().max(255).optional(),
+    displayName: z.string().max(255).optional(),
+    role: userRoleParam.optional(),
+  })
 
-  const { auth, body, error } = await parseRequest(request, schema);
+  const { auth, body, error } = await parseRequest(request, schema)
 
   if (error) {
-    return error();
+    return error()
   }
 
-  const { userId } = await params;
+  const { userId } = await params
 
   if (!(await canUpdateUser(auth, userId))) {
-    return unauthorized();
+    return unauthorized()
   }
 
-  const { username, password, role } = body;
+  const { firstName, lastName, displayName, role } = body
 
-  const user = await getUser(userId);
+  const data: any = {}
 
-  const data: any = {};
-
-  if (password) {
-    data.password = hashPassword(password);
+  if (firstName !== undefined) {
+    data.first_name = firstName
   }
 
-  // Only admin can change these fields
+  if (lastName !== undefined) {
+    data.last_name = lastName
+  }
+
+  if (displayName !== undefined) {
+    data.display_name = displayName
+  }
+
+  // Only admin can change role
   if (role && auth.user.isAdmin) {
-    data.role = role;
+    data.role = role
   }
 
-  if (username && auth.user.isAdmin) {
-    data.username = username;
+  // Get database user ID from Clerk ID
+  const targetUser = await getUserByClerkId(userId)
+  if (!targetUser) {
+    return notFound()
   }
 
-  // Check when username changes
-  if (data.username && user.username !== data.username) {
-    const user = await getUserByUsername(username);
+  const updated = await updateUser(targetUser.userId, data)
 
-    if (user) {
-      return badRequest('User already exists');
-    }
-  }
-
-  const updated = await updateUser(userId, data);
-
-  return json(updated);
+  return json(updated)
 }
 
 export async function DELETE(
   request: Request,
-  { params }: { params: Promise<{ userId: string }> },
+  { params }: { params: Promise<{ userId: string }> }
 ) {
-  const { auth, error } = await parseRequest(request);
+  const { auth, error } = await parseRequest(request)
 
   if (error) {
-    return error();
+    return error()
   }
 
-  const { userId } = await params;
+  const { userId } = await params
 
   if (!(await canDeleteUser(auth))) {
-    return unauthorized();
+    return unauthorized()
   }
 
-  if (userId === auth.user.id) {
-    return badRequest('You cannot delete yourself.');
+  // userId parameter is the Clerk ID from URL
+  if (userId === auth.user.clerkId) {
+    return badRequest('You cannot delete yourself.')
   }
 
-  await deleteUser(userId);
+  // Get database user ID from Clerk ID
+  const targetUser = await getUserByClerkId(userId)
+  if (!targetUser) {
+    return notFound()
+  }
 
-  return ok();
+  await deleteUser(targetUser.userId)
+
+  return ok()
 }

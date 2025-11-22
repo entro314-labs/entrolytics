@@ -1,0 +1,44 @@
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(107, 70, 193, 0.5);
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: difference;
+  transition: transform 0.2s ease;
+  will-change: transform;
+}
+
+.cursor.hovering {
+  transform: translate(-50%, -50%) scale(1.5);
+  background: rgba(107, 70, 193, 0.7);
+}
+
+/* Hide default cursor on landing page */
+:global(body:has(.cursor)) {
+  cursor: none;
+}
+
+:global(body:has(.cursor) a),
+:global(body:has(.cursor) button),
+:global(body:has(.cursor) .interactive) {
+  cursor: none;
+}
+
+/* Show default cursor on mobile */
+@media (max-width: 768px) {
+  .cursor {
+    display: none;
+  }
+
+  :global(body:has(.cursor)),
+  :global(body:has(.cursor) a),
+  :global(body:has(.cursor) button) {
+    cursor: auto;
+  }
+}

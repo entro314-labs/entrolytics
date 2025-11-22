@@ -1,0 +1,30 @@
+.landingPage {
+  position: relative;
+  width: 100%;
+  overflow-x: hidden;
+  background: linear-gradient(180deg, #fafafa 0%, #ffffff 50%, #f8f9fa 100%);
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .landingPage {
+    background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 50%, #0f0f0f 100%);
+  }
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Global landing page typography */
+.landingPage h1,
+.landingPage h2,
+.landingPage h3 {
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.landingPage p {
+  line-height: 1.6;
+}

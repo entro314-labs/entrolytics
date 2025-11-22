@@ -1,0 +1,53 @@
+import { SideMenu } from '@/components/common/SideMenu'
+import { useMessages, useNavigation } from '@/components/hooks'
+import { UserCircle, Users, SlidersHorizontal as Knobs } from '@/components/icons'
+
+export function SettingsNav({ onItemClick }: { onItemClick?: () => void }) {
+  const { formatMessage, labels } = useMessages()
+  const { renderUrl, pathname } = useNavigation()
+
+  const items = [
+    {
+      label: formatMessage(labels.application),
+      items: [
+        {
+          id: 'preferences',
+          label: formatMessage(labels.preferences),
+          path: renderUrl('/settings/preferences'),
+          icon: <Knobs />,
+        },
+      ],
+    },
+    {
+      label: formatMessage(labels.account),
+      items: [
+        {
+          id: 'profile',
+          label: formatMessage(labels.profile),
+          path: renderUrl('/settings/profile'),
+          icon: <UserCircle />,
+        },
+        {
+          id: 'orgs',
+          label: formatMessage(labels.orgs),
+          path: renderUrl('/settings/orgs'),
+          icon: <Users />,
+        },
+      ],
+    },
+  ]
+
+  const selectedKey = items
+    .flatMap((e) => e.items)
+    .find(({ path }) => path && pathname.includes(path.split('?')[0]))?.id
+
+  return (
+    <SideMenu
+      items={items}
+      title={formatMessage(labels.settings)}
+      selectedKey={selectedKey}
+      allowMinimize={false}
+      onItemClick={onItemClick}
+    />
+  )
+}

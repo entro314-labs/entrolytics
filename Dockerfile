@@ -5,7 +5,7 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
 RUN npm install -g pnpm
-RUN pnpm install --frozen-lockfile
+RUN pnpm install 
 
 # Rebuild the source code only when needed
 FROM node:22-alpine AS builder
@@ -41,14 +41,14 @@ RUN set -x \
     && apk add --no-cache curl
 
 # Script dependencies
-RUN pnpm add npm-run-all dotenv prisma@6.7.0
+RUN pnpm add npm-run-all dotenv drizzle-kit
 
-# Permissions for prisma
+# Permissions for node modules
 RUN chown -R nextjs:nodejs node_modules/.pnpm/
 
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
-COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/scripts ./scripts
+COPY --from=builder /app/dist ./dist
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing

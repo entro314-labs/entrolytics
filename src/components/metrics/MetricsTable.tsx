@@ -1,133 +1,110 @@
-import { ReactNode, useMemo, useState } from 'react';
-import { Loading, Icon, Text, SearchField } from 'react-basics';
-import classNames from 'classnames';
-import ErrorMessage from '@/components/common/ErrorMessage';
-import LinkButton from '@/components/common/LinkButton';
-import { DEFAULT_ANIMATION_DURATION } from '@/lib/constants';
-import { percentFilter } from '@/lib/filters';
-import {
-  useNavigation,
-  useWebsiteMetrics,
-  useMessages,
-  useLocale,
-  useFormat,
-} from '@/components/hooks';
-import Icons from '@/components/icons';
-import ListTable, { ListTableProps } from './ListTable';
-import styles from './MetricsTable.module.css';
-import { DownloadButton } from '@/components/input/DownloadButton';
+import { useEffect, useMemo } from 'react'
+import { Icon, Text, Row } from '@entro314labs/entro-zen'
+import { LinkButton } from '@/components/common/LinkButton'
+import { LoadingPanel } from '@/components/common/LoadingPanel'
+import { useMessages, useNavigation, useWebsiteMetricsQuery } from '@/components/hooks'
+import { Maximize } from '@/components/icons'
+import { percentFilter } from '@/lib/filters'
+import { ListTable, ListTableProps } from './ListTable'
+import { MetricLabel } from '@/components/metrics/MetricLabel'
 
 export interface MetricsTableProps extends ListTableProps {
-  websiteId: string;
-  type?: string;
-  className?: string;
-  dataFilter?: (data: any) => any;
-  limit?: number;
-  delay?: number;
-  onDataLoad?: (data: any) => void;
-  onSearch?: (search: string) => void;
-  allowSearch?: boolean;
-  searchFormattedValues?: boolean;
-  showMore?: boolean;
-  params?: { [key: string]: any };
-  allowDownload?: boolean;
-  children?: ReactNode;
+  websiteId: string
+  type: string
+  dataFilter?: (data: any) => any
+  limit?: number
+  showMore?: boolean
+  filterLink?: boolean
+  params?: Record<string, any>
+  onDataLoad?: (data: any) => void
 }
 
 export function MetricsTable({
   websiteId,
   type,
-  className,
   dataFilter,
   limit,
-  onDataLoad,
-  delay = null,
-  allowSearch = false,
-  searchFormattedValues = false,
-  showMore = true,
+  showMore = false,
+  filterLink = true,
   params,
-  allowDownload = true,
-  children,
+  onDataLoad,
   ...props
 }: MetricsTableProps) {
-  const [search, setSearch] = useState('');
-  const { formatValue } = useFormat();
-  const { renderUrl } = useNavigation();
-  const { formatMessage, labels } = useMessages();
-  const { dir } = useLocale();
-
-  const { data, isLoading, isFetched, error } = useWebsiteMetrics(
-    websiteId,
-    { type, limit, search: searchFormattedValues ? undefined : search, ...params },
-    {
-      retryDelay: delay || DEFAULT_ANIMATION_DURATION,
-      onDataLoad,
-    },
-  );
+  const { updateParams } = useNavigation()
+  const { formatMessage, labels } = useMessages()
+  const { data, isLoading, isFetching, error } = useWebsiteMetricsQuery(websiteId, {
+    type,
+    limit,
+    ...params,
+  })
 
   const filteredData = useMemo(() => {
-    if (data) {
-      let items = data as any[];
+    if (data && Array.isArray(data)) {
+      let items = data as any[]
 
       if (dataFilter) {
         if (Array.isArray(dataFilter)) {
           items = dataFilter.reduce((arr, filter) => {
-            return filter(arr);
-          }, items);
+            const result = filter(arr)
+            return Array.isArray(result) ? result : []
+          }, items)
         } else {
-          items = dataFilter(items);
+          const result = dataFilter(items)
+          items = Array.isArray(result) ? result : []
         }
       }
 
-      if (searchFormattedValues && search) {
-        items = items.filter(({ x, ...data }) => {
-          const value = formatValue(x, type, data);
+      items = percentFilter(items)
 
-          return value?.toLowerCase().includes(search.toLowerCase());
-        });
+      // Ensure items is still an array after percentFilter
+      if (!Array.isArray(items)) {
+        console.warn('MetricsTable: percentFilter returned non-array:', items)
+        return []
       }
 
-      items = percentFilter(items);
-
-      return items;
+      return items.map(({ x, y, z, ...props }, index) => ({
+        label: x != null ? String(x) : `item-${index}`,
+        count: typeof y === 'number' ? y : 0,
+        percent: typeof z === 'number' ? z : 0,
+        ...props,
+      }))
     }
-    return [];
-  }, [data, dataFilter, search, limit, formatValue, type]);
+    return []
+  }, [data, dataFilter, limit, type])
+
+  useEffect(() => {
+    if (data) {
+      onDataLoad?.(data)
+    }
+  }, [data])
+
+  const renderLabel = (row: any) => {
+    return filterLink ? <MetricLabel type={type} data={row} /> : row.label
+  }
 
   return (
-    <div className={classNames(styles.container, className)}>
-      {error && <ErrorMessage />}
-      <div className={styles.actions}>
-        {allowSearch && (
-          <SearchField
-            className={styles.search}
-            value={search}
-            onSearch={setSearch}
-            delay={300}
-            autoFocus={true}
-          />
-        )}
-        <div className={styles.buttons}>
-          {children}
-          {allowDownload && <DownloadButton filename={type} data={filteredData} />}
+    <LoadingPanel
+      data={data}
+      isFetching={isFetching}
+      isLoading={isLoading}
+      error={error}
+      minHeight="400px"
+    >
+      <div style={{ display: 'grid', gridTemplateRows: '1fr auto', minHeight: '400px' }}>
+        <div>{data && <ListTable {...props} data={filteredData} renderLabel={renderLabel} />}</div>
+        <div>
+          {showMore && limit && (
+            <Row justifyContent="center" alignItems="flex-end">
+              <LinkButton href={updateParams({ view: type })} variant="quiet">
+                <Icon size="sm">
+                  <Maximize />
+                </Icon>
+                <Text>{formatMessage(labels.more)}</Text>
+              </LinkButton>
+            </Row>
+          )}
         </div>
       </div>
-      {data && !error && (
-        <ListTable {...(props as ListTableProps)} data={filteredData} className={className} />
-      )}
-      {!data && isLoading && !isFetched && <Loading icon="dots" />}
-      <div className={styles.footer}>
-        {showMore && data && !error && limit && (
-          <LinkButton href={renderUrl({ view: type })} variant="quiet">
-            <Text>{formatMessage(labels.more)}</Text>
-            <Icon size="sm" rotate={dir === 'rtl' ? 180 : 0}>
-              <Icons.ArrowRight />
-            </Icon>
-          </LinkButton>
-        )}
-      </div>
-    </div>
-  );
+    </LoadingPanel>
+  )
 }
-
-export default MetricsTable;

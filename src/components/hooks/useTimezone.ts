@@ -1,19 +1,21 @@
-import { setItem } from '@/lib/storage';
-import { TIMEZONE_CONFIG } from '@/lib/constants';
-import { formatInTimeZone, zonedTimeToUtc, utcToZonedTime } from 'date-fns-tz';
-import useStore, { setTimezone } from '@/store/app';
-import useLocale from './useLocale';
+import { setItem } from '@/lib/storage'
+import { TIMEZONE_CONFIG } from '@/lib/constants'
+import { formatInTimeZone, fromZonedTime, toZonedTime } from 'date-fns-tz'
+import { useApp, setTimezone } from '@/store/app'
+import { useLocale } from './useLocale'
+import { getTimezone } from '@/lib/date'
 
-const selector = (state: { timezone: string }) => state.timezone;
+const selector = (state: { timezone: string }) => state.timezone
 
 export function useTimezone() {
-  const timezone = useStore(selector);
-  const { dateLocale } = useLocale();
+  const timezone = useApp(selector)
+  const localTimeZone = getTimezone()
+  const { dateLocale } = useLocale()
 
   const saveTimezone = (value: string) => {
-    setItem(TIMEZONE_CONFIG, value);
-    setTimezone(value);
-  };
+    setItem(TIMEZONE_CONFIG, value)
+    setTimezone(value)
+  }
 
   const formatTimezoneDate = (date: string, pattern: string) => {
     return formatInTimeZone(
@@ -22,19 +24,73 @@ export function useTimezone() {
         : date.split(' ').join('T') + 'Z',
       timezone,
       pattern,
-      { locale: dateLocale },
-    );
-  };
+      { locale: dateLocale }
+    )
+  }
+
+  const formatSeriesTimezone = (data: any[], column: string, tz: string) => {
+    return data.map((item) => {
+      const date = new Date(item[column])
+
+      const format = new Intl.DateTimeFormat('en-US', {
+        timeZone: tz,
+        hour12: false,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      })
+
+      const parts = format.formatToParts(date)
+      const get = (type: string) => parts.find((p) => p.type === type)?.value
+
+      const year = get('year')
+      const month = get('month')
+      const day = get('day')
+      const hour = get('hour')
+      const minute = get('minute')
+      const second = get('second')
+
+      return {
+        ...item,
+        [column]: `${year}-${month}-${day} ${hour}:${minute}:${second}`,
+      }
+    })
+  }
 
   const toUtc = (date: Date | string | number) => {
-    return zonedTimeToUtc(date, timezone);
-  };
+    return fromZonedTime(date, timezone)
+  }
 
   const fromUtc = (date: Date | string | number) => {
-    return utcToZonedTime(date, timezone);
-  };
+    return toZonedTime(date, timezone)
+  }
 
-  return { timezone, saveTimezone, formatTimezoneDate, toUtc, fromUtc };
+  const localToUtc = (date: Date | string | number) => {
+    return fromZonedTime(date, localTimeZone)
+  }
+
+  const localFromUtc = (date: Date | string | number) => {
+    return toZonedTime(date, localTimeZone)
+  }
+
+  const canonicalizeTimezone = (tz: string): string => {
+    // Handle legacy timezone mappings if needed
+    return tz
+  }
+
+  return {
+    timezone,
+    localTimeZone,
+    toUtc,
+    fromUtc,
+    localToUtc,
+    localFromUtc,
+    saveTimezone,
+    formatTimezoneDate,
+    formatSeriesTimezone,
+    canonicalizeTimezone,
+  }
 }
-
-export default useTimezone;

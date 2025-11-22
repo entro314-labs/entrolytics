@@ -1,37 +1,53 @@
-import { z } from 'zod';
-import { parseRequest } from '@/lib/request';
-import { unauthorized, json } from '@/lib/response';
-import { canViewWebsite } from '@/lib/auth';
-import { pagingParams } from '@/lib/schema';
-import { getWebsiteEvents } from '@/queries';
+import { getQueryFilters, parseRequest } from '@/lib/request'
+import { json, unauthorized, serverError } from '@/lib/response'
+import { filterParams, pagingParams, searchParams } from '@/lib/schema'
+import { canViewWebsite } from '@/validations'
+import { getWebsiteEvents } from '@/queries/sql'
+import { z } from 'zod'
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ websiteId: string }> },
+  { params }: { params: Promise<{ websiteId: string }> }
 ) {
-  const schema = z.object({
-    startAt: z.coerce.number().int(),
-    endAt: z.coerce.number().int(),
-    ...pagingParams,
-  });
+  console.log('[events] GET request started')
+  try {
+    const schema = z.object({
+      startAt: z.coerce.number().optional(),
+      endAt: z.coerce.number().optional(),
+      ...filterParams,
+      ...pagingParams,
+      ...searchParams,
+    })
 
-  const { auth, query, error } = await parseRequest(request, schema);
+    const { auth, query, error } = await parseRequest(request, schema)
 
-  if (error) {
-    return error();
+    if (error) {
+      return error()
+    }
+
+    const { websiteId } = await params
+
+    if (!(await canViewWebsite(auth, websiteId))) {
+      return unauthorized()
+    }
+
+    try {
+      const filters = await getQueryFilters(query, websiteId)
+      const data = await getWebsiteEvents(websiteId, filters)
+      return json(data)
+    } catch (err) {
+      const error = err as Error
+      console.error('[API Error] /api/websites/[websiteId]/events:', {
+        websiteId,
+        query,
+        error: error.message,
+        stack: error.stack,
+      })
+      return serverError({ message: error.message, stack: error.stack })
+    }
+  } catch (err) {
+    const error = err as Error
+    console.error('[FATAL] Unhandled error in events route:', error)
+    return serverError({ message: error.message, stack: error.stack })
   }
-
-  const { websiteId } = await params;
-  const { startAt, endAt } = query;
-
-  if (!(await canViewWebsite(auth, websiteId))) {
-    return unauthorized();
-  }
-
-  const startDate = new Date(+startAt);
-  const endDate = new Date(+endAt);
-
-  const data = await getWebsiteEvents(websiteId, { startDate, endDate }, query);
-
-  return json(data);
 }

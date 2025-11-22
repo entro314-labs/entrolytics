@@ -1,12 +1,16 @@
-const os = require('os');
-const isCI = require('is-ci');
-const pkg = require('../package.json');
+import os from 'node:os'
+import path from 'node:path'
+import isCI from 'is-ci'
+import { createRequire } from 'module'
 
-const url = 'https://api.umami.is/v1/telemetry';
+const require = createRequire(import.meta.url)
+const pkg = require(path.resolve(process.cwd(), 'package.json'))
 
-async function sendTelemetry(type) {
-  const { default: isDocker } = await import('is-docker');
-  const { default: fetch } = await import('node-fetch');
+const url = 'https://api.entrolytics.click/v1/telemetry'
+
+export async function sendTelemetry(type) {
+  const { default: isDocker } = await import('is-docker')
+  const { default: fetch } = await import('node-fetch')
 
   const data = {
     type,
@@ -19,7 +23,7 @@ async function sendTelemetry(type) {
       is_docker: isDocker(),
       is_ci: isCI,
     },
-  };
+  }
 
   try {
     await fetch(url, {
@@ -29,12 +33,8 @@ async function sendTelemetry(type) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
-    });
+    })
   } catch {
     // Ignore
   }
 }
-
-module.exports = {
-  sendTelemetry,
-};

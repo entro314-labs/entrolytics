@@ -1,32 +1,43 @@
-import { useMemo } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { buildUrl } from '@/lib/url';
+import { useState, useEffect } from 'react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { buildUrl } from '@/lib/url'
 
-export function useNavigation(): {
-  pathname: string;
-  query: { [key: string]: string };
-  router: any;
-  renderUrl: (params: any, reset?: boolean) => string;
-} {
-  const router = useRouter();
-  const pathname = usePathname();
-  const params = useSearchParams();
+export function useNavigation() {
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const [, orgId] = pathname.match(/\/orgs\/([a-f0-9-]+)/) || []
+  const [, websiteId] = pathname.match(/\/websites\/([a-f0-9-]+)/) || []
+  const [queryParams, setQueryParams] = useState(Object.fromEntries(searchParams))
 
-  const query = useMemo(() => {
-    const obj = {};
-
-    for (const [key, value] of params.entries()) {
-      obj[key] = value;
-    }
-
-    return obj;
-  }, [params]);
-
-  function renderUrl(params: any, reset?: boolean) {
-    return reset ? pathname : buildUrl(pathname, { ...query, ...params });
+  const updateParams = (params?: Record<string, string | number>) => {
+    return buildUrl(pathname, { ...queryParams, ...params })
   }
 
-  return { pathname, query, router, renderUrl };
-}
+  const replaceParams = (params?: Record<string, string | number>) => {
+    return buildUrl(pathname, params)
+  }
 
-export default useNavigation;
+  const renderUrl = (path: string, params?: Record<string, string | number> | false) => {
+    return buildUrl(
+      orgId ? `/orgs/${orgId}${path}` : path,
+      params === false ? {} : { ...queryParams, ...params }
+    )
+  }
+
+  useEffect(() => {
+    setQueryParams(Object.fromEntries(searchParams))
+  }, [searchParams.toString()])
+
+  return {
+    router,
+    pathname,
+    searchParams,
+    query: queryParams,
+    orgId,
+    websiteId,
+    updateParams,
+    replaceParams,
+    renderUrl,
+  }
+}

@@ -1,185 +1,192 @@
-import clickhouse from '@/lib/clickhouse';
-import { EVENT_COLUMNS, EVENT_TYPE, FILTER_COLUMNS, SESSION_COLUMNS } from '@/lib/constants';
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db';
-import prisma from '@/lib/prisma';
-import { QueryFilters } from '@/lib/types';
+import clickhouse from '@/lib/clickhouse'
+import { EVENT_COLUMNS, EVENT_TYPE, FILTER_COLUMNS, SESSION_COLUMNS } from '@/lib/constants'
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
+import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
+
+import { QueryFilters } from '@/lib/types'
+
+export interface PageviewMetricsParameters {
+  type: string
+  limit?: number | string
+  offset?: number | string
+}
+
+export interface PageviewMetricsData {
+  x: string
+  y: number
+}
 
 export async function getPageviewMetrics(
-  ...args: [
-    websiteId: string,
-    type: string,
-    filters: QueryFilters,
-    limit?: number | string,
-    offset?: number | string,
-  ]
+  ...args: [websiteId: string, parameters: PageviewMetricsParameters, filters: QueryFilters]
 ) {
   return runQuery({
-    [PRISMA]: () => relationalQuery(...args),
+    [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  });
+  })
 }
 
 async function relationalQuery(
   websiteId: string,
-  type: string,
-  filters: QueryFilters,
-  limit: number | string = 500,
-  offset: number | string = 0,
-) {
-  const column = FILTER_COLUMNS[type] || type;
-  const { rawQuery, parseFilters } = prisma;
-  const { filterQuery, cohortQuery, joinSession, params } = await parseFilters(
-    websiteId,
+  parameters: PageviewMetricsParameters,
+  filters: QueryFilters
+): Promise<PageviewMetricsData[]> {
+  const { type, limit = 500, offset = 0 } = parameters
+  let column = FILTER_COLUMNS[type] || type
+  // Using rawQuery FROM analytics-utils
+  const { filterQuery, joinSessionQuery, cohortQuery, queryParams } = parseFilters(
     {
       ...filters,
+      websiteId,
       eventType: column === 'event_name' ? EVENT_TYPE.customEvent : EVENT_TYPE.pageView,
     },
-    { joinSession: SESSION_COLUMNS.includes(type) },
-  );
+    { joinSession: SESSION_COLUMNS.includes(type) }
+  )
 
-  let entryExitQuery = '';
-  let excludeDomain = '';
+  let entryExitQuery = ''
+  let excludeDomain = ''
 
   if (column === 'referrer_domain') {
-    excludeDomain = `and website_event.referrer_domain != website_event.hostname
-      and website_event.referrer_domain != ''`;
+    excludeDomain = `AND website_event.referrer_domain != website_event.hostname
+      AND website_event.referrer_domain != ''`
   }
 
   if (type === 'entry' || type === 'exit') {
-    const aggregrate = type === 'entry' ? 'min' : 'max';
+    const order = type === 'entry' ? 'asc' : 'desc'
+    column = `x.${column}`
 
     entryExitQuery = `
-      join (
-        select visit_id,
-            ${aggregrate}(created_at) target_created_at
-        from website_event
-        where website_event.website_id = {{websiteId::uuid}}
-          and website_event.created_at between {{startDate}} and {{endDate}}
-          and event_type = {{eventType}}
-        group by visit_id
+      JOIN (
+        SELECT DISTINCT on (visit_id)
+          visit_id,
+          url_path
+        FROM website_event
+        WHERE website_event.website_id = {{websiteId::uuid}}
+          AND website_event.created_at between {{startDate}} AND {{endDate}}
+          AND event_type = {{eventType}}
+        ORDER BY visit_id, created_at ${order}
       ) x
       on x.visit_id = website_event.visit_id
-          and x.target_created_at = website_event.created_at
-    `;
+    `
   }
 
   return rawQuery(
     `
-    select ${column} x,
-      count(distinct website_event.session_id) as y
-    from website_event
+    SELECT ${column} x,
+      COUNT(DISTINCT website_event.session_id) as y
+    FROM website_event
     ${cohortQuery}
-    ${joinSession}
+    ${joinSessionQuery}
     ${entryExitQuery}
-    where website_event.website_id = {{websiteId::uuid}}
-      and website_event.created_at between {{startDate}} and {{endDate}}
-      and event_type = {{eventType}}
+    WHERE website_event.website_id = {{websiteId::uuid}}
+      AND website_event.created_at between {{startDate}} AND {{endDate}}
       ${excludeDomain}
       ${filterQuery}
-    group by 1
-    order by 2 desc
+    GROUP BY 1
+    ORDER BY 2 desc
     limit ${limit}
     offset ${offset}
     `,
-    params,
-  );
+    { ...queryParams, ...parameters }
+  )
 }
 
 async function clickhouseQuery(
   websiteId: string,
-  type: string,
-  filters: QueryFilters,
-  limit: number | string = 500,
-  offset: number | string = 0,
+  parameters: PageviewMetricsParameters,
+  filters: QueryFilters
 ): Promise<{ x: string; y: number }[]> {
-  const column = FILTER_COLUMNS[type] || type;
-  const { rawQuery, parseFilters } = clickhouse;
-  const { filterQuery, cohortQuery, params } = await parseFilters(websiteId, {
+  const { type, limit = 500, offset = 0 } = parameters
+  let column = FILTER_COLUMNS[type] || type
+  const { rawQuery, parseFilters } = clickhouse
+  const { filterQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
+    websiteId,
     eventType: column === 'event_name' ? EVENT_TYPE.customEvent : EVENT_TYPE.pageView,
-  });
+  })
 
-  let sql = '';
-  let excludeDomain = '';
+  let sql = ''
+  let excludeDomain = ''
 
-  if (EVENT_COLUMNS.some(item => Object.keys(filters).includes(item))) {
-    let entryExitQuery = '';
+  if (
+    filters &&
+    typeof filters === 'object' &&
+    EVENT_COLUMNS.some((item) => Object.keys(filters).includes(item))
+  ) {
+    let entryExitQuery = ''
 
     if (column === 'referrer_domain') {
-      excludeDomain = `and referrer_domain != hostname and referrer_domain != ''`;
+      excludeDomain = `AND referrer_domain != hostname AND referrer_domain != ''`
     }
 
     if (type === 'entry' || type === 'exit') {
-      const aggregrate = type === 'entry' ? 'min' : 'max';
+      const aggregrate = type === 'entry' ? 'argMin' : 'argMax'
+      column = `x.${column}`
 
       entryExitQuery = `
-      JOIN (select visit_id,
-          ${aggregrate}(created_at) target_created_at
-      from website_event
-      where website_id = {websiteId:UUID}
-        and created_at between {startDate:DateTime64} and {endDate:DateTime64}
-        and event_type = {eventType:UInt32}
-      group by visit_id) x
-      ON x.visit_id = website_event.visit_id
-          and x.target_created_at = website_event.created_at`;
+      JOIN (SELECT visit_id,
+          ${aggregrate}(url_path, created_at) url_path
+      FROM website_event
+      WHERE website_id = {websiteId:UUID}
+        AND created_at between {startDate:DateTime64} AND {endDate:DateTime64}
+        AND event_type = {eventType:UInt32}
+      GROUP BY visit_id) x
+      ON x.visit_id = website_event.visit_id`
     }
 
     sql = `
-    select ${column} x, 
+    SELECT ${column} x, 
       uniq(website_event.session_id) as y
-    from website_event
+    FROM website_event
     ${cohortQuery}
     ${entryExitQuery}
-    where website_id = {websiteId:UUID}
-      and created_at between {startDate:DateTime64} and {endDate:DateTime64}
-      and event_type = {eventType:UInt32}
+    WHERE website_id = {websiteId:UUID}
+      AND created_at between {startDate:DateTime64} AND {endDate:DateTime64}
       ${excludeDomain}
       ${filterQuery}
-    group by x
-    order by y desc
+    GROUP BY x
+    ORDER BY y desc
     limit ${limit}
     offset ${offset}
-    `;
+    `
   } else {
-    let groupByQuery = '';
-    let columnQuery = `arrayJoin(${column})`;
+    let groupByQuery = ''
+    let columnQuery = `arrayJoin(${column})`
 
     if (column === 'referrer_domain') {
-      excludeDomain = `and t != ''`;
+      excludeDomain = `AND t != ''`
     }
 
     if (type === 'entry') {
-      columnQuery = `argMinMerge(entry_url)`;
+      columnQuery = `argMinMerge(entry_url)`
     }
 
     if (type === 'exit') {
-      columnQuery = `argMaxMerge(exit_url)`;
+      columnQuery = `argMaxMerge(exit_url)`
     }
 
     if (type === 'entry' || type === 'exit') {
-      groupByQuery = 'group by s';
+      groupByQuery = 'GROUP BY s'
     }
 
     sql = `
-    select g.t as x,
+    SELECT g.t as x,
       uniq(s) as y
-    from (
-      select session_id s, 
+    FROM (
+      SELECT session_id s, 
         ${columnQuery} as t
-      from website_event_stats_hourly website_event
+      FROM website_event_stats_hourly as website_event
       ${cohortQuery}
-      where website_id = {websiteId:UUID}
-        and created_at between {startDate:DateTime64} and {endDate:DateTime64}
-        and event_type = {eventType:UInt32}
+      WHERE website_id = {websiteId:UUID}
+        AND created_at between {startDate:DateTime64} AND {endDate:DateTime64}
         ${excludeDomain}
         ${filterQuery}
       ${groupByQuery}) as g
-    group by x
-    order by y desc
+    GROUP BY x
+    ORDER BY y desc
     limit ${limit}
     offset ${offset}
-    `;
+    `
   }
 
-  return rawQuery(sql, params);
+  return rawQuery(sql, { ...queryParams, ...parameters })
 }

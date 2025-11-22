@@ -1,65 +1,65 @@
-import useMessages from './useMessages';
-import { BROWSERS, OS_NAMES } from '@/lib/constants';
-import useLocale from './useLocale';
-import useCountryNames from './useCountryNames';
-import useLanguageNames from './useLanguageNames';
-import regions from '../../../public/iso-3166-2.json';
+import { useMessages } from './useMessages'
+import { BROWSERS, OS_NAMES } from '@/lib/constants'
+import { useLocale } from './useLocale'
+import { useCountryNames } from './useCountryNames'
+import { useLanguageNames } from './useLanguageNames'
+import regions from '../../../public/iso-3166-2.json'
 
 export function useFormat() {
-  const { formatMessage, labels } = useMessages();
-  const { locale } = useLocale();
-  const { countryNames } = useCountryNames(locale);
-  const { languageNames } = useLanguageNames(locale);
+  const { formatMessage, labels } = useMessages()
+  const { locale } = useLocale()
+  const { countryNames } = useCountryNames(locale)
+  const { languageNames } = useLanguageNames(locale)
 
   const formatOS = (value: string): string => {
-    return OS_NAMES[value] || value;
-  };
+    return OS_NAMES[value] || value
+  }
 
   const formatBrowser = (value: string): string => {
-    return BROWSERS[value] || value;
-  };
+    return BROWSERS[value] || value
+  }
 
   const formatDevice = (value: string): string => {
-    return formatMessage(labels[value] || labels.unknown);
-  };
+    return formatMessage(labels[value] || labels.unknown)
+  }
 
   const formatCountry = (value: string): string => {
-    return countryNames[value] || value;
-  };
+    return countryNames[value] || value
+  }
 
   const formatRegion = (value?: string): string => {
-    const [country] = value?.split('-') || [];
-    return regions[value] ? `${regions[value]}, ${countryNames[country]}` : value;
-  };
+    const [country] = value?.split('-') || []
+    return regions[value] ? `${regions[value]}, ${countryNames[country]}` : value
+  }
 
   const formatCity = (value: string, country?: string): string => {
-    return countryNames[country] ? `${value}, ${countryNames[country]}` : value;
-  };
+    return countryNames[country] ? `${value}, ${countryNames[country]}` : value
+  }
 
   const formatLanguage = (value: string): string => {
-    return languageNames[value?.split('-')[0]] || value;
-  };
+    return languageNames[value?.split('-')[0]] || value
+  }
 
-  const formatValue = (value: string, type: string, data?: { [key: string]: any }): string => {
+  const formatValue = (value: string, type: string, data?: Record<string, any>): string => {
     switch (type) {
       case 'os':
-        return formatOS(value);
+        return formatOS(value)
       case 'browser':
-        return formatBrowser(value);
+        return formatBrowser(value)
       case 'device':
-        return formatDevice(value);
+        return formatDevice(value)
       case 'country':
-        return formatCountry(value);
+        return formatCountry(value)
       case 'region':
-        return formatRegion(value);
+        return formatRegion(value)
       case 'city':
-        return formatCity(value, data?.country);
+        return formatCity(value, data?.country)
       case 'language':
-        return formatLanguage(value);
+        return formatLanguage(value)
       default:
-        return value;
+        return typeof value === 'string' ? value : undefined
     }
-  };
+  }
 
   return {
     formatOS,
@@ -70,7 +70,5 @@ export function useFormat() {
     formatCity,
     formatLanguage,
     formatValue,
-  };
+  }
 }
-
-export default useFormat;

@@ -1,24 +1,24 @@
-import { useCallback } from 'react';
-import ListTable from '@/components/metrics/ListTable';
-import { useLocale, useCountryNames, useMessages } from '@/components/hooks';
-import classNames from 'classnames';
-import styles from './RealtimeCountries.module.css';
-import TypeIcon from '@/components/common/TypeIcon';
+import { useCallback } from 'react'
+import { ListTable } from '@/components/metrics/ListTable'
+import { useLocale, useCountryNames, useMessages } from '@/components/hooks'
+import classNames from 'classnames'
+import styles from './RealtimeCountries.module.css'
+import { TypeIcon } from '@/components/common/TypeIcon'
 
 export function RealtimeCountries({ data }) {
-  const { formatMessage, labels } = useMessages();
-  const { locale } = useLocale();
-  const { countryNames } = useCountryNames(locale);
+  const { formatMessage, labels } = useMessages()
+  const { locale } = useLocale()
+  const { countryNames } = useCountryNames(locale)
 
   const renderCountryName = useCallback(
-    ({ x: code }) => (
+    (data) => (
       <span className={classNames(styles.row)}>
-        <TypeIcon type="country" value={code?.toLowerCase()} />
-        {countryNames[code]}
+        <TypeIcon type="country" value={data.label} />
+        {countryNames[data.label]}
       </span>
     ),
-    [countryNames, locale],
-  );
+    [countryNames, locale]
+  )
 
   return (
     <ListTable
@@ -27,7 +27,5 @@ export function RealtimeCountries({ data }) {
       data={data}
       renderLabel={renderCountryName}
     />
-  );
+  )
 }
-
-export default RealtimeCountries;

@@ -1,12 +1,10 @@
-import { ClickHouseClient, createClient } from '@clickhouse/client';
-import { formatInTimeZone } from 'date-fns-tz';
-import debug from 'debug';
-import { CLICKHOUSE } from '@/lib/db';
-import { getWebsite } from '@/queries';
-import { DEFAULT_PAGE_SIZE, OPERATORS } from './constants';
-import { maxDate } from './date';
-import { filtersToArray } from './params';
-import { PageParams, QueryFilters, QueryOptions } from './types';
+import { ClickHouseClient, createClient } from '@clickhouse/client'
+import { formatInTimeZone } from 'date-fns-tz'
+import debug from 'debug'
+import { CLICKHOUSE } from '@/lib/db'
+import { DEFAULT_PAGE_SIZE, FILTER_COLUMNS, OPERATORS } from './constants'
+import { filtersObjectToArray } from './params'
+import { QueryFilters, QueryOptions } from './types'
 
 export const CLICKHOUSE_DATE_FORMATS = {
   utc: '%Y-%m-%dT%H:%i:%SZ',
@@ -16,14 +14,18 @@ export const CLICKHOUSE_DATE_FORMATS = {
   day: '%Y-%m-%d',
   month: '%Y-%m-01',
   year: '%Y-01-01',
-};
+}
 
-const log = debug('umami:clickhouse');
+const log = debug('entrolytics:clickhouse')
 
-let clickhouse: ClickHouseClient;
-const enabled = Boolean(process.env.CLICKHOUSE_URL);
+let clickhouse: ClickHouseClient
+const enabled = Boolean(process.env.CLICKHOUSE_URL)
 
 function getClient() {
+  if (!process.env.CLICKHOUSE_URL) {
+    throw new Error('CLICKHOUSE_URL environment variable is not defined')
+  }
+
   const {
     hostname,
     port,
@@ -31,212 +33,191 @@ function getClient() {
     protocol,
     username = 'default',
     password,
-  } = new URL(process.env.CLICKHOUSE_URL);
+  } = new URL(process.env.CLICKHOUSE_URL)
 
   const client = createClient({
     url: `${protocol}//${hostname}:${port}`,
     database: pathname.replace('/', ''),
     username: username,
     password,
-  });
+  })
 
   if (process.env.NODE_ENV !== 'production') {
-    global[CLICKHOUSE] = client;
+    globalThis[CLICKHOUSE] = client
   }
 
-  log('Clickhouse initialized');
+  log('Clickhouse initialized')
 
-  return client;
+  return client
 }
 
 function getUTCString(date?: Date | string | number) {
-  return formatInTimeZone(date || new Date(), 'UTC', 'yyyy-MM-dd HH:mm:ss');
+  return formatInTimeZone(date || new Date(), 'UTC', 'yyyy-MM-dd HH:mm:ss')
 }
 
 function getDateStringSQL(data: any, unit: string = 'utc', timezone?: string) {
   if (timezone) {
-    return `formatDateTime(${data}, '${CLICKHOUSE_DATE_FORMATS[unit]}', '${timezone}')`;
+    return `formatDateTime(${data}, '${CLICKHOUSE_DATE_FORMATS[unit]}', '${timezone}')`
   }
 
-  return `formatDateTime(${data}, '${CLICKHOUSE_DATE_FORMATS[unit]}')`;
+  return `formatDateTime(${data}, '${CLICKHOUSE_DATE_FORMATS[unit]}')`
 }
 
 function getDateSQL(field: string, unit: string, timezone?: string) {
   if (timezone) {
-    return `toDateTime(date_trunc('${unit}', ${field}, '${timezone}'), '${timezone}')`;
+    return `toDateTime(date_trunc('${unit}', ${field}, '${timezone}'), '${timezone}')`
   }
-  return `toDateTime(date_trunc('${unit}', ${field}))`;
+  return `toDateTime(date_trunc('${unit}', ${field}))`
 }
 
 function getSearchSQL(column: string, param: string = 'search'): string {
-  return `and positionCaseInsensitive(${column}, {${param}:String}) > 0`;
+  return `and positionCaseInsensitive(${column}, {${param}:String}) > 0`
 }
 
 function mapFilter(column: string, operator: string, name: string, type: string = 'String') {
-  const value = `{${name}:${type}}`;
+  const value = `{${name}:${type}}`
 
   switch (operator) {
     case OPERATORS.equals:
-      return `${column} = ${value}`;
+      return `${column} = ${value}`
     case OPERATORS.notEquals:
-      return `${column} != ${value}`;
+      return `${column} != ${value}`
     case OPERATORS.contains:
-      return `positionCaseInsensitive(${column}, ${value}) > 0`;
+      return `positionCaseInsensitive(${column}, ${value}) > 0`
     case OPERATORS.doesNotContain:
-      return `positionCaseInsensitive(${column}, ${value}) = 0`;
+      return `positionCaseInsensitive(${column}, ${value}) = 0`
     default:
-      return '';
+      return ''
   }
 }
 
-function mapCohortFilter(column: string, operator: string, value: string) {
-  switch (operator) {
-    case OPERATORS.equals:
-      return `${column} = '${value}'`;
-    case OPERATORS.notEquals:
-      return `${column} != '${value}'`;
-    case OPERATORS.contains:
-      return `positionCaseInsensitive(${column}, '${value}') > 0`;
-    case OPERATORS.doesNotContain:
-      return `positionCaseInsensitive(${column}, '${value}') = 0`;
-    default:
-      return '';
-  }
-}
+function getFilterQuery(filters: Record<string, any>, options: QueryOptions = {}) {
+  const query = filtersObjectToArray(filters, options).reduce((arr, { name, column, operator }) => {
+    const isCohort = options?.isCohort
 
-function getFilterQuery(filters: QueryFilters = {}, options: QueryOptions = {}) {
-  const query = filtersToArray(filters, options).reduce((arr, { name, column, operator }) => {
+    if (isCohort) {
+      column = FILTER_COLUMNS[name.slice('cohort_'.length)]
+    }
+
     if (column) {
-      arr.push(`and ${mapFilter(column, operator, name)}`);
+      if (name === 'eventType') {
+        arr.push(`and ${mapFilter(column, operator, name, 'UInt32')}`)
+      } else {
+        arr.push(`and ${mapFilter(column, operator, name)}`)
+      }
 
       if (name === 'referrer') {
-        arr.push(`and referrer_domain != hostname`);
+        arr.push(`and referrer_domain != hostname`)
       }
     }
 
-    return arr;
-  }, []);
+    return arr
+  }, [])
 
-  return query.join('\n');
+  return query.join('\n')
 }
 
-function getCohortQuery(websiteId: string, filters: QueryFilters = {}, options: QueryOptions = {}) {
-  const query = filtersToArray(filters, options).reduce(
-    (arr, { name, column, operator, value }) => {
-      if (column) {
-        arr.push(
-          `${arr.length === 0 ? 'where' : 'and'} ${mapCohortFilter(column, operator, value)}`,
-        );
-
-        if (name === 'referrer') {
-          arr.push(`and referrer_domain != hostname`);
-        }
-      }
-
-      return arr;
-    },
-    [],
-  );
-
-  if (query.length > 0) {
-    // add website and date range filters
-    query.push(`and website_id = '${websiteId}'`);
-    query.push(
-      `and created_at between parseDateTimeBestEffort('${filters.startDate}') and parseDateTimeBestEffort('${filters.endDate}')`,
-    );
-
-    return `join
-    (select distinct session_id
-    from website_event
-    ${query.join('\n')}) cohort
-    on cohort.session_id = website_event.session_id
-    `;
+function getCohortQuery(filters: Record<string, any>) {
+  if (!filters || Object.keys(filters).length === 0) {
+    return ''
   }
 
-  return '';
+  const filterQuery = getFilterQuery(filters, { isCohort: true })
+
+  return `join (
+      select distinct session_id
+      from website_event
+      where website_id = {websiteId:UUID}
+      and created_at between {cohort_startDate:DateTime64} and {cohort_endDate:DateTime64}
+      ${filterQuery}
+    ) as cohort
+      on cohort.session_id = website_event.session_id
+    `
 }
 
-function getDateQuery(filters: QueryFilters = {}) {
-  const { startDate, endDate, timezone } = filters;
+function getDateQuery(filters: Record<string, any>) {
+  const { startDate, endDate, timezone } = filters
 
   if (startDate) {
     if (endDate) {
       if (timezone) {
-        return `and created_at between toTimezone({startDate:DateTime64},{timezone:String}) and toTimezone({endDate:DateTime64},{timezone:String})`;
+        return `and created_at between toTimezone({startDate:DateTime64},{timezone:String}) and toTimezone({endDate:DateTime64},{timezone:String})`
       }
-      return `and created_at between {startDate:DateTime64} and {endDate:DateTime64}`;
+      return `and created_at between {startDate:DateTime64} and {endDate:DateTime64}`
     } else {
       if (timezone) {
-        return `and created_at >= toTimezone({startDate:DateTime64},{timezone:String})`;
+        return `and created_at >= toTimezone({startDate:DateTime64},{timezone:String})`
       }
-      return `and created_at >= {startDate:DateTime64}`;
+      return `and created_at >= {startDate:DateTime64}`
     }
   }
 
-  return '';
+  return ''
 }
 
-function getFilterParams(filters: QueryFilters = {}) {
-  return filtersToArray(filters).reduce((obj, { name, value }) => {
-    if (name && value !== undefined) {
-      obj[name] = value;
-    }
+function getQueryParams(filters: Record<string, any>) {
+  return {
+    ...filters,
+    ...filtersObjectToArray(filters).reduce((obj, { name, value }) => {
+      if (name && value !== undefined) {
+        obj[name] = value
+      }
 
-    return obj;
-  }, {});
+      return obj
+    }, {}),
+  }
 }
 
-async function parseFilters(websiteId: string, filters: QueryFilters = {}, options?: QueryOptions) {
-  const website = await getWebsite(websiteId);
+function parseFilters(filters: Record<string, any>, options?: QueryOptions) {
+  const cohortFilters = Object.fromEntries(
+    Object.entries(filters).filter(([key]) => key.startsWith('cohort_'))
+  )
 
   return {
     filterQuery: getFilterQuery(filters, options),
     dateQuery: getDateQuery(filters),
-    params: {
-      ...getFilterParams(filters),
-      websiteId,
-      startDate: maxDate(filters.startDate, new Date(website?.resetAt)),
-    },
-    cohortQuery: getCohortQuery(websiteId, filters?.cohort),
-  };
+    queryParams: getQueryParams(filters),
+    cohortQuery: getCohortQuery(cohortFilters),
+  }
 }
 
-async function pagedQuery(
+async function pagedRawQuery(
   query: string,
-  queryParams: { [key: string]: any },
-  pageParams: PageParams = {},
+  queryParams: Record<string, any>,
+  filters: QueryFilters,
+  name?: string
 ) {
-  const { page = 1, pageSize, orderBy, sortDescending = false } = pageParams;
-  const size = +pageSize || DEFAULT_PAGE_SIZE;
-  const offset = +size * (+page - 1);
-  const direction = sortDescending ? 'desc' : 'asc';
+  const { page = 1, pageSize, orderBy, sortDescending = false, search } = filters
+  const size = +pageSize || DEFAULT_PAGE_SIZE
+  const offset = +size * (+page - 1)
+  const direction = sortDescending ? 'desc' : 'asc'
 
   const statements = [
     orderBy && `order by ${orderBy} ${direction}`,
     +size > 0 && `limit ${+size} offset ${+offset}`,
   ]
-    .filter(n => n)
-    .join('\n');
+    .filter((n) => n)
+    .join('\n')
 
-  const count = await rawQuery(`select count(*) as num from (${query}) t`, queryParams).then(
-    res => res[0].num,
-  );
+  const count = await rawQuery(`select count(*) as num from (${query}) t`, queryParams, name).then(
+    (res) => res[0].num
+  )
 
-  const data = await rawQuery(`${query}${statements}`, queryParams);
+  const data = await rawQuery(`${query}${statements}`, queryParams, name)
 
-  return { data, count, page: +page, pageSize: size, orderBy };
+  return { data, count, page: +page, pageSize: size, orderBy, search }
 }
 
 async function rawQuery<T = unknown>(
   query: string,
   params: Record<string, unknown> = {},
+  name?: string
 ): Promise<T> {
   if (process.env.LOG_QUERY) {
-    log('QUERY:\n', query);
-    log('PARAMETERS:\n', params);
+    log({ name: name || 'rawQuery', query, params })
   }
 
-  await connect();
+  await connect()
 
   const resultSet = await clickhouse.query({
     query: query,
@@ -246,35 +227,35 @@ async function rawQuery<T = unknown>(
       date_time_output_format: 'iso',
       output_format_json_quote_64bit_integers: 0,
     },
-  });
+  })
 
-  return (await resultSet.json()) as T;
+  return (await resultSet.json()) as T
 }
 
 async function insert(table: string, values: any[]) {
-  await connect();
+  await connect()
 
-  return clickhouse.insert({ table, values, format: 'JSONEachRow' });
+  return clickhouse.insert({ table, values, format: 'JSONEachRow' })
 }
 
 async function findUnique(data: any[]) {
   if (data.length > 1) {
-    throw `${data.length} records found when expecting 1.`;
+    throw `${data.length} records found when expecting 1.`
   }
 
-  return findFirst(data);
+  return findFirst(data)
 }
 
 async function findFirst(data: any[]) {
-  return data[0] ?? null;
+  return data[0] ?? null
 }
 
 async function connect() {
   if (enabled && !clickhouse) {
-    clickhouse = process.env.CLICKHOUSE_URL && (global[CLICKHOUSE] || getClient());
+    clickhouse = process.env.CLICKHOUSE_URL && (globalThis[CLICKHOUSE] || getClient())
   }
 
-  return clickhouse;
+  return clickhouse
 }
 
 export default {
@@ -288,9 +269,9 @@ export default {
   getFilterQuery,
   getUTCString,
   parseFilters,
-  pagedQuery,
+  pagedRawQuery,
   findUnique,
   findFirst,
   rawQuery,
   insert,
-};
+}

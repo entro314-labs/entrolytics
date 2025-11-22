@@ -1,9 +1,9 @@
-import { create } from 'zustand';
+import { create } from 'zustand'
 
-const store = create(() => ({}));
+const store = create(() => ({}))
 
 export function setValue(key: string, value: any) {
-  store.setState({ [key]: value });
+  store.setState({ [key]: value })
 }
 
-export default store;
+export const useCache = store

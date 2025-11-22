@@ -5,6 +5,18 @@
       "value": "Código de acceso"
     }
   ],
+  "label.account": [
+    {
+      "type": 0,
+      "value": "Account"
+    }
+  ],
+  "label.action": [
+    {
+      "type": 0,
+      "value": "Action"
+    }
+  ],
   "label.actions": [
     {
       "type": 0,
@@ -23,16 +35,34 @@
       "value": "Engadir"
     }
   ],
+  "label.add-board": [
+    {
+      "type": 0,
+      "value": "Engadir taboleiro"
+    }
+  ],
   "label.add-description": [
     {
       "type": 0,
       "value": "Engadir descrición"
     }
   ],
+  "label.add-link": [
+    {
+      "type": 0,
+      "value": "Add link"
+    }
+  ],
   "label.add-member": [
     {
       "type": 0,
       "value": "Engadir membro"
+    }
+  ],
+  "label.add-pixel": [
+    {
+      "type": 0,
+      "value": "Add pixel"
     }
   ],
   "label.add-step": [
@@ -53,10 +83,16 @@
       "value": "Administrador/a"
     }
   ],
+  "label.affiliate": [
+    {
+      "type": 0,
+      "value": "Afiliado"
+    }
+  ],
   "label.after": [
     {
       "type": 0,
-      "value": "After"
+      "value": "Despois"
     }
   ],
   "label.all": [
@@ -71,10 +107,46 @@
       "value": "Sempre"
     }
   ],
+  "label.analysis": [
+    {
+      "type": 0,
+      "value": "Analysis"
+    }
+  ],
   "label.analytics": [
     {
       "type": 0,
       "value": "Analíticas"
+    }
+  ],
+  "label.application": [
+    {
+      "type": 0,
+      "value": "Application"
+    }
+  ],
+  "label.apply": [
+    {
+      "type": 0,
+      "value": "Aplicar"
+    }
+  ],
+  "label.attribution": [
+    {
+      "type": 0,
+      "value": "Atribución"
+    }
+  ],
+  "label.attribution-description": [
+    {
+      "type": 0,
+      "value": "Vexa como os usuarios interactúan co seu márketing e que impulsa as conversións."
+    }
+  ],
+  "label.audience": [
+    {
+      "type": 0,
+      "value": "Audience"
     }
   ],
   "label.average": [
@@ -93,6 +165,18 @@
     {
       "type": 0,
       "value": "Antes"
+    }
+  ],
+  "label.behavior": [
+    {
+      "type": 0,
+      "value": "Behavior"
+    }
+  ],
+  "label.boards": [
+    {
+      "type": 0,
+      "value": "Taboleiros"
     }
   ],
   "label.bounce-rate": [
@@ -119,6 +203,12 @@
       "value": "Navegadores"
     }
   ],
+  "label.campaigns": [
+    {
+      "type": 0,
+      "value": "Campañas"
+    }
+  ],
   "label.cancel": [
     {
       "type": 0,
@@ -129,6 +219,24 @@
     {
       "type": 0,
       "value": "Mudar contrasinal"
+    }
+  ],
+  "label.channel": [
+    {
+      "type": 0,
+      "value": "Channel"
+    }
+  ],
+  "label.channels": [
+    {
+      "type": 0,
+      "value": "Canles"
+    }
+  ],
+  "label.chart": [
+    {
+      "type": 0,
+      "value": "Chart"
     }
   ],
   "label.cities": [
@@ -146,13 +254,31 @@
   "label.clear-all": [
     {
       "type": 0,
-      "value": "Clear all"
+      "value": "Limpar todo"
+    }
+  ],
+  "label.cohort": [
+    {
+      "type": 0,
+      "value": "Cohorte"
+    }
+  ],
+  "label.cohorts": [
+    {
+      "type": 0,
+      "value": "Cohorts"
     }
   ],
   "label.compare": [
     {
       "type": 0,
       "value": "Comparar"
+    }
+  ],
+  "label.compare-dates": [
+    {
+      "type": 0,
+      "value": "Comparar datas"
     }
   ],
   "label.confirm": [
@@ -173,10 +299,34 @@
       "value": "Contén"
     }
   ],
+  "label.content": [
+    {
+      "type": 0,
+      "value": "Contido"
+    }
+  ],
   "label.continue": [
     {
       "type": 0,
       "value": "Continuar"
+    }
+  ],
+  "label.conversion": [
+    {
+      "type": 0,
+      "value": "Conversión"
+    }
+  ],
+  "label.conversion-rate": [
+    {
+      "type": 0,
+      "value": "Taxa de conversión"
+    }
+  ],
+  "label.conversion-step": [
+    {
+      "type": 0,
+      "value": "Paso de conversión"
     }
   ],
   "label.count": [
@@ -203,22 +353,22 @@
       "value": "Crear"
     }
   ],
+  "label.create-org": [
+    {
+      "type": 0,
+      "value": "Crear equipo"
+    }
+  ],
   "label.create-report": [
     {
       "type": 0,
-      "value": "Crear report"
-    }
-  ],
-  "label.create-team": [
-    {
-      "type": 0,
-      "value": "Crear team"
+      "value": "Crear informe"
     }
   ],
   "label.create-user": [
     {
       "type": 0,
-      "value": "Crear user"
+      "value": "Crear usuario"
     }
   ],
   "label.created": [
@@ -231,6 +381,18 @@
     {
       "type": 0,
       "value": "Creado por"
+    }
+  ],
+  "label.criteria": [
+    {
+      "type": 0,
+      "value": "Criteria"
+    }
+  ],
+  "label.currency": [
+    {
+      "type": 0,
+      "value": "Moeda"
     }
   ],
   "label.current": [
@@ -293,16 +455,16 @@
       "value": "Eliminar"
     }
   ],
+  "label.delete-org": [
+    {
+      "type": 0,
+      "value": "Eliminar equipo"
+    }
+  ],
   "label.delete-report": [
     {
       "type": 0,
       "value": "Eliminar reporte"
-    }
-  ],
-  "label.delete-team": [
-    {
-      "type": 0,
-      "value": "Eliminar equipo"
     }
   ],
   "label.delete-user": [
@@ -329,6 +491,12 @@
       "value": "Escritorio"
     }
   ],
+  "label.destination-url": [
+    {
+      "type": 0,
+      "value": "Destination URL"
+    }
+  ],
   "label.details": [
     {
       "type": 0,
@@ -347,10 +515,22 @@
       "value": "Dispositivos"
     }
   ],
+  "label.direct": [
+    {
+      "type": 0,
+      "value": "Directo"
+    }
+  ],
   "label.dismiss": [
     {
       "type": 0,
       "value": "Desbotar"
+    }
+  ],
+  "label.distinct-id": [
+    {
+      "type": 0,
+      "value": "ID distinto"
     }
   ],
   "label.does-not-contain": [
@@ -359,10 +539,28 @@
       "value": "Non contén"
     }
   ],
+  "label.does-not-include": [
+    {
+      "type": 0,
+      "value": "Non inclúe"
+    }
+  ],
+  "label.doest-not-exist": [
+    {
+      "type": 0,
+      "value": "Non existe"
+    }
+  ],
   "label.domain": [
     {
       "type": 0,
       "value": "Dominio"
+    }
+  ],
+  "label.download": [
+    {
+      "type": 0,
+      "value": "Download"
     }
   ],
   "label.dropoff": [
@@ -389,6 +587,12 @@
       "value": "Editar membro"
     }
   ],
+  "label.email": [
+    {
+      "type": 0,
+      "value": "Correo electrónico"
+    }
+  ],
   "label.enable-share-url": [
     {
       "type": 0,
@@ -398,13 +602,19 @@
   "label.end-step": [
     {
       "type": 0,
-      "value": "End Step"
+      "value": "Paso final"
     }
   ],
   "label.entry": [
     {
       "type": 0,
-      "value": "Entry URL"
+      "value": "URL de entrada"
+    }
+  ],
+  "label.environment": [
+    {
+      "type": 0,
+      "value": "Environment"
     }
   ],
   "label.event": [
@@ -419,10 +629,22 @@
       "value": "Datos do evento"
     }
   ],
+  "label.event-name": [
+    {
+      "type": 0,
+      "value": "Nome do evento"
+    }
+  ],
   "label.events": [
     {
       "type": 0,
       "value": "Eventos"
+    }
+  ],
+  "label.exists": [
+    {
+      "type": 0,
+      "value": "Existe"
     }
   ],
   "label.exit": [
@@ -473,6 +695,12 @@
       "value": "Filtros"
     }
   ],
+  "label.first-click": [
+    {
+      "type": 0,
+      "value": "Primeiro clic"
+    }
+  ],
   "label.first-seen": [
     {
       "type": 0,
@@ -482,13 +710,19 @@
   "label.funnel": [
     {
       "type": 0,
-      "value": "Funnel"
+      "value": "Funil"
     }
   ],
   "label.funnel-description": [
     {
       "type": 0,
       "value": "Entende a taxa de conversión e de abandono dos usuarios."
+    }
+  ],
+  "label.funnels": [
+    {
+      "type": 0,
+      "value": "Funís"
     }
   ],
   "label.goal": [
@@ -521,34 +755,64 @@
       "value": "Maior ou igual que"
     }
   ],
-  "label.host": [
+  "label.grouped": [
     {
       "type": 0,
-      "value": "Dominio"
+      "value": "Agrupado"
     }
   ],
-  "label.hosts": [
+  "label.growth": [
     {
       "type": 0,
-      "value": "Dominios"
+      "value": "Growth"
+    }
+  ],
+  "label.hostname": [
+    {
+      "type": 0,
+      "value": "Nome do host"
+    }
+  ],
+  "label.includes": [
+    {
+      "type": 0,
+      "value": "Inclúe"
+    }
+  ],
+  "label.insight": [
+    {
+      "type": 0,
+      "value": "Información"
     }
   ],
   "label.insights": [
     {
       "type": 0,
-      "value": "Insights"
+      "value": "Informacións"
     }
   ],
   "label.insights-description": [
     {
       "type": 0,
-      "value": "Dive deeper into your data by using segments and filters."
+      "value": "Afonda nos teus datos usando segmentos e filtros."
+    }
+  ],
+  "label.invalid-url": [
+    {
+      "type": 0,
+      "value": "Invalid URL"
     }
   ],
   "label.is": [
     {
       "type": 0,
       "value": "É"
+    }
+  ],
+  "label.is-false": [
+    {
+      "type": 0,
+      "value": "É falso"
     }
   ],
   "label.is-not": [
@@ -569,13 +833,19 @@
       "value": "Está establecido"
     }
   ],
+  "label.is-true": [
+    {
+      "type": 0,
+      "value": "É verdadeiro"
+    }
+  ],
   "label.join": [
     {
       "type": 0,
       "value": "Unirse"
     }
   ],
-  "label.join-team": [
+  "label.join-org": [
     {
       "type": 0,
       "value": "Unirse ao equipo"
@@ -591,6 +861,12 @@
     {
       "type": 0,
       "value": "Entende como os usuarios navegan polo teu sitio web."
+    }
+  ],
+  "label.journeys": [
+    {
+      "type": 0,
+      "value": "Traxectorias"
     }
   ],
   "label.language": [
@@ -609,6 +885,12 @@
     {
       "type": 0,
       "value": "Portátil"
+    }
+  ],
+  "label.last-click": [
+    {
+      "type": 0,
+      "value": "Último clic"
     }
   ],
   "label.last-days": [
@@ -665,7 +947,7 @@
       "value": "Deixar"
     }
   ],
-  "label.leave-team": [
+  "label.leave-org": [
     {
       "type": 0,
       "value": "Deixar o equipo"
@@ -681,6 +963,24 @@
     {
       "type": 0,
       "value": "Menor ou igual que"
+    }
+  ],
+  "label.link": [
+    {
+      "type": 0,
+      "value": "Link"
+    }
+  ],
+  "label.links": [
+    {
+      "type": 0,
+      "value": "Ligazóns"
+    }
+  ],
+  "label.location": [
+    {
+      "type": 0,
+      "value": "Location"
     }
   ],
   "label.login": [
@@ -713,6 +1013,18 @@
       "value": "Max"
     }
   ],
+  "label.maximize": [
+    {
+      "type": 0,
+      "value": "Expandir"
+    }
+  ],
+  "label.medium": [
+    {
+      "type": 0,
+      "value": "Medio"
+    }
+  ],
   "label.member": [
     {
       "type": 0,
@@ -735,6 +1047,12 @@
     {
       "type": 0,
       "value": "Móbil"
+    }
+  ],
+  "label.model": [
+    {
+      "type": 0,
+      "value": "Modelo"
     }
   ],
   "label.more": [
@@ -770,7 +1088,7 @@
   "label.none": [
     {
       "type": 0,
-      "value": "None"
+      "value": "Ningún"
     }
   ],
   "label.number-of-records": [
@@ -813,10 +1131,106 @@
       "value": "OK"
     }
   ],
+  "label.online": [
+    {
+      "type": 0,
+      "value": "Online"
+    }
+  ],
+  "label.org": [
+    {
+      "type": 0,
+      "value": "Equipo"
+    }
+  ],
+  "label.org-id": [
+    {
+      "type": 0,
+      "value": "ID do equipo"
+    }
+  ],
+  "label.org-manager": [
+    {
+      "type": 0,
+      "value": "Xestor do equipo"
+    }
+  ],
+  "label.org-member": [
+    {
+      "type": 0,
+      "value": "Membro do equipo"
+    }
+  ],
+  "label.org-name": [
+    {
+      "type": 0,
+      "value": "Nome do equipo"
+    }
+  ],
+  "label.org-owner": [
+    {
+      "type": 0,
+      "value": "Propietario do equipo"
+    }
+  ],
+  "label.org-settings": [
+    {
+      "type": 0,
+      "value": "Axustes do equipo"
+    }
+  ],
+  "label.org-view-only": [
+    {
+      "type": 0,
+      "value": "Equipo de só lectura"
+    }
+  ],
+  "label.org-websites": [
+    {
+      "type": 0,
+      "value": "Sitios web do equipo"
+    }
+  ],
+  "label.organic-search": [
+    {
+      "type": 0,
+      "value": "Busca orgánica"
+    }
+  ],
+  "label.organic-shopping": [
+    {
+      "type": 0,
+      "value": "Compra orgánica"
+    }
+  ],
+  "label.organic-social": [
+    {
+      "type": 0,
+      "value": "Social orgánico"
+    }
+  ],
+  "label.organic-video": [
+    {
+      "type": 0,
+      "value": "Vídeo orgánico"
+    }
+  ],
+  "label.orgs": [
+    {
+      "type": 0,
+      "value": "Equipos"
+    }
+  ],
   "label.os": [
     {
       "type": 0,
       "value": "Sistema operativo"
+    }
+  ],
+  "label.other": [
+    {
+      "type": 0,
+      "value": "Outro"
     }
   ],
   "label.overview": [
@@ -829,6 +1243,12 @@
     {
       "type": 0,
       "value": "Propietario/a"
+    }
+  ],
+  "label.page": [
+    {
+      "type": 0,
+      "value": "Páxina"
     }
   ],
   "label.page-of": [
@@ -867,6 +1287,36 @@
       "value": "Páxinas"
     }
   ],
+  "label.paid-ads": [
+    {
+      "type": 0,
+      "value": "Anuncios de pago"
+    }
+  ],
+  "label.paid-search": [
+    {
+      "type": 0,
+      "value": "Busca de pago"
+    }
+  ],
+  "label.paid-shopping": [
+    {
+      "type": 0,
+      "value": "Compra de pago"
+    }
+  ],
+  "label.paid-social": [
+    {
+      "type": 0,
+      "value": "Social de pago"
+    }
+  ],
+  "label.paid-video": [
+    {
+      "type": 0,
+      "value": "Vídeo de pago"
+    }
+  ],
   "label.password": [
     {
       "type": 0,
@@ -885,6 +1335,18 @@
       "value": "Rutas"
     }
   ],
+  "label.pixel": [
+    {
+      "type": 0,
+      "value": "Pixel"
+    }
+  ],
+  "label.pixels": [
+    {
+      "type": 0,
+      "value": "Píxeles"
+    }
+  ],
   "label.powered-by": [
     {
       "type": 0,
@@ -893,6 +1355,12 @@
     {
       "type": 1,
       "value": "name"
+    }
+  ],
+  "label.preferences": [
+    {
+      "type": 0,
+      "value": "Preferences"
     }
   ],
   "label.previous": [
@@ -917,6 +1385,12 @@
     {
       "type": 0,
       "value": "Perfil"
+    }
+  ],
+  "label.profiles": [
+    {
+      "type": 0,
+      "value": "Profiles"
     }
   ],
   "label.properties": [
@@ -955,6 +1429,12 @@
       "value": "Agora mesmo"
     }
   ],
+  "label.referral": [
+    {
+      "type": 0,
+      "value": "Referencia"
+    }
+  ],
   "label.referrer": [
     {
       "type": 0,
@@ -989,6 +1469,12 @@
     {
       "type": 0,
       "value": "Rexións"
+    }
+  ],
+  "label.remaining": [
+    {
+      "type": 0,
+      "value": "Restante"
     }
   ],
   "label.remove": [
@@ -1059,12 +1545,6 @@
       "value": "Consulta os teus ingresos ao longo do tempo."
     }
   ],
-  "label.revenue-property": [
-    {
-      "type": 0,
-      "value": "Revenue Property"
-    }
-  ],
   "label.role": [
     {
       "type": 0,
@@ -1083,6 +1563,24 @@
       "value": "Gardar"
     }
   ],
+  "label.save-cohort": [
+    {
+      "type": 0,
+      "value": "Save as cohort"
+    }
+  ],
+  "label.save-segment": [
+    {
+      "type": 0,
+      "value": "Save as segment"
+    }
+  ],
+  "label.screen": [
+    {
+      "type": 0,
+      "value": "Screen"
+    }
+  ],
   "label.screens": [
     {
       "type": 0,
@@ -1095,6 +1593,18 @@
       "value": "Buscar"
     }
   ],
+  "label.segment": [
+    {
+      "type": 0,
+      "value": "Segment"
+    }
+  ],
+  "label.segments": [
+    {
+      "type": 0,
+      "value": "Segments"
+    }
+  ],
   "label.select": [
     {
       "type": 0,
@@ -1105,6 +1615,12 @@
     {
       "type": 0,
       "value": "Seleccionar data"
+    }
+  ],
+  "label.select-filter": [
+    {
+      "type": 0,
+      "value": "Seleccionar filtro"
     }
   ],
   "label.select-role": [
@@ -1125,6 +1641,12 @@
       "value": "Sesión"
     }
   ],
+  "label.session-data": [
+    {
+      "type": 0,
+      "value": "Datos da sesión"
+    }
+  ],
   "label.sessions": [
     {
       "type": 0,
@@ -1137,6 +1659,12 @@
       "value": "Axustes"
     }
   ],
+  "label.share": [
+    {
+      "type": 0,
+      "value": "Compartir"
+    }
+  ],
   "label.share-url": [
     {
       "type": 0,
@@ -1147,6 +1675,18 @@
     {
       "type": 0,
       "value": "Un só día"
+    }
+  ],
+  "label.sms": [
+    {
+      "type": 0,
+      "value": "SMS"
+    }
+  ],
+  "label.sources": [
+    {
+      "type": 0,
+      "value": "Fontes"
     }
   ],
   "label.start-step": [
@@ -1167,64 +1707,34 @@
       "value": "Suma"
     }
   ],
+  "label.table": [
+    {
+      "type": 0,
+      "value": "Table"
+    }
+  ],
   "label.tablet": [
     {
       "type": 0,
       "value": "Tableta"
     }
   ],
-  "label.team": [
+  "label.tag": [
     {
       "type": 0,
-      "value": "Equipo"
+      "value": "Etiqueta"
     }
   ],
-  "label.team-id": [
+  "label.tags": [
     {
       "type": 0,
-      "value": "ID do equipo"
+      "value": "Etiquetas"
     }
   ],
-  "label.team-manager": [
+  "label.terms": [
     {
       "type": 0,
-      "value": "Xestor do equipo"
-    }
-  ],
-  "label.team-member": [
-    {
-      "type": 0,
-      "value": "Membro do equipo"
-    }
-  ],
-  "label.team-name": [
-    {
-      "type": 0,
-      "value": "Nome do equipo"
-    }
-  ],
-  "label.team-owner": [
-    {
-      "type": 0,
-      "value": "Propietario do equipo"
-    }
-  ],
-  "label.team-view-only": [
-    {
-      "type": 0,
-      "value": "Equipo de só lectura"
-    }
-  ],
-  "label.team-websites": [
-    {
-      "type": 0,
-      "value": "Sitios web do equipo"
-    }
-  ],
-  "label.teams": [
-    {
-      "type": 0,
-      "value": "Equipos"
+      "value": "Termos"
     }
   ],
   "label.theme": [
@@ -1293,6 +1803,12 @@
       "value": "Código de seguemento"
     }
   ],
+  "label.traffic": [
+    {
+      "type": 0,
+      "value": "Traffic"
+    }
+  ],
   "label.transactions": [
     {
       "type": 0,
@@ -1359,28 +1875,10 @@
       "value": "Actualizar"
     }
   ],
-  "label.url": [
-    {
-      "type": 0,
-      "value": "URL"
-    }
-  ],
-  "label.urls": [
-    {
-      "type": 0,
-      "value": "URLs"
-    }
-  ],
   "label.user": [
     {
       "type": 0,
       "value": "Usuario"
-    }
-  ],
-  "label.user-property": [
-    {
-      "type": 0,
-      "value": "Propiedade do usuario"
     }
   ],
   "label.username": [
@@ -1539,6 +2037,12 @@
       "value": "x"
     }
   ],
+  "message.bad-request": [
+    {
+      "type": 0,
+      "value": "Bad request"
+    }
+  ],
   "message.collected-data": [
     {
       "type": 0,
@@ -1601,7 +2105,7 @@
       "value": "?"
     }
   ],
-  "message.delete-team-warning": [
+  "message.delete-org-warning": [
     {
       "type": 0,
       "value": "Eliminar un equipo tamén eliminará tódolos sitios web do equipo."
@@ -1631,6 +2135,12 @@
     {
       "type": 1,
       "value": "url"
+    }
+  ],
+  "message.forbidden": [
+    {
+      "type": 0,
+      "value": "Forbidden"
     }
   ],
   "message.go-to-settings": [
@@ -1668,7 +2178,7 @@
   "message.new-version-available": [
     {
       "type": 0,
-      "value": "Unha nova versión de Umami "
+      "value": "Unha nova versión de Entrolytics "
     },
     {
       "type": 1,
@@ -1697,22 +2207,22 @@
       "value": "Non concordan os contrasinais"
     }
   ],
-  "message.no-results-found": [
-    {
-      "type": 0,
-      "value": "Non se atoparon resultados."
-    }
-  ],
-  "message.no-team-websites": [
+  "message.no-org-websites": [
     {
       "type": 0,
       "value": "Este equipo non ten ningún sitio web."
     }
   ],
-  "message.no-teams": [
+  "message.no-orgs": [
     {
       "type": 0,
       "value": "Non creaches ningún equipo."
+    }
+  ],
+  "message.no-results-found": [
+    {
+      "type": 0,
+      "value": "Non se atoparon resultados."
     }
   ],
   "message.no-users": [
@@ -1725,6 +2235,36 @@
     {
       "type": 0,
       "value": "Non tes sitios web configurados."
+    }
+  ],
+  "message.not-found": [
+    {
+      "type": 0,
+      "value": "Not found"
+    }
+  ],
+  "message.nothing-selected": [
+    {
+      "type": 0,
+      "value": "Nothing selected."
+    }
+  ],
+  "message.org-already-member": [
+    {
+      "type": 0,
+      "value": "Xa es membro do equipo."
+    }
+  ],
+  "message.org-not-found": [
+    {
+      "type": 0,
+      "value": "Equipo non atopado."
+    }
+  ],
+  "message.org-websites-info": [
+    {
+      "type": 0,
+      "value": "Os sitios web poden ser vistos por calquera membro do equipo."
     }
   ],
   "message.page-not-found": [
@@ -1759,6 +2299,12 @@
       "value": "Gardouse correctamente."
     }
   ],
+  "message.sever-error": [
+    {
+      "type": 0,
+      "value": "Server error"
+    }
+  ],
   "message.share-url": [
     {
       "type": 0,
@@ -1773,37 +2319,19 @@
       "value": "."
     }
   ],
-  "message.team-already-member": [
-    {
-      "type": 0,
-      "value": "Xa es membro do equipo."
-    }
-  ],
-  "message.team-not-found": [
-    {
-      "type": 0,
-      "value": "Equipo non atopado."
-    }
-  ],
-  "message.team-websites-info": [
-    {
-      "type": 0,
-      "value": "Os sitios web poden ser vistos por calquera membro do equipo."
-    }
-  ],
   "message.tracking-code": [
     {
       "type": 0,
       "value": "Código de seguimento"
     }
   ],
-  "message.transfer-team-website-to-user": [
+  "message.transfer-org-website-to-user": [
     {
       "type": 0,
       "value": "Transferir este sitio web á túa conta?"
     }
   ],
-  "message.transfer-user-website-to-team": [
+  "message.transfer-user-website-to-org": [
     {
       "type": 0,
       "value": "Selecciona o equipo ao que transferir este sitio web."
@@ -1819,6 +2347,12 @@
     {
       "type": 0,
       "value": "Activou o evento"
+    }
+  ],
+  "message.unauthorized": [
+    {
+      "type": 0,
+      "value": "Unauthorized"
     }
   ],
   "message.user-deleted": [
@@ -1865,12 +2399,6 @@
     {
       "type": 1,
       "value": "device"
-    }
-  ],
-  "message.visitors-dropped-off": [
-    {
-      "type": 0,
-      "value": "Visitantes abandonados"
     }
   ]
 }

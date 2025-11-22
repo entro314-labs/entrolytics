@@ -1,77 +1,80 @@
-import { Key, useContext, useState } from 'react';
-import { ButtonGroup, Button, Flexbox } from 'react-basics';
-import thenby from 'thenby';
-import { percentFilter } from '@/lib/filters';
-import ListTable from '@/components/metrics/ListTable';
-import { FILTER_PAGES, FILTER_REFERRERS } from '@/lib/constants';
-import { useMessages } from '@/components/hooks';
-import { RealtimeData } from '@/lib/types';
-import { WebsiteContext } from '../WebsiteProvider';
+import { useState } from 'react'
+import { Row } from '@entro314labs/entro-zen'
+import thenby from 'thenby'
+import { percentFilter } from '@/lib/filters'
+import { ListTable } from '@/components/metrics/ListTable'
+import { useMessages, useWebsite } from '@/components/hooks'
+import { FilterButtons } from '@/components/input/FilterButtons'
 
-export function RealtimeUrls({ data }: { data: RealtimeData }) {
-  const website = useContext(WebsiteContext);
-  const { formatMessage, labels } = useMessages();
-  const { referrers, urls } = data || {};
-  const [filter, setFilter] = useState<Key>(FILTER_REFERRERS);
-  const limit = 15;
+const FILTER_REFERRERS = 'filter-referrers'
+const FILTER_PAGES = 'filter-pages'
+
+export function RealtimeUrls({ data }: { data: any }) {
+  const website = useWebsite()
+  const { formatMessage, labels } = useMessages()
+  const { referrers, urls } = data || {}
+  const [filter, setFilter] = useState(FILTER_REFERRERS)
+  const limit = 15
 
   const buttons = [
     {
+      id: FILTER_REFERRERS,
       label: formatMessage(labels.referrers),
-      key: FILTER_REFERRERS,
     },
     {
+      id: FILTER_PAGES,
       label: formatMessage(labels.pages),
-      key: FILTER_PAGES,
     },
-  ];
+  ]
 
-  const renderLink = ({ x }) => {
-    const domain = x.startsWith('/') ? website?.domain : '';
+  const renderLink = (data) => {
+    const domain = data.label.startsWith('/') ? website?.domain : ''
     return (
-      <a href={`//${domain}${x}`} target="_blank" rel="noreferrer noopener">
-        {x}
+      <a href={`//${domain}${data.label}`} target="_blank" rel="noreferrer noopener">
+        {data.label}
       </a>
-    );
-  };
+    )
+  }
 
   const domains = percentFilter(
     Object.keys(referrers)
-      .map(key => {
+      .map((key) => {
         return {
           x: key,
           y: referrers[key],
-        };
+        }
       })
       .sort(thenby.firstBy('y', -1))
-      .slice(0, limit),
-  );
+      .slice(0, limit)
+  )
 
   const pages = percentFilter(
     Object.keys(urls)
-      .map(key => {
+      .map((key) => {
         return {
           x: key,
           y: urls[key],
-        };
+        }
       })
       .sort(thenby.firstBy('y', -1))
-      .slice(0, limit),
-  );
+      .slice(0, limit)
+  )
 
   return (
     <>
-      <Flexbox justifyContent="center">
-        <ButtonGroup items={buttons} selectedKey={filter} onSelect={setFilter}>
-          {({ key, label }) => <Button key={key}>{label}</Button>}
-        </ButtonGroup>
-      </Flexbox>
+      <Row justifyContent="center">
+        <FilterButtons items={buttons} value={filter} onChange={setFilter} />
+      </Row>
       {filter === FILTER_REFERRERS && (
         <ListTable
           title={formatMessage(labels.referrers)}
           metric={formatMessage(labels.views)}
           renderLabel={renderLink}
-          data={domains}
+          data={domains.map(({ x, y, z }) => ({
+            label: x,
+            count: y,
+            percent: z,
+          }))}
         />
       )}
       {filter === FILTER_PAGES && (
@@ -79,11 +82,13 @@ export function RealtimeUrls({ data }: { data: RealtimeData }) {
           title={formatMessage(labels.pages)}
           metric={formatMessage(labels.views)}
           renderLabel={renderLink}
-          data={pages}
+          data={pages.map(({ x, y, z }) => ({
+            label: x,
+            count: y,
+            percent: z,
+          }))}
         />
       )}
     </>
-  );
+  )
 }
-
-export default RealtimeUrls;

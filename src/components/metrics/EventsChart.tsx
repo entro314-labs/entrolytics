@@ -1,72 +1,89 @@
-import { useMemo, useState, useEffect } from 'react';
-import { colord } from 'colord';
-import BarChart from '@/components/charts/BarChart';
-import { useDateRange, useLocale, useWebsiteEventsSeries } from '@/components/hooks';
-import { renderDateLabels } from '@/lib/charts';
-import { CHART_COLORS } from '@/lib/constants';
+import { BarChart, BarChartProps } from '@/components/charts/BarChart'
+import { LoadingPanel } from '@/components/common/LoadingPanel'
+import { useDateRange, useLocale, useWebsiteEventsSeriesQuery } from '@/components/hooks'
+import { renderDateLabels } from '@/lib/charts'
+import { CHART_COLORS } from '@/lib/constants'
+import { generateTimeSeries } from '@/lib/date'
+import { colord } from 'colord'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
-export interface EventsChartProps {
-  websiteId: string;
-  className?: string;
-  focusLabel?: string;
+export interface EventsChartProps extends BarChartProps {
+  websiteId: string
+  focusLabel?: string
 }
 
-export function EventsChart({ websiteId, className, focusLabel }: EventsChartProps) {
+export function EventsChart({ websiteId, focusLabel }: EventsChartProps) {
   const {
-    dateRange: { startDate, endDate, unit, value },
-  } = useDateRange(websiteId);
-  const { locale } = useLocale();
-  const { data, isLoading } = useWebsiteEventsSeries(websiteId);
-  const [label, setLabel] = useState<string>(focusLabel);
+    dateRange: { startDate, endDate, unit },
+  } = useDateRange()
+  const { locale, dateLocale } = useLocale()
+  const { data, isLoading, error } = useWebsiteEventsSeriesQuery(websiteId)
+  const [label, setLabel] = useState<string>(focusLabel)
 
-  const chartData = useMemo(() => {
-    if (!data) return [];
+  const chartData: any = useMemo(() => {
+    if (!data) return
 
-    const map = (data as any[]).reduce((obj, { x, t, y }) => {
-      if (!obj[x]) {
-        obj[x] = [];
+    const map = Array.isArray(data)
+      ? data.reduce((obj, { x, t, y }) => {
+          if (!obj[x]) {
+            obj[x] = []
+          }
+
+          obj[x].push({ x: t, y })
+
+          return obj
+        }, {})
+      : {}
+
+    if (!map || Object.keys(map).length === 0) {
+      return {
+        datasets: [
+          {
+            data: generateTimeSeries([], startDate, endDate, unit, dateLocale),
+            lineTension: 0,
+            borderWidth: 1,
+          },
+        ],
       }
-
-      obj[x].push({ x: t, y });
-
-      return obj;
-    }, {});
-
-    return {
-      datasets: Object.keys(map).map((key, index) => {
-        const color = colord(CHART_COLORS[index % CHART_COLORS.length]);
-        return {
-          label: key,
-          data: map[key],
-          lineTension: 0,
-          backgroundColor: color.alpha(0.6).toRgbString(),
-          borderColor: color.alpha(0.7).toRgbString(),
-          borderWidth: 1,
-        };
-      }),
-      focusLabel,
-    };
-  }, [data, startDate, endDate, unit, focusLabel]);
+    } else {
+      return {
+        datasets: Object.keys(map).map((key, index) => {
+          const color = colord(CHART_COLORS[index % CHART_COLORS.length])
+          return {
+            label: key,
+            data: generateTimeSeries(map[key], startDate, endDate, unit, dateLocale),
+            lineTension: 0,
+            backgroundColor: color.alpha(0.6).toRgbString(),
+            borderColor: color.alpha(0.7).toRgbString(),
+            borderWidth: 1,
+          }
+        }),
+        focusLabel,
+      }
+    }
+  }, [data, startDate, endDate, unit, focusLabel])
 
   useEffect(() => {
     if (label !== focusLabel) {
-      setLabel(focusLabel);
+      setLabel(focusLabel)
     }
-  }, [focusLabel]);
+  }, [focusLabel])
+
+  const renderXLabel = useCallback(renderDateLabels(unit, locale), [unit, locale])
 
   return (
-    <BarChart
-      minDate={startDate.toISOString()}
-      maxDate={endDate.toISOString()}
-      className={className}
-      data={chartData}
-      unit={unit}
-      stacked={true}
-      renderXLabel={renderDateLabels(unit, locale)}
-      isLoading={isLoading}
-      isAllTime={value === 'all'}
-    />
-  );
+    <LoadingPanel isLoading={isLoading} error={error} minHeight="400px">
+      {chartData && (
+        <BarChart
+          chartData={chartData}
+          minDate={startDate}
+          maxDate={endDate}
+          unit={unit}
+          stacked={true}
+          renderXLabel={renderXLabel}
+          height="400px"
+        />
+      )}
+    </LoadingPanel>
+  )
 }
-
-export default EventsChart;

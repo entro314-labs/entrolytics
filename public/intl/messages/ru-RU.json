@@ -5,6 +5,18 @@
       "value": "Код доступа"
     }
   ],
+  "label.account": [
+    {
+      "type": 0,
+      "value": "Account"
+    }
+  ],
+  "label.action": [
+    {
+      "type": 0,
+      "value": "Action"
+    }
+  ],
   "label.actions": [
     {
       "type": 0,
@@ -23,16 +35,34 @@
       "value": "Добавить"
     }
   ],
+  "label.add-board": [
+    {
+      "type": 0,
+      "value": "Добавить доску"
+    }
+  ],
   "label.add-description": [
     {
       "type": 0,
       "value": "Добавить описание"
     }
   ],
+  "label.add-link": [
+    {
+      "type": 0,
+      "value": "Add link"
+    }
+  ],
   "label.add-member": [
     {
       "type": 0,
       "value": "Добавить участника"
+    }
+  ],
+  "label.add-pixel": [
+    {
+      "type": 0,
+      "value": "Add pixel"
     }
   ],
   "label.add-step": [
@@ -53,6 +83,12 @@
       "value": "Администратор"
     }
   ],
+  "label.affiliate": [
+    {
+      "type": 0,
+      "value": "Партнер"
+    }
+  ],
   "label.after": [
     {
       "type": 0,
@@ -71,10 +107,46 @@
       "value": "Все время"
     }
   ],
+  "label.analysis": [
+    {
+      "type": 0,
+      "value": "Analysis"
+    }
+  ],
   "label.analytics": [
     {
       "type": 0,
       "value": "Аналитика"
+    }
+  ],
+  "label.application": [
+    {
+      "type": 0,
+      "value": "Application"
+    }
+  ],
+  "label.apply": [
+    {
+      "type": 0,
+      "value": "Применить"
+    }
+  ],
+  "label.attribution": [
+    {
+      "type": 0,
+      "value": "Атрибуция"
+    }
+  ],
+  "label.attribution-description": [
+    {
+      "type": 0,
+      "value": "Посмотрите, как пользователи взаимодействуют с вашим маркетингом и что приводит к конверсиям."
+    }
+  ],
+  "label.audience": [
+    {
+      "type": 0,
+      "value": "Audience"
     }
   ],
   "label.average": [
@@ -93,6 +165,18 @@
     {
       "type": 0,
       "value": "До"
+    }
+  ],
+  "label.behavior": [
+    {
+      "type": 0,
+      "value": "Behavior"
+    }
+  ],
+  "label.boards": [
+    {
+      "type": 0,
+      "value": "Доски"
     }
   ],
   "label.bounce-rate": [
@@ -119,6 +203,12 @@
       "value": "Браузеры"
     }
   ],
+  "label.campaigns": [
+    {
+      "type": 0,
+      "value": "Кампании"
+    }
+  ],
   "label.cancel": [
     {
       "type": 0,
@@ -129,6 +219,24 @@
     {
       "type": 0,
       "value": "Изменить пароль"
+    }
+  ],
+  "label.channel": [
+    {
+      "type": 0,
+      "value": "Channel"
+    }
+  ],
+  "label.channels": [
+    {
+      "type": 0,
+      "value": "Каналы"
+    }
+  ],
+  "label.chart": [
+    {
+      "type": 0,
+      "value": "Chart"
     }
   ],
   "label.cities": [
@@ -149,10 +257,28 @@
       "value": "Очистить все"
     }
   ],
+  "label.cohort": [
+    {
+      "type": 0,
+      "value": "Когорта"
+    }
+  ],
+  "label.cohorts": [
+    {
+      "type": 0,
+      "value": "Cohorts"
+    }
+  ],
   "label.compare": [
     {
       "type": 0,
       "value": "Сравнить"
+    }
+  ],
+  "label.compare-dates": [
+    {
+      "type": 0,
+      "value": "Сравнить даты"
     }
   ],
   "label.confirm": [
@@ -173,10 +299,34 @@
       "value": "Содержит"
     }
   ],
+  "label.content": [
+    {
+      "type": 0,
+      "value": "Контент"
+    }
+  ],
   "label.continue": [
     {
       "type": 0,
       "value": "Продолжить"
+    }
+  ],
+  "label.conversion": [
+    {
+      "type": 0,
+      "value": "Конверсия"
+    }
+  ],
+  "label.conversion-rate": [
+    {
+      "type": 0,
+      "value": "Коэффициент конверсии"
+    }
+  ],
+  "label.conversion-step": [
+    {
+      "type": 0,
+      "value": "Шаг конверсии"
     }
   ],
   "label.count": [
@@ -203,16 +353,16 @@
       "value": "Создать"
     }
   ],
+  "label.create-org": [
+    {
+      "type": 0,
+      "value": "Создать команду"
+    }
+  ],
   "label.create-report": [
     {
       "type": 0,
       "value": "Создать отчет"
-    }
-  ],
-  "label.create-team": [
-    {
-      "type": 0,
-      "value": "Создать команду"
     }
   ],
   "label.create-user": [
@@ -231,6 +381,18 @@
     {
       "type": 0,
       "value": "Создано"
+    }
+  ],
+  "label.criteria": [
+    {
+      "type": 0,
+      "value": "Criteria"
+    }
+  ],
+  "label.currency": [
+    {
+      "type": 0,
+      "value": "Валюта"
     }
   ],
   "label.current": [
@@ -293,16 +455,16 @@
       "value": "Удалить"
     }
   ],
+  "label.delete-org": [
+    {
+      "type": 0,
+      "value": "Удалить команду"
+    }
+  ],
   "label.delete-report": [
     {
       "type": 0,
       "value": "Удалить отчет"
-    }
-  ],
-  "label.delete-team": [
-    {
-      "type": 0,
-      "value": "Удалить команду"
     }
   ],
   "label.delete-user": [
@@ -329,6 +491,12 @@
       "value": "Настольный компьютер"
     }
   ],
+  "label.destination-url": [
+    {
+      "type": 0,
+      "value": "Destination URL"
+    }
+  ],
   "label.details": [
     {
       "type": 0,
@@ -347,10 +515,22 @@
       "value": "Устройства"
     }
   ],
+  "label.direct": [
+    {
+      "type": 0,
+      "value": "Direct"
+    }
+  ],
   "label.dismiss": [
     {
       "type": 0,
       "value": "Отклонить"
+    }
+  ],
+  "label.distinct-id": [
+    {
+      "type": 0,
+      "value": "Distinct ID"
     }
   ],
   "label.does-not-contain": [
@@ -359,10 +539,28 @@
       "value": "Не содержит"
     }
   ],
+  "label.does-not-include": [
+    {
+      "type": 0,
+      "value": "Не включает"
+    }
+  ],
+  "label.doest-not-exist": [
+    {
+      "type": 0,
+      "value": "Не существует"
+    }
+  ],
   "label.domain": [
     {
       "type": 0,
       "value": "Домен"
+    }
+  ],
+  "label.download": [
+    {
+      "type": 0,
+      "value": "Download"
     }
   ],
   "label.dropoff": [
@@ -389,6 +587,12 @@
       "value": "Редактировать участника"
     }
   ],
+  "label.email": [
+    {
+      "type": 0,
+      "value": "Email"
+    }
+  ],
   "label.enable-share-url": [
     {
       "type": 0,
@@ -407,6 +611,12 @@
       "value": "URL-адрес входа"
     }
   ],
+  "label.environment": [
+    {
+      "type": 0,
+      "value": "Environment"
+    }
+  ],
   "label.event": [
     {
       "type": 0,
@@ -419,10 +629,22 @@
       "value": "Данные о событии"
     }
   ],
+  "label.event-name": [
+    {
+      "type": 0,
+      "value": "Название события"
+    }
+  ],
   "label.events": [
     {
       "type": 0,
       "value": "События"
+    }
+  ],
+  "label.exists": [
+    {
+      "type": 0,
+      "value": "Существует"
     }
   ],
   "label.exit": [
@@ -473,6 +695,12 @@
       "value": "Фильтры"
     }
   ],
+  "label.first-click": [
+    {
+      "type": 0,
+      "value": "Первый клик"
+    }
+  ],
   "label.first-seen": [
     {
       "type": 0,
@@ -489,6 +717,12 @@
     {
       "type": 0,
       "value": "Изучите коэффициент конверсии и ухода пользователей."
+    }
+  ],
+  "label.funnels": [
+    {
+      "type": 0,
+      "value": "Воронки"
     }
   ],
   "label.goal": [
@@ -521,16 +755,34 @@
       "value": "Больше или равно"
     }
   ],
-  "label.host": [
+  "label.grouped": [
     {
       "type": 0,
-      "value": "Host"
+      "value": "Группировано"
     }
   ],
-  "label.hosts": [
+  "label.growth": [
     {
       "type": 0,
-      "value": "Hosts"
+      "value": "Growth"
+    }
+  ],
+  "label.hostname": [
+    {
+      "type": 0,
+      "value": "Имя хоста"
+    }
+  ],
+  "label.includes": [
+    {
+      "type": 0,
+      "value": "Включает"
+    }
+  ],
+  "label.insight": [
+    {
+      "type": 0,
+      "value": "Инсайт"
     }
   ],
   "label.insights": [
@@ -545,10 +797,22 @@
       "value": "Погрузитесь глубже в свои данные с помощью сегментов и фильтров."
     }
   ],
+  "label.invalid-url": [
+    {
+      "type": 0,
+      "value": "Invalid URL"
+    }
+  ],
   "label.is": [
     {
       "type": 0,
       "value": "Является"
+    }
+  ],
+  "label.is-false": [
+    {
+      "type": 0,
+      "value": "Ложно"
     }
   ],
   "label.is-not": [
@@ -569,13 +833,19 @@
       "value": "Установлен"
     }
   ],
+  "label.is-true": [
+    {
+      "type": 0,
+      "value": "Истинно"
+    }
+  ],
   "label.join": [
     {
       "type": 0,
       "value": "Присоединиться"
     }
   ],
-  "label.join-team": [
+  "label.join-org": [
     {
       "type": 0,
       "value": "Присоединиться к команде"
@@ -591,6 +861,12 @@
     {
       "type": 0,
       "value": "Поймите, как пользователи перемещаются по вашему сайту."
+    }
+  ],
+  "label.journeys": [
+    {
+      "type": 0,
+      "value": "Пути"
     }
   ],
   "label.language": [
@@ -609,6 +885,12 @@
     {
       "type": 0,
       "value": "Ноутбук"
+    }
+  ],
+  "label.last-click": [
+    {
+      "type": 0,
+      "value": "Последний клик"
     }
   ],
   "label.last-days": [
@@ -665,7 +947,7 @@
       "value": "Уйти"
     }
   ],
-  "label.leave-team": [
+  "label.leave-org": [
     {
       "type": 0,
       "value": "Покинуть команду"
@@ -681,6 +963,24 @@
     {
       "type": 0,
       "value": "Меньше или равно"
+    }
+  ],
+  "label.link": [
+    {
+      "type": 0,
+      "value": "Link"
+    }
+  ],
+  "label.links": [
+    {
+      "type": 0,
+      "value": "Ссылки"
+    }
+  ],
+  "label.location": [
+    {
+      "type": 0,
+      "value": "Location"
     }
   ],
   "label.login": [
@@ -713,6 +1013,18 @@
       "value": "Максимум"
     }
   ],
+  "label.maximize": [
+    {
+      "type": 0,
+      "value": "Развернуть"
+    }
+  ],
+  "label.medium": [
+    {
+      "type": 0,
+      "value": "Средний"
+    }
+  ],
   "label.member": [
     {
       "type": 0,
@@ -735,6 +1047,12 @@
     {
       "type": 0,
       "value": "Смартфон"
+    }
+  ],
+  "label.model": [
+    {
+      "type": 0,
+      "value": "Модель"
     }
   ],
   "label.more": [
@@ -813,10 +1131,106 @@
       "value": "OK"
     }
   ],
+  "label.online": [
+    {
+      "type": 0,
+      "value": "Online"
+    }
+  ],
+  "label.org": [
+    {
+      "type": 0,
+      "value": "Команда"
+    }
+  ],
+  "label.org-id": [
+    {
+      "type": 0,
+      "value": "ID команды"
+    }
+  ],
+  "label.org-manager": [
+    {
+      "type": 0,
+      "value": "Менеджер команды"
+    }
+  ],
+  "label.org-member": [
+    {
+      "type": 0,
+      "value": "Член команды"
+    }
+  ],
+  "label.org-name": [
+    {
+      "type": 0,
+      "value": "Название команды"
+    }
+  ],
+  "label.org-owner": [
+    {
+      "type": 0,
+      "value": "Владелец команды"
+    }
+  ],
+  "label.org-settings": [
+    {
+      "type": 0,
+      "value": "Настройки команды"
+    }
+  ],
+  "label.org-view-only": [
+    {
+      "type": 0,
+      "value": "Только командный просмотр"
+    }
+  ],
+  "label.org-websites": [
+    {
+      "type": 0,
+      "value": "Веб-сайты команды"
+    }
+  ],
+  "label.organic-search": [
+    {
+      "type": 0,
+      "value": "Органический поиск"
+    }
+  ],
+  "label.organic-shopping": [
+    {
+      "type": 0,
+      "value": "Органические покупки"
+    }
+  ],
+  "label.organic-social": [
+    {
+      "type": 0,
+      "value": "Органические соцсети"
+    }
+  ],
+  "label.organic-video": [
+    {
+      "type": 0,
+      "value": "Органическое видео"
+    }
+  ],
+  "label.orgs": [
+    {
+      "type": 0,
+      "value": "Команды"
+    }
+  ],
   "label.os": [
     {
       "type": 0,
       "value": "OS"
+    }
+  ],
+  "label.other": [
+    {
+      "type": 0,
+      "value": "Другое"
     }
   ],
   "label.overview": [
@@ -829,6 +1243,12 @@
     {
       "type": 0,
       "value": "Владелец"
+    }
+  ],
+  "label.page": [
+    {
+      "type": 0,
+      "value": "Страница"
     }
   ],
   "label.page-of": [
@@ -867,6 +1287,36 @@
       "value": "Страницы"
     }
   ],
+  "label.paid-ads": [
+    {
+      "type": 0,
+      "value": "Платная реклама"
+    }
+  ],
+  "label.paid-search": [
+    {
+      "type": 0,
+      "value": "Платный поиск"
+    }
+  ],
+  "label.paid-shopping": [
+    {
+      "type": 0,
+      "value": "Платные покупки"
+    }
+  ],
+  "label.paid-social": [
+    {
+      "type": 0,
+      "value": "Платные соцсети"
+    }
+  ],
+  "label.paid-video": [
+    {
+      "type": 0,
+      "value": "Платное видео"
+    }
+  ],
   "label.password": [
     {
       "type": 0,
@@ -885,6 +1335,18 @@
       "value": "Пути"
     }
   ],
+  "label.pixel": [
+    {
+      "type": 0,
+      "value": "Pixel"
+    }
+  ],
+  "label.pixels": [
+    {
+      "type": 0,
+      "value": "Пиксели"
+    }
+  ],
   "label.powered-by": [
     {
       "type": 0,
@@ -893,6 +1355,12 @@
     {
       "type": 1,
       "value": "name"
+    }
+  ],
+  "label.preferences": [
+    {
+      "type": 0,
+      "value": "Preferences"
     }
   ],
   "label.previous": [
@@ -917,6 +1385,12 @@
     {
       "type": 0,
       "value": "Профиль"
+    }
+  ],
+  "label.profiles": [
+    {
+      "type": 0,
+      "value": "Profiles"
     }
   ],
   "label.properties": [
@@ -955,6 +1429,12 @@
       "value": "Реальное время"
     }
   ],
+  "label.referral": [
+    {
+      "type": 0,
+      "value": "Referral"
+    }
+  ],
   "label.referrer": [
     {
       "type": 0,
@@ -989,6 +1469,12 @@
     {
       "type": 0,
       "value": "Регионы"
+    }
+  ],
+  "label.remaining": [
+    {
+      "type": 0,
+      "value": "Осталось"
     }
   ],
   "label.remove": [
@@ -1051,12 +1537,6 @@
       "value": "Изучите свои доходы за определенное время."
     }
   ],
-  "label.revenue-property": [
-    {
-      "type": 0,
-      "value": "Доходная недвижимость"
-    }
-  ],
   "label.role": [
     {
       "type": 0,
@@ -1075,6 +1555,24 @@
       "value": "Сохранить"
     }
   ],
+  "label.save-cohort": [
+    {
+      "type": 0,
+      "value": "Save as cohort"
+    }
+  ],
+  "label.save-segment": [
+    {
+      "type": 0,
+      "value": "Save as segment"
+    }
+  ],
+  "label.screen": [
+    {
+      "type": 0,
+      "value": "Screen"
+    }
+  ],
   "label.screens": [
     {
       "type": 0,
@@ -1087,6 +1585,18 @@
       "value": "Поиск"
     }
   ],
+  "label.segment": [
+    {
+      "type": 0,
+      "value": "Segment"
+    }
+  ],
+  "label.segments": [
+    {
+      "type": 0,
+      "value": "Segments"
+    }
+  ],
   "label.select": [
     {
       "type": 0,
@@ -1097,6 +1607,12 @@
     {
       "type": 0,
       "value": "Выберите дату"
+    }
+  ],
+  "label.select-filter": [
+    {
+      "type": 0,
+      "value": "Выберите фильтр"
     }
   ],
   "label.select-role": [
@@ -1117,6 +1633,12 @@
       "value": "Сессия"
     }
   ],
+  "label.session-data": [
+    {
+      "type": 0,
+      "value": "Данные сессии"
+    }
+  ],
   "label.sessions": [
     {
       "type": 0,
@@ -1129,6 +1651,12 @@
       "value": "Настройки"
     }
   ],
+  "label.share": [
+    {
+      "type": 0,
+      "value": "Поделиться"
+    }
+  ],
   "label.share-url": [
     {
       "type": 0,
@@ -1139,6 +1667,18 @@
     {
       "type": 0,
       "value": "Один день"
+    }
+  ],
+  "label.sms": [
+    {
+      "type": 0,
+      "value": "SMS"
+    }
+  ],
+  "label.sources": [
+    {
+      "type": 0,
+      "value": "Источники"
     }
   ],
   "label.start-step": [
@@ -1159,64 +1699,34 @@
       "value": "Сумма"
     }
   ],
+  "label.table": [
+    {
+      "type": 0,
+      "value": "Table"
+    }
+  ],
   "label.tablet": [
     {
       "type": 0,
       "value": "Планшет"
     }
   ],
-  "label.team": [
+  "label.tag": [
     {
       "type": 0,
-      "value": "Команда"
+      "value": "Тег"
     }
   ],
-  "label.team-id": [
+  "label.tags": [
     {
       "type": 0,
-      "value": "ID команды"
+      "value": "Теги"
     }
   ],
-  "label.team-manager": [
+  "label.terms": [
     {
       "type": 0,
-      "value": "Менеджер команды"
-    }
-  ],
-  "label.team-member": [
-    {
-      "type": 0,
-      "value": "Член команды"
-    }
-  ],
-  "label.team-name": [
-    {
-      "type": 0,
-      "value": "Название команды"
-    }
-  ],
-  "label.team-owner": [
-    {
-      "type": 0,
-      "value": "Владелец команды"
-    }
-  ],
-  "label.team-view-only": [
-    {
-      "type": 0,
-      "value": "Только командный просмотр"
-    }
-  ],
-  "label.team-websites": [
-    {
-      "type": 0,
-      "value": "Веб-сайты команды"
-    }
-  ],
-  "label.teams": [
-    {
-      "type": 0,
-      "value": "Команды"
+      "value": "Условия"
     }
   ],
   "label.theme": [
@@ -1285,6 +1795,12 @@
       "value": "Код отслеживания"
     }
   ],
+  "label.traffic": [
+    {
+      "type": 0,
+      "value": "Traffic"
+    }
+  ],
   "label.transactions": [
     {
       "type": 0,
@@ -1351,28 +1867,10 @@
       "value": "Обновление"
     }
   ],
-  "label.url": [
-    {
-      "type": 0,
-      "value": "URL"
-    }
-  ],
-  "label.urls": [
-    {
-      "type": 0,
-      "value": "URLs"
-    }
-  ],
   "label.user": [
     {
       "type": 0,
       "value": "Пользователь"
-    }
-  ],
-  "label.user-property": [
-    {
-      "type": 0,
-      "value": "Собственность пользователя"
     }
   ],
   "label.username": [
@@ -1507,6 +2005,12 @@
       "value": " текущих посетителей"
     }
   ],
+  "message.bad-request": [
+    {
+      "type": 0,
+      "value": "Bad request"
+    }
+  ],
   "message.collected-data": [
     {
       "type": 0,
@@ -1569,7 +2073,7 @@
       "value": "?"
     }
   ],
-  "message.delete-team-warning": [
+  "message.delete-org-warning": [
     {
       "type": 0,
       "value": "При удалении команды будут удалены и все ее веб-сайты."
@@ -1599,6 +2103,12 @@
     {
       "type": 1,
       "value": "url"
+    }
+  ],
+  "message.forbidden": [
+    {
+      "type": 0,
+      "value": "Forbidden"
     }
   ],
   "message.go-to-settings": [
@@ -1636,7 +2146,7 @@
   "message.new-version-available": [
     {
       "type": 0,
-      "value": "Вышла новая версия Umami "
+      "value": "Вышла новая версия Entrolytics "
     },
     {
       "type": 1,
@@ -1665,22 +2175,22 @@
       "value": "Пароли не совпадают"
     }
   ],
-  "message.no-results-found": [
-    {
-      "type": 0,
-      "value": "Результаты не найдены."
-    }
-  ],
-  "message.no-team-websites": [
+  "message.no-org-websites": [
     {
       "type": 0,
       "value": "У этой команды нет ни одного сайта."
     }
   ],
-  "message.no-teams": [
+  "message.no-orgs": [
     {
       "type": 0,
       "value": "Вы не создали ни одной команды."
+    }
+  ],
+  "message.no-results-found": [
+    {
+      "type": 0,
+      "value": "Результаты не найдены."
     }
   ],
   "message.no-users": [
@@ -1693,6 +2203,36 @@
     {
       "type": 0,
       "value": "У вас нет настроенных сайтов."
+    }
+  ],
+  "message.not-found": [
+    {
+      "type": 0,
+      "value": "Not found"
+    }
+  ],
+  "message.nothing-selected": [
+    {
+      "type": 0,
+      "value": "Nothing selected."
+    }
+  ],
+  "message.org-already-member": [
+    {
+      "type": 0,
+      "value": "Вы уже состоите в команде."
+    }
+  ],
+  "message.org-not-found": [
+    {
+      "type": 0,
+      "value": "Команда не найдена."
+    }
+  ],
+  "message.org-websites-info": [
+    {
+      "type": 0,
+      "value": "Сайты могут просматривать все члены команды."
     }
   ],
   "message.page-not-found": [
@@ -1719,6 +2259,12 @@
       "value": "Успешно сохранено."
     }
   ],
+  "message.sever-error": [
+    {
+      "type": 0,
+      "value": "Server error"
+    }
+  ],
   "message.share-url": [
     {
       "type": 0,
@@ -1733,37 +2279,19 @@
       "value": "."
     }
   ],
-  "message.team-already-member": [
-    {
-      "type": 0,
-      "value": "Вы уже состоите в команде."
-    }
-  ],
-  "message.team-not-found": [
-    {
-      "type": 0,
-      "value": "Команда не найдена."
-    }
-  ],
-  "message.team-websites-info": [
-    {
-      "type": 0,
-      "value": "Сайты могут просматривать все члены команды."
-    }
-  ],
   "message.tracking-code": [
     {
       "type": 0,
       "value": "Код отслеживания"
     }
   ],
-  "message.transfer-team-website-to-user": [
+  "message.transfer-org-website-to-user": [
     {
       "type": 0,
       "value": "Перенести этот сайт в свой прфоиль?"
     }
   ],
-  "message.transfer-user-website-to-team": [
+  "message.transfer-user-website-to-org": [
     {
       "type": 0,
       "value": "Выберите команду, которой нужно передать этот сайт."
@@ -1779,6 +2307,12 @@
     {
       "type": 0,
       "value": "Запущенное событие"
+    }
+  ],
+  "message.unauthorized": [
+    {
+      "type": 0,
+      "value": "Unauthorized"
     }
   ],
   "message.user-deleted": [
@@ -1825,12 +2359,6 @@
     {
       "type": 1,
       "value": "device"
-    }
-  ],
-  "message.visitors-dropped-off": [
-    {
-      "type": 0,
-      "value": "Высадка посетителей"
     }
   ]
 }

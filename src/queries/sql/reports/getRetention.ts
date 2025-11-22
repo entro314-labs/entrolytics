@@ -1,171 +1,180 @@
-import clickhouse from '@/lib/clickhouse';
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db';
-import prisma from '@/lib/prisma';
+import clickhouse from '@/lib/clickhouse'
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
+import {
+  getTimestampDiffSQL,
+  getDateSQL,
+  parseFilters,
+  rawQuery,
+  getDayDiffQuery,
+  getCastColumnQuery,
+} from '@/lib/analytics-utils'
+
+import { QueryFilters } from '@/lib/types'
+
+export interface RetentionParameters {
+  startDate: Date
+  endDate: Date
+  timezone?: string
+}
+
+export interface RetentionResult {
+  date: string
+  day: number
+  visitors: number
+  returnVisitors: number
+  percentage: number
+}
 
 export async function getRetention(
-  ...args: [
-    websiteId: string,
-    filters: {
-      startDate: Date;
-      endDate: Date;
-      timezone?: string;
-    },
-  ]
+  ...args: [websiteId: string, parameters: RetentionParameters, filters: QueryFilters]
 ) {
   return runQuery({
-    [PRISMA]: () => relationalQuery(...args),
+    [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  });
+  })
 }
 
 async function relationalQuery(
   websiteId: string,
-  filters: {
-    startDate: Date;
-    endDate: Date;
-    timezone?: string;
-  },
-): Promise<
-  {
-    date: string;
-    day: number;
-    visitors: number;
-    returnVisitors: number;
-    percentage: number;
-  }[]
-> {
-  const { startDate, endDate, timezone = 'UTC' } = filters;
-  const { getDateSQL, getDayDiffQuery, getCastColumnQuery, rawQuery } = prisma;
-  const unit = 'day';
+  parameters: RetentionParameters,
+  filters: QueryFilters
+): Promise<RetentionResult[]> {
+  const { startDate, endDate, timezone } = parameters
+  // Using rawQuery FROM analytics-utils
+  const unit = 'day'
+
+  const { filterQuery, joinSessionQuery, cohortQuery, queryParams } = parseFilters({
+    ...filters,
+    websiteId,
+    startDate,
+    endDate,
+    timezone,
+  })
 
   return rawQuery(
     `
     WITH cohort_items AS (
-      select session_id,
-        ${getDateSQL('created_at', unit, timezone)} as cohort_date  
-      from session 
-      where website_id = {{websiteId::uuid}}
-        and created_at between {{startDate}} and {{endDate}}
+      SELECT
+        MIN(${getDateSQL('website_event.created_at', unit, timezone)}) as cohort_date,
+        website_event.session_id
+      FROM website_event
+      ${cohortQuery}
+      ${joinSessionQuery}
+      WHERE website_event.website_id = {{websiteId::uuid}}
+        AND website_event.created_at between {{startDate}} AND {{endDate}}
+        ${filterQuery}
+      GROUP BY website_event.session_id
     ),
     user_activities AS (
-      select distinct
-        w.session_id,
-        ${getDayDiffQuery(getDateSQL('created_at', unit, timezone), 'c.cohort_date')} as day_number
-      from website_event w
-      join cohort_items c
-      on w.session_id = c.session_id
-      where website_id = {{websiteId::uuid}}
-          and created_at between {{startDate}} and {{endDate}}
+      SELECT DISTINCT
+        website_event.session_id,
+        ${getDayDiffQuery(getDateSQL('website_event.created_at', unit, timezone), 'cohort_items.cohort_date')} as day_number
+      FROM website_event
+      JOIN cohort_items
+      on website_event.session_id = cohort_items.session_id
+      WHERE website_event.website_id = {{websiteId::uuid}}
+          AND website_event.created_at between {{startDate}} AND {{endDate}}
       ),
     cohort_size as (
-      select cohort_date,
-        count(*) as visitors
-      from cohort_items
-      group by 1
-      order by 1
+      SELECT cohort_date,
+        COUNT(*) as visitors
+      FROM cohort_items
+      GROUP BY 1
+      ORDER BY 1
     ),
     cohort_date as (
-      select
+      SELECT
         c.cohort_date,
         a.day_number,
-        count(*) as visitors
-      from user_activities a
-      join cohort_items c
+        COUNT(*) as visitors
+      FROM user_activities a
+      JOIN cohort_items c
       on a.session_id = c.session_id
-      group by 1, 2
+      GROUP BY 1, 2
     )
-    select
+    SELECT
       c.cohort_date as date,
       c.day_number as day,
       s.visitors,
       c.visitors as "returnVisitors",
       ${getCastColumnQuery('c.visitors', 'float')} * 100 / s.visitors  as percentage
-    from cohort_date c
-    join cohort_size s
+    FROM cohort_date c
+    JOIN cohort_size s
     on c.cohort_date = s.cohort_date
-    where c.day_number <= 31
-    order by 1, 2`,
-    {
-      websiteId,
-      startDate,
-      endDate,
-    },
-  );
+    WHERE c.day_number <= 31
+    ORDER BY 1, 2`,
+    queryParams
+  )
 }
 
 async function clickhouseQuery(
   websiteId: string,
-  filters: {
-    startDate: Date;
-    endDate: Date;
-    timezone?: string;
-  },
-): Promise<
-  {
-    date: string;
-    day: number;
-    visitors: number;
-    returnVisitors: number;
-    percentage: number;
-  }[]
-> {
-  const { startDate, endDate, timezone = 'UTC' } = filters;
-  const { getDateSQL, rawQuery } = clickhouse;
-  const unit = 'day';
+  parameters: RetentionParameters,
+  filters: QueryFilters
+): Promise<RetentionResult[]> {
+  const { startDate, endDate, timezone } = parameters
+  const { getDateSQL, rawQuery, parseFilters } = clickhouse
+  const unit = 'day'
+
+  const { filterQuery, cohortQuery, queryParams } = parseFilters({
+    ...filters,
+    websiteId,
+    startDate,
+    endDate,
+    timezone,
+  })
 
   return rawQuery(
     `
     WITH cohort_items AS (
-      select
-        min(${getDateSQL('created_at', unit, timezone)}) as cohort_date,
+      SELECT
+        MIN(${getDateSQL('created_at', unit, timezone)}) as cohort_date,
         session_id
-      from website_event
-      where website_id = {websiteId:UUID}
-      and created_at between {startDate:DateTime64} and {endDate:DateTime64}
-      group by session_id
+      FROM website_event
+      ${cohortQuery}
+      WHERE website_id = {websiteId:UUID}
+        AND created_at between {startDate:DateTime64} AND {endDate:DateTime64}
+        ${filterQuery}
+      GROUP BY session_id
     ),
     user_activities AS (
-      select distinct
-        w.session_id,
-        (${getDateSQL('created_at', unit, timezone)} - c.cohort_date) / 86400 as day_number
-      from website_event w
-      join cohort_items c
-      on w.session_id = c.session_id
-      where website_id = {websiteId:UUID}
-        and created_at between {startDate:DateTime64} and {endDate:DateTime64}
+      SELECT DISTINCT
+        website_event.session_id,
+        toInt32((${getDateSQL('created_at', unit, timezone)} - cohort_items.cohort_date) / 86400) as day_number
+      FROM website_event
+      JOIN cohort_items
+      on website_event.session_id = cohort_items.session_id
+      WHERE website_id = {websiteId:UUID}
+        AND created_at between {startDate:DateTime64} AND {endDate:DateTime64}
     ),
     cohort_size as (
-      select cohort_date,
-        count(*) as visitors
-      from cohort_items
-      group by 1
-      order by 1
+      SELECT cohort_date,
+        COUNT(*) as visitors
+      FROM cohort_items
+      GROUP BY 1
+      ORDER BY 1
     ),
     cohort_date as (
-      select
+      SELECT
         c.cohort_date,
         a.day_number,
-        count(*) as visitors
-      from user_activities a
-      join cohort_items c
+        COUNT(*) as visitors
+      FROM user_activities a
+      JOIN cohort_items c
       on a.session_id = c.session_id
-      group by 1, 2
+      GROUP BY 1, 2
     )
-    select
+    SELECT
       c.cohort_date as date,
       c.day_number as day,
       s.visitors as visitors,
       c.visitors returnVisitors,
       c.visitors * 100 / s.visitors as percentage
-    from cohort_date c
-    join cohort_size s
+    FROM cohort_date c
+    JOIN cohort_size s
     on c.cohort_date = s.cohort_date
-    where c.day_number <= 31
-    order by 1, 2`,
-    {
-      websiteId,
-      startDate,
-      endDate,
-    },
-  );
+    WHERE c.day_number <= 31
+    ORDER BY 1, 2`,
+    queryParams
+  )
 }

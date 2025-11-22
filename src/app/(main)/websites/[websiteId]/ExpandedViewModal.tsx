@@ -1,0 +1,46 @@
+import { Dialog, Modal } from '@entro314labs/entro-zen'
+import { WebsiteExpandedView } from '@/app/(main)/websites/[websiteId]/WebsiteExpandedView'
+import { useNavigation } from '@/components/hooks'
+
+export function ExpandedViewModal({
+  websiteId,
+  excludedIds,
+}: {
+  websiteId: string
+  excludedIds?: string[]
+}) {
+  const {
+    router,
+    query: { view },
+    updateParams,
+  } = useNavigation()
+
+  const handleClose = (close: () => void) => {
+    router.push(updateParams({ view: undefined }))
+    close()
+  }
+
+  const handleOpenChange = (isOpen: boolean) => {
+    if (!isOpen) {
+      router.push(updateParams({ view: undefined }))
+    }
+  }
+
+  const height = CSS.supports('height', '100dvh') ? 'calc(100dvh - 40px)' : 'calc(100vh - 40px)'
+
+  return (
+    <Modal isOpen={!!view} onOpenChange={handleOpenChange} isDismissable>
+      <Dialog style={{ maxWidth: 1320, width: '100vw', height }}>
+        {({ close }) => {
+          return (
+            <WebsiteExpandedView
+              websiteId={websiteId}
+              excludedIds={excludedIds}
+              onClose={() => handleClose(close)}
+            />
+          )
+        }}
+      </Dialog>
+    </Modal>
+  )
+}

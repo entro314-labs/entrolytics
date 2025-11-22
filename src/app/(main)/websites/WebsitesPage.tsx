@@ -1,15 +1,26 @@
-'use client';
-import WebsitesHeader from '@/app/(main)/settings/websites/WebsitesHeader';
-import WebsitesDataTable from '@/app/(main)/settings/websites/WebsitesDataTable';
-import { useTeamUrl } from '@/components/hooks';
+'use client'
+import { WebsitesDataTable } from './WebsitesDataTable'
+import { WebsiteAddButton } from './WebsiteAddButton'
+import { useMessages, useNavigation } from '@/components/hooks'
+import { Column } from '@entro314labs/entro-zen'
+import { PageHeader } from '@/components/common/PageHeader'
+import { Panel } from '@/components/common/Panel'
+import { PageBody } from '@/components/common/PageBody'
 
-export default function WebsitesPage() {
-  const { teamId } = useTeamUrl();
+export function WebsitesPage() {
+  const { orgId } = useNavigation()
+  const { formatMessage, labels } = useMessages()
 
   return (
-    <>
-      <WebsitesHeader teamId={teamId} allowCreate={false} />
-      <WebsitesDataTable teamId={teamId} allowEdit={false} />
-    </>
-  );
+    <PageBody>
+      <Column gap="6" margin="2">
+        <PageHeader title={formatMessage(labels.websites)}>
+          <WebsiteAddButton orgId={orgId} />
+        </PageHeader>
+        <Panel>
+          <WebsitesDataTable orgId={orgId} />
+        </Panel>
+      </Column>
+    </PageBody>
+  )
 }

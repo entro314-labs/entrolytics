@@ -1,33 +1,38 @@
-import Empty from '@/components/common/Empty';
-import { useMessages } from '@/components/hooks';
-import { formatLongCurrency, formatLongNumber } from '@/lib/format';
-import { animated, config, useSpring } from '@react-spring/web';
-import classNames from 'classnames';
-import { ReactNode } from 'react';
-import { FixedSizeList } from 'react-window';
-import styles from './ListTable.module.css';
+import React, { ReactNode } from 'react'
+import * as ReactWindow from 'react-window'
+import { useSpring, config } from '@react-spring/web'
+import { Grid, Row, Column, Text } from '@entro314labs/entro-zen'
+import { AnimatedDiv } from '@/components/common/AnimatedDiv'
+import { Empty } from '@/components/common/Empty'
+import { useMessages, useMobile } from '@/components/hooks'
+import { formatLongCurrency, formatLongNumber } from '@/lib/format'
 
-const ITEM_SIZE = 30;
+const ITEM_SIZE = 30
+
+interface ListData {
+  label: string
+  count: number
+  percent: number
+}
 
 export interface ListTableProps {
-  data?: any[];
-  title?: string;
-  metric?: string;
-  className?: string;
-  renderLabel?: (row: any, index: number) => ReactNode;
-  renderChange?: (row: any, index: number) => ReactNode;
-  animate?: boolean;
-  virtualize?: boolean;
-  showPercentage?: boolean;
-  itemCount?: number;
-  currency?: string;
+  data?: ListData[]
+  title?: string
+  metric?: string
+  className?: string
+  renderLabel?: (data: ListData, index: number) => ReactNode
+  renderChange?: (data: ListData, index: number) => ReactNode
+  animate?: boolean
+  virtualize?: boolean
+  showPercentage?: boolean
+  itemCount?: number
+  currency?: string
 }
 
 export function ListTable({
   data = [],
   title,
   metric,
-  className,
   renderLabel,
   renderChange,
   animate = true,
@@ -36,52 +41,69 @@ export function ListTable({
   itemCount = 10,
   currency,
 }: ListTableProps) {
-  const { formatMessage, labels } = useMessages();
+  const { formatMessage, labels } = useMessages()
+  const { isPhone } = useMobile()
 
-  const getRow = (row: { x: any; y: any; z: any }, index: number) => {
-    const { x: label, y: value, z: percent } = row;
+  // Ensure data is always an array
+  const safeData = Array.isArray(data) ? data : []
+
+  const getRow = (row: ListData, index: number) => {
+    const { label, count, percent } = row
+
+    // Generate a more robust key that handles edge cases
+    const safeLabel = typeof label === 'string' ? label : String(label || 'unknown')
+    const keyId = `row-${index}-${safeLabel.slice(0, 50)}-${count || 0}`
 
     return (
       <AnimatedRow
-        key={label}
-        label={renderLabel ? renderLabel(row, index) : label ?? formatMessage(labels.unknown)}
-        value={value}
+        key={keyId}
+        label={renderLabel ? renderLabel(row, index) : safeLabel || formatMessage(labels.unknown)}
+        value={count}
         percent={percent}
         animate={animate && !virtualize}
         showPercentage={showPercentage}
         change={renderChange ? renderChange(row, index) : null}
         currency={currency}
+        isMobile={isPhone}
       />
-    );
-  };
+    )
+  }
 
-  const Row = ({ index, style }) => {
-    return <div style={style}>{getRow(data[index], index)}</div>;
-  };
+  const ListTableRow = ({ index, style }: { index: number; style: React.CSSProperties }) => {
+    const rowData = safeData[index]
+    const safeLabel =
+      typeof rowData?.label === 'string' ? rowData.label : String(rowData?.label || 'unknown')
+    const virtualizedKey = `virtualized-${index}-${safeLabel.slice(0, 30)}-${rowData?.count || 0}`
+
+    return (
+      <div style={style} key={virtualizedKey}>
+        {getRow(rowData, index)}
+      </div>
+    )
+  }
 
   return (
-    <div className={classNames(styles.table, className)}>
-      <div className={styles.header}>
-        <div className={styles.title}>{title}</div>
-        <div className={styles.metric}>{metric}</div>
-      </div>
-      <div className={styles.body}>
-        {data?.length === 0 && <Empty className={styles.empty} />}
-        {virtualize && data.length > 0 ? (
-          <FixedSizeList
-            width="100%"
-            height={itemCount * ITEM_SIZE}
-            itemCount={data.length}
-            itemSize={ITEM_SIZE}
-          >
-            {Row}
-          </FixedSizeList>
-        ) : (
-          data.map(getRow)
-        )}
-      </div>
-    </div>
-  );
+    <Column gap>
+      <Grid alignItems="center" justifyContent="space-between" paddingLeft="2" columns="1fr 100px">
+        <Text weight="bold">{title}</Text>
+        <Text weight="bold" align="center">
+          {metric}
+        </Text>
+      </Grid>
+      <Column gap="1">
+        {safeData?.length === 0 && <Empty />}
+        {virtualize && safeData.length > 0
+          ? React.createElement(ReactWindow.List as any, {
+              width: '100%',
+              height: itemCount * ITEM_SIZE,
+              itemCount: safeData.length,
+              itemSize: ITEM_SIZE,
+              children: ListTableRow,
+            })
+          : safeData.map(getRow)}
+      </Column>
+    </Column>
+  )
 }
 
 const AnimatedRow = ({
@@ -92,33 +114,52 @@ const AnimatedRow = ({
   animate,
   showPercentage = true,
   currency,
+  isMobile,
 }) => {
   const props = useSpring({
     width: percent,
-    y: value,
+    y: !isNaN(value) ? value : 0,
     from: { width: 0, y: 0 },
     config: animate ? config.default : { duration: 0 },
-  });
+  })
 
   return (
-    <div className={styles.row}>
-      <div className={styles.label}>{label}</div>
-      <div className={styles.value}>
+    <Grid
+      columns="1fr 50px 50px"
+      paddingLeft="2"
+      alignItems="center"
+      hoverBackgroundColor="2"
+      borderRadius
+      gap
+    >
+      <Row alignItems="center">
+        <Text truncate={true} style={{ maxWidth: isMobile ? '200px' : '400px' }}>
+          {label}
+        </Text>
+      </Row>
+      <Row alignItems="center" height="30px" justifyContent="flex-end">
         {change}
-        <animated.div className={styles.value} title={props?.y as any}>
-          {currency
-            ? props.y?.to(n => formatLongCurrency(n, currency))
-            : props.y?.to(formatLongNumber)}
-        </animated.div>
-      </div>
+        <Text weight="bold">
+          <AnimatedDiv title={props?.y as any}>
+            {currency
+              ? props.y?.to((n) => formatLongCurrency(n, currency))
+              : props.y?.to(formatLongNumber)}
+          </AnimatedDiv>
+        </Text>
+      </Row>
       {showPercentage && (
-        <div className={styles.percent}>
-          <animated.div className={styles.bar} style={{ width: props.width.to(n => `${n}%`) }} />
-          <animated.span>{props.width.to(n => `${n?.toFixed?.(0)}%`)}</animated.span>
-        </div>
+        <Row
+          alignItems="center"
+          justifyContent="flex-start"
+          position="relative"
+          border="left"
+          borderColor="8"
+          color="muted"
+          paddingLeft="3"
+        >
+          <AnimatedDiv>{props.width.to((n) => `${n?.toFixed?.(0)}%`)}</AnimatedDiv>
+        </Row>
       )}
-    </div>
-  );
-};
-
-export default ListTable;
+    </Grid>
+  )
+}

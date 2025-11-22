@@ -1,321 +1,172 @@
-import bcrypt from 'bcryptjs';
-import { Report } from '@prisma/client';
-import redis from '@/lib/redis';
-import debug from 'debug';
-import { PERMISSIONS, ROLE_PERMISSIONS, ROLES, SHARE_TOKEN_HEADER } from '@/lib/constants';
-import { secret, getRandomChars } from '@/lib/crypto';
-import { createSecureToken, parseSecureToken, parseToken } from '@/lib/jwt';
-import { ensureArray } from '@/lib/utils';
-import { getTeamUser, getUser, getWebsite } from '@/queries';
-import { Auth } from './types';
+import { auth, currentUser, clerkClient } from '@clerk/nextjs/server'
+import debug from 'debug'
+import { ROLE_PERMISSIONS, ROLES, SHARE_TOKEN_HEADER } from '@/lib/constants'
+import { parseToken } from '@/lib/jwt'
+import { secret, uuid } from '@/lib/crypto'
+import { ensureArray } from '@/lib/utils'
+import { getUser, createUser, getUserByClerkId } from '@/queries/drizzle/user'
+import type { AuthContext, PlatformRole } from '@/types/clerk'
+import type { User } from '@/lib/db'
+import type { Role } from '@/lib/types'
 
-const log = debug('umami:auth');
-const cloudMode = process.env.CLOUD_MODE;
-const SALT_ROUNDS = 10;
-
-export function hashPassword(password: string, rounds = SALT_ROUNDS) {
-  return bcrypt.hashSync(password, rounds);
+// Enhanced user type with computed properties
+type EnhancedUser = User & {
+  isAdmin?: boolean
+  platformRole?: PlatformRole
+  orgId?: string | null
+  orgRole?: string | null
 }
 
-export function checkPassword(password: string, passwordHash: string) {
-  return bcrypt.compareSync(password, passwordHash);
-}
+const log = debug('entrolytics:auth')
 
-export async function checkAuth(request: Request) {
-  const token = request.headers.get('authorization')?.split(' ')?.[1];
-  const payload = parseSecureToken(token, secret());
-  const shareToken = await parseShareToken(request.headers);
+/**
+ * Get current authenticated user with enhanced role information
+ *
+ * Uses Clerk's auth() function, syncs user to local database,
+ * and enriches with role data from Clerk's publicMetadata.
+ *
+ * @returns Enhanced user object with role information or null if not authenticated
+ */
+export async function getCurrentUser(): Promise<EnhancedUser | null> {
+  try {
+    const { userId: clerkUserId, orgId, orgRole } = await auth()
 
-  let user = null;
-  const { userId, authKey, grant } = payload || {};
-
-  if (userId) {
-    user = await getUser(userId);
-  } else if (redis.enabled && authKey) {
-    const key = await redis.client.get(authKey);
-
-    if (key?.userId) {
-      user = await getUser(key.userId);
+    if (!clerkUserId) {
+      return null
     }
-  }
 
-  if (process.env.NODE_ENV === 'development') {
-    log('checkAuth:', { token, shareToken, payload, user, grant });
-  }
+    // Get Clerk user data including publicMetadata
+    const client = await clerkClient()
+    const clerkUser = await client.users.getUser(clerkUserId)
+    const platformRole = (clerkUser.publicMetadata?.role as PlatformRole) || ROLES.user
 
-  if (!user?.id && !shareToken) {
-    log('checkAuth: User not authorized');
-    return null;
-  }
+    // Get user from database using Clerk ID
+    let user = await getUserByClerkId(clerkUserId)
 
-  if (user) {
-    user.isAdmin = user.role === ROLES.admin;
-  }
-
-  return {
-    user,
-    grant,
-    token,
-    shareToken,
-    authKey,
-  };
-}
-
-export async function saveAuth(data: any, expire = 0) {
-  const authKey = `auth:${getRandomChars(32)}`;
-
-  if (redis.enabled) {
-    await redis.client.set(authKey, data);
-
-    if (expire) {
-      await redis.client.expire(authKey, expire);
+    // If user doesn't exist in our database, sync from Clerk
+    if (!user) {
+      const currentClerkUser = await currentUser()
+      if (currentClerkUser) {
+        user = await syncUserFromClerk(currentClerkUser, platformRole)
+      }
+    } else {
+      // Update role from Clerk's publicMetadata if different
+      if (user.role !== platformRole) {
+        user.role = platformRole
+        // Could update database here if needed for consistency
+      }
     }
-  }
 
-  return createSecureToken({ authKey }, secret());
+    if (user) {
+      // Return enhanced user object with computed properties
+      return {
+        ...user,
+        isAdmin: platformRole === ROLES.admin,
+        platformRole,
+        orgId: orgId || null,
+        orgRole: orgRole || null,
+      } as EnhancedUser
+    }
+
+    return null
+  } catch (error) {
+    log('getCurrentUser error:', error)
+    return null
+  }
 }
 
+/**
+ * Sync user data from Clerk to our database
+ * Creates a new user record with Clerk data using Clerk ID as primary key
+ * Now takes role from Clerk's publicMetadata for consistency
+ */
+async function syncUserFromClerk(clerkUser: any, platformRole?: PlatformRole): Promise<User> {
+  try {
+    const userData = {
+      user_id: uuid(), // Generate proper UUID for primary key
+      clerk_id: clerkUser.id, // Store Clerk ID in clerk_id field
+      email: clerkUser.emailAddresses[0]?.emailAddress || '',
+      first_name: clerkUser.firstName || null,
+      last_name: clerkUser.lastName || null,
+      image_url: clerkUser.imageUrl || null,
+      role: (platformRole ||
+        (clerkUser.publicMetadata?.role as PlatformRole) ||
+        ROLES.user) as Role,
+      display_name:
+        `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim() ||
+        clerkUser.emailAddresses[0]?.emailAddress?.split('@')?.[0] ||
+        'User',
+    }
+
+    const newUser = await createUser(userData)
+    log('User synced from Clerk:', newUser.userId)
+
+    // Get the full user object from database after creation
+    const fullUser = await getUserByClerkId(clerkUser.id)
+    if (!fullUser) {
+      throw new Error('Failed to retrieve created user from database')
+    }
+
+    return fullUser as User
+  } catch (error) {
+    log('Error syncing user from Clerk:', error)
+    throw error
+  }
+}
+
+/**
+ * Check if user has specific permission(s)
+ * Maintains the existing permission system
+ */
+export async function hasPermission(role: string, permission: string | string[]) {
+  return ensureArray(permission).some((e) => ROLE_PERMISSIONS[role]?.includes(e))
+}
+
+/**
+ * Parse share token from request headers
+ * Maintains compatibility with existing share functionality
+ */
 export function parseShareToken(headers: Headers) {
   try {
-    return parseToken(headers.get(SHARE_TOKEN_HEADER), secret());
+    return parseToken(headers.get(SHARE_TOKEN_HEADER), secret())
   } catch (e) {
-    log(e);
-    return null;
+    log('Share token parse error:', e)
+    return null
   }
 }
 
-export async function canViewWebsite({ user, shareToken }: Auth, websiteId: string) {
-  if (user?.isAdmin) {
-    return true;
+/**
+ * Get enhanced auth context with role information from Clerk
+ * This provides a unified interface for checking authentication and roles
+ */
+export async function getAuthContext(): Promise<AuthContext | null> {
+  try {
+    const { userId: clerkUserId, orgId, orgRole } = await auth()
+
+    if (!clerkUserId) {
+      return null
+    }
+
+    // Get platform role from Clerk's publicMetadata
+    const client = await clerkClient()
+    const clerkUser = await client.users.getUser(clerkUserId)
+    const platformRole = (clerkUser.publicMetadata?.role as PlatformRole) || ROLES.user
+
+    return {
+      userId: clerkUserId,
+      orgId: orgId || null,
+      orgRole: (orgRole as any) || null,
+      platformRole,
+      isAdmin: platformRole === ROLES.admin,
+    }
+  } catch (error) {
+    log('Error getting auth context:', error)
+    return null
   }
-
-  if (shareToken?.websiteId === websiteId) {
-    return true;
-  }
-
-  const website = await getWebsite(websiteId);
-
-  if (website.userId) {
-    return user.id === website.userId;
-  }
-
-  if (website.teamId) {
-    const teamUser = await getTeamUser(website.teamId, user.id);
-
-    return !!teamUser;
-  }
-
-  return false;
 }
 
-export async function canViewAllWebsites({ user }: Auth) {
-  return user.isAdmin;
-}
-
-export async function canCreateWebsite({ user, grant }: Auth) {
-  if (cloudMode) {
-    return !!grant?.find(a => a === PERMISSIONS.websiteCreate);
-  }
-
-  if (user.isAdmin) {
-    return true;
-  }
-
-  return hasPermission(user.role, PERMISSIONS.websiteCreate);
-}
-
-export async function canUpdateWebsite({ user }: Auth, websiteId: string) {
-  if (user.isAdmin) {
-    return true;
-  }
-
-  const website = await getWebsite(websiteId);
-
-  if (website.userId) {
-    return user.id === website.userId;
-  }
-
-  if (website.teamId) {
-    const teamUser = await getTeamUser(website.teamId, user.id);
-
-    return teamUser && hasPermission(teamUser.role, PERMISSIONS.websiteUpdate);
-  }
-
-  return false;
-}
-
-export async function canTransferWebsiteToUser({ user }: Auth, websiteId: string, userId: string) {
-  const website = await getWebsite(websiteId);
-
-  if (website.teamId && user.id === userId) {
-    const teamUser = await getTeamUser(website.teamId, userId);
-
-    return teamUser && hasPermission(teamUser.role, PERMISSIONS.websiteTransferToUser);
-  }
-
-  return false;
-}
-
-export async function canTransferWebsiteToTeam({ user }: Auth, websiteId: string, teamId: string) {
-  const website = await getWebsite(websiteId);
-
-  if (website.userId && website.userId === user.id) {
-    const teamUser = await getTeamUser(teamId, user.id);
-
-    return teamUser && hasPermission(teamUser.role, PERMISSIONS.websiteTransferToTeam);
-  }
-
-  return false;
-}
-
-export async function canDeleteWebsite({ user }: Auth, websiteId: string) {
-  if (user.isAdmin) {
-    return true;
-  }
-
-  const website = await getWebsite(websiteId);
-
-  if (website.userId) {
-    return user.id === website.userId;
-  }
-
-  if (website.teamId) {
-    const teamUser = await getTeamUser(website.teamId, user.id);
-
-    return teamUser && hasPermission(teamUser.role, PERMISSIONS.websiteDelete);
-  }
-
-  return false;
-}
-
-export async function canViewReport(auth: Auth, report: Report) {
-  if (auth.user.isAdmin) {
-    return true;
-  }
-
-  if (auth.user.id == report.userId) {
-    return true;
-  }
-
-  return !!(await canViewWebsite(auth, report.websiteId));
-}
-
-export async function canUpdateReport({ user }: Auth, report: Report) {
-  if (user.isAdmin) {
-    return true;
-  }
-
-  return user.id == report.userId;
-}
-
-export async function canDeleteReport(auth: Auth, report: Report) {
-  return canUpdateReport(auth, report);
-}
-
-export async function canCreateTeam({ user, grant }: Auth) {
-  if (cloudMode) {
-    return !!grant?.find(a => a === PERMISSIONS.teamCreate);
-  }
-
-  if (user.isAdmin) {
-    return true;
-  }
-
-  return !!user;
-}
-
-export async function canViewTeam({ user }: Auth, teamId: string) {
-  if (user.isAdmin) {
-    return true;
-  }
-
-  return getTeamUser(teamId, user.id);
-}
-
-export async function canUpdateTeam({ user, grant }: Auth, teamId: string) {
-  if (user.isAdmin) {
-    return true;
-  }
-
-  if (cloudMode) {
-    return !!grant?.find(a => a === PERMISSIONS.teamUpdate);
-  }
-
-  const teamUser = await getTeamUser(teamId, user.id);
-
-  return teamUser && hasPermission(teamUser.role, PERMISSIONS.teamUpdate);
-}
-
-export async function canAddUserToTeam({ user, grant }: Auth) {
-  if (cloudMode) {
-    return !!grant?.find(a => a === PERMISSIONS.teamUpdate);
-  }
-
-  return user.isAdmin;
-}
-
-export async function canDeleteTeam({ user }: Auth, teamId: string) {
-  if (user.isAdmin) {
-    return true;
-  }
-
-  const teamUser = await getTeamUser(teamId, user.id);
-
-  return teamUser && hasPermission(teamUser.role, PERMISSIONS.teamDelete);
-}
-
-export async function canDeleteTeamUser({ user }: Auth, teamId: string, removeUserId: string) {
-  if (user.isAdmin) {
-    return true;
-  }
-
-  if (removeUserId === user.id) {
-    return true;
-  }
-
-  const teamUser = await getTeamUser(teamId, user.id);
-
-  return teamUser && hasPermission(teamUser.role, PERMISSIONS.teamUpdate);
-}
-
-export async function canCreateTeamWebsite({ user }: Auth, teamId: string) {
-  if (user.isAdmin) {
-    return true;
-  }
-
-  const teamUser = await getTeamUser(teamId, user.id);
-
-  return teamUser && hasPermission(teamUser.role, PERMISSIONS.websiteCreate);
-}
-
-export async function canCreateUser({ user }: Auth) {
-  return user.isAdmin;
-}
-
-export async function canViewUser({ user }: Auth, viewedUserId: string) {
-  if (user.isAdmin) {
-    return true;
-  }
-
-  return user.id === viewedUserId;
-}
-
-export async function canViewUsers({ user }: Auth) {
-  return user.isAdmin;
-}
-
-export async function canUpdateUser({ user }: Auth, viewedUserId: string) {
-  if (user.isAdmin) {
-    return true;
-  }
-
-  return user.id === viewedUserId;
-}
-
-export async function canDeleteUser({ user }: Auth) {
-  return user.isAdmin;
-}
-
-export async function hasPermission(role: string, permission: string | string[]) {
-  return ensureArray(permission).some(e => ROLE_PERMISSIONS[role]?.includes(e));
-}
+/**
+ * Entrolytics now uses Clerk with enhanced RBAC for authentication and authorization.
+ * Platform roles are stored in Clerk's publicMetadata.
+ * Organization roles use Clerk's native organization system.
+ */

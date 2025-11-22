@@ -1,11 +1,9 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react'
 
 export function useForceUpdate() {
-  const [, update] = useState(Object.create(null));
+  const [, update] = useState(Object.create(null))
 
   return useCallback(() => {
-    update(Object.create(null));
-  }, [update]);
+    update(Object.create(null))
+  }, [update])
 }
-
-export default useForceUpdate;

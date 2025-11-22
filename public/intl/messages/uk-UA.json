@@ -5,6 +5,18 @@
       "value": "Код доступу"
     }
   ],
+  "label.account": [
+    {
+      "type": 0,
+      "value": "Account"
+    }
+  ],
+  "label.action": [
+    {
+      "type": 0,
+      "value": "Action"
+    }
+  ],
   "label.actions": [
     {
       "type": 0,
@@ -23,16 +35,34 @@
       "value": "Додати"
     }
   ],
+  "label.add-board": [
+    {
+      "type": 0,
+      "value": "Додати дошку"
+    }
+  ],
   "label.add-description": [
     {
       "type": 0,
       "value": "Додати опис"
     }
   ],
+  "label.add-link": [
+    {
+      "type": 0,
+      "value": "Add link"
+    }
+  ],
   "label.add-member": [
     {
       "type": 0,
       "value": "Додати учасника"
+    }
+  ],
+  "label.add-pixel": [
+    {
+      "type": 0,
+      "value": "Add pixel"
     }
   ],
   "label.add-step": [
@@ -53,6 +83,12 @@
       "value": "Адміністратор"
     }
   ],
+  "label.affiliate": [
+    {
+      "type": 0,
+      "value": "Партнер"
+    }
+  ],
   "label.after": [
     {
       "type": 0,
@@ -71,10 +107,46 @@
       "value": "Весь час"
     }
   ],
+  "label.analysis": [
+    {
+      "type": 0,
+      "value": "Analysis"
+    }
+  ],
   "label.analytics": [
     {
       "type": 0,
       "value": "Аналітика"
+    }
+  ],
+  "label.application": [
+    {
+      "type": 0,
+      "value": "Application"
+    }
+  ],
+  "label.apply": [
+    {
+      "type": 0,
+      "value": "Застосувати"
+    }
+  ],
+  "label.attribution": [
+    {
+      "type": 0,
+      "value": "Атрибуція"
+    }
+  ],
+  "label.attribution-description": [
+    {
+      "type": 0,
+      "value": "Дивіться, як користувачі взаємодіють з вашим маркетингом і що сприяє конверсіям."
+    }
+  ],
+  "label.audience": [
+    {
+      "type": 0,
+      "value": "Audience"
     }
   ],
   "label.average": [
@@ -93,6 +165,18 @@
     {
       "type": 0,
       "value": "До"
+    }
+  ],
+  "label.behavior": [
+    {
+      "type": 0,
+      "value": "Behavior"
+    }
+  ],
+  "label.boards": [
+    {
+      "type": 0,
+      "value": "Дошки"
     }
   ],
   "label.bounce-rate": [
@@ -119,6 +203,12 @@
       "value": "Браузери"
     }
   ],
+  "label.campaigns": [
+    {
+      "type": 0,
+      "value": "Кампанії"
+    }
+  ],
   "label.cancel": [
     {
       "type": 0,
@@ -129,6 +219,24 @@
     {
       "type": 0,
       "value": "Змінити пароль"
+    }
+  ],
+  "label.channel": [
+    {
+      "type": 0,
+      "value": "Channel"
+    }
+  ],
+  "label.channels": [
+    {
+      "type": 0,
+      "value": "Канали"
+    }
+  ],
+  "label.chart": [
+    {
+      "type": 0,
+      "value": "Chart"
     }
   ],
   "label.cities": [
@@ -149,10 +257,28 @@
       "value": "Очистити все"
     }
   ],
+  "label.cohort": [
+    {
+      "type": 0,
+      "value": "Когорта"
+    }
+  ],
+  "label.cohorts": [
+    {
+      "type": 0,
+      "value": "Cohorts"
+    }
+  ],
   "label.compare": [
     {
       "type": 0,
-      "value": "Compare"
+      "value": "Порівняти"
+    }
+  ],
+  "label.compare-dates": [
+    {
+      "type": 0,
+      "value": "Порівняти дати"
     }
   ],
   "label.confirm": [
@@ -173,16 +299,40 @@
       "value": "Містить"
     }
   ],
+  "label.content": [
+    {
+      "type": 0,
+      "value": "Вміст"
+    }
+  ],
   "label.continue": [
     {
       "type": 0,
       "value": "Продовжити"
     }
   ],
+  "label.conversion": [
+    {
+      "type": 0,
+      "value": "Конверсія"
+    }
+  ],
+  "label.conversion-rate": [
+    {
+      "type": 0,
+      "value": "Рівень конверсії"
+    }
+  ],
+  "label.conversion-step": [
+    {
+      "type": 0,
+      "value": "Крок конверсії"
+    }
+  ],
   "label.count": [
     {
       "type": 0,
-      "value": "Count"
+      "value": "Кількість"
     }
   ],
   "label.countries": [
@@ -203,16 +353,16 @@
       "value": "Створити"
     }
   ],
+  "label.create-org": [
+    {
+      "type": 0,
+      "value": "Створити команду"
+    }
+  ],
   "label.create-report": [
     {
       "type": 0,
       "value": "Створити звіт"
-    }
-  ],
-  "label.create-team": [
-    {
-      "type": 0,
-      "value": "Створити команду"
     }
   ],
   "label.create-user": [
@@ -233,10 +383,22 @@
       "value": "Створено"
     }
   ],
+  "label.criteria": [
+    {
+      "type": 0,
+      "value": "Criteria"
+    }
+  ],
+  "label.currency": [
+    {
+      "type": 0,
+      "value": "Валюта"
+    }
+  ],
   "label.current": [
     {
       "type": 0,
-      "value": "Current"
+      "value": "Поточний"
     }
   ],
   "label.current-password": [
@@ -293,16 +455,16 @@
       "value": "Видалити"
     }
   ],
+  "label.delete-org": [
+    {
+      "type": 0,
+      "value": "Видалити команду"
+    }
+  ],
   "label.delete-report": [
     {
       "type": 0,
       "value": "Видалити звіт"
-    }
-  ],
-  "label.delete-team": [
-    {
-      "type": 0,
-      "value": "Видалити команду"
     }
   ],
   "label.delete-user": [
@@ -329,6 +491,12 @@
       "value": "Настільний ПК"
     }
   ],
+  "label.destination-url": [
+    {
+      "type": 0,
+      "value": "Destination URL"
+    }
+  ],
   "label.details": [
     {
       "type": 0,
@@ -347,10 +515,22 @@
       "value": "Пристрої"
     }
   ],
+  "label.direct": [
+    {
+      "type": 0,
+      "value": "Прямий"
+    }
+  ],
   "label.dismiss": [
     {
       "type": 0,
       "value": "Відхилити"
+    }
+  ],
+  "label.distinct-id": [
+    {
+      "type": 0,
+      "value": "Унікальний ID"
     }
   ],
   "label.does-not-contain": [
@@ -359,10 +539,28 @@
       "value": "Не містить"
     }
   ],
+  "label.does-not-include": [
+    {
+      "type": 0,
+      "value": "Не включає"
+    }
+  ],
+  "label.doest-not-exist": [
+    {
+      "type": 0,
+      "value": "Не існує"
+    }
+  ],
   "label.domain": [
     {
       "type": 0,
       "value": "Домен"
+    }
+  ],
+  "label.download": [
+    {
+      "type": 0,
+      "value": "Download"
     }
   ],
   "label.dropoff": [
@@ -380,31 +578,43 @@
   "label.edit-dashboard": [
     {
       "type": 0,
-      "value": "Edit dashboard"
+      "value": "Редагувати панель"
     }
   ],
   "label.edit-member": [
     {
       "type": 0,
-      "value": "Edit member"
+      "value": "Редагувати учасника"
+    }
+  ],
+  "label.email": [
+    {
+      "type": 0,
+      "value": "Email"
     }
   ],
   "label.enable-share-url": [
     {
       "type": 0,
-      "value": "Enable share URL"
+      "value": "Увімкнути спільне посилання"
     }
   ],
   "label.end-step": [
     {
       "type": 0,
-      "value": "End Step"
+      "value": "Кінцевий крок"
     }
   ],
   "label.entry": [
     {
       "type": 0,
-      "value": "Entry URL"
+      "value": "Вхідний URL"
+    }
+  ],
+  "label.environment": [
+    {
+      "type": 0,
+      "value": "Environment"
     }
   ],
   "label.event": [
@@ -419,10 +629,22 @@
       "value": "Дані події"
     }
   ],
+  "label.event-name": [
+    {
+      "type": 0,
+      "value": "Назва події"
+    }
+  ],
   "label.events": [
     {
       "type": 0,
       "value": "Події"
+    }
+  ],
+  "label.exists": [
+    {
+      "type": 0,
+      "value": "Існує"
     }
   ],
   "label.exit": [
@@ -473,6 +695,12 @@
       "value": "Фільтри"
     }
   ],
+  "label.first-click": [
+    {
+      "type": 0,
+      "value": "Перший клік"
+    }
+  ],
   "label.first-seen": [
     {
       "type": 0,
@@ -491,22 +719,28 @@
       "value": "Зрозуміти рівень конверсії та відсіву користувачів."
     }
   ],
+  "label.funnels": [
+    {
+      "type": 0,
+      "value": "Воронки"
+    }
+  ],
   "label.goal": [
     {
       "type": 0,
-      "value": "Goal"
+      "value": "Мета"
     }
   ],
   "label.goals": [
     {
       "type": 0,
-      "value": "Goals"
+      "value": "Мети"
     }
   ],
   "label.goals-description": [
     {
       "type": 0,
-      "value": "Track your goals for pageviews and events."
+      "value": "Відстежуйте свої цілі для переглядів сторінок і подій."
     }
   ],
   "label.greater-than": [
@@ -521,16 +755,34 @@
       "value": "Більше або рівно"
     }
   ],
-  "label.host": [
+  "label.grouped": [
     {
       "type": 0,
-      "value": "Host"
+      "value": "Груповано"
     }
   ],
-  "label.hosts": [
+  "label.growth": [
     {
       "type": 0,
-      "value": "Hosts"
+      "value": "Growth"
+    }
+  ],
+  "label.hostname": [
+    {
+      "type": 0,
+      "value": "Ім'я хоста"
+    }
+  ],
+  "label.includes": [
+    {
+      "type": 0,
+      "value": "Включає"
+    }
+  ],
+  "label.insight": [
+    {
+      "type": 0,
+      "value": "Інсайт"
     }
   ],
   "label.insights": [
@@ -545,10 +797,22 @@
       "value": "Зануртеся глибше у свої дані за допомогою сегментів та фільтрів."
     }
   ],
+  "label.invalid-url": [
+    {
+      "type": 0,
+      "value": "Invalid URL"
+    }
+  ],
   "label.is": [
     {
       "type": 0,
       "value": "Є"
+    }
+  ],
+  "label.is-false": [
+    {
+      "type": 0,
+      "value": "Хибно"
     }
   ],
   "label.is-not": [
@@ -569,13 +833,19 @@
       "value": "Встановлено"
     }
   ],
+  "label.is-true": [
+    {
+      "type": 0,
+      "value": "Правдиво"
+    }
+  ],
   "label.join": [
     {
       "type": 0,
       "value": "Приєднатись"
     }
   ],
-  "label.join-team": [
+  "label.join-org": [
     {
       "type": 0,
       "value": "Приєднатись до команди"
@@ -584,13 +854,19 @@
   "label.journey": [
     {
       "type": 0,
-      "value": "Journey"
+      "value": "Шлях"
     }
   ],
   "label.journey-description": [
     {
       "type": 0,
-      "value": "Understand how users navigate through your website."
+      "value": "Зрозумійте, як користувачі переміщаються вашим сайтом."
+    }
+  ],
+  "label.journeys": [
+    {
+      "type": 0,
+      "value": "Шляхи"
     }
   ],
   "label.language": [
@@ -609,6 +885,12 @@
     {
       "type": 0,
       "value": "Ноутбук"
+    }
+  ],
+  "label.last-click": [
+    {
+      "type": 0,
+      "value": "Останній клік"
     }
   ],
   "label.last-days": [
@@ -656,7 +938,7 @@
   "label.last-seen": [
     {
       "type": 0,
-      "value": "Last seen"
+      "value": "Останній перегляд"
     }
   ],
   "label.leave": [
@@ -665,7 +947,7 @@
       "value": "Покинути"
     }
   ],
-  "label.leave-team": [
+  "label.leave-org": [
     {
       "type": 0,
       "value": "Покинути команду"
@@ -681,6 +963,24 @@
     {
       "type": 0,
       "value": "Менше або дорівнює"
+    }
+  ],
+  "label.link": [
+    {
+      "type": 0,
+      "value": "Link"
+    }
+  ],
+  "label.links": [
+    {
+      "type": 0,
+      "value": "Посилання"
+    }
+  ],
+  "label.location": [
+    {
+      "type": 0,
+      "value": "Location"
     }
   ],
   "label.login": [
@@ -713,6 +1013,18 @@
       "value": "Макс."
     }
   ],
+  "label.maximize": [
+    {
+      "type": 0,
+      "value": "Розгорнути"
+    }
+  ],
+  "label.medium": [
+    {
+      "type": 0,
+      "value": "Середній"
+    }
+  ],
   "label.member": [
     {
       "type": 0,
@@ -735,6 +1047,12 @@
     {
       "type": 0,
       "value": "Мобільний"
+    }
+  ],
+  "label.model": [
+    {
+      "type": 0,
+      "value": "Модель"
     }
   ],
   "label.more": [
@@ -813,10 +1131,106 @@
       "value": "OK"
     }
   ],
+  "label.online": [
+    {
+      "type": 0,
+      "value": "Online"
+    }
+  ],
+  "label.org": [
+    {
+      "type": 0,
+      "value": "Команда"
+    }
+  ],
+  "label.org-id": [
+    {
+      "type": 0,
+      "value": "Ідентифікатор команди"
+    }
+  ],
+  "label.org-manager": [
+    {
+      "type": 0,
+      "value": "Менеджер команди"
+    }
+  ],
+  "label.org-member": [
+    {
+      "type": 0,
+      "value": "Учасник команди"
+    }
+  ],
+  "label.org-name": [
+    {
+      "type": 0,
+      "value": "Назва команди"
+    }
+  ],
+  "label.org-owner": [
+    {
+      "type": 0,
+      "value": "Власник команди"
+    }
+  ],
+  "label.org-settings": [
+    {
+      "type": 0,
+      "value": "Налаштування команди"
+    }
+  ],
+  "label.org-view-only": [
+    {
+      "type": 0,
+      "value": "Тільки для командного перегляду"
+    }
+  ],
+  "label.org-websites": [
+    {
+      "type": 0,
+      "value": "Сайти команди"
+    }
+  ],
+  "label.organic-search": [
+    {
+      "type": 0,
+      "value": "Органічний пошук"
+    }
+  ],
+  "label.organic-shopping": [
+    {
+      "type": 0,
+      "value": "Органічні покупки"
+    }
+  ],
+  "label.organic-social": [
+    {
+      "type": 0,
+      "value": "Органічні соцмережі"
+    }
+  ],
+  "label.organic-video": [
+    {
+      "type": 0,
+      "value": "Органічне відео"
+    }
+  ],
+  "label.orgs": [
+    {
+      "type": 0,
+      "value": "Команди"
+    }
+  ],
   "label.os": [
     {
       "type": 0,
       "value": "ОС"
+    }
+  ],
+  "label.other": [
+    {
+      "type": 0,
+      "value": "Інше"
     }
   ],
   "label.overview": [
@@ -829,6 +1243,12 @@
     {
       "type": 0,
       "value": "Власник"
+    }
+  ],
+  "label.page": [
+    {
+      "type": 0,
+      "value": "Сторінка"
     }
   ],
   "label.page-of": [
@@ -867,6 +1287,36 @@
       "value": "Сторінки"
     }
   ],
+  "label.paid-ads": [
+    {
+      "type": 0,
+      "value": "Платна реклама"
+    }
+  ],
+  "label.paid-search": [
+    {
+      "type": 0,
+      "value": "Платний пошук"
+    }
+  ],
+  "label.paid-shopping": [
+    {
+      "type": 0,
+      "value": "Платні покупки"
+    }
+  ],
+  "label.paid-social": [
+    {
+      "type": 0,
+      "value": "Платні соцмережі"
+    }
+  ],
+  "label.paid-video": [
+    {
+      "type": 0,
+      "value": "Платне відео"
+    }
+  ],
   "label.password": [
     {
       "type": 0,
@@ -885,6 +1335,18 @@
       "value": "Paths"
     }
   ],
+  "label.pixel": [
+    {
+      "type": 0,
+      "value": "Pixel"
+    }
+  ],
+  "label.pixels": [
+    {
+      "type": 0,
+      "value": "Пікселі"
+    }
+  ],
   "label.powered-by": [
     {
       "type": 0,
@@ -895,22 +1357,28 @@
       "value": "name"
     }
   ],
+  "label.preferences": [
+    {
+      "type": 0,
+      "value": "Preferences"
+    }
+  ],
   "label.previous": [
     {
       "type": 0,
-      "value": "Previous"
+      "value": "Попередній"
     }
   ],
   "label.previous-period": [
     {
       "type": 0,
-      "value": "Previous period"
+      "value": "Попередній період"
     }
   ],
   "label.previous-year": [
     {
       "type": 0,
-      "value": "Previous year"
+      "value": "Попередній рік"
     }
   ],
   "label.profile": [
@@ -919,16 +1387,22 @@
       "value": "Профіль"
     }
   ],
+  "label.profiles": [
+    {
+      "type": 0,
+      "value": "Profiles"
+    }
+  ],
   "label.properties": [
     {
       "type": 0,
-      "value": "Properties"
+      "value": "Властивості"
     }
   ],
   "label.property": [
     {
       "type": 0,
-      "value": "Property"
+      "value": "Властивість"
     }
   ],
   "label.queries": [
@@ -953,6 +1427,12 @@
     {
       "type": 0,
       "value": "У реальному часі"
+    }
+  ],
+  "label.referral": [
+    {
+      "type": 0,
+      "value": "Реферал"
     }
   ],
   "label.referrer": [
@@ -989,6 +1469,12 @@
     {
       "type": 0,
       "value": "Регіони"
+    }
+  ],
+  "label.remaining": [
+    {
+      "type": 0,
+      "value": "Залишилось"
     }
   ],
   "label.remove": [
@@ -1042,19 +1528,13 @@
   "label.revenue": [
     {
       "type": 0,
-      "value": "Revenue"
+      "value": "Дохід"
     }
   ],
   "label.revenue-description": [
     {
       "type": 0,
-      "value": "Look into your revenue across time."
-    }
-  ],
-  "label.revenue-property": [
-    {
-      "type": 0,
-      "value": "Revenue Property"
+      "value": "Перегляньте свій дохід за певний період."
     }
   ],
   "label.role": [
@@ -1075,6 +1555,24 @@
       "value": "Зберегти"
     }
   ],
+  "label.save-cohort": [
+    {
+      "type": 0,
+      "value": "Save as cohort"
+    }
+  ],
+  "label.save-segment": [
+    {
+      "type": 0,
+      "value": "Save as segment"
+    }
+  ],
+  "label.screen": [
+    {
+      "type": 0,
+      "value": "Screen"
+    }
+  ],
   "label.screens": [
     {
       "type": 0,
@@ -1087,6 +1585,18 @@
       "value": "Пошук"
     }
   ],
+  "label.segment": [
+    {
+      "type": 0,
+      "value": "Segment"
+    }
+  ],
+  "label.segments": [
+    {
+      "type": 0,
+      "value": "Segments"
+    }
+  ],
   "label.select": [
     {
       "type": 0,
@@ -1097,6 +1607,12 @@
     {
       "type": 0,
       "value": "Вибрати дату"
+    }
+  ],
+  "label.select-filter": [
+    {
+      "type": 0,
+      "value": "Вибрати фільтр"
     }
   ],
   "label.select-role": [
@@ -1114,7 +1630,13 @@
   "label.session": [
     {
       "type": 0,
-      "value": "Session"
+      "value": "Сесія"
+    }
+  ],
+  "label.session-data": [
+    {
+      "type": 0,
+      "value": "Дані сесії"
     }
   ],
   "label.sessions": [
@@ -1129,6 +1651,12 @@
       "value": "Налаштування"
     }
   ],
+  "label.share": [
+    {
+      "type": 0,
+      "value": "Поділитися"
+    }
+  ],
   "label.share-url": [
     {
       "type": 0,
@@ -1139,6 +1667,18 @@
     {
       "type": 0,
       "value": "Один день"
+    }
+  ],
+  "label.sms": [
+    {
+      "type": 0,
+      "value": "SMS"
+    }
+  ],
+  "label.sources": [
+    {
+      "type": 0,
+      "value": "Джерела"
     }
   ],
   "label.start-step": [
@@ -1159,64 +1699,34 @@
       "value": "Сума"
     }
   ],
+  "label.table": [
+    {
+      "type": 0,
+      "value": "Table"
+    }
+  ],
   "label.tablet": [
     {
       "type": 0,
       "value": "Планшет"
     }
   ],
-  "label.team": [
+  "label.tag": [
     {
       "type": 0,
-      "value": "Команда"
+      "value": "Тег"
     }
   ],
-  "label.team-id": [
+  "label.tags": [
     {
       "type": 0,
-      "value": "Ідентифікатор команди"
+      "value": "Теги"
     }
   ],
-  "label.team-manager": [
+  "label.terms": [
     {
       "type": 0,
-      "value": "Team manager"
-    }
-  ],
-  "label.team-member": [
-    {
-      "type": 0,
-      "value": "Учасник команди"
-    }
-  ],
-  "label.team-name": [
-    {
-      "type": 0,
-      "value": "Назва команди"
-    }
-  ],
-  "label.team-owner": [
-    {
-      "type": 0,
-      "value": "Власник команди"
-    }
-  ],
-  "label.team-view-only": [
-    {
-      "type": 0,
-      "value": "Тільки для командного перегляду"
-    }
-  ],
-  "label.team-websites": [
-    {
-      "type": 0,
-      "value": "Сайти команди"
-    }
-  ],
-  "label.teams": [
-    {
-      "type": 0,
-      "value": "Команди"
+      "value": "Умови"
     }
   ],
   "label.theme": [
@@ -1285,6 +1795,12 @@
       "value": "Код для відслідковування"
     }
   ],
+  "label.traffic": [
+    {
+      "type": 0,
+      "value": "Traffic"
+    }
+  ],
   "label.transactions": [
     {
       "type": 0,
@@ -1351,28 +1867,10 @@
       "value": "Оновлення"
     }
   ],
-  "label.url": [
-    {
-      "type": 0,
-      "value": "URL"
-    }
-  ],
-  "label.urls": [
-    {
-      "type": 0,
-      "value": "URLs"
-    }
-  ],
   "label.user": [
     {
       "type": 0,
       "value": "Користувач"
-    }
-  ],
-  "label.user-property": [
-    {
-      "type": 0,
-      "value": "User Property"
     }
   ],
   "label.username": [
@@ -1507,6 +2005,12 @@
       "value": " поточних відвідувачів"
     }
   ],
+  "message.bad-request": [
+    {
+      "type": 0,
+      "value": "Bad request"
+    }
+  ],
   "message.collected-data": [
     {
       "type": 0,
@@ -1569,7 +2073,7 @@
       "value": "?"
     }
   ],
-  "message.delete-team-warning": [
+  "message.delete-org-warning": [
     {
       "type": 0,
       "value": "Видалення команди також призведе до видалення всіх її веб-сайтів."
@@ -1599,6 +2103,12 @@
     {
       "type": 1,
       "value": "url"
+    }
+  ],
+  "message.forbidden": [
+    {
+      "type": 0,
+      "value": "Forbidden"
     }
   ],
   "message.go-to-settings": [
@@ -1636,7 +2146,7 @@
   "message.new-version-available": [
     {
       "type": 0,
-      "value": "Вийшла нова версія Umami "
+      "value": "Вийшла нова версія Entrolytics "
     },
     {
       "type": 1,
@@ -1665,22 +2175,22 @@
       "value": "Паролі не співпадають"
     }
   ],
-  "message.no-results-found": [
-    {
-      "type": 0,
-      "value": "Не знайдено жодного результату."
-    }
-  ],
-  "message.no-team-websites": [
+  "message.no-org-websites": [
     {
       "type": 0,
       "value": "У цієї команди немає жодного веб-сайту."
     }
   ],
-  "message.no-teams": [
+  "message.no-orgs": [
     {
       "type": 0,
       "value": "Ви не створили жодної команди."
+    }
+  ],
+  "message.no-results-found": [
+    {
+      "type": 0,
+      "value": "Не знайдено жодного результату."
     }
   ],
   "message.no-users": [
@@ -1693,6 +2203,36 @@
     {
       "type": 0,
       "value": "У вас немає налаштованих сайтів."
+    }
+  ],
+  "message.not-found": [
+    {
+      "type": 0,
+      "value": "Not found"
+    }
+  ],
+  "message.nothing-selected": [
+    {
+      "type": 0,
+      "value": "Nothing selected."
+    }
+  ],
+  "message.org-already-member": [
+    {
+      "type": 0,
+      "value": "Ви вже є членом команди."
+    }
+  ],
+  "message.org-not-found": [
+    {
+      "type": 0,
+      "value": "Команду не знайдено."
+    }
+  ],
+  "message.org-websites-info": [
+    {
+      "type": 0,
+      "value": "Веб-сайти може переглядати будь-хто з команди."
     }
   ],
   "message.page-not-found": [
@@ -1727,6 +2267,12 @@
       "value": "Збережено успішно."
     }
   ],
+  "message.sever-error": [
+    {
+      "type": 0,
+      "value": "Server error"
+    }
+  ],
   "message.share-url": [
     {
       "type": 0,
@@ -1741,37 +2287,19 @@
       "value": "."
     }
   ],
-  "message.team-already-member": [
-    {
-      "type": 0,
-      "value": "Ви вже є членом команди."
-    }
-  ],
-  "message.team-not-found": [
-    {
-      "type": 0,
-      "value": "Команду не знайдено."
-    }
-  ],
-  "message.team-websites-info": [
-    {
-      "type": 0,
-      "value": "Веб-сайти може переглядати будь-хто з команди."
-    }
-  ],
   "message.tracking-code": [
     {
       "type": 0,
       "value": "Код для відслідковування"
     }
   ],
-  "message.transfer-team-website-to-user": [
+  "message.transfer-org-website-to-user": [
     {
       "type": 0,
       "value": "Перенести цей сайт до свого облікового запису?"
     }
   ],
-  "message.transfer-user-website-to-team": [
+  "message.transfer-user-website-to-org": [
     {
       "type": 0,
       "value": "Виберіть команду, до якої ви хочете передати цей веб-сайт."
@@ -1787,6 +2315,12 @@
     {
       "type": 0,
       "value": "Подія, що спрацювала"
+    }
+  ],
+  "message.unauthorized": [
+    {
+      "type": 0,
+      "value": "Unauthorized"
     }
   ],
   "message.user-deleted": [
@@ -1833,12 +2367,6 @@
     {
       "type": 1,
       "value": "device"
-    }
-  ],
-  "message.visitors-dropped-off": [
-    {
-      "type": 0,
-      "value": "Користувачі що відсіялись"
     }
   ]
 }

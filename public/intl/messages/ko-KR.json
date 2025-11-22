@@ -5,6 +5,18 @@
       "value": "액세스 코드"
     }
   ],
+  "label.account": [
+    {
+      "type": 0,
+      "value": "Account"
+    }
+  ],
+  "label.action": [
+    {
+      "type": 0,
+      "value": "Action"
+    }
+  ],
   "label.actions": [
     {
       "type": 0,
@@ -23,16 +35,34 @@
       "value": "추가"
     }
   ],
+  "label.add-board": [
+    {
+      "type": 0,
+      "value": "보드 추가"
+    }
+  ],
   "label.add-description": [
     {
       "type": 0,
       "value": "설명 추가"
     }
   ],
+  "label.add-link": [
+    {
+      "type": 0,
+      "value": "Add link"
+    }
+  ],
   "label.add-member": [
     {
       "type": 0,
       "value": "멤버 추가"
+    }
+  ],
+  "label.add-pixel": [
+    {
+      "type": 0,
+      "value": "Add pixel"
     }
   ],
   "label.add-step": [
@@ -53,6 +83,12 @@
       "value": "관리자"
     }
   ],
+  "label.affiliate": [
+    {
+      "type": 0,
+      "value": "제휴사"
+    }
+  ],
   "label.after": [
     {
       "type": 0,
@@ -71,10 +107,46 @@
       "value": "전체 시간"
     }
   ],
+  "label.analysis": [
+    {
+      "type": 0,
+      "value": "Analysis"
+    }
+  ],
   "label.analytics": [
     {
       "type": 0,
       "value": "분석"
+    }
+  ],
+  "label.application": [
+    {
+      "type": 0,
+      "value": "Application"
+    }
+  ],
+  "label.apply": [
+    {
+      "type": 0,
+      "value": "적용"
+    }
+  ],
+  "label.attribution": [
+    {
+      "type": 0,
+      "value": "기여도"
+    }
+  ],
+  "label.attribution-description": [
+    {
+      "type": 0,
+      "value": "사용자가 마케팅에 어떻게 반응하고 전환을 유도하는지 확인하세요."
+    }
+  ],
+  "label.audience": [
+    {
+      "type": 0,
+      "value": "Audience"
     }
   ],
   "label.average": [
@@ -93,6 +165,18 @@
     {
       "type": 0,
       "value": "이전"
+    }
+  ],
+  "label.behavior": [
+    {
+      "type": 0,
+      "value": "Behavior"
+    }
+  ],
+  "label.boards": [
+    {
+      "type": 0,
+      "value": "보드"
     }
   ],
   "label.bounce-rate": [
@@ -119,6 +203,12 @@
       "value": "브라우저"
     }
   ],
+  "label.campaigns": [
+    {
+      "type": 0,
+      "value": "캠페인"
+    }
+  ],
   "label.cancel": [
     {
       "type": 0,
@@ -129,6 +219,24 @@
     {
       "type": 0,
       "value": "비밀번호 변경"
+    }
+  ],
+  "label.channel": [
+    {
+      "type": 0,
+      "value": "Channel"
+    }
+  ],
+  "label.channels": [
+    {
+      "type": 0,
+      "value": "채널"
+    }
+  ],
+  "label.chart": [
+    {
+      "type": 0,
+      "value": "Chart"
     }
   ],
   "label.cities": [
@@ -149,10 +257,28 @@
       "value": "모두 지우기"
     }
   ],
+  "label.cohort": [
+    {
+      "type": 0,
+      "value": "코호트"
+    }
+  ],
+  "label.cohorts": [
+    {
+      "type": 0,
+      "value": "Cohorts"
+    }
+  ],
   "label.compare": [
     {
       "type": 0,
       "value": "비교"
+    }
+  ],
+  "label.compare-dates": [
+    {
+      "type": 0,
+      "value": "날짜 비교"
     }
   ],
   "label.confirm": [
@@ -173,10 +299,34 @@
       "value": "포함"
     }
   ],
+  "label.content": [
+    {
+      "type": 0,
+      "value": "콘텐츠"
+    }
+  ],
   "label.continue": [
     {
       "type": 0,
       "value": "계속"
+    }
+  ],
+  "label.conversion": [
+    {
+      "type": 0,
+      "value": "전환"
+    }
+  ],
+  "label.conversion-rate": [
+    {
+      "type": 0,
+      "value": "전환율"
+    }
+  ],
+  "label.conversion-step": [
+    {
+      "type": 0,
+      "value": "전환 단계"
     }
   ],
   "label.count": [
@@ -203,16 +353,16 @@
       "value": "만들기"
     }
   ],
+  "label.create-org": [
+    {
+      "type": 0,
+      "value": "팀 만들기"
+    }
+  ],
   "label.create-report": [
     {
       "type": 0,
       "value": "보고서 만들기"
-    }
-  ],
-  "label.create-team": [
-    {
-      "type": 0,
-      "value": "팀 만들기"
     }
   ],
   "label.create-user": [
@@ -231,6 +381,18 @@
     {
       "type": 0,
       "value": "작성자"
+    }
+  ],
+  "label.criteria": [
+    {
+      "type": 0,
+      "value": "Criteria"
+    }
+  ],
+  "label.currency": [
+    {
+      "type": 0,
+      "value": "통화"
     }
   ],
   "label.current": [
@@ -293,16 +455,16 @@
       "value": "삭제"
     }
   ],
+  "label.delete-org": [
+    {
+      "type": 0,
+      "value": "팀 삭제"
+    }
+  ],
   "label.delete-report": [
     {
       "type": 0,
       "value": "보고서 삭제"
-    }
-  ],
-  "label.delete-team": [
-    {
-      "type": 0,
-      "value": "팀 삭제"
     }
   ],
   "label.delete-user": [
@@ -329,6 +491,12 @@
       "value": "데스크톱"
     }
   ],
+  "label.destination-url": [
+    {
+      "type": 0,
+      "value": "Destination URL"
+    }
+  ],
   "label.details": [
     {
       "type": 0,
@@ -347,10 +515,22 @@
       "value": "기기"
     }
   ],
+  "label.direct": [
+    {
+      "type": 0,
+      "value": "직접"
+    }
+  ],
   "label.dismiss": [
     {
       "type": 0,
       "value": "무시하기"
+    }
+  ],
+  "label.distinct-id": [
+    {
+      "type": 0,
+      "value": "고유 ID"
     }
   ],
   "label.does-not-contain": [
@@ -359,10 +539,28 @@
       "value": "포함하지 않음"
     }
   ],
+  "label.does-not-include": [
+    {
+      "type": 0,
+      "value": "포함하지 않음"
+    }
+  ],
+  "label.doest-not-exist": [
+    {
+      "type": 0,
+      "value": "존재하지 않음"
+    }
+  ],
   "label.domain": [
     {
       "type": 0,
       "value": "도메인"
+    }
+  ],
+  "label.download": [
+    {
+      "type": 0,
+      "value": "Download"
     }
   ],
   "label.dropoff": [
@@ -389,6 +587,12 @@
       "value": "멤버 편집"
     }
   ],
+  "label.email": [
+    {
+      "type": 0,
+      "value": "이메일"
+    }
+  ],
   "label.enable-share-url": [
     {
       "type": 0,
@@ -407,6 +611,12 @@
       "value": "입장 URL"
     }
   ],
+  "label.environment": [
+    {
+      "type": 0,
+      "value": "Environment"
+    }
+  ],
   "label.event": [
     {
       "type": 0,
@@ -419,10 +629,22 @@
       "value": "이벤트 데이터"
     }
   ],
+  "label.event-name": [
+    {
+      "type": 0,
+      "value": "이벤트 이름"
+    }
+  ],
   "label.events": [
     {
       "type": 0,
       "value": "이벤트"
+    }
+  ],
+  "label.exists": [
+    {
+      "type": 0,
+      "value": "존재함"
     }
   ],
   "label.exit": [
@@ -473,6 +695,12 @@
       "value": "필터"
     }
   ],
+  "label.first-click": [
+    {
+      "type": 0,
+      "value": "첫 클릭"
+    }
+  ],
   "label.first-seen": [
     {
       "type": 0,
@@ -489,6 +717,12 @@
     {
       "type": 0,
       "value": "사용자 전환율 및 이탈률을 살펴보세요."
+    }
+  ],
+  "label.funnels": [
+    {
+      "type": 0,
+      "value": "퍼널"
     }
   ],
   "label.goal": [
@@ -521,16 +755,34 @@
       "value": "이상"
     }
   ],
-  "label.host": [
+  "label.grouped": [
     {
       "type": 0,
-      "value": "호스트"
+      "value": "그룹화됨"
     }
   ],
-  "label.hosts": [
+  "label.growth": [
     {
       "type": 0,
-      "value": "호스트"
+      "value": "Growth"
+    }
+  ],
+  "label.hostname": [
+    {
+      "type": 0,
+      "value": "호스트명"
+    }
+  ],
+  "label.includes": [
+    {
+      "type": 0,
+      "value": "포함"
+    }
+  ],
+  "label.insight": [
+    {
+      "type": 0,
+      "value": "인사이트"
     }
   ],
   "label.insights": [
@@ -545,10 +797,22 @@
       "value": "세그먼트 및 필터를 사용하여 데이터를 더 자세히 살펴보세요."
     }
   ],
+  "label.invalid-url": [
+    {
+      "type": 0,
+      "value": "Invalid URL"
+    }
+  ],
   "label.is": [
     {
       "type": 0,
       "value": "해당"
+    }
+  ],
+  "label.is-false": [
+    {
+      "type": 0,
+      "value": "거짓임"
     }
   ],
   "label.is-not": [
@@ -569,13 +833,19 @@
       "value": "설정됨"
     }
   ],
+  "label.is-true": [
+    {
+      "type": 0,
+      "value": "참임"
+    }
+  ],
   "label.join": [
     {
       "type": 0,
       "value": "가입하기"
     }
   ],
-  "label.join-team": [
+  "label.join-org": [
     {
       "type": 0,
       "value": "팀 가입하기"
@@ -591,6 +861,12 @@
     {
       "type": 0,
       "value": "사용자가 웹사이트를 탐색하는 경로를 살펴보세요."
+    }
+  ],
+  "label.journeys": [
+    {
+      "type": 0,
+      "value": "여정"
     }
   ],
   "label.language": [
@@ -609,6 +885,12 @@
     {
       "type": 0,
       "value": "노트북"
+    }
+  ],
+  "label.last-click": [
+    {
+      "type": 0,
+      "value": "마지막 클릭"
     }
   ],
   "label.last-days": [
@@ -665,7 +947,7 @@
       "value": "떠나기"
     }
   ],
-  "label.leave-team": [
+  "label.leave-org": [
     {
       "type": 0,
       "value": "팀 떠나기"
@@ -681,6 +963,24 @@
     {
       "type": 0,
       "value": "이하"
+    }
+  ],
+  "label.link": [
+    {
+      "type": 0,
+      "value": "Link"
+    }
+  ],
+  "label.links": [
+    {
+      "type": 0,
+      "value": "링크"
+    }
+  ],
+  "label.location": [
+    {
+      "type": 0,
+      "value": "Location"
     }
   ],
   "label.login": [
@@ -713,6 +1013,18 @@
       "value": "최대"
     }
   ],
+  "label.maximize": [
+    {
+      "type": 0,
+      "value": "확장"
+    }
+  ],
+  "label.medium": [
+    {
+      "type": 0,
+      "value": "미디엄"
+    }
+  ],
   "label.member": [
     {
       "type": 0,
@@ -735,6 +1047,12 @@
     {
       "type": 0,
       "value": "모바일"
+    }
+  ],
+  "label.model": [
+    {
+      "type": 0,
+      "value": "모델"
     }
   ],
   "label.more": [
@@ -789,10 +1107,106 @@
       "value": "확인"
     }
   ],
+  "label.online": [
+    {
+      "type": 0,
+      "value": "Online"
+    }
+  ],
+  "label.org": [
+    {
+      "type": 0,
+      "value": "팀"
+    }
+  ],
+  "label.org-id": [
+    {
+      "type": 0,
+      "value": "팀 ID"
+    }
+  ],
+  "label.org-manager": [
+    {
+      "type": 0,
+      "value": "팀 관리자"
+    }
+  ],
+  "label.org-member": [
+    {
+      "type": 0,
+      "value": "팀 멤버"
+    }
+  ],
+  "label.org-name": [
+    {
+      "type": 0,
+      "value": "팀 이름"
+    }
+  ],
+  "label.org-owner": [
+    {
+      "type": 0,
+      "value": "팀 소유자"
+    }
+  ],
+  "label.org-settings": [
+    {
+      "type": 0,
+      "value": "팀 설정"
+    }
+  ],
+  "label.org-view-only": [
+    {
+      "type": 0,
+      "value": "팀 보기 전용"
+    }
+  ],
+  "label.org-websites": [
+    {
+      "type": 0,
+      "value": "팀 웹사이트"
+    }
+  ],
+  "label.organic-search": [
+    {
+      "type": 0,
+      "value": "자연 검색"
+    }
+  ],
+  "label.organic-shopping": [
+    {
+      "type": 0,
+      "value": "자연 쇼핑"
+    }
+  ],
+  "label.organic-social": [
+    {
+      "type": 0,
+      "value": "자연 소셜"
+    }
+  ],
+  "label.organic-video": [
+    {
+      "type": 0,
+      "value": "자연 비디오"
+    }
+  ],
+  "label.orgs": [
+    {
+      "type": 0,
+      "value": "팀"
+    }
+  ],
   "label.os": [
     {
       "type": 0,
       "value": "운영 체제"
+    }
+  ],
+  "label.other": [
+    {
+      "type": 0,
+      "value": "기타"
     }
   ],
   "label.overview": [
@@ -805,6 +1219,12 @@
     {
       "type": 0,
       "value": "소유자"
+    }
+  ],
+  "label.page": [
+    {
+      "type": 0,
+      "value": "페이지"
     }
   ],
   "label.page-of": [
@@ -843,6 +1263,36 @@
       "value": "페이지"
     }
   ],
+  "label.paid-ads": [
+    {
+      "type": 0,
+      "value": "유료 광고"
+    }
+  ],
+  "label.paid-search": [
+    {
+      "type": 0,
+      "value": "유료 검색"
+    }
+  ],
+  "label.paid-shopping": [
+    {
+      "type": 0,
+      "value": "유료 쇼핑"
+    }
+  ],
+  "label.paid-social": [
+    {
+      "type": 0,
+      "value": "유료 소셜"
+    }
+  ],
+  "label.paid-video": [
+    {
+      "type": 0,
+      "value": "유료 비디오"
+    }
+  ],
   "label.password": [
     {
       "type": 0,
@@ -861,6 +1311,18 @@
       "value": "패스"
     }
   ],
+  "label.pixel": [
+    {
+      "type": 0,
+      "value": "Pixel"
+    }
+  ],
+  "label.pixels": [
+    {
+      "type": 0,
+      "value": "픽셀"
+    }
+  ],
   "label.powered-by": [
     {
       "type": 0,
@@ -869,6 +1331,12 @@
     {
       "type": 1,
       "value": "name"
+    }
+  ],
+  "label.preferences": [
+    {
+      "type": 0,
+      "value": "Preferences"
     }
   ],
   "label.previous": [
@@ -893,6 +1361,12 @@
     {
       "type": 0,
       "value": "프로필"
+    }
+  ],
+  "label.profiles": [
+    {
+      "type": 0,
+      "value": "Profiles"
     }
   ],
   "label.properties": [
@@ -931,6 +1405,12 @@
       "value": "실시간"
     }
   ],
+  "label.referral": [
+    {
+      "type": 0,
+      "value": "Referral"
+    }
+  ],
   "label.referrer": [
     {
       "type": 0,
@@ -965,6 +1445,12 @@
     {
       "type": 0,
       "value": "지역"
+    }
+  ],
+  "label.remaining": [
+    {
+      "type": 0,
+      "value": "남음"
     }
   ],
   "label.remove": [
@@ -1027,12 +1513,6 @@
       "value": "시간대별 수익을 살펴보세요."
     }
   ],
-  "label.revenue-property": [
-    {
-      "type": 0,
-      "value": "수익 속성"
-    }
-  ],
   "label.role": [
     {
       "type": 0,
@@ -1051,6 +1531,24 @@
       "value": "저장"
     }
   ],
+  "label.save-cohort": [
+    {
+      "type": 0,
+      "value": "Save as cohort"
+    }
+  ],
+  "label.save-segment": [
+    {
+      "type": 0,
+      "value": "Save as segment"
+    }
+  ],
+  "label.screen": [
+    {
+      "type": 0,
+      "value": "Screen"
+    }
+  ],
   "label.screens": [
     {
       "type": 0,
@@ -1063,6 +1561,18 @@
       "value": "검색"
     }
   ],
+  "label.segment": [
+    {
+      "type": 0,
+      "value": "Segment"
+    }
+  ],
+  "label.segments": [
+    {
+      "type": 0,
+      "value": "Segments"
+    }
+  ],
   "label.select": [
     {
       "type": 0,
@@ -1073,6 +1583,12 @@
     {
       "type": 0,
       "value": "날짜 선택"
+    }
+  ],
+  "label.select-filter": [
+    {
+      "type": 0,
+      "value": "필터 선택"
     }
   ],
   "label.select-role": [
@@ -1093,6 +1609,12 @@
       "value": "세션"
     }
   ],
+  "label.session-data": [
+    {
+      "type": 0,
+      "value": "세션 데이터"
+    }
+  ],
   "label.sessions": [
     {
       "type": 0,
@@ -1105,6 +1627,12 @@
       "value": "설정"
     }
   ],
+  "label.share": [
+    {
+      "type": 0,
+      "value": "공유"
+    }
+  ],
   "label.share-url": [
     {
       "type": 0,
@@ -1115,6 +1643,18 @@
     {
       "type": 0,
       "value": "하루"
+    }
+  ],
+  "label.sms": [
+    {
+      "type": 0,
+      "value": "SMS"
+    }
+  ],
+  "label.sources": [
+    {
+      "type": 0,
+      "value": "소스"
     }
   ],
   "label.start-step": [
@@ -1135,64 +1675,34 @@
       "value": "합계"
     }
   ],
+  "label.table": [
+    {
+      "type": 0,
+      "value": "Table"
+    }
+  ],
   "label.tablet": [
     {
       "type": 0,
       "value": "태블릿"
     }
   ],
-  "label.team": [
+  "label.tag": [
     {
       "type": 0,
-      "value": "팀"
+      "value": "태그"
     }
   ],
-  "label.team-id": [
+  "label.tags": [
     {
       "type": 0,
-      "value": "팀 ID"
+      "value": "태그"
     }
   ],
-  "label.team-manager": [
+  "label.terms": [
     {
       "type": 0,
-      "value": "팀 관리자"
-    }
-  ],
-  "label.team-member": [
-    {
-      "type": 0,
-      "value": "팀 멤버"
-    }
-  ],
-  "label.team-name": [
-    {
-      "type": 0,
-      "value": "팀 이름"
-    }
-  ],
-  "label.team-owner": [
-    {
-      "type": 0,
-      "value": "팀 소유자"
-    }
-  ],
-  "label.team-view-only": [
-    {
-      "type": 0,
-      "value": "팀 보기 전용"
-    }
-  ],
-  "label.team-websites": [
-    {
-      "type": 0,
-      "value": "팀 웹사이트"
-    }
-  ],
-  "label.teams": [
-    {
-      "type": 0,
-      "value": "팀"
+      "value": "약관"
     }
   ],
   "label.theme": [
@@ -1261,6 +1771,12 @@
       "value": "추적 코드"
     }
   ],
+  "label.traffic": [
+    {
+      "type": 0,
+      "value": "Traffic"
+    }
+  ],
   "label.transactions": [
     {
       "type": 0,
@@ -1327,28 +1843,10 @@
       "value": "업데이트"
     }
   ],
-  "label.url": [
-    {
-      "type": 0,
-      "value": "URL"
-    }
-  ],
-  "label.urls": [
-    {
-      "type": 0,
-      "value": "URL"
-    }
-  ],
   "label.user": [
     {
       "type": 0,
       "value": "사용자"
-    }
-  ],
-  "label.user-property": [
-    {
-      "type": 0,
-      "value": "사용자 속성"
     }
   ],
   "label.username": [
@@ -1487,6 +1985,12 @@
       "value": "명"
     }
   ],
+  "message.bad-request": [
+    {
+      "type": 0,
+      "value": "Bad request"
+    }
+  ],
   "message.collected-data": [
     {
       "type": 0,
@@ -1533,7 +2037,7 @@
       "value": "을(를) 초기화하시겠습니까?"
     }
   ],
-  "message.delete-team-warning": [
+  "message.delete-org-warning": [
     {
       "type": 0,
       "value": "팀을 삭제하면 팀에 등록된 모든 웹사이트도 삭제됩니다."
@@ -1563,6 +2067,12 @@
     {
       "type": 1,
       "value": "url"
+    }
+  ],
+  "message.forbidden": [
+    {
+      "type": 0,
+      "value": "Forbidden"
     }
   ],
   "message.go-to-settings": [
@@ -1600,7 +2110,7 @@
   "message.new-version-available": [
     {
       "type": 0,
-      "value": "Umami의 새 버전 "
+      "value": "Entrolytics의 새 버전 "
     },
     {
       "type": 1,
@@ -1629,22 +2139,22 @@
       "value": "비밀번호가 일치하지 않습니다."
     }
   ],
-  "message.no-results-found": [
-    {
-      "type": 0,
-      "value": "결과를 찾을 수 없습니다."
-    }
-  ],
-  "message.no-team-websites": [
+  "message.no-org-websites": [
     {
       "type": 0,
       "value": "팀에 웹사이트가 없습니다."
     }
   ],
-  "message.no-teams": [
+  "message.no-orgs": [
     {
       "type": 0,
       "value": "만든 팀이 없습니다."
+    }
+  ],
+  "message.no-results-found": [
+    {
+      "type": 0,
+      "value": "결과를 찾을 수 없습니다."
     }
   ],
   "message.no-users": [
@@ -1657,6 +2167,36 @@
     {
       "type": 0,
       "value": "설정된 웹사이트가 없습니다."
+    }
+  ],
+  "message.not-found": [
+    {
+      "type": 0,
+      "value": "Not found"
+    }
+  ],
+  "message.nothing-selected": [
+    {
+      "type": 0,
+      "value": "Nothing selected."
+    }
+  ],
+  "message.org-already-member": [
+    {
+      "type": 0,
+      "value": "이미 팀 멤버입니다."
+    }
+  ],
+  "message.org-not-found": [
+    {
+      "type": 0,
+      "value": "팀을 찾을 수 없습니다."
+    }
+  ],
+  "message.org-websites-info": [
+    {
+      "type": 0,
+      "value": "웹사이트는 팀 멤버 누구나 볼 수 있습니다."
     }
   ],
   "message.page-not-found": [
@@ -1691,28 +2231,16 @@
       "value": "저장했습니다."
     }
   ],
+  "message.sever-error": [
+    {
+      "type": 0,
+      "value": "Server error"
+    }
+  ],
   "message.share-url": [
     {
       "type": 0,
       "value": "아래 링크를 통해 웹사이트의 통계를 누구나 볼 수 있습니다."
-    }
-  ],
-  "message.team-already-member": [
-    {
-      "type": 0,
-      "value": "이미 팀 멤버입니다."
-    }
-  ],
-  "message.team-not-found": [
-    {
-      "type": 0,
-      "value": "팀을 찾을 수 없습니다."
-    }
-  ],
-  "message.team-websites-info": [
-    {
-      "type": 0,
-      "value": "웹사이트는 팀 멤버 누구나 볼 수 있습니다."
     }
   ],
   "message.tracking-code": [
@@ -1735,13 +2263,13 @@
       "value": " 부분에 추가하세요."
     }
   ],
-  "message.transfer-team-website-to-user": [
+  "message.transfer-org-website-to-user": [
     {
       "type": 0,
       "value": "이 웹사이트를 당신의 계정으로 전송하시겠습니까?"
     }
   ],
-  "message.transfer-user-website-to-team": [
+  "message.transfer-user-website-to-org": [
     {
       "type": 0,
       "value": "이 웹사이트를 전송받을 팀을 선택하세요."
@@ -1757,6 +2285,12 @@
     {
       "type": 0,
       "value": "트리거된 이벤트"
+    }
+  ],
+  "message.unauthorized": [
+    {
+      "type": 0,
+      "value": "Unauthorized"
     }
   ],
   "message.user-deleted": [
@@ -1803,12 +2337,6 @@
     {
       "type": 0,
       "value": "의 방문자"
-    }
-  ],
-  "message.visitors-dropped-off": [
-    {
-      "type": 0,
-      "value": "방문자 이탈함"
     }
   ]
 }

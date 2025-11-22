@@ -2,7 +2,19 @@
   "label.access-code": [
     {
       "type": 0,
-      "value": "Access code"
+      "value": "កូដចូលប្រើ"
+    }
+  ],
+  "label.account": [
+    {
+      "type": 0,
+      "value": "Account"
+    }
+  ],
+  "label.action": [
+    {
+      "type": 0,
+      "value": "Action"
     }
   ],
   "label.actions": [
@@ -23,16 +35,34 @@
       "value": "បង្កើតបន្ថែម"
     }
   ],
+  "label.add-board": [
+    {
+      "type": 0,
+      "value": "បន្ថែមក្តារ"
+    }
+  ],
   "label.add-description": [
     {
       "type": 0,
       "value": "បន្ថែមពិពណ៌នា"
     }
   ],
+  "label.add-link": [
+    {
+      "type": 0,
+      "value": "Add link"
+    }
+  ],
   "label.add-member": [
     {
       "type": 0,
       "value": "បន្ថែមសមាជិក"
+    }
+  ],
+  "label.add-pixel": [
+    {
+      "type": 0,
+      "value": "Add pixel"
     }
   ],
   "label.add-step": [
@@ -53,6 +83,12 @@
       "value": "អ្នកគ្រប់គ្រង"
     }
   ],
+  "label.affiliate": [
+    {
+      "type": 0,
+      "value": "ដៃគូ"
+    }
+  ],
   "label.after": [
     {
       "type": 0,
@@ -71,10 +107,46 @@
       "value": "គ្រប់ពេល"
     }
   ],
+  "label.analysis": [
+    {
+      "type": 0,
+      "value": "Analysis"
+    }
+  ],
   "label.analytics": [
     {
       "type": 0,
-      "value": "Analytics"
+      "value": "វិភាគ"
+    }
+  ],
+  "label.application": [
+    {
+      "type": 0,
+      "value": "Application"
+    }
+  ],
+  "label.apply": [
+    {
+      "type": 0,
+      "value": "អនុវត្ត"
+    }
+  ],
+  "label.attribution": [
+    {
+      "type": 0,
+      "value": "ការបញ្ជាក់"
+    }
+  ],
+  "label.attribution-description": [
+    {
+      "type": 0,
+      "value": "មើលថាប្រើប្រាស់របស់អ្នកធ្វើអ្វីជាមួយទីផ្សាររបស់អ្នក និងអ្វីជាហេតុបណ្តាលឲ្យមានការបម្លែង។"
+    }
+  ],
+  "label.audience": [
+    {
+      "type": 0,
+      "value": "Audience"
     }
   ],
   "label.average": [
@@ -95,6 +167,18 @@
       "value": "មុន"
     }
   ],
+  "label.behavior": [
+    {
+      "type": 0,
+      "value": "Behavior"
+    }
+  ],
+  "label.boards": [
+    {
+      "type": 0,
+      "value": "ក្តារ"
+    }
+  ],
   "label.bounce-rate": [
     {
       "type": 0,
@@ -104,19 +188,25 @@
   "label.breakdown": [
     {
       "type": 0,
-      "value": "Breakdown"
+      "value": "បំបែកលម្អិត"
     }
   ],
   "label.browser": [
     {
       "type": 0,
-      "value": "Browser"
+      "value": "កម្មវិធីរុករក"
     }
   ],
   "label.browsers": [
     {
       "type": 0,
       "value": "កម្មវិធី"
+    }
+  ],
+  "label.campaigns": [
+    {
+      "type": 0,
+      "value": "យុទ្ធនាការ"
     }
   ],
   "label.cancel": [
@@ -129,6 +219,24 @@
     {
       "type": 0,
       "value": "ផ្លាស់ប្តូរពាក្យសម្ងាត់"
+    }
+  ],
+  "label.channel": [
+    {
+      "type": 0,
+      "value": "Channel"
+    }
+  ],
+  "label.channels": [
+    {
+      "type": 0,
+      "value": "ឆានែល"
+    }
+  ],
+  "label.chart": [
+    {
+      "type": 0,
+      "value": "Chart"
     }
   ],
   "label.cities": [
@@ -146,13 +254,31 @@
   "label.clear-all": [
     {
       "type": 0,
-      "value": "លុបទាំងអស់"
+      "value": "លុបចេញទាំងអស់"
+    }
+  ],
+  "label.cohort": [
+    {
+      "type": 0,
+      "value": "ក្រុម"
+    }
+  ],
+  "label.cohorts": [
+    {
+      "type": 0,
+      "value": "Cohorts"
     }
   ],
   "label.compare": [
     {
       "type": 0,
       "value": "ប្រៀបធៀប"
+    }
+  ],
+  "label.compare-dates": [
+    {
+      "type": 0,
+      "value": "ប្រៀបធៀបទិន្នន័យថ្ងៃខែ"
     }
   ],
   "label.confirm": [
@@ -173,10 +299,34 @@
       "value": "មាន"
     }
   ],
+  "label.content": [
+    {
+      "type": 0,
+      "value": "មាតិកា"
+    }
+  ],
   "label.continue": [
     {
       "type": 0,
       "value": "បន្ត"
+    }
+  ],
+  "label.conversion": [
+    {
+      "type": 0,
+      "value": "ការបម្លែង"
+    }
+  ],
+  "label.conversion-rate": [
+    {
+      "type": 0,
+      "value": "អត្រាបម្លែង"
+    }
+  ],
+  "label.conversion-step": [
+    {
+      "type": 0,
+      "value": "ជំហានបម្លែង"
     }
   ],
   "label.count": [
@@ -203,16 +353,16 @@
       "value": "បង្កើត"
     }
   ],
+  "label.create-org": [
+    {
+      "type": 0,
+      "value": "បង្កើតក្រុម"
+    }
+  ],
   "label.create-report": [
     {
       "type": 0,
       "value": "បង្កើតរបាយការណ៍"
-    }
-  ],
-  "label.create-team": [
-    {
-      "type": 0,
-      "value": "បង្កើតក្រុម"
     }
   ],
   "label.create-user": [
@@ -231,6 +381,18 @@
     {
       "type": 0,
       "value": "បង្កើតដោយ"
+    }
+  ],
+  "label.criteria": [
+    {
+      "type": 0,
+      "value": "Criteria"
+    }
+  ],
+  "label.currency": [
+    {
+      "type": 0,
+      "value": "រូបិយប័ណ្ណ"
     }
   ],
   "label.current": [
@@ -293,16 +455,16 @@
       "value": "លុប"
     }
   ],
+  "label.delete-org": [
+    {
+      "type": 0,
+      "value": "លុបក្រុម"
+    }
+  ],
   "label.delete-report": [
     {
       "type": 0,
       "value": "លុបរបាយការណ៍"
-    }
-  ],
-  "label.delete-team": [
-    {
-      "type": 0,
-      "value": "លុបក្រុម"
     }
   ],
   "label.delete-user": [
@@ -329,6 +491,12 @@
       "value": "កុំព្យូទ័រលើតុ"
     }
   ],
+  "label.destination-url": [
+    {
+      "type": 0,
+      "value": "Destination URL"
+    }
+  ],
   "label.details": [
     {
       "type": 0,
@@ -347,10 +515,22 @@
       "value": "ឧបករណ៍"
     }
   ],
+  "label.direct": [
+    {
+      "type": 0,
+      "value": "ផ្ទាល់"
+    }
+  ],
   "label.dismiss": [
     {
       "type": 0,
       "value": "រំសាយ"
+    }
+  ],
+  "label.distinct-id": [
+    {
+      "type": 0,
+      "value": "លេខសម្គាល់ពិសេស"
     }
   ],
   "label.does-not-contain": [
@@ -359,10 +539,28 @@
       "value": "មិនមាន"
     }
   ],
+  "label.does-not-include": [
+    {
+      "type": 0,
+      "value": "មិនរួមបញ្ចូល"
+    }
+  ],
+  "label.doest-not-exist": [
+    {
+      "type": 0,
+      "value": "មិនមានទេ"
+    }
+  ],
   "label.domain": [
     {
       "type": 0,
       "value": "Domain"
+    }
+  ],
+  "label.download": [
+    {
+      "type": 0,
+      "value": "Download"
     }
   ],
   "label.dropoff": [
@@ -389,6 +587,12 @@
       "value": "កែព័ត៌មានសមាជិក"
     }
   ],
+  "label.email": [
+    {
+      "type": 0,
+      "value": "Email"
+    }
+  ],
   "label.enable-share-url": [
     {
       "type": 0,
@@ -407,6 +611,12 @@
       "value": "URL ចូល"
     }
   ],
+  "label.environment": [
+    {
+      "type": 0,
+      "value": "Environment"
+    }
+  ],
   "label.event": [
     {
       "type": 0,
@@ -419,10 +629,22 @@
       "value": "ទិន្នន័យព្រឹត្តិការណ៍"
     }
   ],
+  "label.event-name": [
+    {
+      "type": 0,
+      "value": "ឈ្មោះព្រឹត្តិការណ៍"
+    }
+  ],
   "label.events": [
     {
       "type": 0,
       "value": "ព្រឹត្តិការណ៍"
+    }
+  ],
+  "label.exists": [
+    {
+      "type": 0,
+      "value": "មាន"
     }
   ],
   "label.exit": [
@@ -473,6 +695,12 @@
       "value": "ចម្រោះ"
     }
   ],
+  "label.first-click": [
+    {
+      "type": 0,
+      "value": "ចុចដំបូង"
+    }
+  ],
   "label.first-seen": [
     {
       "type": 0,
@@ -482,13 +710,19 @@
   "label.funnel": [
     {
       "type": 0,
-      "value": "Funnel"
+      "value": "ផ្លូវបង្ហាញ"
     }
   ],
   "label.funnel-description": [
     {
       "type": 0,
       "value": "Understand the conversion and drop-off rate of users."
+    }
+  ],
+  "label.funnels": [
+    {
+      "type": 0,
+      "value": "ផ្លូវបង្ហាញ"
     }
   ],
   "label.goal": [
@@ -521,16 +755,34 @@
       "value": "ធំជាងឬស្មើ"
     }
   ],
-  "label.host": [
+  "label.grouped": [
     {
       "type": 0,
-      "value": "Host"
+      "value": "បានដាក់ជាក្រុម"
     }
   ],
-  "label.hosts": [
+  "label.growth": [
     {
       "type": 0,
-      "value": "Hosts"
+      "value": "Growth"
+    }
+  ],
+  "label.hostname": [
+    {
+      "type": 0,
+      "value": "ឈ្មោះម៉ាស៊ីន"
+    }
+  ],
+  "label.includes": [
+    {
+      "type": 0,
+      "value": "រួមបញ្ចូល"
+    }
+  ],
+  "label.insight": [
+    {
+      "type": 0,
+      "value": "ការយល់ដឹង"
     }
   ],
   "label.insights": [
@@ -545,10 +797,22 @@
       "value": "Dive deeper into your data by using segments and filters."
     }
   ],
+  "label.invalid-url": [
+    {
+      "type": 0,
+      "value": "Invalid URL"
+    }
+  ],
   "label.is": [
     {
       "type": 0,
       "value": "គឺ"
+    }
+  ],
+  "label.is-false": [
+    {
+      "type": 0,
+      "value": "មិនពិត"
     }
   ],
   "label.is-not": [
@@ -569,13 +833,19 @@
       "value": "បានកំណត់"
     }
   ],
+  "label.is-true": [
+    {
+      "type": 0,
+      "value": "ពិត"
+    }
+  ],
   "label.join": [
     {
       "type": 0,
       "value": "ចូលរួម"
     }
   ],
-  "label.join-team": [
+  "label.join-org": [
     {
       "type": 0,
       "value": "ចូលក្រុម"
@@ -591,6 +861,12 @@
     {
       "type": 0,
       "value": "ស្វែងយល់ពីការប្រើប្រាស់គេហទំព័ររបស់អតិថិជនអ្នក។"
+    }
+  ],
+  "label.journeys": [
+    {
+      "type": 0,
+      "value": "ដំណើរ"
     }
   ],
   "label.language": [
@@ -609,6 +885,12 @@
     {
       "type": 0,
       "value": "កុំព្យូទ័រយួរដៃ"
+    }
+  ],
+  "label.last-click": [
+    {
+      "type": 0,
+      "value": "ចុចចុងក្រោយ"
     }
   ],
   "label.last-days": [
@@ -653,7 +935,7 @@
       "value": "ចាកចេញ"
     }
   ],
-  "label.leave-team": [
+  "label.leave-org": [
     {
       "type": 0,
       "value": "ចេញពីក្រុម"
@@ -669,6 +951,24 @@
     {
       "type": 0,
       "value": "តិចជាង ឬស្មើ"
+    }
+  ],
+  "label.link": [
+    {
+      "type": 0,
+      "value": "Link"
+    }
+  ],
+  "label.links": [
+    {
+      "type": 0,
+      "value": "តំណភ្ជាប់"
+    }
+  ],
+  "label.location": [
+    {
+      "type": 0,
+      "value": "Location"
     }
   ],
   "label.login": [
@@ -701,6 +1001,18 @@
       "value": "Max"
     }
   ],
+  "label.maximize": [
+    {
+      "type": 0,
+      "value": "ពង្រីក"
+    }
+  ],
+  "label.medium": [
+    {
+      "type": 0,
+      "value": "មធ្យម"
+    }
+  ],
   "label.member": [
     {
       "type": 0,
@@ -723,6 +1035,12 @@
     {
       "type": 0,
       "value": "ទូរស័ព្ទចល័ត"
+    }
+  ],
+  "label.model": [
+    {
+      "type": 0,
+      "value": "ម៉ូដែល"
     }
   ],
   "label.more": [
@@ -758,7 +1076,7 @@
   "label.none": [
     {
       "type": 0,
-      "value": "មិនមាន"
+      "value": "គ្មាន"
     }
   ],
   "label.number-of-records": [
@@ -801,10 +1119,106 @@
       "value": "OK"
     }
   ],
+  "label.online": [
+    {
+      "type": 0,
+      "value": "Online"
+    }
+  ],
+  "label.org": [
+    {
+      "type": 0,
+      "value": "ក្រុម"
+    }
+  ],
+  "label.org-id": [
+    {
+      "type": 0,
+      "value": "ID ក្រុម"
+    }
+  ],
+  "label.org-manager": [
+    {
+      "type": 0,
+      "value": "អ្នកគ្រប់គ្រងក្រុម"
+    }
+  ],
+  "label.org-member": [
+    {
+      "type": 0,
+      "value": "សមាជិកក្រុម"
+    }
+  ],
+  "label.org-name": [
+    {
+      "type": 0,
+      "value": "ឈ្មោះក្រុម"
+    }
+  ],
+  "label.org-owner": [
+    {
+      "type": 0,
+      "value": "ម្ចាស់ក្រុម"
+    }
+  ],
+  "label.org-settings": [
+    {
+      "type": 0,
+      "value": "ការកំណត់ក្រុម"
+    }
+  ],
+  "label.org-view-only": [
+    {
+      "type": 0,
+      "value": "Org view only"
+    }
+  ],
+  "label.org-websites": [
+    {
+      "type": 0,
+      "value": "គេហទំព័ររបស់ក្រុម"
+    }
+  ],
+  "label.organic-search": [
+    {
+      "type": 0,
+      "value": "ស្វែងរកធម្មជាតិ"
+    }
+  ],
+  "label.organic-shopping": [
+    {
+      "type": 0,
+      "value": "ការទិញធម្មជាតិ"
+    }
+  ],
+  "label.organic-social": [
+    {
+      "type": 0,
+      "value": "សង្គមធម្មជាតិ"
+    }
+  ],
+  "label.organic-video": [
+    {
+      "type": 0,
+      "value": "វីដេអូធម្មជាតិ"
+    }
+  ],
+  "label.orgs": [
+    {
+      "type": 0,
+      "value": "ក្រុម"
+    }
+  ],
   "label.os": [
     {
       "type": 0,
       "value": "OS"
+    }
+  ],
+  "label.other": [
+    {
+      "type": 0,
+      "value": "ផ្សេងទៀត"
     }
   ],
   "label.overview": [
@@ -817,6 +1231,12 @@
     {
       "type": 0,
       "value": "ម្ចាស់"
+    }
+  ],
+  "label.page": [
+    {
+      "type": 0,
+      "value": "ទំព័រ"
     }
   ],
   "label.page-of": [
@@ -855,6 +1275,36 @@
       "value": "ទំព័រ"
     }
   ],
+  "label.paid-ads": [
+    {
+      "type": 0,
+      "value": "ផ្សាយពាណិជ្ជកម្មបង់ប្រាក់"
+    }
+  ],
+  "label.paid-search": [
+    {
+      "type": 0,
+      "value": "ស្វែងរកបង់ប្រាក់"
+    }
+  ],
+  "label.paid-shopping": [
+    {
+      "type": 0,
+      "value": "ទិញបង់ប្រាក់"
+    }
+  ],
+  "label.paid-social": [
+    {
+      "type": 0,
+      "value": "សង្គមបង់ប្រាក់"
+    }
+  ],
+  "label.paid-video": [
+    {
+      "type": 0,
+      "value": "វីដេអូបង់ប្រាក់"
+    }
+  ],
   "label.password": [
     {
       "type": 0,
@@ -873,6 +1323,18 @@
       "value": "Paths"
     }
   ],
+  "label.pixel": [
+    {
+      "type": 0,
+      "value": "Pixel"
+    }
+  ],
+  "label.pixels": [
+    {
+      "type": 0,
+      "value": "ភីកសែល"
+    }
+  ],
   "label.powered-by": [
     {
       "type": 0,
@@ -881,6 +1343,12 @@
     {
       "type": 1,
       "value": "name"
+    }
+  ],
+  "label.preferences": [
+    {
+      "type": 0,
+      "value": "Preferences"
     }
   ],
   "label.previous": [
@@ -907,16 +1375,22 @@
       "value": "គណនី"
     }
   ],
+  "label.profiles": [
+    {
+      "type": 0,
+      "value": "Profiles"
+    }
+  ],
   "label.properties": [
     {
       "type": 0,
-      "value": "Properties"
+      "value": "លក្ខណៈពិសេស"
     }
   ],
   "label.property": [
     {
       "type": 0,
-      "value": "Property"
+      "value": "លក្ខណៈពិសេស"
     }
   ],
   "label.queries": [
@@ -941,6 +1415,12 @@
     {
       "type": 0,
       "value": "ឥលូវនេះ"
+    }
+  ],
+  "label.referral": [
+    {
+      "type": 0,
+      "value": "ការបញ្ជូន"
     }
   ],
   "label.referrer": [
@@ -979,6 +1459,12 @@
       "value": "តំបន់"
     }
   ],
+  "label.remaining": [
+    {
+      "type": 0,
+      "value": "នៅសល់"
+    }
+  ],
   "label.remove": [
     {
       "type": 0,
@@ -1012,7 +1498,15 @@
   "label.reset-website": [
     {
       "type": 0,
-      "value": "កំណត់ស្ថិតិឡើងវិញ"
+      "value": "ដើម្បីកែគេហទំព័រនេះឡើងវិញ សូមសរសេរ "
+    },
+    {
+      "type": 1,
+      "value": "confirmation"
+    },
+    {
+      "type": 0,
+      "value": " នៅក្នុងប្រអប់ខាងក្រោមដើម្បីបញ្ជាក់។"
     }
   ],
   "label.retention": [
@@ -1039,12 +1533,6 @@
       "value": "Look into your revenue across time."
     }
   ],
-  "label.revenue-property": [
-    {
-      "type": 0,
-      "value": "Revenue Property"
-    }
-  ],
   "label.role": [
     {
       "type": 0,
@@ -1063,6 +1551,24 @@
       "value": "រក្សាទុក"
     }
   ],
+  "label.save-cohort": [
+    {
+      "type": 0,
+      "value": "Save as cohort"
+    }
+  ],
+  "label.save-segment": [
+    {
+      "type": 0,
+      "value": "Save as segment"
+    }
+  ],
+  "label.screen": [
+    {
+      "type": 0,
+      "value": "Screen"
+    }
+  ],
   "label.screens": [
     {
       "type": 0,
@@ -1075,6 +1581,18 @@
       "value": "ស្វែងរក"
     }
   ],
+  "label.segment": [
+    {
+      "type": 0,
+      "value": "Segment"
+    }
+  ],
+  "label.segments": [
+    {
+      "type": 0,
+      "value": "Segments"
+    }
+  ],
   "label.select": [
     {
       "type": 0,
@@ -1085,6 +1603,12 @@
     {
       "type": 0,
       "value": "ជ្រើសរើសកាលបរិច្ឆេទ"
+    }
+  ],
+  "label.select-filter": [
+    {
+      "type": 0,
+      "value": "ជ្រើសរើសតម្រង"
     }
   ],
   "label.select-role": [
@@ -1105,6 +1629,12 @@
       "value": "Session"
     }
   ],
+  "label.session-data": [
+    {
+      "type": 0,
+      "value": "ទិន្នន័យសម័យ"
+    }
+  ],
   "label.sessions": [
     {
       "type": 0,
@@ -1117,6 +1647,12 @@
       "value": "ការកំណត់"
     }
   ],
+  "label.share": [
+    {
+      "type": 0,
+      "value": "ចែករំលែក"
+    }
+  ],
   "label.share-url": [
     {
       "type": 0,
@@ -1127,6 +1663,18 @@
     {
       "type": 0,
       "value": "ថ្ងៃតែមួយ"
+    }
+  ],
+  "label.sms": [
+    {
+      "type": 0,
+      "value": "SMS"
+    }
+  ],
+  "label.sources": [
+    {
+      "type": 0,
+      "value": "ប្រភព"
     }
   ],
   "label.start-step": [
@@ -1147,64 +1695,34 @@
       "value": "Sum"
     }
   ],
+  "label.table": [
+    {
+      "type": 0,
+      "value": "Table"
+    }
+  ],
   "label.tablet": [
     {
       "type": 0,
       "value": "ថេប្លេត"
     }
   ],
-  "label.team": [
+  "label.tag": [
     {
       "type": 0,
-      "value": "ក្រុម"
+      "value": "ស្លាក"
     }
   ],
-  "label.team-id": [
+  "label.tags": [
     {
       "type": 0,
-      "value": "ID ក្រុម"
+      "value": "ស្លាក"
     }
   ],
-  "label.team-manager": [
+  "label.terms": [
     {
       "type": 0,
-      "value": "អ្នកគ្រប់គ្រងក្រុម"
-    }
-  ],
-  "label.team-member": [
-    {
-      "type": 0,
-      "value": "សមាជិកក្រុម"
-    }
-  ],
-  "label.team-name": [
-    {
-      "type": 0,
-      "value": "ឈ្មោះក្រុម"
-    }
-  ],
-  "label.team-owner": [
-    {
-      "type": 0,
-      "value": "ម្ចាស់ក្រុម"
-    }
-  ],
-  "label.team-view-only": [
-    {
-      "type": 0,
-      "value": "Team view only"
-    }
-  ],
-  "label.team-websites": [
-    {
-      "type": 0,
-      "value": "គេហទំព័ររបស់ក្រុម"
-    }
-  ],
-  "label.teams": [
-    {
-      "type": 0,
-      "value": "ក្រុម"
+      "value": "លក្ខខណ្ឌ"
     }
   ],
   "label.theme": [
@@ -1273,6 +1791,12 @@
       "value": "លេខកូដតាមដាន"
     }
   ],
+  "label.traffic": [
+    {
+      "type": 0,
+      "value": "Traffic"
+    }
+  ],
   "label.transactions": [
     {
       "type": 0,
@@ -1339,28 +1863,10 @@
       "value": "Update"
     }
   ],
-  "label.url": [
-    {
-      "type": 0,
-      "value": "URL"
-    }
-  ],
-  "label.urls": [
-    {
-      "type": 0,
-      "value": "URLs"
-    }
-  ],
   "label.user": [
     {
       "type": 0,
       "value": "អ្នកប្រើប្រាស់"
-    }
-  ],
-  "label.user-property": [
-    {
-      "type": 0,
-      "value": "User Property"
     }
   ],
   "label.username": [
@@ -1499,6 +2005,12 @@
       "value": " នាក់ ឥលូវនេះ"
     }
   ],
+  "message.bad-request": [
+    {
+      "type": 0,
+      "value": "Bad request"
+    }
+  ],
   "message.collected-data": [
     {
       "type": 0,
@@ -1561,7 +2073,7 @@
       "value": " ឡើងវិញទេ?"
     }
   ],
-  "message.delete-team-warning": [
+  "message.delete-org-warning": [
     {
       "type": 0,
       "value": "ពេលលុបក្រុម គេហទំព័ររបស់ក្រុមក៏នឹងត្រូវលប់ចោលទាំងអស់ផងដែរ។"
@@ -1591,6 +2103,12 @@
     {
       "type": 1,
       "value": "url"
+    }
+  ],
+  "message.forbidden": [
+    {
+      "type": 0,
+      "value": "Forbidden"
     }
   ],
   "message.go-to-settings": [
@@ -1628,7 +2146,7 @@
   "message.new-version-available": [
     {
       "type": 0,
-      "value": "Version ថ្មីនៃ Umami "
+      "value": "Version ថ្មីនៃ Entrolytics "
     },
     {
       "type": 1,
@@ -1657,22 +2175,22 @@
       "value": "ពាក្យសម្ងាត់មិនត្រូវគ្នាទេ។"
     }
   ],
-  "message.no-results-found": [
-    {
-      "type": 0,
-      "value": "មិនមានលទ្ធផល។"
-    }
-  ],
-  "message.no-team-websites": [
+  "message.no-org-websites": [
     {
       "type": 0,
       "value": "ក្រុមនេះមិនមានគេហទំព័រទេ។"
     }
   ],
-  "message.no-teams": [
+  "message.no-orgs": [
     {
       "type": 0,
       "value": "អ្នកមិនទាន់បានបង្កើតក្រុមណាមួយទេ។"
+    }
+  ],
+  "message.no-results-found": [
+    {
+      "type": 0,
+      "value": "មិនមានលទ្ធផល។"
     }
   ],
   "message.no-users": [
@@ -1685,6 +2203,36 @@
     {
       "type": 0,
       "value": "អ្នកមិនទាន់បានដាក់គេហទំព័រណាមួយចូលទេ។"
+    }
+  ],
+  "message.not-found": [
+    {
+      "type": 0,
+      "value": "Not found"
+    }
+  ],
+  "message.nothing-selected": [
+    {
+      "type": 0,
+      "value": "Nothing selected."
+    }
+  ],
+  "message.org-already-member": [
+    {
+      "type": 0,
+      "value": "អ្នកគឺជាសមាជិកនៃក្រុមរួចហើយ។"
+    }
+  ],
+  "message.org-not-found": [
+    {
+      "type": 0,
+      "value": "រកក្រុមមិនឃើញទេ។"
+    }
+  ],
+  "message.org-websites-info": [
+    {
+      "type": 0,
+      "value": "គេហទំព័រនេះអាចមើលបានតែសមាជិកក្រុមតែប៉ុណ្ណោះ"
     }
   ],
   "message.page-not-found": [
@@ -1719,6 +2267,12 @@
       "value": "រក្សាទុកដោយជោគជ័យ។"
     }
   ],
+  "message.sever-error": [
+    {
+      "type": 0,
+      "value": "Server error"
+    }
+  ],
   "message.share-url": [
     {
       "type": 0,
@@ -1731,24 +2285,6 @@
     {
       "type": 0,
       "value": "។"
-    }
-  ],
-  "message.team-already-member": [
-    {
-      "type": 0,
-      "value": "អ្នកគឺជាសមាជិកនៃក្រុមរួចហើយ។"
-    }
-  ],
-  "message.team-not-found": [
-    {
-      "type": 0,
-      "value": "រកក្រុមមិនឃើញទេ។"
-    }
-  ],
-  "message.team-websites-info": [
-    {
-      "type": 0,
-      "value": "គេហទំព័រនេះអាចមើលបានតែសមាជិកក្រុមតែប៉ុណ្ណោះ"
     }
   ],
   "message.tracking-code": [
@@ -1771,13 +2307,13 @@
       "value": " នៃ HTML របស់អ្នក។"
     }
   ],
-  "message.transfer-team-website-to-user": [
+  "message.transfer-org-website-to-user": [
     {
       "type": 0,
       "value": "ផ្ទេរគេហទំព័រនេះទៅគណនីរបស់អ្នក។?"
     }
   ],
-  "message.transfer-user-website-to-team": [
+  "message.transfer-user-website-to-org": [
     {
       "type": 0,
       "value": "ជ្រើសក្រុមដែរត្រូវផ្ទេរគេហទំព័រនេះទៅ។"
@@ -1793,6 +2329,12 @@
     {
       "type": 0,
       "value": "Triggered event"
+    }
+  ],
+  "message.unauthorized": [
+    {
+      "type": 0,
+      "value": "Unauthorized"
     }
   ],
   "message.user-deleted": [
@@ -1839,12 +2381,6 @@
     {
       "type": 1,
       "value": "device"
-    }
-  ],
-  "message.visitors-dropped-off": [
-    {
-      "type": 0,
-      "value": "ចំនួនអ្នកទស្សនាធ្លាក់ចុះ"
     }
   ]
 }

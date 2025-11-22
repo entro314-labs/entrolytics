@@ -1,122 +1,130 @@
-import clickhouse from '@/lib/clickhouse';
-import { EVENT_COLUMNS, EVENT_TYPE, FILTER_COLUMNS, SESSION_COLUMNS } from '@/lib/constants';
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db';
-import prisma from '@/lib/prisma';
-import { QueryFilters } from '@/lib/types';
+import clickhouse from '@/lib/clickhouse'
+import { EVENT_COLUMNS, FILTER_COLUMNS, SESSION_COLUMNS } from '@/lib/constants'
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
+import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
+
+import { QueryFilters } from '@/lib/types'
+
+export interface SessionMetricsParameters {
+  type: string
+  limit?: number | string
+  offset?: number | string
+}
 
 export async function getSessionMetrics(
-  ...args: [
-    websiteId: string,
-    type: string,
-    filters: QueryFilters,
-    limit?: number | string,
-    offset?: number | string,
-  ]
+  ...args: [websiteId: string, parameters: SessionMetricsParameters, filters: QueryFilters]
 ) {
   return runQuery({
-    [PRISMA]: () => relationalQuery(...args),
+    [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  });
+  })
 }
 
 async function relationalQuery(
   websiteId: string,
-  type: string,
-  filters: QueryFilters,
-  limit: number | string = 500,
-  offset: number | string = 0,
+  parameters: SessionMetricsParameters,
+  filters: QueryFilters
 ) {
-  const column = FILTER_COLUMNS[type] || type;
-  const { parseFilters, rawQuery } = prisma;
-  const { filterQuery, cohortQuery, joinSession, params } = await parseFilters(
-    websiteId,
+  const { type, limit = 500, offset = 0 } = parameters
+  let column = FILTER_COLUMNS[type] || type
+  // Using rawQuery FROM analytics-utils
+  const { filterQuery, joinSessionQuery, cohortQuery, queryParams } = parseFilters(
     {
       ...filters,
-      eventType: EVENT_TYPE.pageView,
+      websiteId,
     },
     {
       joinSession: SESSION_COLUMNS.includes(type),
-    },
-  );
-  const includeCountry = column === 'city' || column === 'region';
+    }
+  )
+  const includeCountry = column === 'city' || column === 'region'
+
+  if (type === 'language') {
+    column = `lower(left(${type}, 2))`
+  }
 
   return rawQuery(
     `
-    select 
+    SELECT 
       ${column} x,
-      count(distinct website_event.session_id) y
+      COUNT(DISTINCT website_event.session_id) y
       ${includeCountry ? ', country' : ''}
-    from website_event
+    FROM website_event
     ${cohortQuery}
-    ${joinSession}
-    where website_event.website_id = {{websiteId::uuid}}
-      and website_event.created_at between {{startDate}} and {{endDate}}
-      and website_event.event_type = {{eventType}}
+    ${joinSessionQuery}
+    WHERE website_event.website_id = {{websiteId::uuid}}
+      AND website_event.created_at between {{startDate}} AND {{endDate}}
+      AND website_event.event_type != 2
     ${filterQuery}
-    group by 1 
+    GROUP BY 1 
     ${includeCountry ? ', 3' : ''}
-    order by 2 desc
+    ORDER BY 2 desc
     limit ${limit}
     offset ${offset}
     `,
-    params,
-  );
+    { ...queryParams, ...parameters }
+  )
 }
 
 async function clickhouseQuery(
   websiteId: string,
-  type: string,
-  filters: QueryFilters,
-  limit: number | string = 500,
-  offset: number | string = 0,
+  parameters: SessionMetricsParameters,
+  filters: QueryFilters
 ): Promise<{ x: string; y: number }[]> {
-  const column = FILTER_COLUMNS[type] || type;
-  const { parseFilters, rawQuery } = clickhouse;
-  const { filterQuery, cohortQuery, params } = await parseFilters(websiteId, {
+  const { type, limit = 500, offset = 0 } = parameters
+  let column = FILTER_COLUMNS[type] || type
+  const { parseFilters, rawQuery } = clickhouse
+  const { filterQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
-    eventType: EVENT_TYPE.pageView,
-  });
-  const includeCountry = column === 'city' || column === 'region';
+    websiteId,
+  })
+  const includeCountry = column === 'city' || column === 'region'
 
-  let sql = '';
+  if (type === 'language') {
+    column = `lower(left(${type}, 2))`
+  }
 
-  if (EVENT_COLUMNS.some(item => Object.keys(filters).includes(item))) {
+  let sql = ''
+
+  if (
+    filters &&
+    typeof filters === 'object' &&
+    EVENT_COLUMNS.some((item) => Object.keys(filters).includes(item))
+  ) {
     sql = `
-    select
+    SELECT
       ${column} x,
-      count(distinct session_id) y
+      COUNT(DISTINCT session_id) y
       ${includeCountry ? ', country' : ''}
-    from website_event
+    FROM website_event
     ${cohortQuery}
-    where website_id = {websiteId:UUID}
-      and created_at between {startDate:DateTime64} and {endDate:DateTime64}
-      and event_type = {eventType:UInt32}
+    WHERE website_id = {websiteId:UUID}
+      AND created_at between {startDate:DateTime64} AND {endDate:DateTime64}
       ${filterQuery}
-    group by x 
+    GROUP BY x 
     ${includeCountry ? ', country' : ''}
-    order by y desc
+    ORDER BY y desc
     limit ${limit}
     offset ${offset}
-    `;
+    `
   } else {
     sql = `
-    select
+    SELECT
       ${column} x,
       uniq(session_id) y
       ${includeCountry ? ', country' : ''}
-    from website_event_stats_hourly website_event
+    FROM website_event_stats_hourly as website_event
     ${cohortQuery}
-    where website_id = {websiteId:UUID}
-      and created_at between {startDate:DateTime64} and {endDate:DateTime64}
-      and event_type = {eventType:UInt32}
+    WHERE website_id = {websiteId:UUID}
+      AND created_at between {startDate:DateTime64} AND {endDate:DateTime64}
       ${filterQuery}
-    group by x 
+    GROUP BY x 
     ${includeCountry ? ', country' : ''}
-    order by y desc
+    ORDER BY y desc
     limit ${limit}
     offset ${offset}
-    `;
+    `
   }
 
-  return rawQuery(sql, params);
+  return rawQuery(sql, { ...queryParams, ...parameters })
 }

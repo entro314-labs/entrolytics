@@ -1,90 +1,28 @@
-import { z } from 'zod';
-import { parseRequest } from '@/lib/request';
-import { json, unauthorized } from '@/lib/response';
-import { pagingParams } from '@/lib/schema';
-import { canViewAllWebsites } from '@/lib/auth';
-import { getWebsites } from '@/queries/prisma/website';
-import { ROLES } from '@/lib/constants';
+import { z } from 'zod'
+import { parseRequest } from '@/lib/request'
+import { json, unauthorized } from '@/lib/response'
+import { pagingParams, searchParams } from '@/lib/schema'
+import { canViewAllWebsites } from '@/validations'
+import { getWebsites } from '@/queries/drizzle'
+import { ROLES } from '@/lib/constants'
 
 export async function GET(request: Request) {
   const schema = z.object({
-    userId: z.string().uuid(),
-    includeOwnedTeams: z.string().optional(),
-    includeAllTeams: z.string().optional(),
     ...pagingParams,
-  });
+    ...searchParams,
+  })
 
-  const { auth, query, error } = await parseRequest(request, schema);
+  const { auth, query, error } = await parseRequest(request, schema)
 
   if (error) {
-    return error();
+    return error()
   }
 
   if (!(await canViewAllWebsites(auth))) {
-    return unauthorized();
+    return unauthorized()
   }
 
-  const { userId, includeOwnedTeams, includeAllTeams } = query;
+  const websites = await getWebsites({}, query)
 
-  const websites = await getWebsites(
-    {
-      where: {
-        OR: [
-          ...(userId && [{ userId }]),
-          ...(userId && includeOwnedTeams
-            ? [
-                {
-                  team: {
-                    deletedAt: null,
-                    teamUser: {
-                      some: {
-                        role: ROLES.teamOwner,
-                        userId,
-                      },
-                    },
-                  },
-                },
-              ]
-            : []),
-          ...(userId && includeAllTeams
-            ? [
-                {
-                  team: {
-                    deletedAt: null,
-                    teamUser: {
-                      some: {
-                        userId,
-                      },
-                    },
-                  },
-                },
-              ]
-            : []),
-        ],
-      },
-      include: {
-        user: {
-          select: {
-            username: true,
-            id: true,
-          },
-        },
-        team: {
-          where: {
-            deletedAt: null,
-          },
-          include: {
-            teamUser: {
-              where: {
-                role: ROLES.teamOwner,
-              },
-            },
-          },
-        },
-      },
-    },
-    query,
-  );
-
-  return json(websites);
+  return json(websites)
 }

@@ -5,6 +5,18 @@
       "value": "Cod de access"
     }
   ],
+  "label.account": [
+    {
+      "type": 0,
+      "value": "Account"
+    }
+  ],
+  "label.action": [
+    {
+      "type": 0,
+      "value": "Action"
+    }
+  ],
   "label.actions": [
     {
       "type": 0,
@@ -23,16 +35,34 @@
       "value": "Adaugă"
     }
   ],
+  "label.add-board": [
+    {
+      "type": 0,
+      "value": "Adaugă panou"
+    }
+  ],
   "label.add-description": [
     {
       "type": 0,
       "value": "Adaugă descriere"
     }
   ],
+  "label.add-link": [
+    {
+      "type": 0,
+      "value": "Add link"
+    }
+  ],
   "label.add-member": [
     {
       "type": 0,
       "value": "Adaugă membru"
+    }
+  ],
+  "label.add-pixel": [
+    {
+      "type": 0,
+      "value": "Add pixel"
     }
   ],
   "label.add-step": [
@@ -53,6 +83,12 @@
       "value": "Administrator"
     }
   ],
+  "label.affiliate": [
+    {
+      "type": 0,
+      "value": "Afiliat"
+    }
+  ],
   "label.after": [
     {
       "type": 0,
@@ -71,10 +107,46 @@
       "value": "Pentru tot timpul"
     }
   ],
+  "label.analysis": [
+    {
+      "type": 0,
+      "value": "Analysis"
+    }
+  ],
   "label.analytics": [
     {
       "type": 0,
-      "value": "Analytics"
+      "value": "Analiză"
+    }
+  ],
+  "label.application": [
+    {
+      "type": 0,
+      "value": "Application"
+    }
+  ],
+  "label.apply": [
+    {
+      "type": 0,
+      "value": "Aplică"
+    }
+  ],
+  "label.attribution": [
+    {
+      "type": 0,
+      "value": "Atribuire"
+    }
+  ],
+  "label.attribution-description": [
+    {
+      "type": 0,
+      "value": "Vezi cum utilizatorii interacționează cu marketingul tău și ce determină conversiile."
+    }
+  ],
+  "label.audience": [
+    {
+      "type": 0,
+      "value": "Audience"
     }
   ],
   "label.average": [
@@ -93,6 +165,18 @@
     {
       "type": 0,
       "value": "Înainte"
+    }
+  ],
+  "label.behavior": [
+    {
+      "type": 0,
+      "value": "Behavior"
+    }
+  ],
+  "label.boards": [
+    {
+      "type": 0,
+      "value": "Panouri"
     }
   ],
   "label.bounce-rate": [
@@ -119,6 +203,12 @@
       "value": "Browsere"
     }
   ],
+  "label.campaigns": [
+    {
+      "type": 0,
+      "value": "Campanii"
+    }
+  ],
   "label.cancel": [
     {
       "type": 0,
@@ -129,6 +219,24 @@
     {
       "type": 0,
       "value": "Schimbare parolă"
+    }
+  ],
+  "label.channel": [
+    {
+      "type": 0,
+      "value": "Channel"
+    }
+  ],
+  "label.channels": [
+    {
+      "type": 0,
+      "value": "Canale"
+    }
+  ],
+  "label.chart": [
+    {
+      "type": 0,
+      "value": "Chart"
     }
   ],
   "label.cities": [
@@ -149,10 +257,28 @@
       "value": "Șterge tot"
     }
   ],
+  "label.cohort": [
+    {
+      "type": 0,
+      "value": "Cohortă"
+    }
+  ],
+  "label.cohorts": [
+    {
+      "type": 0,
+      "value": "Cohorts"
+    }
+  ],
   "label.compare": [
     {
       "type": 0,
       "value": "Compară"
+    }
+  ],
+  "label.compare-dates": [
+    {
+      "type": 0,
+      "value": "Compară datele"
     }
   ],
   "label.confirm": [
@@ -173,10 +299,34 @@
       "value": "Conține"
     }
   ],
+  "label.content": [
+    {
+      "type": 0,
+      "value": "Conținut"
+    }
+  ],
   "label.continue": [
     {
       "type": 0,
       "value": "Continuă"
+    }
+  ],
+  "label.conversion": [
+    {
+      "type": 0,
+      "value": "Conversie"
+    }
+  ],
+  "label.conversion-rate": [
+    {
+      "type": 0,
+      "value": "Rată de conversie"
+    }
+  ],
+  "label.conversion-step": [
+    {
+      "type": 0,
+      "value": "Pas de conversie"
     }
   ],
   "label.count": [
@@ -203,16 +353,16 @@
       "value": "Crează"
     }
   ],
+  "label.create-org": [
+    {
+      "type": 0,
+      "value": "Crează echipă"
+    }
+  ],
   "label.create-report": [
     {
       "type": 0,
       "value": "Crează report"
-    }
-  ],
-  "label.create-team": [
-    {
-      "type": 0,
-      "value": "Crează echipă"
     }
   ],
   "label.create-user": [
@@ -231,6 +381,18 @@
     {
       "type": 0,
       "value": "Creat de"
+    }
+  ],
+  "label.criteria": [
+    {
+      "type": 0,
+      "value": "Criteria"
+    }
+  ],
+  "label.currency": [
+    {
+      "type": 0,
+      "value": "Monedă"
     }
   ],
   "label.current": [
@@ -293,16 +455,16 @@
       "value": "Șterge"
     }
   ],
+  "label.delete-org": [
+    {
+      "type": 0,
+      "value": "Șterge echipă"
+    }
+  ],
   "label.delete-report": [
     {
       "type": 0,
       "value": "Șterge raport"
-    }
-  ],
-  "label.delete-team": [
-    {
-      "type": 0,
-      "value": "Șterge echipă"
     }
   ],
   "label.delete-user": [
@@ -329,6 +491,12 @@
       "value": "Desktop"
     }
   ],
+  "label.destination-url": [
+    {
+      "type": 0,
+      "value": "Destination URL"
+    }
+  ],
   "label.details": [
     {
       "type": 0,
@@ -347,10 +515,22 @@
       "value": "Dispozitive"
     }
   ],
+  "label.direct": [
+    {
+      "type": 0,
+      "value": "Direct"
+    }
+  ],
   "label.dismiss": [
     {
       "type": 0,
       "value": "Renunță"
+    }
+  ],
+  "label.distinct-id": [
+    {
+      "type": 0,
+      "value": "Distinct ID"
     }
   ],
   "label.does-not-contain": [
@@ -359,10 +539,28 @@
       "value": "Nu conține"
     }
   ],
+  "label.does-not-include": [
+    {
+      "type": 0,
+      "value": "Nu include"
+    }
+  ],
+  "label.doest-not-exist": [
+    {
+      "type": 0,
+      "value": "Nu există"
+    }
+  ],
   "label.domain": [
     {
       "type": 0,
       "value": "Domeniu"
+    }
+  ],
+  "label.download": [
+    {
+      "type": 0,
+      "value": "Download"
     }
   ],
   "label.dropoff": [
@@ -389,6 +587,12 @@
       "value": "Editare membru"
     }
   ],
+  "label.email": [
+    {
+      "type": 0,
+      "value": "Email"
+    }
+  ],
   "label.enable-share-url": [
     {
       "type": 0,
@@ -407,6 +611,12 @@
       "value": "URL de intrare"
     }
   ],
+  "label.environment": [
+    {
+      "type": 0,
+      "value": "Environment"
+    }
+  ],
   "label.event": [
     {
       "type": 0,
@@ -419,10 +629,22 @@
       "value": "Date despre eveniment"
     }
   ],
+  "label.event-name": [
+    {
+      "type": 0,
+      "value": "Nume eveniment"
+    }
+  ],
   "label.events": [
     {
       "type": 0,
       "value": "Evenimente"
+    }
+  ],
+  "label.exists": [
+    {
+      "type": 0,
+      "value": "Există"
     }
   ],
   "label.exit": [
@@ -473,6 +695,12 @@
       "value": "Filtre"
     }
   ],
+  "label.first-click": [
+    {
+      "type": 0,
+      "value": "Primul click"
+    }
+  ],
   "label.first-seen": [
     {
       "type": 0,
@@ -489,6 +717,12 @@
     {
       "type": 0,
       "value": "Înțelege rata de conversie și rata de abandon a utilizatorilor."
+    }
+  ],
+  "label.funnels": [
+    {
+      "type": 0,
+      "value": "Parcursuri"
     }
   ],
   "label.goal": [
@@ -521,16 +755,34 @@
       "value": "Mai mare sau egal cu"
     }
   ],
-  "label.host": [
+  "label.grouped": [
     {
       "type": 0,
-      "value": "Host"
+      "value": "Grupat"
     }
   ],
-  "label.hosts": [
+  "label.growth": [
     {
       "type": 0,
-      "value": "Hosts"
+      "value": "Growth"
+    }
+  ],
+  "label.hostname": [
+    {
+      "type": 0,
+      "value": "Nume gazdă"
+    }
+  ],
+  "label.includes": [
+    {
+      "type": 0,
+      "value": "Include"
+    }
+  ],
+  "label.insight": [
+    {
+      "type": 0,
+      "value": "Perspectivă"
     }
   ],
   "label.insights": [
@@ -545,10 +797,22 @@
       "value": "Aprofundează datele utilizând segmente și filtre."
     }
   ],
+  "label.invalid-url": [
+    {
+      "type": 0,
+      "value": "Invalid URL"
+    }
+  ],
   "label.is": [
     {
       "type": 0,
       "value": "Este"
+    }
+  ],
+  "label.is-false": [
+    {
+      "type": 0,
+      "value": "Este fals"
     }
   ],
   "label.is-not": [
@@ -569,13 +833,19 @@
       "value": "Este setat"
     }
   ],
+  "label.is-true": [
+    {
+      "type": 0,
+      "value": "Este adevărat"
+    }
+  ],
   "label.join": [
     {
       "type": 0,
       "value": "Alătură-te"
     }
   ],
-  "label.join-team": [
+  "label.join-org": [
     {
       "type": 0,
       "value": "Alătură-te echipei"
@@ -591,6 +861,12 @@
     {
       "type": 0,
       "value": "Înțelege cum navighează vizitatorii prin website."
+    }
+  ],
+  "label.journeys": [
+    {
+      "type": 0,
+      "value": "Trasee"
     }
   ],
   "label.language": [
@@ -609,6 +885,12 @@
     {
       "type": 0,
       "value": "Laptop"
+    }
+  ],
+  "label.last-click": [
+    {
+      "type": 0,
+      "value": "Ultimul click"
     }
   ],
   "label.last-days": [
@@ -665,7 +947,7 @@
       "value": "Părăsește"
     }
   ],
-  "label.leave-team": [
+  "label.leave-org": [
     {
       "type": 0,
       "value": "Părăsește echipa"
@@ -681,6 +963,24 @@
     {
       "type": 0,
       "value": "Mai puțin sau egal cu"
+    }
+  ],
+  "label.link": [
+    {
+      "type": 0,
+      "value": "Link"
+    }
+  ],
+  "label.links": [
+    {
+      "type": 0,
+      "value": "Linkuri"
+    }
+  ],
+  "label.location": [
+    {
+      "type": 0,
+      "value": "Location"
     }
   ],
   "label.login": [
@@ -713,6 +1013,18 @@
       "value": "Max"
     }
   ],
+  "label.maximize": [
+    {
+      "type": 0,
+      "value": "Extinde"
+    }
+  ],
+  "label.medium": [
+    {
+      "type": 0,
+      "value": "Mediu"
+    }
+  ],
   "label.member": [
     {
       "type": 0,
@@ -735,6 +1047,12 @@
     {
       "type": 0,
       "value": "Mobil"
+    }
+  ],
+  "label.model": [
+    {
+      "type": 0,
+      "value": "Model"
     }
   ],
   "label.more": [
@@ -813,10 +1131,106 @@
       "value": "OK"
     }
   ],
+  "label.online": [
+    {
+      "type": 0,
+      "value": "Online"
+    }
+  ],
+  "label.org": [
+    {
+      "type": 0,
+      "value": "Echipă"
+    }
+  ],
+  "label.org-id": [
+    {
+      "type": 0,
+      "value": "ID Echipă"
+    }
+  ],
+  "label.org-manager": [
+    {
+      "type": 0,
+      "value": "Manager echipă"
+    }
+  ],
+  "label.org-member": [
+    {
+      "type": 0,
+      "value": "Membru echipă"
+    }
+  ],
+  "label.org-name": [
+    {
+      "type": 0,
+      "value": "Nume echipă"
+    }
+  ],
+  "label.org-owner": [
+    {
+      "type": 0,
+      "value": "Titular echipă"
+    }
+  ],
+  "label.org-settings": [
+    {
+      "type": 0,
+      "value": "Setări echipă"
+    }
+  ],
+  "label.org-view-only": [
+    {
+      "type": 0,
+      "value": "Doar vizualizare echipă"
+    }
+  ],
+  "label.org-websites": [
+    {
+      "type": 0,
+      "value": "Website-uri echipă"
+    }
+  ],
+  "label.organic-search": [
+    {
+      "type": 0,
+      "value": "Căutare organică"
+    }
+  ],
+  "label.organic-shopping": [
+    {
+      "type": 0,
+      "value": "Cumpărături organice"
+    }
+  ],
+  "label.organic-social": [
+    {
+      "type": 0,
+      "value": "Social organic"
+    }
+  ],
+  "label.organic-video": [
+    {
+      "type": 0,
+      "value": "Video organic"
+    }
+  ],
+  "label.orgs": [
+    {
+      "type": 0,
+      "value": "Echipă"
+    }
+  ],
   "label.os": [
     {
       "type": 0,
       "value": "OS"
+    }
+  ],
+  "label.other": [
+    {
+      "type": 0,
+      "value": "Altul"
     }
   ],
   "label.overview": [
@@ -829,6 +1243,12 @@
     {
       "type": 0,
       "value": "Titular"
+    }
+  ],
+  "label.page": [
+    {
+      "type": 0,
+      "value": "Pagină"
     }
   ],
   "label.page-of": [
@@ -867,6 +1287,36 @@
       "value": "Pagini"
     }
   ],
+  "label.paid-ads": [
+    {
+      "type": 0,
+      "value": "Reclame plătite"
+    }
+  ],
+  "label.paid-search": [
+    {
+      "type": 0,
+      "value": "Căutare plătită"
+    }
+  ],
+  "label.paid-shopping": [
+    {
+      "type": 0,
+      "value": "Cumpărături plătite"
+    }
+  ],
+  "label.paid-social": [
+    {
+      "type": 0,
+      "value": "Social plătit"
+    }
+  ],
+  "label.paid-video": [
+    {
+      "type": 0,
+      "value": "Video plătit"
+    }
+  ],
   "label.password": [
     {
       "type": 0,
@@ -885,6 +1335,18 @@
       "value": "Rute"
     }
   ],
+  "label.pixel": [
+    {
+      "type": 0,
+      "value": "Pixel"
+    }
+  ],
+  "label.pixels": [
+    {
+      "type": 0,
+      "value": "Pixeli"
+    }
+  ],
   "label.powered-by": [
     {
       "type": 0,
@@ -893,6 +1355,12 @@
     {
       "type": 1,
       "value": "name"
+    }
+  ],
+  "label.preferences": [
+    {
+      "type": 0,
+      "value": "Preferences"
     }
   ],
   "label.previous": [
@@ -917,6 +1385,12 @@
     {
       "type": 0,
       "value": "Profil"
+    }
+  ],
+  "label.profiles": [
+    {
+      "type": 0,
+      "value": "Profiles"
     }
   ],
   "label.properties": [
@@ -955,6 +1429,12 @@
       "value": "Timp real"
     }
   ],
+  "label.referral": [
+    {
+      "type": 0,
+      "value": "Referral"
+    }
+  ],
   "label.referrer": [
     {
       "type": 0,
@@ -989,6 +1469,12 @@
     {
       "type": 0,
       "value": "Regiuni"
+    }
+  ],
+  "label.remaining": [
+    {
+      "type": 0,
+      "value": "Rămas"
     }
   ],
   "label.remove": [
@@ -1051,12 +1537,6 @@
       "value": "Urmărește venitul în timp."
     }
   ],
-  "label.revenue-property": [
-    {
-      "type": 0,
-      "value": "Revenue Property"
-    }
-  ],
   "label.role": [
     {
       "type": 0,
@@ -1075,6 +1555,24 @@
       "value": "Salvează"
     }
   ],
+  "label.save-cohort": [
+    {
+      "type": 0,
+      "value": "Save as cohort"
+    }
+  ],
+  "label.save-segment": [
+    {
+      "type": 0,
+      "value": "Save as segment"
+    }
+  ],
+  "label.screen": [
+    {
+      "type": 0,
+      "value": "Screen"
+    }
+  ],
   "label.screens": [
     {
       "type": 0,
@@ -1087,6 +1585,18 @@
       "value": "Căutare"
     }
   ],
+  "label.segment": [
+    {
+      "type": 0,
+      "value": "Segment"
+    }
+  ],
+  "label.segments": [
+    {
+      "type": 0,
+      "value": "Segments"
+    }
+  ],
   "label.select": [
     {
       "type": 0,
@@ -1097,6 +1607,12 @@
     {
       "type": 0,
       "value": "Selectează data"
+    }
+  ],
+  "label.select-filter": [
+    {
+      "type": 0,
+      "value": "Selectează filtru"
     }
   ],
   "label.select-role": [
@@ -1117,6 +1633,12 @@
       "value": "Sesiune"
     }
   ],
+  "label.session-data": [
+    {
+      "type": 0,
+      "value": "Date sesiune"
+    }
+  ],
   "label.sessions": [
     {
       "type": 0,
@@ -1129,6 +1651,12 @@
       "value": "Setări"
     }
   ],
+  "label.share": [
+    {
+      "type": 0,
+      "value": "Partajează"
+    }
+  ],
   "label.share-url": [
     {
       "type": 0,
@@ -1139,6 +1667,18 @@
     {
       "type": 0,
       "value": "O singură zi"
+    }
+  ],
+  "label.sms": [
+    {
+      "type": 0,
+      "value": "SMS"
+    }
+  ],
+  "label.sources": [
+    {
+      "type": 0,
+      "value": "Surse"
     }
   ],
   "label.start-step": [
@@ -1159,64 +1699,34 @@
       "value": "Sumă"
     }
   ],
+  "label.table": [
+    {
+      "type": 0,
+      "value": "Table"
+    }
+  ],
   "label.tablet": [
     {
       "type": 0,
       "value": "Tabletă"
     }
   ],
-  "label.team": [
+  "label.tag": [
     {
       "type": 0,
-      "value": "Echipă"
+      "value": "Etichetă"
     }
   ],
-  "label.team-id": [
+  "label.tags": [
     {
       "type": 0,
-      "value": "ID Echipă"
+      "value": "Etichete"
     }
   ],
-  "label.team-manager": [
+  "label.terms": [
     {
       "type": 0,
-      "value": "Manager echipă"
-    }
-  ],
-  "label.team-member": [
-    {
-      "type": 0,
-      "value": "Membru echipă"
-    }
-  ],
-  "label.team-name": [
-    {
-      "type": 0,
-      "value": "Nume echipă"
-    }
-  ],
-  "label.team-owner": [
-    {
-      "type": 0,
-      "value": "Titular echipă"
-    }
-  ],
-  "label.team-view-only": [
-    {
-      "type": 0,
-      "value": "Doar vizualizare echipă"
-    }
-  ],
-  "label.team-websites": [
-    {
-      "type": 0,
-      "value": "Website-uri echipă"
-    }
-  ],
-  "label.teams": [
-    {
-      "type": 0,
-      "value": "Echipă"
+      "value": "Termeni"
     }
   ],
   "label.theme": [
@@ -1285,6 +1795,12 @@
       "value": "Cod de urmărire"
     }
   ],
+  "label.traffic": [
+    {
+      "type": 0,
+      "value": "Traffic"
+    }
+  ],
   "label.transactions": [
     {
       "type": 0,
@@ -1351,28 +1867,10 @@
       "value": "Update"
     }
   ],
-  "label.url": [
-    {
-      "type": 0,
-      "value": "URL"
-    }
-  ],
-  "label.urls": [
-    {
-      "type": 0,
-      "value": "URLs"
-    }
-  ],
   "label.user": [
     {
       "type": 0,
       "value": "Utilizator"
-    }
-  ],
-  "label.user-property": [
-    {
-      "type": 0,
-      "value": "Proprietatea utilizatorului"
     }
   ],
   "label.username": [
@@ -1531,6 +2029,12 @@
       "value": "x"
     }
   ],
+  "message.bad-request": [
+    {
+      "type": 0,
+      "value": "Bad request"
+    }
+  ],
   "message.collected-data": [
     {
       "type": 0,
@@ -1593,7 +2097,7 @@
       "value": "?"
     }
   ],
-  "message.delete-team-warning": [
+  "message.delete-org-warning": [
     {
       "type": 0,
       "value": "Ștergerea unei echipe va șterge și toate website-urile echipei."
@@ -1623,6 +2127,12 @@
     {
       "type": 1,
       "value": "url"
+    }
+  ],
+  "message.forbidden": [
+    {
+      "type": 0,
+      "value": "Forbidden"
     }
   ],
   "message.go-to-settings": [
@@ -1660,7 +2170,7 @@
   "message.new-version-available": [
     {
       "type": 0,
-      "value": "O nouă versiune de Umami "
+      "value": "O nouă versiune de Entrolytics "
     },
     {
       "type": 1,
@@ -1689,22 +2199,22 @@
       "value": "Parolele nu se potrivesc"
     }
   ],
-  "message.no-results-found": [
-    {
-      "type": 0,
-      "value": "Nu a fost găsit niciun rezultat."
-    }
-  ],
-  "message.no-team-websites": [
+  "message.no-org-websites": [
     {
       "type": 0,
       "value": "Echipa aceasta nu are niciun website."
     }
   ],
-  "message.no-teams": [
+  "message.no-orgs": [
     {
       "type": 0,
       "value": "Nu ai creat nicio echipă."
+    }
+  ],
+  "message.no-results-found": [
+    {
+      "type": 0,
+      "value": "Nu a fost găsit niciun rezultat."
     }
   ],
   "message.no-users": [
@@ -1717,6 +2227,36 @@
     {
       "type": 0,
       "value": "Nu ai niciun site web configurat."
+    }
+  ],
+  "message.not-found": [
+    {
+      "type": 0,
+      "value": "Not found"
+    }
+  ],
+  "message.nothing-selected": [
+    {
+      "type": 0,
+      "value": "Nothing selected."
+    }
+  ],
+  "message.org-already-member": [
+    {
+      "type": 0,
+      "value": "Deja ești membru al acestei echipe."
+    }
+  ],
+  "message.org-not-found": [
+    {
+      "type": 0,
+      "value": "Echipa nu a fost găsită."
+    }
+  ],
+  "message.org-websites-info": [
+    {
+      "type": 0,
+      "value": "Site-urile web pot fi vizualizate de către oricare membru al echipei."
     }
   ],
   "message.page-not-found": [
@@ -1751,6 +2291,12 @@
       "value": "Salvat cu succes."
     }
   ],
+  "message.sever-error": [
+    {
+      "type": 0,
+      "value": "Server error"
+    }
+  ],
   "message.share-url": [
     {
       "type": 0,
@@ -1765,37 +2311,19 @@
       "value": "."
     }
   ],
-  "message.team-already-member": [
-    {
-      "type": 0,
-      "value": "Deja ești membru al acestei echipe."
-    }
-  ],
-  "message.team-not-found": [
-    {
-      "type": 0,
-      "value": "Echipa nu a fost găsită."
-    }
-  ],
-  "message.team-websites-info": [
-    {
-      "type": 0,
-      "value": "Site-urile web pot fi vizualizate de către oricare membru al echipei."
-    }
-  ],
   "message.tracking-code": [
     {
       "type": 0,
       "value": "Cod de urmărire"
     }
   ],
-  "message.transfer-team-website-to-user": [
+  "message.transfer-org-website-to-user": [
     {
       "type": 0,
       "value": "Vrei să transferi acest website pe contul tău?"
     }
   ],
-  "message.transfer-user-website-to-team": [
+  "message.transfer-user-website-to-org": [
     {
       "type": 0,
       "value": "Selectează echipa căreia vrei să îi transferi site-ul."
@@ -1811,6 +2339,12 @@
     {
       "type": 0,
       "value": "Eveniment declanșat"
+    }
+  ],
+  "message.unauthorized": [
+    {
+      "type": 0,
+      "value": "Unauthorized"
     }
   ],
   "message.user-deleted": [
@@ -1857,12 +2391,6 @@
     {
       "type": 1,
       "value": "device"
-    }
-  ],
-  "message.visitors-dropped-off": [
-    {
-      "type": 0,
-      "value": "Vizitatori care au abandonat"
     }
   ]
 }

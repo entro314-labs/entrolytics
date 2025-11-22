@@ -1,77 +1,85 @@
-import clickhouse from '@/lib/clickhouse';
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db';
-import prisma from '@/lib/prisma';
+import clickhouse from '@/lib/clickhouse'
+import { EVENT_TYPE } from '@/lib/constants'
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
+import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
+
+import { QueryFilters } from '@/lib/types'
+
+export interface UTMParameters {
+  column: string
+  startDate: Date
+  endDate: Date
+}
 
 export async function getUTM(
-  ...args: [
-    websiteId: string,
-    filters: {
-      startDate: Date;
-      endDate: Date;
-      timezone?: string;
-    },
-  ]
+  ...args: [websiteId: string, parameters: UTMParameters, filters: QueryFilters]
 ) {
   return runQuery({
-    [PRISMA]: () => relationalQuery(...args),
+    [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  });
+  })
 }
 
 async function relationalQuery(
   websiteId: string,
-  filters: {
-    startDate: Date;
-    endDate: Date;
-    timezone?: string;
-  },
+  parameters: UTMParameters,
+  filters: QueryFilters
 ) {
-  const { startDate, endDate } = filters;
-  const { rawQuery } = prisma;
+  const { column, startDate, endDate } = parameters
+  // Using rawQuery FROM analytics-utils
+
+  const { filterQuery, joinSessionQuery, cohortQuery, queryParams } = parseFilters({
+    ...filters,
+    websiteId,
+    startDate,
+    endDate,
+    eventType: EVENT_TYPE.pageView,
+  })
 
   return rawQuery(
     `
-    select url_query, count(*) as "num"
-    from website_event
-    where website_id = {{websiteId::uuid}}
-      and created_at between {{startDate}} and {{endDate}}
-      and coalesce(url_query, '') != ''
-      and event_type = 1
-    group by 1
+    SELECT website_event.${column} utm, COUNT(*) as views
+    FROM website_event
+    ${cohortQuery}
+    ${joinSessionQuery}
+    WHERE website_event.website_id = {{websiteId::uuid}}
+      AND website_event.created_at between {{startDate}} AND {{endDate}}
+      AND coalesce(website_event.${column}, '') != ''
+      ${filterQuery}
+    GROUP BY 1
+    ORDER BY 2 desc
     `,
-    {
-      websiteId,
-      startDate,
-      endDate,
-    },
-  );
+    queryParams
+  )
 }
 
 async function clickhouseQuery(
   websiteId: string,
-  filters: {
-    startDate: Date;
-    endDate: Date;
-    timezone?: string;
-  },
+  parameters: UTMParameters,
+  filters: QueryFilters
 ) {
-  const { startDate, endDate } = filters;
-  const { rawQuery } = clickhouse;
+  const { column, startDate, endDate } = parameters
+  const { parseFilters, rawQuery } = clickhouse
+  const { filterQuery, cohortQuery, queryParams } = parseFilters({
+    ...filters,
+    websiteId,
+    startDate,
+    endDate,
+    eventType: EVENT_TYPE.pageView,
+  })
 
   return rawQuery(
     `
-    select url_query, count(*) as "num"
-    from website_event
-    where website_id = {websiteId:UUID}
-      and created_at between {startDate:DateTime64} and {endDate:DateTime64}
-      and url_query != ''
-      and event_type = 1
-    group by 1
+    SELECT ${column} utm, COUNT(*) as views
+    FROM website_event
+    ${cohortQuery}
+    WHERE website_id = {websiteId:UUID}
+      AND created_at between {startDate:DateTime64} AND {endDate:DateTime64}
+      AND ${column} != ''
+      ${filterQuery}
+    GROUP BY 1
+    ORDER BY 2 desc
     `,
-    {
-      websiteId,
-      startDate,
-      endDate,
-    },
-  );
+    queryParams
+  )
 }

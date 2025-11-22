@@ -1,45 +1,37 @@
-import { z } from 'zod';
-import { parseRequest, getRequestDateRange, getRequestFilters } from '@/lib/request';
-import { unauthorized, json } from '@/lib/response';
-import { canViewWebsite } from '@/lib/auth';
-import { filterParams, timezoneParam, unitParam } from '@/lib/schema';
-import { getEventStats } from '@/queries';
+import { z } from 'zod'
+import { parseRequest, getQueryFilters } from '@/lib/request'
+import { unauthorized, json } from '@/lib/response'
+import { canViewWebsite } from '@/validations'
+import { filterParams, timezoneParam, unitParam } from '@/lib/schema'
+import { getEventStats } from '@/queries/sql'
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ websiteId: string }> },
+  { params }: { params: Promise<{ websiteId: string }> }
 ) {
   const schema = z.object({
     startAt: z.coerce.number().int(),
     endAt: z.coerce.number().int(),
-    unit: unitParam,
+    unit: unitParam.optional(),
     timezone: timezoneParam,
     ...filterParams,
-  });
+  })
 
-  const { auth, query, error } = await parseRequest(request, schema);
+  const { auth, query, error } = await parseRequest(request, schema)
 
   if (error) {
-    return error();
+    return error()
   }
 
-  const { websiteId } = await params;
-  const { timezone } = query;
-  const { startDate, endDate, unit } = await getRequestDateRange(query);
+  const { websiteId } = await params
 
   if (!(await canViewWebsite(auth, websiteId))) {
-    return unauthorized();
+    return unauthorized()
   }
 
-  const filters = {
-    ...(await getRequestFilters(query)),
-    startDate,
-    endDate,
-    timezone,
-    unit,
-  };
+  const filters = await getQueryFilters(query, websiteId)
 
-  const data = await getEventStats(websiteId, filters);
+  const data = await getEventStats(websiteId, filters)
 
-  return json(data);
+  return json(data)
 }

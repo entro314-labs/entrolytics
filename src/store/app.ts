@@ -1,62 +1,50 @@
-import { create } from 'zustand';
+import { create } from 'zustand'
 import {
   DATE_RANGE_CONFIG,
-  DEFAULT_DATE_RANGE,
+  DEFAULT_DATE_RANGE_VALUE,
   DEFAULT_LOCALE,
   DEFAULT_THEME,
   LOCALE_CONFIG,
   THEME_CONFIG,
   TIMEZONE_CONFIG,
-} from '@/lib/constants';
-import { getItem } from '@/lib/storage';
-import { getTimezone } from '@/lib/date';
-
-function getDefaultTheme() {
-  return typeof window !== 'undefined'
-    ? window?.matchMedia('(prefers-color-scheme: dark)')?.matches
-      ? 'dark'
-      : 'light'
-    : 'light';
-}
+} from '@/lib/constants'
+import { getItem } from '@/lib/storage'
+import { getTimezone } from '@/lib/date'
 
 const initialState = {
   locale: getItem(LOCALE_CONFIG) || process.env.defaultLocale || DEFAULT_LOCALE,
-  theme: getItem(THEME_CONFIG) || getDefaultTheme() || DEFAULT_THEME,
+  theme: getItem(THEME_CONFIG) || DEFAULT_THEME,
   timezone: getItem(TIMEZONE_CONFIG) || getTimezone(),
-  dateRange: getItem(DATE_RANGE_CONFIG) || DEFAULT_DATE_RANGE,
+  dateRangeValue: getItem(DATE_RANGE_CONFIG) || DEFAULT_DATE_RANGE_VALUE,
   shareToken: null,
   user: null,
   config: null,
-};
-
-const store = create(() => ({ ...initialState }));
-
-export function setTheme(theme: string) {
-  store.setState({ theme });
 }
 
+const store = create(() => ({ ...initialState }))
+
 export function setTimezone(timezone: string) {
-  store.setState({ timezone });
+  store.setState({ timezone })
 }
 
 export function setLocale(locale: string) {
-  store.setState({ locale });
+  store.setState({ locale })
 }
 
 export function setShareToken(shareToken: string) {
-  store.setState({ shareToken });
+  store.setState({ shareToken })
 }
 
 export function setUser(user: object) {
-  store.setState({ user });
+  store.setState({ user })
 }
 
 export function setConfig(config: object) {
-  store.setState({ config });
+  store.setState({ config })
 }
 
-export function setDateRange(dateRange: string | object) {
-  store.setState({ dateRange });
+export function setDateRangeValue(dateRangeValue: string) {
+  store.setState({ dateRangeValue })
 }
 
-export default store;
+export const useApp = store

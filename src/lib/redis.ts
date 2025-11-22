@@ -1,17 +1,22 @@
-import { REDIS, UmamiRedisClient } from '@umami/redis-client';
+import { EntrolyticsRedisClient } from '@entro314labs/redis-client'
 
-const enabled = !!process.env.REDIS_URL;
+const REDIS = 'redis'
+const enabled = !!process.env.REDIS_URL
 
 function getClient() {
-  const redis = new UmamiRedisClient(process.env.REDIS_URL);
-
-  if (process.env.NODE_ENV !== 'production') {
-    global[REDIS] = redis;
+  if (!process.env.REDIS_URL) {
+    throw new Error('REDIS_URL environment variable is required')
   }
 
-  return redis;
+  const redis = new EntrolyticsRedisClient({ url: process.env.REDIS_URL })
+
+  if (process.env.NODE_ENV !== 'production') {
+    globalThis[REDIS] = redis
+  }
+
+  return redis
 }
 
-const client = global[REDIS] || getClient();
+const client = globalThis[REDIS] || (enabled ? getClient() : null)
 
-export default { client, enabled };
+export default { client, enabled }

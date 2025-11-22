@@ -1,60 +1,70 @@
-import { useState, Key } from 'react';
-import { Dropdown, Item } from 'react-basics';
-import { useWebsite, useWebsites, useMessages } from '@/components/hooks';
-import Empty from '@/components/common/Empty';
-import styles from './WebsiteSelect.module.css';
+import { useState } from 'react'
+import { Select, SelectProps, ListItem, Text } from '@entro314labs/entro-zen'
+import {
+  useUserWebsitesQuery,
+  useWebsiteQuery,
+  useNavigation,
+  useMessages,
+} from '@/components/hooks'
+import { Empty } from '@/components/common/Empty'
 
 export function WebsiteSelect({
   websiteId,
-  teamId,
-  onSelect,
+  orgId,
+  ...props
 }: {
-  websiteId?: string;
-  teamId?: string;
-  onSelect?: (key: any) => void;
-}) {
-  const { formatMessage, labels, messages } = useMessages();
-  const [search, setSearch] = useState('');
-  const [selectedId, setSelectedId] = useState<Key>(websiteId);
-
-  const { data: website } = useWebsite(selectedId as string);
-
-  const queryResult = useWebsites({ teamId }, { search, pageSize: 5 });
-
-  const renderValue = () => {
-    return website?.name;
-  };
-
-  const renderEmpty = () => {
-    return <Empty message={formatMessage(messages.noResultsFound)} />;
-  };
+  websiteId?: string
+  orgId?: string
+} & SelectProps) {
+  const { formatMessage, messages } = useMessages()
+  const { router, renderUrl } = useNavigation()
+  const [search, setSearch] = useState('')
+  const { data: website } = useWebsiteQuery(websiteId)
+  const { data, isLoading } = useUserWebsitesQuery({ orgId }, { search, pageSize: 5 })
 
   const handleSelect = (value: any) => {
-    setSelectedId(value);
-    onSelect?.(value);
-  };
+    router.push(renderUrl(`/websites/${value}`))
+  }
 
   const handleSearch = (value: string) => {
-    setSearch(value);
-  };
+    setSearch(value)
+  }
+
+  const handleOpenChange = () => {
+    setSearch('')
+  }
 
   return (
-    <Dropdown
-      menuProps={{ className: styles.dropdown }}
-      items={queryResult?.result?.data as any[]}
-      value={selectedId as string}
-      renderValue={renderValue}
-      renderEmpty={renderEmpty}
-      onChange={handleSelect}
-      alignment="end"
-      placeholder={formatMessage(labels.selectWebsite)}
+    <Select
+      {...props}
+      placeholder=""
+      items={data?.['data'] || []}
+      value={websiteId}
+      isLoading={isLoading}
+      buttonProps={{ variant: 'outline' }}
       allowSearch={true}
+      searchValue={search}
       onSearch={handleSearch}
-      isLoading={queryResult.query.isLoading}
+      onChange={handleSelect}
+      onOpenChange={handleOpenChange}
+      aria-label="Website selector"
+      listProps={{
+        renderEmptyState: () => <Empty message={formatMessage(messages.noResultsFound)} />,
+      }}
+      renderValue={() => (
+        <Text truncate weight="bold" style={{ maxWidth: 160, lineHeight: 1 }}>
+          {website?.name}
+        </Text>
+      )}
     >
-      {({ id, name }) => <Item key={id}>{name}</Item>}
-    </Dropdown>
-  );
+      {(item: any) => {
+        const itemId = item.id || `website-${item.name}`
+        return (
+          <ListItem key={itemId} id={itemId}>
+            {item.name}
+          </ListItem>
+        )
+      }}
+    </Select>
+  )
 }
-
-export default WebsiteSelect;

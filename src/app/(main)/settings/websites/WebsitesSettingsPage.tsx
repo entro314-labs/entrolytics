@@ -1,17 +1,16 @@
-'use client';
-import { useLogin } from '@/components/hooks';
-import WebsitesDataTable from './WebsitesDataTable';
-import WebsitesHeader from './WebsitesHeader';
-import { ROLES } from '@/lib/constants';
+'use client'
+import { Column } from '@entro314labs/entro-zen'
+import { useMessages } from '@/components/hooks'
+import { WebsitesDataTable } from '@/app/(main)/websites/WebsitesDataTable'
+import { SectionHeader } from '@/components/common/SectionHeader'
 
-export default function WebsitesSettingsPage({ teamId }: { teamId: string }) {
-  const { user } = useLogin();
-  const canCreate = user.role !== ROLES.viewOnly;
+export function WebsitesSettingsPage({ orgId }: { orgId: string }) {
+  const { formatMessage, labels } = useMessages()
 
   return (
-    <>
-      <WebsitesHeader teamId={teamId} allowCreate={canCreate} />
-      <WebsitesDataTable teamId={teamId} />
-    </>
-  );
+    <Column gap>
+      <SectionHeader title={formatMessage(labels.websites)} />
+      <WebsitesDataTable orgId={orgId} />
+    </Column>
+  )
 }

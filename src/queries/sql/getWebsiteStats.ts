@@ -1,77 +1,84 @@
-import clickhouse from '@/lib/clickhouse';
-import { EVENT_TYPE } from '@/lib/constants';
-import { CLICKHOUSE, PRISMA, runQuery } from '@/lib/db';
-import prisma from '@/lib/prisma';
-import { QueryFilters } from '@/lib/types';
-import { EVENT_COLUMNS } from '@/lib/constants';
+import clickhouse from '@/lib/clickhouse'
+import { EVENT_COLUMNS } from '@/lib/constants'
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
+import { getTimestampDiffSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
+import { QueryFilters } from '@/lib/types'
+
+const FUNCTION_NAME = 'getWebsiteStats'
+
+export interface WebsiteStatsData {
+  pageviews: number
+  visitors: number
+  visits: number
+  bounces: number
+  totaltime: number
+}
 
 export async function getWebsiteStats(
   ...args: [websiteId: string, filters: QueryFilters]
-): Promise<
-  { pageviews: number; visitors: number; visits: number; bounces: number; totaltime: number }[]
-> {
+): Promise<WebsiteStatsData[]> {
   return runQuery({
-    [PRISMA]: () => relationalQuery(...args),
+    [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  });
+  })
 }
 
 async function relationalQuery(
   websiteId: string,
-  filters: QueryFilters,
-): Promise<
-  { pageviews: number; visitors: number; visits: number; bounces: number; totaltime: number }[]
-> {
-  const { getTimestampDiffSQL, parseFilters, rawQuery } = prisma;
-  const { filterQuery, cohortQuery, joinSession, params } = await parseFilters(websiteId, {
+  filters: QueryFilters
+): Promise<WebsiteStatsData[]> {
+  const { filterQuery, joinSessionQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
-    eventType: EVENT_TYPE.pageView,
-  });
+    websiteId,
+  })
 
   return rawQuery(
     `
-    select
-      sum(t.c) as "pageviews",
-      count(distinct t.session_id) as "visitors",
-      count(distinct t.visit_id) as "visits",
-      sum(case when t.c = 1 then 1 else 0 end) as "bounces",
-      sum(${getTimestampDiffSQL('t.min_time', 't.max_time')}) as "totaltime"
-    from (
-      select
+    SELECT
+      SUM(t.c) as "pageviews",
+      COUNT(DISTINCT t.session_id) as "visitors",
+      COUNT(DISTINCT t.visit_id) as "visits",
+      SUM(CASE WHEN t.c = 1 THEN 1 ELSE 0 END) as "bounces",
+      SUM(${getTimestampDiffSQL('t.min_time', 't.max_time')}) as "totaltime"
+    FROM (
+      SELECT
         website_event.session_id,
         website_event.visit_id,
-        count(*) as "c",
-        min(website_event.created_at) as "min_time",
-        max(website_event.created_at) as "max_time"
-      from website_event
-        ${cohortQuery}
-        ${joinSession}
-      where website_event.website_id = {{websiteId::uuid}}
-        and website_event.created_at between {{startDate}} and {{endDate}}
-        and event_type = {{eventType}}
+        COUNT(*) as "c",
+        MIN(website_event.created_at) as "min_time",
+        MAX(website_event.created_at) as "max_time"
+      FROM website_event
+      ${cohortQuery}
+      ${joinSessionQuery}
+      WHERE website_event.website_id = {{websiteId::uuid}}
+        AND website_event.created_at BETWEEN {{startDate}} AND {{endDate}}
+        AND website_event.event_type != 2
         ${filterQuery}
-      group by 1, 2
+      GROUP BY 1, 2
     ) as t
     `,
-    params,
-  );
+    queryParams,
+    FUNCTION_NAME
+  )
 }
 
 async function clickhouseQuery(
   websiteId: string,
-  filters: QueryFilters,
-): Promise<
-  { pageviews: number; visitors: number; visits: number; bounces: number; totaltime: number }[]
-> {
-  const { rawQuery, parseFilters } = clickhouse;
-  const { filterQuery, cohortQuery, params } = await parseFilters(websiteId, {
+  filters: QueryFilters
+): Promise<WebsiteStatsData[]> {
+  const { rawQuery, parseFilters } = clickhouse
+  const { filterQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
-    eventType: EVENT_TYPE.pageView,
-  });
+    websiteId,
+  })
 
-  let sql = '';
+  let sql = ''
 
-  if (EVENT_COLUMNS.some(item => Object.keys(filters).includes(item))) {
+  if (
+    filters &&
+    typeof filters === 'object' &&
+    EVENT_COLUMNS.some((item) => Object.keys(filters).includes(item))
+  ) {
     sql = `
     select
       sum(t.c) as "pageviews",
@@ -90,11 +97,11 @@ async function clickhouseQuery(
       ${cohortQuery}
       where website_id = {websiteId:UUID}
         and created_at between {startDate:DateTime64} and {endDate:DateTime64}
-        and event_type = {eventType:UInt32}
+        and event_type != 2
         ${filterQuery}
       group by session_id, visit_id
     ) as t;
-    `;
+    `
   } else {
     sql = `
     select
@@ -113,12 +120,12 @@ async function clickhouseQuery(
         ${cohortQuery}
     where website_id = {websiteId:UUID}
       and created_at between {startDate:DateTime64} and {endDate:DateTime64}
-      and event_type = {eventType:UInt32}
+      and event_type != 2
       ${filterQuery}
       group by session_id, visit_id
     ) as t;
-    `;
+    `
   }
 
-  return rawQuery(sql, params);
+  return rawQuery(sql, queryParams, FUNCTION_NAME).then((result) => result?.[0])
 }

@@ -5,6 +5,18 @@
       "value": "Åtkomstkod"
     }
   ],
+  "label.account": [
+    {
+      "type": 0,
+      "value": "Account"
+    }
+  ],
+  "label.action": [
+    {
+      "type": 0,
+      "value": "Action"
+    }
+  ],
   "label.actions": [
     {
       "type": 0,
@@ -23,22 +35,40 @@
       "value": "Lägg till"
     }
   ],
+  "label.add-board": [
+    {
+      "type": 0,
+      "value": "Lägg till anslagstavla"
+    }
+  ],
   "label.add-description": [
     {
       "type": 0,
       "value": "Lägg till beskrivning"
     }
   ],
+  "label.add-link": [
+    {
+      "type": 0,
+      "value": "Add link"
+    }
+  ],
   "label.add-member": [
     {
       "type": 0,
-      "value": "Add member"
+      "value": "Lägg till medlem"
+    }
+  ],
+  "label.add-pixel": [
+    {
+      "type": 0,
+      "value": "Add pixel"
     }
   ],
   "label.add-step": [
     {
       "type": 0,
-      "value": "Add step"
+      "value": "Lägg till steg"
     }
   ],
   "label.add-website": [
@@ -51,6 +81,12 @@
     {
       "type": 0,
       "value": "Administratör"
+    }
+  ],
+  "label.affiliate": [
+    {
+      "type": 0,
+      "value": "Partner"
     }
   ],
   "label.after": [
@@ -71,10 +107,46 @@
       "value": "Sedan början"
     }
   ],
+  "label.analysis": [
+    {
+      "type": 0,
+      "value": "Analysis"
+    }
+  ],
   "label.analytics": [
     {
       "type": 0,
       "value": "Webbplats Analys"
+    }
+  ],
+  "label.application": [
+    {
+      "type": 0,
+      "value": "Application"
+    }
+  ],
+  "label.apply": [
+    {
+      "type": 0,
+      "value": "Tillämpa"
+    }
+  ],
+  "label.attribution": [
+    {
+      "type": 0,
+      "value": "Attribuering"
+    }
+  ],
+  "label.attribution-description": [
+    {
+      "type": 0,
+      "value": "Se hur användare interagerar med din marknadsföring och vad som driver konverteringar."
+    }
+  ],
+  "label.audience": [
+    {
+      "type": 0,
+      "value": "Audience"
     }
   ],
   "label.average": [
@@ -93,6 +165,18 @@
     {
       "type": 0,
       "value": "Före"
+    }
+  ],
+  "label.behavior": [
+    {
+      "type": 0,
+      "value": "Behavior"
+    }
+  ],
+  "label.boards": [
+    {
+      "type": 0,
+      "value": "Anslagstavlor"
     }
   ],
   "label.bounce-rate": [
@@ -119,6 +203,12 @@
       "value": "Webbläsare"
     }
   ],
+  "label.campaigns": [
+    {
+      "type": 0,
+      "value": "Kampanjer"
+    }
+  ],
   "label.cancel": [
     {
       "type": 0,
@@ -129,6 +219,24 @@
     {
       "type": 0,
       "value": "Byt lösenord"
+    }
+  ],
+  "label.channel": [
+    {
+      "type": 0,
+      "value": "Channel"
+    }
+  ],
+  "label.channels": [
+    {
+      "type": 0,
+      "value": "Kanaler"
+    }
+  ],
+  "label.chart": [
+    {
+      "type": 0,
+      "value": "Chart"
     }
   ],
   "label.cities": [
@@ -149,10 +257,28 @@
       "value": "Rensa alla"
     }
   ],
+  "label.cohort": [
+    {
+      "type": 0,
+      "value": "Kohort"
+    }
+  ],
+  "label.cohorts": [
+    {
+      "type": 0,
+      "value": "Cohorts"
+    }
+  ],
   "label.compare": [
     {
       "type": 0,
-      "value": "Compare"
+      "value": "Jämför"
+    }
+  ],
+  "label.compare-dates": [
+    {
+      "type": 0,
+      "value": "Jämför datum"
     }
   ],
   "label.confirm": [
@@ -173,16 +299,40 @@
       "value": "Innehåller"
     }
   ],
+  "label.content": [
+    {
+      "type": 0,
+      "value": "Innehåll"
+    }
+  ],
   "label.continue": [
     {
       "type": 0,
       "value": "Fortsätt"
     }
   ],
+  "label.conversion": [
+    {
+      "type": 0,
+      "value": "Konvertering"
+    }
+  ],
+  "label.conversion-rate": [
+    {
+      "type": 0,
+      "value": "Konverteringsfrekvens"
+    }
+  ],
+  "label.conversion-step": [
+    {
+      "type": 0,
+      "value": "Konverteringssteg"
+    }
+  ],
   "label.count": [
     {
       "type": 0,
-      "value": "Count"
+      "value": "Antal"
     }
   ],
   "label.countries": [
@@ -203,16 +353,16 @@
       "value": "Skapa"
     }
   ],
+  "label.create-org": [
+    {
+      "type": 0,
+      "value": "Skapa org"
+    }
+  ],
   "label.create-report": [
     {
       "type": 0,
       "value": "Skapa rapport"
-    }
-  ],
-  "label.create-team": [
-    {
-      "type": 0,
-      "value": "Skapa team"
     }
   ],
   "label.create-user": [
@@ -230,13 +380,25 @@
   "label.created-by": [
     {
       "type": 0,
-      "value": "Created By"
+      "value": "Skapad av"
+    }
+  ],
+  "label.criteria": [
+    {
+      "type": 0,
+      "value": "Criteria"
+    }
+  ],
+  "label.currency": [
+    {
+      "type": 0,
+      "value": "Valuta"
     }
   ],
   "label.current": [
     {
       "type": 0,
-      "value": "Current"
+      "value": "Nuvarande"
     }
   ],
   "label.current-password": [
@@ -293,16 +455,16 @@
       "value": "Radera"
     }
   ],
+  "label.delete-org": [
+    {
+      "type": 0,
+      "value": "Radera org"
+    }
+  ],
   "label.delete-report": [
     {
       "type": 0,
-      "value": "Delete report"
-    }
-  ],
-  "label.delete-team": [
-    {
-      "type": 0,
-      "value": "Radera team"
+      "value": "Radera rapport"
     }
   ],
   "label.delete-user": [
@@ -329,6 +491,12 @@
       "value": "Stationär"
     }
   ],
+  "label.destination-url": [
+    {
+      "type": 0,
+      "value": "Destination URL"
+    }
+  ],
   "label.details": [
     {
       "type": 0,
@@ -347,10 +515,22 @@
       "value": "Enheter"
     }
   ],
+  "label.direct": [
+    {
+      "type": 0,
+      "value": "Direkt"
+    }
+  ],
   "label.dismiss": [
     {
       "type": 0,
       "value": "Avbryt"
+    }
+  ],
+  "label.distinct-id": [
+    {
+      "type": 0,
+      "value": "Unikt ID"
     }
   ],
   "label.does-not-contain": [
@@ -359,10 +539,28 @@
       "value": "Innehåller inte"
     }
   ],
+  "label.does-not-include": [
+    {
+      "type": 0,
+      "value": "Inkluderar inte"
+    }
+  ],
+  "label.doest-not-exist": [
+    {
+      "type": 0,
+      "value": "Existerar inte"
+    }
+  ],
   "label.domain": [
     {
       "type": 0,
       "value": "Domän"
+    }
+  ],
+  "label.download": [
+    {
+      "type": 0,
+      "value": "Download"
     }
   ],
   "label.dropoff": [
@@ -386,7 +584,13 @@
   "label.edit-member": [
     {
       "type": 0,
-      "value": "Edit member"
+      "value": "Redigera medlem"
+    }
+  ],
+  "label.email": [
+    {
+      "type": 0,
+      "value": "Email"
     }
   ],
   "label.enable-share-url": [
@@ -398,13 +602,19 @@
   "label.end-step": [
     {
       "type": 0,
-      "value": "End Step"
+      "value": "Slutsteg"
     }
   ],
   "label.entry": [
     {
       "type": 0,
-      "value": "Entry URL"
+      "value": "Ingångs-URL"
+    }
+  ],
+  "label.environment": [
+    {
+      "type": 0,
+      "value": "Environment"
     }
   ],
   "label.event": [
@@ -419,10 +629,22 @@
       "value": "Händelsedata"
     }
   ],
+  "label.event-name": [
+    {
+      "type": 0,
+      "value": "Händelsenamn"
+    }
+  ],
   "label.events": [
     {
       "type": 0,
       "value": "Händelser"
+    }
+  ],
+  "label.exists": [
+    {
+      "type": 0,
+      "value": "Existerar"
     }
   ],
   "label.exit": [
@@ -473,6 +695,12 @@
       "value": "Filter"
     }
   ],
+  "label.first-click": [
+    {
+      "type": 0,
+      "value": "Första klicket"
+    }
+  ],
   "label.first-seen": [
     {
       "type": 0,
@@ -491,22 +719,28 @@
       "value": "Förstå omvandlingen och bortfallsfrekvensen för användare."
     }
   ],
+  "label.funnels": [
+    {
+      "type": 0,
+      "value": "Trattar"
+    }
+  ],
   "label.goal": [
     {
       "type": 0,
-      "value": "Goal"
+      "value": "Mål"
     }
   ],
   "label.goals": [
     {
       "type": 0,
-      "value": "Goals"
+      "value": "Mål"
     }
   ],
   "label.goals-description": [
     {
       "type": 0,
-      "value": "Track your goals for pageviews and events."
+      "value": "Följ dina mål för sidvisningar och händelser."
     }
   ],
   "label.greater-than": [
@@ -521,16 +755,34 @@
       "value": "Större än eller lika med"
     }
   ],
-  "label.host": [
+  "label.grouped": [
     {
       "type": 0,
-      "value": "Host"
+      "value": "Grupperad"
     }
   ],
-  "label.hosts": [
+  "label.growth": [
     {
       "type": 0,
-      "value": "Hosts"
+      "value": "Growth"
+    }
+  ],
+  "label.hostname": [
+    {
+      "type": 0,
+      "value": "Värdnamn"
+    }
+  ],
+  "label.includes": [
+    {
+      "type": 0,
+      "value": "Inkluderar"
+    }
+  ],
+  "label.insight": [
+    {
+      "type": 0,
+      "value": "Insikt"
     }
   ],
   "label.insights": [
@@ -545,10 +797,22 @@
       "value": "Dyk djupare in i din data genom att använda olika segment och filter."
     }
   ],
+  "label.invalid-url": [
+    {
+      "type": 0,
+      "value": "Invalid URL"
+    }
+  ],
   "label.is": [
     {
       "type": 0,
       "value": "Är"
+    }
+  ],
+  "label.is-false": [
+    {
+      "type": 0,
+      "value": "Är falskt"
     }
   ],
   "label.is-not": [
@@ -569,28 +833,40 @@
       "value": "Är inställd"
     }
   ],
+  "label.is-true": [
+    {
+      "type": 0,
+      "value": "Är sant"
+    }
+  ],
   "label.join": [
     {
       "type": 0,
       "value": "Gå med"
     }
   ],
-  "label.join-team": [
+  "label.join-org": [
     {
       "type": 0,
-      "value": "Gå med i team"
+      "value": "Gå med i org"
     }
   ],
   "label.journey": [
     {
       "type": 0,
-      "value": "Journey"
+      "value": "Resa"
     }
   ],
   "label.journey-description": [
     {
       "type": 0,
-      "value": "Understand how users navigate through your website."
+      "value": "Förstå hur användare navigerar på din webbplats."
+    }
+  ],
+  "label.journeys": [
+    {
+      "type": 0,
+      "value": "Resor"
     }
   ],
   "label.language": [
@@ -609,6 +885,12 @@
     {
       "type": 0,
       "value": "Bärbar"
+    }
+  ],
+  "label.last-click": [
+    {
+      "type": 0,
+      "value": "Sista klicket"
     }
   ],
   "label.last-days": [
@@ -642,7 +924,7 @@
   "label.last-months": [
     {
       "type": 0,
-      "value": "Last "
+      "value": "Senaste "
     },
     {
       "type": 1,
@@ -650,13 +932,13 @@
     },
     {
       "type": 0,
-      "value": " months"
+      "value": " månaderna"
     }
   ],
   "label.last-seen": [
     {
       "type": 0,
-      "value": "Last seen"
+      "value": "Senast sedd"
     }
   ],
   "label.leave": [
@@ -665,10 +947,10 @@
       "value": "Lämna"
     }
   ],
-  "label.leave-team": [
+  "label.leave-org": [
     {
       "type": 0,
-      "value": "Lämna team"
+      "value": "Lämna org"
     }
   ],
   "label.less-than": [
@@ -681,6 +963,24 @@
     {
       "type": 0,
       "value": "Mindre än eller lika med"
+    }
+  ],
+  "label.link": [
+    {
+      "type": 0,
+      "value": "Link"
+    }
+  ],
+  "label.links": [
+    {
+      "type": 0,
+      "value": "Länkar"
+    }
+  ],
+  "label.location": [
+    {
+      "type": 0,
+      "value": "Location"
     }
   ],
   "label.login": [
@@ -713,10 +1013,22 @@
       "value": "Max"
     }
   ],
+  "label.maximize": [
+    {
+      "type": 0,
+      "value": "Expandera"
+    }
+  ],
+  "label.medium": [
+    {
+      "type": 0,
+      "value": "Medium"
+    }
+  ],
   "label.member": [
     {
       "type": 0,
-      "value": "Member"
+      "value": "Medlem"
     }
   ],
   "label.members": [
@@ -737,6 +1049,12 @@
       "value": "Mobil"
     }
   ],
+  "label.model": [
+    {
+      "type": 0,
+      "value": "Modell"
+    }
+  ],
   "label.more": [
     {
       "type": 0,
@@ -746,7 +1064,7 @@
   "label.my-account": [
     {
       "type": 0,
-      "value": "My account"
+      "value": "Mitt konto"
     }
   ],
   "label.my-websites": [
@@ -770,7 +1088,7 @@
   "label.none": [
     {
       "type": 0,
-      "value": "Inga"
+      "value": "Ingen"
     }
   ],
   "label.number-of-records": [
@@ -813,10 +1131,106 @@
       "value": "OK"
     }
   ],
+  "label.online": [
+    {
+      "type": 0,
+      "value": "Online"
+    }
+  ],
+  "label.org": [
+    {
+      "type": 0,
+      "value": "Org"
+    }
+  ],
+  "label.org-id": [
+    {
+      "type": 0,
+      "value": "Org ID"
+    }
+  ],
+  "label.org-manager": [
+    {
+      "type": 0,
+      "value": "Orgledare"
+    }
+  ],
+  "label.org-member": [
+    {
+      "type": 0,
+      "value": "Org-medlem"
+    }
+  ],
+  "label.org-name": [
+    {
+      "type": 0,
+      "value": "Org namn"
+    }
+  ],
+  "label.org-owner": [
+    {
+      "type": 0,
+      "value": "Org-ägare"
+    }
+  ],
+  "label.org-settings": [
+    {
+      "type": 0,
+      "value": "Orginställningar"
+    }
+  ],
+  "label.org-view-only": [
+    {
+      "type": 0,
+      "value": "Org view only"
+    }
+  ],
+  "label.org-websites": [
+    {
+      "type": 0,
+      "value": "Org webbplatser"
+    }
+  ],
+  "label.organic-search": [
+    {
+      "type": 0,
+      "value": "Organisk sökning"
+    }
+  ],
+  "label.organic-shopping": [
+    {
+      "type": 0,
+      "value": "Organisk shopping"
+    }
+  ],
+  "label.organic-social": [
+    {
+      "type": 0,
+      "value": "Organisk social"
+    }
+  ],
+  "label.organic-video": [
+    {
+      "type": 0,
+      "value": "Organisk video"
+    }
+  ],
+  "label.orgs": [
+    {
+      "type": 0,
+      "value": "Org"
+    }
+  ],
   "label.os": [
     {
       "type": 0,
       "value": "Operativsystem"
+    }
+  ],
+  "label.other": [
+    {
+      "type": 0,
+      "value": "Annat"
     }
   ],
   "label.overview": [
@@ -829,6 +1243,12 @@
     {
       "type": 0,
       "value": "Ägare"
+    }
+  ],
+  "label.page": [
+    {
+      "type": 0,
+      "value": "Sida"
     }
   ],
   "label.page-of": [
@@ -867,6 +1287,36 @@
       "value": "Sidor"
     }
   ],
+  "label.paid-ads": [
+    {
+      "type": 0,
+      "value": "Betalda annonser"
+    }
+  ],
+  "label.paid-search": [
+    {
+      "type": 0,
+      "value": "Betald sökning"
+    }
+  ],
+  "label.paid-shopping": [
+    {
+      "type": 0,
+      "value": "Betald shopping"
+    }
+  ],
+  "label.paid-social": [
+    {
+      "type": 0,
+      "value": "Betald social"
+    }
+  ],
+  "label.paid-video": [
+    {
+      "type": 0,
+      "value": "Betald video"
+    }
+  ],
   "label.password": [
     {
       "type": 0,
@@ -876,13 +1326,25 @@
   "label.path": [
     {
       "type": 0,
-      "value": "Path"
+      "value": "Sökväg"
     }
   ],
   "label.paths": [
     {
       "type": 0,
-      "value": "Paths"
+      "value": "Sökvägar"
+    }
+  ],
+  "label.pixel": [
+    {
+      "type": 0,
+      "value": "Pixel"
+    }
+  ],
+  "label.pixels": [
+    {
+      "type": 0,
+      "value": "Pixlar"
     }
   ],
   "label.powered-by": [
@@ -895,22 +1357,28 @@
       "value": "name"
     }
   ],
+  "label.preferences": [
+    {
+      "type": 0,
+      "value": "Preferences"
+    }
+  ],
   "label.previous": [
     {
       "type": 0,
-      "value": "Previous"
+      "value": "Föregående"
     }
   ],
   "label.previous-period": [
     {
       "type": 0,
-      "value": "Previous period"
+      "value": "Föregående period"
     }
   ],
   "label.previous-year": [
     {
       "type": 0,
-      "value": "Previous year"
+      "value": "Föregående år"
     }
   ],
   "label.profile": [
@@ -919,16 +1387,22 @@
       "value": "Profil"
     }
   ],
+  "label.profiles": [
+    {
+      "type": 0,
+      "value": "Profiles"
+    }
+  ],
   "label.properties": [
     {
       "type": 0,
-      "value": "Properties"
+      "value": "Egenskaper"
     }
   ],
   "label.property": [
     {
       "type": 0,
-      "value": "Property"
+      "value": "Egenskap"
     }
   ],
   "label.queries": [
@@ -953,6 +1427,12 @@
     {
       "type": 0,
       "value": "Realtid"
+    }
+  ],
+  "label.referral": [
+    {
+      "type": 0,
+      "value": "Hänvisning"
     }
   ],
   "label.referrer": [
@@ -989,6 +1469,12 @@
     {
       "type": 0,
       "value": "Regioner"
+    }
+  ],
+  "label.remaining": [
+    {
+      "type": 0,
+      "value": "Återstår"
     }
   ],
   "label.remove": [
@@ -1042,19 +1528,13 @@
   "label.revenue": [
     {
       "type": 0,
-      "value": "Revenue"
+      "value": "Intäkter"
     }
   ],
   "label.revenue-description": [
     {
       "type": 0,
-      "value": "Look into your revenue across time."
-    }
-  ],
-  "label.revenue-property": [
-    {
-      "type": 0,
-      "value": "Revenue Property"
+      "value": "Se dina intäkter över tid."
     }
   ],
   "label.role": [
@@ -1075,6 +1555,24 @@
       "value": "Spara"
     }
   ],
+  "label.save-cohort": [
+    {
+      "type": 0,
+      "value": "Save as cohort"
+    }
+  ],
+  "label.save-segment": [
+    {
+      "type": 0,
+      "value": "Save as segment"
+    }
+  ],
+  "label.screen": [
+    {
+      "type": 0,
+      "value": "Screen"
+    }
+  ],
   "label.screens": [
     {
       "type": 0,
@@ -1087,6 +1585,18 @@
       "value": "Sök"
     }
   ],
+  "label.segment": [
+    {
+      "type": 0,
+      "value": "Segment"
+    }
+  ],
+  "label.segments": [
+    {
+      "type": 0,
+      "value": "Segments"
+    }
+  ],
   "label.select": [
     {
       "type": 0,
@@ -1097,6 +1607,12 @@
     {
       "type": 0,
       "value": "Välj datum"
+    }
+  ],
+  "label.select-filter": [
+    {
+      "type": 0,
+      "value": "Välj filter"
     }
   ],
   "label.select-role": [
@@ -1117,6 +1633,12 @@
       "value": "Session"
     }
   ],
+  "label.session-data": [
+    {
+      "type": 0,
+      "value": "Sessionsdata"
+    }
+  ],
   "label.sessions": [
     {
       "type": 0,
@@ -1129,6 +1651,12 @@
       "value": "Inställningar"
     }
   ],
+  "label.share": [
+    {
+      "type": 0,
+      "value": "Dela"
+    }
+  ],
   "label.share-url": [
     {
       "type": 0,
@@ -1139,6 +1667,18 @@
     {
       "type": 0,
       "value": "En dag"
+    }
+  ],
+  "label.sms": [
+    {
+      "type": 0,
+      "value": "SMS"
+    }
+  ],
+  "label.sources": [
+    {
+      "type": 0,
+      "value": "Källor"
     }
   ],
   "label.start-step": [
@@ -1159,64 +1699,34 @@
       "value": "Summa"
     }
   ],
+  "label.table": [
+    {
+      "type": 0,
+      "value": "Table"
+    }
+  ],
   "label.tablet": [
     {
       "type": 0,
       "value": "Surfplatta"
     }
   ],
-  "label.team": [
+  "label.tag": [
     {
       "type": 0,
-      "value": "Team"
+      "value": "Tagg"
     }
   ],
-  "label.team-id": [
+  "label.tags": [
     {
       "type": 0,
-      "value": "Team ID"
+      "value": "Taggar"
     }
   ],
-  "label.team-manager": [
+  "label.terms": [
     {
       "type": 0,
-      "value": "Team manager"
-    }
-  ],
-  "label.team-member": [
-    {
-      "type": 0,
-      "value": "Team-medlem"
-    }
-  ],
-  "label.team-name": [
-    {
-      "type": 0,
-      "value": "Team namn"
-    }
-  ],
-  "label.team-owner": [
-    {
-      "type": 0,
-      "value": "Team-ägare"
-    }
-  ],
-  "label.team-view-only": [
-    {
-      "type": 0,
-      "value": "Team view only"
-    }
-  ],
-  "label.team-websites": [
-    {
-      "type": 0,
-      "value": "Team webbplatser"
-    }
-  ],
-  "label.teams": [
-    {
-      "type": 0,
-      "value": "Team"
+      "value": "Villkor"
     }
   ],
   "label.theme": [
@@ -1285,6 +1795,12 @@
       "value": "Spårningskod"
     }
   ],
+  "label.traffic": [
+    {
+      "type": 0,
+      "value": "Traffic"
+    }
+  ],
   "label.transactions": [
     {
       "type": 0,
@@ -1351,28 +1867,10 @@
       "value": "Update"
     }
   ],
-  "label.url": [
-    {
-      "type": 0,
-      "value": "Länk"
-    }
-  ],
-  "label.urls": [
-    {
-      "type": 0,
-      "value": "Länkar"
-    }
-  ],
   "label.user": [
     {
       "type": 0,
       "value": "Användare"
-    }
-  ],
-  "label.user-property": [
-    {
-      "type": 0,
-      "value": "User Property"
     }
   ],
   "label.username": [
@@ -1535,6 +2033,12 @@
       "value": " just nu"
     }
   ],
+  "message.bad-request": [
+    {
+      "type": 0,
+      "value": "Bad request"
+    }
+  ],
   "message.collected-data": [
     {
       "type": 0,
@@ -1597,10 +2101,10 @@
       "value": "?"
     }
   ],
-  "message.delete-team-warning": [
+  "message.delete-org-warning": [
     {
       "type": 0,
-      "value": "Deleting a team will also delete all team websites."
+      "value": "Deleting a org will also delete all org websites."
     }
   ],
   "message.delete-website-warning": [
@@ -1627,6 +2131,12 @@
     {
       "type": 1,
       "value": "url"
+    }
+  ],
+  "message.forbidden": [
+    {
+      "type": 0,
+      "value": "Forbidden"
     }
   ],
   "message.go-to-settings": [
@@ -1664,7 +2174,7 @@
   "message.new-version-available": [
     {
       "type": 0,
-      "value": "En ny version av Umami "
+      "value": "En ny version av Entrolytics "
     },
     {
       "type": 1,
@@ -1693,22 +2203,22 @@
       "value": "Lösenorden matchar inte"
     }
   ],
+  "message.no-org-websites": [
+    {
+      "type": 0,
+      "value": "Det här orget har inga webbplatser."
+    }
+  ],
+  "message.no-orgs": [
+    {
+      "type": 0,
+      "value": "Du har inte skapat några org."
+    }
+  ],
   "message.no-results-found": [
     {
       "type": 0,
       "value": "Inga resultat hittades."
-    }
-  ],
-  "message.no-team-websites": [
-    {
-      "type": 0,
-      "value": "Det här teamet har inga webbplatser."
-    }
-  ],
-  "message.no-teams": [
-    {
-      "type": 0,
-      "value": "Du har inte skapat några team."
     }
   ],
   "message.no-users": [
@@ -1721,6 +2231,36 @@
     {
       "type": 0,
       "value": "Du har inte konfigurerat några webbplatser."
+    }
+  ],
+  "message.not-found": [
+    {
+      "type": 0,
+      "value": "Not found"
+    }
+  ],
+  "message.nothing-selected": [
+    {
+      "type": 0,
+      "value": "Nothing selected."
+    }
+  ],
+  "message.org-already-member": [
+    {
+      "type": 0,
+      "value": "Du är redan medlem i orget."
+    }
+  ],
+  "message.org-not-found": [
+    {
+      "type": 0,
+      "value": "Orget kunde inte hittas."
+    }
+  ],
+  "message.org-websites-info": [
+    {
+      "type": 0,
+      "value": "Webbplatserna kan ses av alla i orget."
     }
   ],
   "message.page-not-found": [
@@ -1755,6 +2295,12 @@
       "value": "Sparat!"
     }
   ],
+  "message.sever-error": [
+    {
+      "type": 0,
+      "value": "Server error"
+    }
+  ],
   "message.share-url": [
     {
       "type": 0,
@@ -1769,52 +2315,40 @@
       "value": "."
     }
   ],
-  "message.team-already-member": [
-    {
-      "type": 0,
-      "value": "Du är redan medlem i teamet."
-    }
-  ],
-  "message.team-not-found": [
-    {
-      "type": 0,
-      "value": "Teamet kunde inte hittas."
-    }
-  ],
-  "message.team-websites-info": [
-    {
-      "type": 0,
-      "value": "Webbplatserna kan ses av alla i teamet."
-    }
-  ],
   "message.tracking-code": [
     {
       "type": 0,
       "value": "Spårningskod"
     }
   ],
-  "message.transfer-team-website-to-user": [
+  "message.transfer-org-website-to-user": [
     {
       "type": 0,
       "value": "Transfer this website to your account?"
     }
   ],
-  "message.transfer-user-website-to-team": [
+  "message.transfer-user-website-to-org": [
     {
       "type": 0,
-      "value": "Select the team to transfer this website to."
+      "value": "Select the org to transfer this website to."
     }
   ],
   "message.transfer-website": [
     {
       "type": 0,
-      "value": "Transfer website ownership to your account or another team."
+      "value": "Transfer website ownership to your account or another org."
     }
   ],
   "message.triggered-event": [
     {
       "type": 0,
       "value": "Triggered event"
+    }
+  ],
+  "message.unauthorized": [
+    {
+      "type": 0,
+      "value": "Unauthorized"
     }
   ],
   "message.user-deleted": [
@@ -1861,12 +2395,6 @@
     {
       "type": 1,
       "value": "device"
-    }
-  ],
-  "message.visitors-dropped-off": [
-    {
-      "type": 0,
-      "value": "Visitors dropped off"
     }
   ]
 }

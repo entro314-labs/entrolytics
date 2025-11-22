@@ -1,20 +1,20 @@
-import prisma from '@/lib/prisma';
-import clickhouse from '@/lib/clickhouse';
-import { runQuery, PRISMA, CLICKHOUSE } from '@/lib/db';
+import clickhouse from '@/lib/clickhouse'
+import { runQuery, DRIZZLE, CLICKHOUSE } from '@/lib/db'
+import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
 
 export async function getSessionData(...args: [websiteId: string, sessionId: string]) {
   return runQuery({
-    [PRISMA]: () => relationalQuery(...args),
+    [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  });
+  })
 }
 
 async function relationalQuery(websiteId: string, sessionId: string) {
-  const { rawQuery } = prisma;
+  // Using rawQuery FROM analytics-utils
 
   return rawQuery(
     `
-    select
+    SELECT
         website_id as "websiteId",
         session_id as "sessionId",
         data_key as "dataKey",
@@ -23,21 +23,21 @@ async function relationalQuery(websiteId: string, sessionId: string) {
         number_value as "numberValue",
         date_value as "dateValue",
         created_at as "createdAt"
-    from session_data
-    where website_id = {{websiteId::uuid}}
-      and session_id = {{sessionId::uuid}}
-    order by data_key asc
+    FROM session_data
+    WHERE website_id = {{websiteId::uuid}}
+      AND session_id = {{sessionId::uuid}}
+    ORDER BY data_key asc
     `,
-    { websiteId, sessionId },
-  );
+    { websiteId, sessionId }
+  )
 }
 
 async function clickhouseQuery(websiteId: string, sessionId: string) {
-  const { rawQuery } = clickhouse;
+  const { rawQuery } = clickhouse
 
   return rawQuery(
     `
-    select
+    SELECT
         website_id as websiteId,
         session_id as sessionId,
         data_key as dataKey,
@@ -46,11 +46,11 @@ async function clickhouseQuery(websiteId: string, sessionId: string) {
         number_value as numberValue,
         date_value as dateValue,
         created_at as createdAt
-    from session_data final
-    where website_id = {websiteId:UUID}
-    and session_id = {sessionId:UUID}
-    order by data_key asc
+    FROM session_data final
+    WHERE website_id = {websiteId:UUID}
+    AND session_id = {sessionId:UUID}
+    ORDER BY data_key asc
     `,
-    { websiteId, sessionId },
-  );
+    { websiteId, sessionId }
+  )
 }

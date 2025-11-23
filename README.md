@@ -319,7 +319,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - [GitHub Issues](https://github.com/entro314-labs/entrolytics/issues)
 - [Documentation](https://entrolytics.click/docs)
-- [Email Support](mailto:hello@entrolytics.click)
+- [Email Support](mailto:hey@entrolytics.click)
 
 ---
 

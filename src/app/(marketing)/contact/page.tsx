@@ -130,7 +130,7 @@ export default function ContactPage() {
                 </div>
                 <h3>Email Us</h3>
                 <p>For general inquiries:</p>
-                <a href="mailto:hello@entrolytics.click">hello@entrolytics.click</a>
+                <a href="mailto:hey@entrolytics.click">hey@entrolytics.click</a>
                 <p className={styles.responseTime}>We respond within 24 hours</p>
               </div>
 

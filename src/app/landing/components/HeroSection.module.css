@@ -17,9 +17,9 @@
   width: 100%;
   height: 100%;
   background:
-    radial-gradient(circle at 20% 20%, rgba(107, 70, 193, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(159, 122, 234, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 50%);
+    radial-gradient(circle at 20% 20%, rgba(20, 122, 243, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(6, 182, 212, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(20, 184, 166, 0.1) 0%, transparent 50%);
   background-size: 200% 200%;
   background-position: 0% 0%;
   z-index: 0;
@@ -34,8 +34,8 @@
   width: 100%;
   height: 100%;
   background-image:
-    linear-gradient(rgba(107, 70, 193, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(107, 70, 193, 0.03) 1px, transparent 1px);
+    linear-gradient(rgba(20, 122, 243, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(20, 122, 243, 0.03) 1px, transparent 1px);
   background-size: 50px 50px;
   z-index: 1;
   opacity: 0.5;
@@ -55,7 +55,7 @@
 .circle3 {
   position: absolute;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(107, 70, 193, 0.1), transparent 70%);
+  background: radial-gradient(circle, rgba(20, 122, 243, 0.1), transparent 70%);
   animation: float 20s ease-in-out infinite;
 }
 
@@ -115,7 +115,7 @@
 }
 
 .gradient {
-  background: linear-gradient(135deg, #6b46c1 0%, #9f7aea 50%, #6366f1 100%);
+  background: var(--marketing-gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -134,7 +134,7 @@
 
 .subtitle {
   font-size: clamp(1.125rem, 2vw, 1.5rem);
-  color: #64748b;
+  color: var(--marketing-text-secondary);
   margin-bottom: 2.5rem;
   line-height: 1.6;
   max-width: 700px;
@@ -164,31 +164,27 @@
 }
 
 .primaryButton {
-  background: linear-gradient(135deg, #6b46c1 0%, #9f7aea 100%);
+  background: var(--marketing-gradient-primary);
   color: white;
-  box-shadow:
-    0 4px 6px rgba(107, 70, 193, 0.2),
-    0 10px 20px rgba(107, 70, 193, 0.15);
+  box-shadow: var(--marketing-shadow-button);
 }
 
 .primaryButton:hover {
   transform: scale(1.05) translateY(-2px);
-  box-shadow:
-    0 6px 12px rgba(107, 70, 193, 0.3),
-    0 15px 30px rgba(107, 70, 193, 0.2);
+  box-shadow: var(--marketing-shadow-button-hover);
 }
 
 .secondaryButton {
-  background: white;
-  color: #6b46c1;
-  border-color: #e2e8f0;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  background: var(--marketing-bg-surface);
+  color: var(--marketing-primary);
+  border-color: var(--marketing-border);
+  box-shadow: var(--marketing-shadow-sm);
 }
 
 .secondaryButton:hover {
   transform: scale(1.05) translateY(-2px);
-  border-color: #6b46c1;
-  box-shadow: 0 4px 8px rgba(107, 70, 193, 0.15);
+  border-color: var(--marketing-primary);
+  box-shadow: 0 4px 8px rgba(20, 122, 243, 0.15);
 }
 
 /* Stats */
@@ -205,9 +201,10 @@
 }
 
 .statValue {
+  font-family: var(--marketing-font-mono);
   font-size: 2.5rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #6b46c1 0%, #9f7aea 100%);
+  background: var(--marketing-gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -216,7 +213,7 @@
 
 .statLabel {
   font-size: 0.875rem;
-  color: #64748b;
+  color: var(--marketing-text-secondary);
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
@@ -269,7 +266,7 @@
 .logo {
   font-size: 1.5rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #6b46c1 0%, #9f7aea 100%);
+  background: var(--marketing-gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -306,11 +303,11 @@
 
 .dateRange {
   padding: 0.5rem 1rem;
-  background: rgba(107, 70, 193, 0.1);
+  background: rgba(20, 122, 243, 0.1);
   border-radius: 0.5rem;
   font-size: 0.875rem;
   font-weight: 600;
-  color: #6b46c1;
+  color: var(--marketing-primary);
 }
 
 /* Metrics Grid */
@@ -331,27 +328,29 @@
 
 .metricCard:hover {
   transform: translateY(-4px);
-  box-shadow: 0 4px 12px rgba(107, 70, 193, 0.15);
-  border-color: rgba(107, 70, 193, 0.2);
+  box-shadow: 0 4px 12px rgba(20, 122, 243, 0.15);
+  border-color: rgba(20, 122, 243, 0.2);
 }
 
 .metricLabel {
   font-size: 0.75rem;
-  color: #64748b;
+  color: var(--marketing-text-secondary);
   letter-spacing: 0.05em;
   text-transform: uppercase;
   margin-bottom: 0.5rem;
 }
 
 .metricValue {
+  font-family: var(--marketing-font-mono);
   font-size: 2rem;
   font-weight: 700;
-  color: #1e293b;
+  color: var(--marketing-text-primary);
   margin-bottom: 0.25rem;
 }
 
 .metricChange,
 .metricChangeNegative {
+  font-family: var(--marketing-font-mono);
   font-size: 0.875rem;
   font-weight: 600;
 }
@@ -393,7 +392,7 @@
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
   .subtitle {
-    color: #94a3b8;
+    color: var(--marketing-text-secondary);
   }
 
   .secondaryButton {
@@ -404,7 +403,7 @@
 
   .secondaryButton:hover {
     background: rgba(255, 255, 255, 0.1);
-    border-color: #9f7aea;
+    border-color: var(--marketing-secondary);
   }
 
   .dashboardInner {
@@ -423,7 +422,7 @@
 
   .metricCard:hover {
     background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(159, 122, 234, 0.3);
+    border-color: rgba(6, 182, 212, 0.3);
   }
 
   .metricValue {

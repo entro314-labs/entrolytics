@@ -151,8 +151,8 @@ export function HeroSection() {
             <svg className={styles.chart} viewBox="0 0 800 200">
               <defs>
                 <linearGradient id="chartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="rgba(107, 70, 193, 0.3)" />
-                  <stop offset="100%" stopColor="rgba(107, 70, 193, 0)" />
+                  <stop offset="0%" stopColor="rgba(20, 122, 243, 0.3)" />
+                  <stop offset="100%" stopColor="rgba(20, 122, 243, 0)" />
                 </linearGradient>
               </defs>
               <path
@@ -168,8 +168,8 @@ export function HeroSection() {
               />
               <defs>
                 <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#6B46C1" />
-                  <stop offset="100%" stopColor="#9F7AEA" />
+                  <stop offset="0%" stopColor="#1e5faa" />
+                  <stop offset="100%" stopColor="#06b6d4" />
                 </linearGradient>
               </defs>
             </svg>

@@ -5,7 +5,7 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: rgba(107, 70, 193, 0.5);
+  background: rgba(20, 122, 243, 0.5);
   pointer-events: none;
   z-index: 9999;
   transform: translate(-50%, -50%);
@@ -16,7 +16,7 @@
 
 .cursor.hovering {
   transform: translate(-50%, -50%) scale(1.5);
-  background: rgba(107, 70, 193, 0.7);
+  background: rgba(20, 122, 243, 0.7);
 }
 
 /* Hide default cursor on landing page */

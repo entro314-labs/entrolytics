@@ -93,7 +93,7 @@ export function CTASection() {
         // Draw particle
         ctx.beginPath()
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
-        ctx.fillStyle = 'rgba(107, 70, 193, 0.6)'
+        ctx.fillStyle = 'rgba(20, 122, 243, 0.6)'
         ctx.fill()
       })
 
@@ -108,7 +108,7 @@ export function CTASection() {
             ctx.beginPath()
             ctx.moveTo(p1.x, p1.y)
             ctx.lineTo(p2.x, p2.y)
-            ctx.strokeStyle = `rgba(107, 70, 193, ${0.2 * (1 - distance / 150)})`
+            ctx.strokeStyle = `rgba(20, 122, 243, ${0.2 * (1 - distance / 150)})`
             ctx.lineWidth = 1
             ctx.stroke()
           }

@@ -11,6 +11,7 @@ const basePath = process.env.BASE_PATH
 const collectApiEndpoint = process.env.COLLECT_API_ENDPOINT
 const edgeMode = process.env.EDGE_MODE
 const edgeUrl = process.env.EDGE_URL
+const enableEdgeProxy = process.env.ENABLE_EDGE_PROXY
 const corsMaxAge = process.env.CORS_MAX_AGE
 const defaultLocale = process.env.DEFAULT_LOCALE
 const forceSSL = process.env.FORCE_SSL
@@ -101,6 +102,14 @@ const headers = [
 ]
 
 const rewrites = []
+
+// Edge proxy for /api/send - routes through edge runtime for lower latency
+if (enableEdgeProxy) {
+  rewrites.push({
+    source: '/api/send',
+    destination: '/api/send-edge',
+  })
+}
 
 if (trackerScriptURL) {
   rewrites.push({

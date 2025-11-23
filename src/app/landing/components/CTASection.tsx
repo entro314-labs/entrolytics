@@ -3,9 +3,14 @@
 import { useEffect, useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { AuthAwareCTA } from './AuthAwareCTA'
+import { MarketingFooter } from '@/components/marketing/MarketingFooter'
 import styles from './CTASection.module.css'
 
-export function CTASection() {
+interface CTASectionProps {
+  showFooter?: boolean
+}
+
+export function CTASection({ showFooter = true }: CTASectionProps) {
   const sectionRef = useRef<HTMLElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const isInView = useInView(sectionRef, { once: true, margin: '-20%' })
@@ -168,59 +173,7 @@ export function CTASection() {
         </motion.div>
       </div>
 
-      <footer className={styles.footer}>
-        <div className={styles.footerContent}>
-          <div className={styles.footerBrand}>
-            <div className={styles.logo}>Entrolytics</div>
-            <p className={styles.footerText}>First-party growth analytics for the edge</p>
-          </div>
-
-          <div className={styles.footerLinks}>
-            <div className={styles.linkColumn}>
-              <h4 className={styles.linkTitle}>Product</h4>
-              <a href="#features" className={styles.link}>
-                Features
-              </a>
-              <a href="#pricing" className={styles.link}>
-                Pricing
-              </a>
-              <a href="#docs" className={styles.link}>
-                Documentation
-              </a>
-            </div>
-
-            <div className={styles.linkColumn}>
-              <h4 className={styles.linkTitle}>Company</h4>
-              <a href="#about" className={styles.link}>
-                About
-              </a>
-              <a href="#blog" className={styles.link}>
-                Blog
-              </a>
-              <a href="#contact" className={styles.link}>
-                Contact
-              </a>
-            </div>
-
-            <div className={styles.linkColumn}>
-              <h4 className={styles.linkTitle}>Legal</h4>
-              <a href="#privacy" className={styles.link}>
-                Privacy Policy
-              </a>
-              <a href="#terms" className={styles.link}>
-                Terms of Service
-              </a>
-              <a href="#gdpr" className={styles.link}>
-                GDPR
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div className={styles.copyright}>
-          © {new Date().getFullYear()} Entrolytics. All rights reserved.
-        </div>
-      </footer>
+      {showFooter && <MarketingFooter />}
     </section>
   )
 }

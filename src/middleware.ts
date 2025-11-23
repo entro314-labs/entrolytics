@@ -10,6 +10,25 @@ const isPublicRoute = createRouteMatcher([
   '/api/webhooks/(.*)',
   '/script.js',
   '/telemetry.js',
+  // Marketing/public pages
+  '/privacy',
+  '/terms',
+  '/cookies',
+  '/gdpr',
+  '/dpa',
+  '/about',
+  '/contact',
+  '/pricing',
+  '/faq',
+  '/changelog',
+  '/features',
+  '/use-cases',
+  '/integrations',
+  '/blog(.*)',
+  '/careers',
+  '/security',
+  '/accessibility',
+  '/sitemap',
 ])
 
 // Define protected routes that require authentication

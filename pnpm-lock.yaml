@@ -39,8 +39,8 @@ importers:
         specifier: ^9.2.4
         version: 9.2.4
       '@entro314labs/entro-zen':
-        specifier: ^1.0.1
-        version: 1.0.1(@babel/core@7.28.5)(@types/react@19.2.6)(babel-plugin-react-compiler@1.0.0)(immer@10.2.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(rollup@4.53.3)(typescript@5.9.3)(use-sync-external-store@1.6.0(react@19.2.0))
+        specifier: ^1.0.2
+        version: 1.0.2(@babel/core@7.28.5)(@types/react@19.2.6)(babel-plugin-react-compiler@1.0.0)(immer@10.2.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(rollup@4.53.3)(typescript@5.9.3)(use-sync-external-store@1.6.0(react@19.2.0))
       '@entro314labs/redis-client':
         specifier: ^1.0.0
         version: 1.0.0
@@ -143,6 +143,9 @@ importers:
       isbot:
         specifier: ^5.1.32
         version: 5.1.32
+      jose:
+        specifier: ^6.1.2
+        version: 6.1.2
       jsonwebtoken:
         specifier: ^9.0.2
         version: 9.0.2
@@ -1685,8 +1688,8 @@ packages:
   '@emnapi/wasi-threads@1.1.0':
     resolution: {integrity: sha512-WI0DdZ8xFSbgMjR1sFsKABJ/C5OnRrjT06JXbZKexJGrDuPTzZdDYfFlsgcCXCyf+suG5QU2e/y1Wo2V/OapLQ==}
 
-  '@entro314labs/entro-zen@1.0.1':
-    resolution: {integrity: sha512-FuzPO3F8XmWCkQtaAGocBADs0JnaDiHNNmKERpn2LjrjHk7B2TU3a9CwP1Ghob7qeNegNUfRLw4ny4EX268G5g==}
+  '@entro314labs/entro-zen@1.0.2':
+    resolution: {integrity: sha512-8YUg+FhYFaS1m5kJ0LcHu09KgfP5TG/1GpCRvTuzuRdqz+DU2A/SObUtoKvaGm55Yu19pevsYhSTMMHK/uagCg==}
     peerDependencies:
       react: ^19.2.0
       react-dom: ^19.2.0
@@ -6401,6 +6404,9 @@ packages:
     resolution: {integrity: sha512-ekilCSN1jwRvIbgeg/57YFh8qQDNbwDb9xT/qu2DAHbFFZUicIl4ygVaAvzveMhMVr3LnpSKTNnwt8PoOfmKhQ==}
     hasBin: true
 
+  jose@6.1.2:
+    resolution: {integrity: sha512-MpcPtHLE5EmztuFIqB0vzHAWJPpmN1E6L4oo+kze56LIs3MyXIj9ZHMDxqOvkP38gBR7K1v3jqd4WU2+nrfONQ==}
+
   js-cookie@3.0.5:
     resolution: {integrity: sha512-cEiJEAEoIbWfCZYKWhVwFuvPX1gETRYPw6LlaTKoxD3s2AkXzkCjnp6h0V77ozyqj0jakteJ4YqDJT830+lVGw==}
     engines: {node: '>=14'}
@@ -10686,7 +10692,7 @@ snapshots:
       tslib: 2.8.1
     optional: true
 
-  '@entro314labs/entro-zen@1.0.1(@babel/core@7.28.5)(@types/react@19.2.6)(babel-plugin-react-compiler@1.0.0)(immer@10.2.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(rollup@4.53.3)(typescript@5.9.3)(use-sync-external-store@1.6.0(react@19.2.0))':
+  '@entro314labs/entro-zen@1.0.2(@babel/core@7.28.5)(@types/react@19.2.6)(babel-plugin-react-compiler@1.0.0)(immer@10.2.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(rollup@4.53.3)(typescript@5.9.3)(use-sync-external-store@1.6.0(react@19.2.0))':
     dependencies:
       '@fontsource/jetbrains-mono': 5.2.8
       '@internationalized/date': 3.10.0
@@ -16130,6 +16136,8 @@ snapshots:
       - ts-node
 
   jiti@2.6.1: {}
+
+  jose@6.1.2: {}
 
   js-cookie@3.0.5: {}
 

@@ -1,0 +1,12 @@
+.main {
+  min-height: 100vh;
+  padding-top: 5rem;
+  background: var(--marketing-gradient-bg-light);
+  font-family: var(--marketing-font-sans);
+}
+
+@media (prefers-color-scheme: dark) {
+  .main {
+    background: var(--marketing-gradient-bg-dark);
+  }
+}

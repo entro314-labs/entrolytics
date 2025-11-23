@@ -1,4 +1,20 @@
 html body {
-  --primary-color: #147af3;
+  /* Edge Blue brand palette */
+  --brand-cyan: #00a1e1;
+  --brand-blue: #147bf3;
+  --brand-indigo: #2e5cf8;
+  --brand-purple: #6025ff;
+
+  /* Semantic colors */
+  --primary-color: var(--brand-blue);
   --primary-font-color: var(--light-color);
+
+  --secondary-color: var(--brand-cyan);
+  --secondary-font-color: var(--light-color);
+
+  --accent-color: var(--brand-indigo);
+  --accent-font-color: var(--light-color);
+
+  --active-color: var(--brand-blue);
+  --active-font-color: var(--light-color);
 }

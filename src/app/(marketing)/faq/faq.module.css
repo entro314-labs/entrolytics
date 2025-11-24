@@ -44,7 +44,9 @@
   font-weight: 500;
   color: var(--marketing-text-secondary);
   text-decoration: none;
-  background: var(--marketing-bg-surface);
+  background: var(--marketing-glass-bg-subtle);
+  backdrop-filter: var(--marketing-glass-blur);
+  -webkit-backdrop-filter: var(--marketing-glass-blur);
   border: 1px solid var(--marketing-border);
   border-radius: 9999px;
   transition: all 0.2s ease;
@@ -82,7 +84,9 @@
 }
 
 .faqItem {
-  background: var(--marketing-bg-surface);
+  background: var(--marketing-glass-bg);
+  backdrop-filter: var(--marketing-glass-blur);
+  -webkit-backdrop-filter: var(--marketing-glass-blur);
   border: 1px solid var(--marketing-border);
   border-radius: 0.75rem;
   overflow: hidden;
@@ -141,6 +145,8 @@
   text-align: center;
   padding: 3rem;
   background: linear-gradient(135deg, rgba(20, 122, 243, 0.05) 0%, rgba(6, 182, 212, 0.05) 100%);
+  backdrop-filter: var(--marketing-glass-blur);
+  -webkit-backdrop-filter: var(--marketing-glass-blur);
   border: 1px solid var(--marketing-border);
   border-radius: 1.5rem;
 }
@@ -167,14 +173,6 @@
 
 /* Dark Mode */
 @media (prefers-color-scheme: dark) {
-  .categoryLink {
-    background: rgba(255, 255, 255, 0.05);
-  }
-
-  .faqItem {
-    background: rgba(26, 26, 26, 0.5);
-  }
-
   .ctaSection {
     background: linear-gradient(135deg, rgba(20, 122, 243, 0.08) 0%, rgba(6, 182, 212, 0.08) 100%);
   }

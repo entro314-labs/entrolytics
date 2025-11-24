@@ -253,7 +253,7 @@ export async function resetWebsite(websiteId: string) {
     .returning()
 
   if (edgeMode) {
-    await redis.client.set(`website:${websiteId}`, JSON.stringify(updatedWebsite))
+    await redis.client.set(`website:${websiteId}`, updatedWebsite)
   }
 
   return updatedWebsite

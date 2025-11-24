@@ -37,7 +37,9 @@
 
 /* Form Styles */
 .contactForm {
-  background: var(--marketing-bg-surface);
+  background: var(--marketing-glass-bg);
+  backdrop-filter: var(--marketing-glass-blur);
+  -webkit-backdrop-filter: var(--marketing-glass-blur);
   border: 1px solid var(--marketing-border);
   border-radius: 1.5rem;
   padding: 2.5rem;
@@ -141,7 +143,9 @@
 
 .infoCard {
   padding: 1.5rem;
-  background: var(--marketing-bg-surface);
+  background: var(--marketing-glass-bg);
+  backdrop-filter: var(--marketing-glass-blur);
+  -webkit-backdrop-filter: var(--marketing-glass-blur);
   border: 1px solid var(--marketing-border);
   border-radius: 1rem;
   transition: all 0.3s ease;
@@ -241,7 +245,9 @@
 /* FAQ Section */
 .faqSection {
   padding: 4rem;
-  background: var(--marketing-bg-surface);
+  background: var(--marketing-glass-bg);
+  backdrop-filter: var(--marketing-glass-blur);
+  -webkit-backdrop-filter: var(--marketing-glass-blur);
   border: 1px solid var(--marketing-border);
   border-radius: 1.5rem;
 }
@@ -300,26 +306,14 @@
 
 /* Dark Mode */
 @media (prefers-color-scheme: dark) {
-  .contactForm {
-    background: rgba(26, 26, 26, 0.5);
-  }
-
   .input,
   .select,
   .textarea {
     background: rgba(0, 0, 0, 0.2);
   }
 
-  .infoCard {
-    background: rgba(26, 26, 26, 0.5);
-  }
-
   .infoCardHighlight {
     background: linear-gradient(135deg, rgba(20, 122, 243, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%);
-  }
-
-  .faqSection {
-    background: rgba(26, 26, 26, 0.5);
   }
 }
 

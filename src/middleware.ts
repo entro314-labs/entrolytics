@@ -1,4 +1,5 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
+import { NextResponse } from 'next/server'
 
 // Define public routes that don't require authentication
 const isPublicRoute = createRouteMatcher([
@@ -56,9 +57,17 @@ const isProtectedApiRoute = createRouteMatcher([
   '/api/pixels(.*)',
 ])
 
+const isOnboardingRoute = createRouteMatcher(['/onboarding(.*)'])
+
 export default clerkMiddleware(async (auth, req) => {
   // Allow public routes to proceed without authentication
   if (isPublicRoute(req)) {
+    return
+  }
+
+  // Allow onboarding routes for authenticated users (check before protected routes)
+  if (isOnboardingRoute(req)) {
+    await auth.protect()
     return
   }
 

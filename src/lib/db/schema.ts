@@ -338,6 +338,55 @@ export const sessionData = pgTable(
   }
 )
 
+export const cliSetupToken = pgTable(
+  'cli_setup_token',
+  {
+    tokenId: uuid('token_id').primaryKey().default(sql`gen_random_uuid()`),
+    token: varchar('token', { length: 128 }).notNull().unique(),
+    // Ownership
+    userId: uuid('user_id').notNull(),
+    websiteId: uuid('website_id').notNull(),
+    orgId: uuid('org_id'),
+    // Token lifecycle
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+    usedAt: timestamp('used_at', { withTimezone: true }),
+    // Metadata
+    purpose: varchar('purpose', { length: 50 }).default('cli-init').notNull(),
+    ipAddress: varchar('ip_address', { length: 45 }),
+    userAgent: varchar('user_agent', { length: 500 }),
+    // Status
+    status: varchar('status', { length: 20 }).default('pending').notNull(),
+  },
+  (table) => {
+    return {
+      tokenIdx: uniqueIndex('cli_setup_token_token_idx').on(table.token),
+      userIdIdx: index('cli_setup_token_user_id_idx').on(table.userId),
+      statusIdx: index('cli_setup_token_status_idx').on(table.status),
+      expiresAtIdx: index('cli_setup_token_expires_at_idx').on(table.expiresAt),
+      websiteIdIdx: index('cli_setup_token_website_id_idx').on(table.websiteId),
+    }
+  }
+)
+
+export const onboardingStep = pgTable(
+  'onboarding_step',
+  {
+    stepId: uuid('step_id').primaryKey().default(sql`gen_random_uuid()`),
+    userId: uuid('user_id').notNull(),
+    step: varchar('step', { length: 50 }).notNull(),
+    action: varchar('action', { length: 50 }).notNull(),
+    metadata: json('metadata'),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => {
+    return {
+      userIdIdx: index('onboarding_step_user_id_idx').on(table.userId),
+      createdAtIdx: index('onboarding_step_created_at_idx').on(table.createdAt),
+    }
+  }
+)
+
 export const user = pgTable(
   'user',
   {
@@ -352,10 +401,21 @@ export const user = pgTable(
     firstName: varchar('first_name', { length: 255 }),
     lastName: varchar('last_name', { length: 255 }),
     imageUrl: varchar('image_url', { length: 2183 }),
+    // Onboarding tracking
+    onboardingCompleted: varchar('onboarding_completed', { length: 5 }).default('false'),
+    onboardingCompletedAt: timestamp('onboarding_completed_at', { withTimezone: true }),
+    onboardingStep: varchar('onboarding_step', { length: 50 }).default('welcome'),
+    onboardingSkipped: varchar('onboarding_skipped', { length: 5 }).default('false'),
+    // Additional context
+    companySize: varchar('company_size', { length: 50 }),
+    industry: varchar('industry', { length: 100 }),
+    useCase: varchar('use_case', { length: 500 }),
+    referralSource: varchar('referral_source', { length: 100 }),
   },
   (table) => {
     return {
       emailIdx: index('user_email_idx').on(table.email),
+      onboardingCompletedIdx: index('user_onboarding_completed_idx').on(table.onboardingCompleted),
     }
   }
 )
@@ -473,6 +533,12 @@ export type NewBoard = typeof board.$inferInsert
 
 export type BoardWidget = typeof boardWidget.$inferSelect
 export type NewBoardWidget = typeof boardWidget.$inferInsert
+
+export type CliSetupToken = typeof cliSetupToken.$inferSelect
+export type NewCliSetupToken = typeof cliSetupToken.$inferInsert
+
+export type OnboardingStep = typeof onboardingStep.$inferSelect
+export type NewOnboardingStep = typeof onboardingStep.$inferInsert
 
 export type EventData = typeof eventData.$inferSelect
 export type NewEventData = typeof eventData.$inferInsert

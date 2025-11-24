@@ -22,9 +22,9 @@ export async function getAccountSubscription(userId: string): Promise<AccountCac
   // Try to get from Redis cache first
   if (redis.client) {
     try {
-      const cached = await redis.client.get(`account:${userId}`)
+      const cached = await redis.client.get<AccountCache>(`account:${userId}`)
       if (cached) {
-        return JSON.parse(cached)
+        return cached
       }
     } catch {
       // Cache miss or error, continue to fetch from Clerk
@@ -48,7 +48,7 @@ export async function getAccountSubscription(userId: string): Promise<AccountCac
     // Cache for 5 minutes
     if (redis.client) {
       try {
-        await redis.client.set(`account:${userId}`, JSON.stringify(account), { EX: CACHE_TTL_SECONDS })
+        await redis.client.set(`account:${userId}`, account, { EX: CACHE_TTL_SECONDS })
       } catch {
         // Cache write failed, continue without caching
       }

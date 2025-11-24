@@ -33,6 +33,11 @@ export async function canViewOrg({ user }: Auth, orgId: string) {
 }
 
 export async function canCreateOrg({ user, grant }: Auth) {
+  // All authenticated users can create orgs (included in ROLE_PERMISSIONS[ROLES.user])
+  if (!user) {
+    return false
+  }
+
   if (edgeMode) {
     return (
       !!grant?.find((a) => a === PERMISSIONS.orgCreate) ||
@@ -40,12 +45,13 @@ export async function canCreateOrg({ user, grant }: Auth) {
     )
   }
 
-  // Platform admin or user with org creation permission
-  if (user?.isAdmin || (await isAdmin())) {
+  // Platform admin always has permission
+  if (user.isAdmin || (await isAdmin())) {
     return true
   }
 
-  return !!user && (await hasClerkPermission(PERMISSIONS.orgCreate))
+  // Regular users have orgCreate permission by default
+  return true
 }
 
 export async function canUpdateOrg({ user, grant }: Auth, orgId: string) {

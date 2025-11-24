@@ -10,22 +10,49 @@ import { useLoginQuery, useConfig } from '@/components/hooks'
 import { useRouter } from 'next/navigation'
 import { LAST_ORG_CONFIG } from '@/lib/constants'
 import { getItem, setItem } from '@/lib/storage'
+import { useUser } from '@clerk/nextjs'
 
 export function App({ children }) {
   const { user, isLoading, error } = useLoginQuery()
+  const { user: clerkUser } = useUser()
   const config = useConfig()
   const pathname = usePathname()
   const router = useRouter()
 
-  // Redirect to last org on initial websites page load
+  // Redirect to onboarding if user hasn't completed it
   useEffect(() => {
-    if (pathname === '/websites') {
-      const lastOrg = getItem(LAST_ORG_CONFIG)
-      if (lastOrg) {
-        router.replace(`/orgs/${lastOrg}/websites`)
+    if (!isLoading && user && clerkUser) {
+      const onboardingCompleted = clerkUser.publicMetadata?.onboardingCompleted === true
+      const onboardingSkipped = clerkUser.publicMetadata?.onboardingSkipped === true
+
+      // If onboarding not completed and not on onboarding page, redirect
+      if (!onboardingCompleted && !onboardingSkipped && !pathname.startsWith('/onboarding')) {
+        router.replace('/onboarding')
+        return
       }
     }
-  }, [pathname, router])
+  }, [user, clerkUser, isLoading, pathname, router])
+
+  // Redirect to last org on initial websites page load (only if onboarding complete)
+  // Also verify user is actually a member of that org
+  useEffect(() => {
+    if (pathname === '/websites' && user && clerkUser) {
+      const onboardingCompleted = clerkUser.publicMetadata?.onboardingCompleted === true
+      const onboardingSkipped = clerkUser.publicMetadata?.onboardingSkipped === true
+
+      // Only redirect to last org if user has completed/skipped onboarding
+      if (onboardingCompleted || onboardingSkipped) {
+        const lastOrg = getItem(LAST_ORG_CONFIG)
+        // Clear the lastOrg from storage - we'll verify it's valid first
+        if (lastOrg) {
+          // TODO: Verify user is member of this org before redirecting
+          // For now, just clear it to prevent 401 errors for new users
+          // They'll need to select an org from the orgs page
+          setItem(LAST_ORG_CONFIG, '')
+        }
+      }
+    }
+  }, [pathname, router, user, clerkUser])
 
   // Remember last visited org
   useEffect(() => {

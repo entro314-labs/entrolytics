@@ -44,10 +44,18 @@ export async function getCurrentUser(): Promise<EnhancedUser | null> {
     let user = await getUserByClerkId(clerkUserId)
 
     // If user doesn't exist in our database, sync from Clerk
+    // With retry logic to handle webhook race conditions
     if (!user) {
       const currentClerkUser = await currentUser()
       if (currentClerkUser) {
+        // Try to sync, but also check if webhook beat us to it
         user = await syncUserFromClerk(currentClerkUser, platformRole)
+
+        // If sync failed, wait a bit and retry (webhook might be processing)
+        if (!user) {
+          await new Promise(resolve => setTimeout(resolve, 1000))
+          user = await getUserByClerkId(clerkUserId)
+        }
       }
     } else {
       // Update role from Clerk's publicMetadata if different
@@ -80,8 +88,15 @@ export async function getCurrentUser(): Promise<EnhancedUser | null> {
  * Creates a new user record with Clerk data using Clerk ID as primary key
  * Now takes role from Clerk's publicMetadata for consistency
  */
-async function syncUserFromClerk(clerkUser: any, platformRole?: PlatformRole): Promise<User> {
+async function syncUserFromClerk(clerkUser: any, platformRole?: PlatformRole): Promise<User | null> {
   try {
+    // First check if webhook already created the user
+    const existingUser = await getUserByClerkId(clerkUser.id)
+    if (existingUser) {
+      log('User already exists (likely from webhook), using existing:', existingUser.userId)
+      return existingUser as User
+    }
+
     const userData = {
       user_id: uuid(), // Generate proper UUID for primary key
       clerk_id: clerkUser.id, // Store Clerk ID in clerk_id field
@@ -110,7 +125,15 @@ async function syncUserFromClerk(clerkUser: any, platformRole?: PlatformRole): P
     return fullUser as User
   } catch (error) {
     log('Error syncing user from Clerk:', error)
-    throw error
+    // Check if it's a duplicate key error (webhook beat us)
+    if (error instanceof Error && error.message.includes('duplicate')) {
+      const user = await getUserByClerkId(clerkUser.id)
+      if (user) {
+        log('User created by webhook during sync attempt, using existing')
+        return user as User
+      }
+    }
+    return null
   }
 }
 

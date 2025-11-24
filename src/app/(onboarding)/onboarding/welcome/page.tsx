@@ -22,7 +22,10 @@ export default function WelcomePage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action: 'update',
-          data: formData,
+          companySize: formData.companySize,
+          industry: formData.industry,
+          useCase: formData.useCase,
+          referralSource: formData.referralSource,
         }),
       })
 

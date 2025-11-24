@@ -41,7 +41,7 @@ export function OrgEditForm({
       {({ setValue }) => {
         return (
           <>
-            <FormField name="id" label={formatMessage(labels.orgId)}>
+            <FormField name="orgId" label={formatMessage(labels.orgId)}>
               <TextField isReadOnly allowCopy />
             </FormField>
             <FormField

@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { db } from '@/lib/db'
 import { website } from '@/lib/db/schema'
 import { and, eq } from 'drizzle-orm'
+import { getUserByClerkId } from '@/queries/drizzle'
 
 const createTokenSchema = z.object({
   websiteId: z.string().uuid(),
@@ -22,22 +23,42 @@ const createTokenSchema = z.object({
 export async function POST(request: NextRequest) {
   try {
     // Check authentication
-    const user = await currentUser()
-    if (!user) {
+    const clerkUser = await currentUser()
+    if (!clerkUser) {
+      console.error('[CLI Token] No authenticated Clerk user')
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    console.log('[CLI Token] Clerk user authenticated:', clerkUser.id)
+
+    // Get database user from Clerk ID
+    const dbUser = await getUserByClerkId(clerkUser.id)
+    if (!dbUser) {
+      console.error('[CLI Token] User not found in database for Clerk ID:', clerkUser.id)
+      return NextResponse.json(
+        { error: 'User not found in database. Please try again in a moment.' },
+        { status: 404 }
+      )
+    }
+
+    console.log('[CLI Token] Database user found:', dbUser.userId)
+
     const body = await request.json()
+    console.log('[CLI Token] Request body:', body)
+
     const validation = createTokenSchema.safeParse(body)
 
     if (!validation.success) {
+      console.error('[CLI Token] Validation failed:', validation.error.issues)
       return NextResponse.json(
-        { error: 'Invalid request', details: validation.error.errors },
+        { error: 'Invalid request', details: validation.error.issues },
         { status: 400 }
       )
     }
 
     const { websiteId, orgId, expiresInMinutes } = validation.data
+
+    console.log('[CLI Token] Checking website access for:', { websiteId, userId: dbUser.userId })
 
     // Verify user has access to this website
     const [websiteRecord] = await db
@@ -46,25 +67,30 @@ export async function POST(request: NextRequest) {
       .where(
         and(
           eq(website.websiteId, websiteId),
-          eq(website.userId, user.id)
+          eq(website.userId, dbUser.userId)
         )
       )
       .limit(1)
 
     if (!websiteRecord) {
+      console.error('[CLI Token] Website not found or access denied:', { websiteId, userId: dbUser.userId })
       return NextResponse.json(
         { error: 'Website not found or access denied' },
         { status: 404 }
       )
     }
 
+    console.log('[CLI Token] Creating token for website:', websiteId)
+
     // Create token
     const token = await CliTokenService.createToken({
-      userId: user.id,
+      userId: dbUser.userId, // Use database UUID, not Clerk ID
       websiteId,
       orgId,
       expiresInMinutes,
     })
+
+    console.log('[CLI Token] Token created successfully:', token.token.substring(0, 10) + '...')
 
     return NextResponse.json({
       token: token.token,
@@ -72,9 +98,9 @@ export async function POST(request: NextRequest) {
       websiteId: token.websiteId,
     })
   } catch (error) {
-    console.error('Error creating CLI token:', error)
+    console.error('[CLI Token] Error creating CLI token:', error)
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Internal server error', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     )
   }
@@ -86,12 +112,21 @@ export async function POST(request: NextRequest) {
  */
 export async function GET() {
   try {
-    const user = await currentUser()
-    if (!user) {
+    const clerkUser = await currentUser()
+    if (!clerkUser) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const tokens = await CliTokenService.getUserTokens(user.id)
+    // Get database user from Clerk ID
+    const dbUser = await getUserByClerkId(clerkUser.id)
+    if (!dbUser) {
+      return NextResponse.json(
+        { error: 'User not found in database' },
+        { status: 404 }
+      )
+    }
+
+    const tokens = await CliTokenService.getUserTokens(dbUser.userId)
 
     return NextResponse.json({
       tokens: tokens.map(token => ({

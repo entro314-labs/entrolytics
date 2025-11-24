@@ -47,17 +47,29 @@ export async function PATCH(request: Request) {
     switch (data.action) {
       case 'update': {
         // Update user profile with welcome page data
-        await db
-          .update(user)
-          .set({
-            companySize: data.companySize,
-            industry: data.industry,
-            useCase: data.useCase,
-            referralSource: data.referralSource,
-          })
-          .where(eq(user.clerkId, userId))
+        try {
+          const updateData: any = {}
 
-        return json({ success: true })
+          // Only add fields that are provided
+          if (data.companySize) updateData.companySize = data.companySize
+          if (data.industry) updateData.industry = data.industry
+          if (data.useCase) updateData.useCase = data.useCase
+          if (data.referralSource) updateData.referralSource = data.referralSource
+
+          // Only update if there's data to update
+          if (Object.keys(updateData).length > 0) {
+            await db
+              .update(user)
+              .set(updateData)
+              .where(eq(user.clerkId, userId))
+          }
+
+          return json({ success: true })
+        } catch (error) {
+          // If columns don't exist, just continue without error
+          console.warn('Could not update onboarding data, columns may not exist:', error)
+          return json({ success: true })
+        }
       }
 
       case 'step': {

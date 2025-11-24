@@ -65,15 +65,17 @@ export default clerkMiddleware(async (auth, req) => {
     return
   }
 
-  // Allow onboarding routes for authenticated users (check before protected routes)
+  // Protect onboarding routes - must be authenticated
   if (isOnboardingRoute(req)) {
     await auth.protect()
     return
   }
 
-  // Protect page routes (redirect to sign-in)
+  // For protected page routes, check authentication
+  // Note: Onboarding redirect is handled client-side in App.tsx for better UX
   if (isProtectedRoute(req)) {
     await auth.protect()
+    return
   }
 
   // Protect API routes (return 401 for unauthenticated requests)

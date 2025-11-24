@@ -19,6 +19,11 @@ export async function GET(request: Request) {
     return error()
   }
 
+  if (!auth?.user) {
+    console.error('[API /orgs GET] Auth user not found')
+    return unauthorized('User authentication required')
+  }
+
   const filters = await getQueryFilters(query)
 
   // If user is admin, return all orgs, otherwise return user's orgs
@@ -26,7 +31,7 @@ export async function GET(request: Request) {
     const orgs = await getOrgs({}, filters)
     return json(orgs)
   } else {
-    const orgs = await getUserOrgs(auth?.user?.userId, filters)
+    const orgs = await getUserOrgs(auth.user.userId, filters)
     return json(orgs)
   }
 }
@@ -40,30 +45,49 @@ export async function POST(request: Request) {
     const { auth, body, error } = await parseRequest(request, schema)
 
     if (error) {
+      console.error('[API /orgs POST] Request parsing error')
       return error()
     }
 
+    if (!auth?.user) {
+      console.error('[API /orgs POST] Auth user not found')
+      return unauthorized('User authentication failed. Please sign in again.')
+    }
+
+    console.log('[API /orgs POST] User authenticated:', {
+      userId: auth.user.userId,
+      clerkId: auth.user.clerkId,
+      email: auth.user.email,
+    })
+
     if (!(await canCreateOrg(auth))) {
-      return unauthorized()
+      console.error('[API /orgs POST] User lacks permission to create org')
+      return unauthorized('You do not have permission to create organizations')
     }
 
     const { name } = body
+    const orgId = uuid()
+    const accessCode = `org_${getRandomChars(16)}`
+
+    console.log('[API /orgs POST] Creating org:', { orgId, name, accessCode })
 
     const result = await createOrg(
       {
-        id: uuid(),
+        id: orgId,
         name,
-        access_code: `org_${getRandomChars(16)}`,
+        access_code: accessCode,
       },
       auth.user.userId
     )
 
-    // createOrg returns [newOrg, newOrgUser], we want just the org
-    const [org] = result
+    // createOrg returns [newOrg, newOrgUser] tuple
+    const newOrg = result[0]
 
-    return json(org)
+    console.log('[API /orgs POST] Org created successfully:', { orgId, name })
+
+    return json(newOrg)
   } catch (err) {
-    console.error('Error creating org:', err)
+    console.error('[API /orgs POST] Error creating org:', err)
     return new Response(
       JSON.stringify({
         error: 'Internal server error',

@@ -8,7 +8,7 @@ export async function findOrg(orgId: string, options: { includeMembers?: boolean
   const { includeMembers } = options
 
   if (includeMembers) {
-    return db
+    const rows = await db
       .select({
         // Flatten org fields
         orgId: org.orgId,
@@ -32,6 +32,41 @@ export async function findOrg(orgId: string, options: { includeMembers?: boolean
       .leftJoin(orgUser, eq(org.orgId, orgUser.orgId))
       .leftJoin(user, eq(orgUser.userId, user.userId))
       .where(eq(org.orgId, orgId))
+
+    if (!rows || rows.length === 0) {
+      return null
+    }
+
+    // Transform flattened rows into single org object with members array
+    const firstRow = rows[0]
+    const orgData = {
+      id: firstRow.orgId,
+      orgId: firstRow.orgId,
+      name: firstRow.name,
+      accessCode: firstRow.accessCode,
+      createdAt: firstRow.createdAt,
+      updatedAt: firstRow.updatedAt,
+      deletedAt: firstRow.deletedAt,
+      logoUrl: firstRow.logoUrl,
+      members: rows
+        .filter((row) => row.memberUserId) // Only include rows with actual members
+        .map((row) => ({
+          orgUserId: row.memberOrgUserId,
+          userId: row.memberUserId,
+          role: row.memberRole,
+          createdAt: row.memberCreatedAt,
+          updatedAt: row.memberUpdatedAt,
+          user: {
+            id: row.memberUserId,
+            userId: row.memberUserId,
+            displayName: row.memberUserDisplayName,
+            email: row.memberUserEmail,
+            username: row.memberUserDisplayName || row.memberUserEmail,
+          },
+        })),
+    }
+
+    return orgData
   }
 
   return db

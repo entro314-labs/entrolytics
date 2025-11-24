@@ -32,17 +32,13 @@ export function OrgsTable({
         {(row: any) => <Link href={renderUrl(`/settings/orgs/${row.orgId}`)}>{row.name}</Link>}
       </DataColumn>
       <DataColumn id="owner" label={formatMessage(labels.owner)}>
-        {(row: any) =>
-          Array.isArray(row?.members)
-            ? row.members.find(({ role }) => role === ROLES.orgOwner)?.user?.username
-            : null
-        }
+        {(row: any) => row.userDisplayName || row.userEmail || '-'}
       </DataColumn>
       <DataColumn id="websites" label={formatMessage(labels.websites)} align="end">
-        {(row: any) => row?._count?.websites}
+        {(row: any) => row.websiteCount || 0}
       </DataColumn>
       <DataColumn id="members" label={formatMessage(labels.members)} align="end">
-        {(row: any) => row?._count?.members}
+        {(row: any) => row.memberCount || 0}
       </DataColumn>
       {showActions ? (
         <DataColumn id="action" label=" " align="end">

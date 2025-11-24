@@ -91,10 +91,28 @@ export async function getOrgUsers(
 
   // Apply pagination and ordering
   const offset = (page - 1) * pageSize
-  const data = await query
+  const rawData = await query
     .orderBy(sortDescending ? desc(orgUser[orderBy]) : asc(orgUser[orderBy]))
     .limit(pageSize)
     .offset(offset)
+
+  // Transform flattened data into nested structure
+  const data = rawData.map(row => ({
+    orgUserId: row.orgUserId,
+    orgId: row.orgId,
+    userId: row.userId,
+    role: row.role,
+    createdAt: row.createdAt,
+    updatedAt: row.updatedAt,
+    user: {
+      userId: row.userId,
+      displayName: row.userDisplayName,
+      email: row.userEmail,
+      firstName: row.userFirstName,
+      lastName: row.userLastName,
+      imageUrl: row.userImageUrl,
+    },
+  }))
 
   return {
     data,

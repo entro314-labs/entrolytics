@@ -1,0 +1,173 @@
+{
+  "id": "0005_add_onboarding_tables",
+  "prevId": "0004_clumsy_the_fallen",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.cli_setup_token": {
+      "name": "cli_setup_token",
+      "schema": "",
+      "columns": {
+        "token_id": {
+          "name": "token_id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "token": {
+          "name": "token",
+          "type": "varchar(128)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "website_id": {
+          "name": "website_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "used_at": {
+          "name": "used_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "purpose": {
+          "name": "purpose",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'cli-init'"
+        },
+        "ip_address": {
+          "name": "ip_address",
+          "type": "varchar(45)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "user_agent": {
+          "name": "user_agent",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'pending'"
+        }
+      },
+      "indexes": {
+        "cli_setup_token_token_idx": {
+          "name": "cli_setup_token_token_idx",
+          "columns": ["token"],
+          "isUnique": true
+        },
+        "cli_setup_token_user_id_idx": {
+          "name": "cli_setup_token_user_id_idx",
+          "columns": ["user_id"],
+          "isUnique": false
+        },
+        "cli_setup_token_status_idx": {
+          "name": "cli_setup_token_status_idx",
+          "columns": ["status"],
+          "isUnique": false
+        },
+        "cli_setup_token_expires_at_idx": {
+          "name": "cli_setup_token_expires_at_idx",
+          "columns": ["expires_at"],
+          "isUnique": false
+        },
+        "cli_setup_token_website_id_idx": {
+          "name": "cli_setup_token_website_id_idx",
+          "columns": ["website_id"],
+          "isUnique": false
+        }
+      }
+    },
+    "public.onboarding_step": {
+      "name": "onboarding_step",
+      "schema": "",
+      "columns": {
+        "step_id": {
+          "name": "step_id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "step": {
+          "name": "step",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "action": {
+          "name": "action",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "metadata": {
+          "name": "metadata",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {
+        "onboarding_step_user_id_idx": {
+          "name": "onboarding_step_user_id_idx",
+          "columns": ["user_id"],
+          "isUnique": false
+        },
+        "onboarding_step_created_at_idx": {
+          "name": "onboarding_step_created_at_idx",
+          "columns": ["created_at"],
+          "isUnique": false
+        }
+      }
+    }
+  }
+}

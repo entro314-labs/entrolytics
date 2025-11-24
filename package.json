@@ -33,6 +33,7 @@
     "db:migrate": "drizzle-kit migrate",
     "db:generate": "drizzle-kit generate",
     "db:studio": "drizzle-kit studio",
+    "migrate:onboarding": "node scripts/apply-onboarding-migration.js",
     "check-db": "node scripts/check-db.js",
     "check-env": "node scripts/check-env.js",
     "copy-db-files": "node scripts/copy-db-files.js",

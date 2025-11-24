@@ -29,6 +29,20 @@
       "when": 1763780774605,
       "tag": "0004_add_board_widget_table",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1763943387698,
+      "tag": "0004_clumsy_the_fallen",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1732444800000,
+      "tag": "0005_add_onboarding_tables",
+      "breakpoints": true
     }
   ]
 }

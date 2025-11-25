@@ -1,19 +1,19 @@
-import { useLoginQuery, useMessages, useModified } from '@/components/hooks'
-import { useRouter } from 'next/navigation'
-import { Button, Icon, Modal, DialogTrigger, Dialog, Text } from '@entro314labs/entro-zen'
-import { LogOut } from '@/components/icons'
-import { OrgLeaveForm } from './OrgLeaveForm'
+import { Button, Dialog, DialogTrigger, Icon, Modal, Text } from '@entro314labs/entro-zen';
+import { useRouter } from 'next/navigation';
+import { useLoginQuery, useMessages, useModified } from '@/components/hooks';
+import { LogOut } from '@/components/icons';
+import { OrgLeaveForm } from './OrgLeaveForm';
 
 export function OrgLeaveButton({ orgId, orgName }: { orgId: string; orgName: string }) {
-  const { formatMessage, labels } = useMessages()
-  const router = useRouter()
-  const { user } = useLoginQuery()
-  const { touch } = useModified()
+  const { formatMessage, labels } = useMessages();
+  const router = useRouter();
+  const { user } = useLoginQuery();
+  const { touch } = useModified();
 
   const handleLeave = async () => {
-    touch('orgs')
-    router.push('/settings/orgs')
-  }
+    touch('orgs');
+    router.push('/settings/orgs');
+  };
 
   return (
     <DialogTrigger>
@@ -37,5 +37,5 @@ export function OrgLeaveButton({ orgId, orgName }: { orgId: string; orgName: str
         </Dialog>
       </Modal>
     </DialogTrigger>
-  )
+  );
 }

@@ -1,17 +1,17 @@
-import clickhouse from '@/lib/clickhouse'
-import { EVENT_COLUMNS } from '@/lib/constants'
-import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
-import { getTimestampDiffSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
-import { QueryFilters } from '@/lib/types'
+import { getTimestampDiffSQL, parseFilters, rawQuery } from '@/lib/analytics-utils';
+import clickhouse from '@/lib/clickhouse';
+import { EVENT_COLUMNS } from '@/lib/constants';
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db';
+import type { QueryFilters } from '@/lib/types';
 
-const FUNCTION_NAME = 'getWebsiteStats'
+const FUNCTION_NAME = 'getWebsiteStats';
 
 export interface WebsiteStatsData {
-  pageviews: number
-  visitors: number
-  visits: number
-  bounces: number
-  totaltime: number
+  pageviews: number;
+  visitors: number;
+  visits: number;
+  bounces: number;
+  totaltime: number;
 }
 
 export async function getWebsiteStats(
@@ -20,17 +20,17 @@ export async function getWebsiteStats(
   return runQuery({
     [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  })
+  });
 }
 
 async function relationalQuery(
   websiteId: string,
-  filters: QueryFilters
+  filters: QueryFilters,
 ): Promise<WebsiteStatsData[]> {
   const { filterQuery, joinSessionQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
-  })
+  });
 
   return rawQuery(
     `
@@ -58,26 +58,26 @@ async function relationalQuery(
     ) as t
     `,
     queryParams,
-    FUNCTION_NAME
-  )
+    FUNCTION_NAME,
+  );
 }
 
 async function clickhouseQuery(
   websiteId: string,
-  filters: QueryFilters
+  filters: QueryFilters,
 ): Promise<WebsiteStatsData[]> {
-  const { rawQuery, parseFilters } = clickhouse
+  const { rawQuery, parseFilters } = clickhouse;
   const { filterQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
-  })
+  });
 
-  let sql = ''
+  let sql = '';
 
   if (
     filters &&
     typeof filters === 'object' &&
-    EVENT_COLUMNS.some((item) => Object.keys(filters).includes(item))
+    EVENT_COLUMNS.some(item => Object.keys(filters).includes(item))
   ) {
     sql = `
     select
@@ -101,7 +101,7 @@ async function clickhouseQuery(
         ${filterQuery}
       group by session_id, visit_id
     ) as t;
-    `
+    `;
   } else {
     sql = `
     select
@@ -124,8 +124,8 @@ async function clickhouseQuery(
       ${filterQuery}
       group by session_id, visit_id
     ) as t;
-    `
+    `;
   }
 
-  return rawQuery(sql, queryParams, FUNCTION_NAME).then((result) => result?.[0])
+  return rawQuery(sql, queryParams, FUNCTION_NAME).then(result => result?.[0]);
 }

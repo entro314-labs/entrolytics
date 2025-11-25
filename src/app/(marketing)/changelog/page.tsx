@@ -1,13 +1,13 @@
-import { Metadata } from 'next'
-import { MarketingLayout } from '@/components/marketing'
-import styles from './changelog.module.css'
-import contentStyles from '@/components/marketing/ContentPage.module.css'
-import Link from 'next/link'
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { MarketingLayout } from '@/components/marketing';
+import contentStyles from '@/components/marketing/ContentPage.module.css';
+import styles from './changelog.module.css';
 
 export const metadata: Metadata = {
   title: 'Changelog | Entrolytics',
-  description: 'See what\'s new in Entrolytics. Track new features, improvements, and fixes.',
-}
+  description: "See what's new in Entrolytics. Track new features, improvements, and fixes.",
+};
 
 const releases = [
   {
@@ -18,12 +18,14 @@ const releases = [
       {
         type: 'feature',
         title: 'Custom Dashboards',
-        description: 'Create personalized dashboards with drag-and-drop widgets. Save and share your custom views.',
+        description:
+          'Create personalized dashboards with drag-and-drop widgets. Save and share your custom views.',
       },
       {
         type: 'feature',
         title: 'Revenue Tracking',
-        description: 'Track purchases and revenue with e-commerce integrations. Attribute revenue to campaigns and sources.',
+        description:
+          'Track purchases and revenue with e-commerce integrations. Attribute revenue to campaigns and sources.',
       },
       {
         type: 'improvement',
@@ -45,12 +47,14 @@ const releases = [
       {
         type: 'feature',
         title: 'Funnel Analysis',
-        description: 'Track user journeys through multi-step funnels. Identify where users drop off and optimize conversion.',
+        description:
+          'Track user journeys through multi-step funnels. Identify where users drop off and optimize conversion.',
       },
       {
         type: 'feature',
         title: 'API v2',
-        description: 'New REST API with improved performance, better documentation, and GraphQL support.',
+        description:
+          'New REST API with improved performance, better documentation, and GraphQL support.',
       },
       {
         type: 'improvement',
@@ -77,7 +81,8 @@ const releases = [
       {
         type: 'feature',
         title: 'Conversion Pixels',
-        description: 'Track conversions across marketing channels with lightweight conversion pixels.',
+        description:
+          'Track conversions across marketing channels with lightweight conversion pixels.',
       },
       {
         type: 'improvement',
@@ -145,33 +150,33 @@ const releases = [
       },
     ],
   },
-]
+];
 
 const getTypeColor = (type: string) => {
   switch (type) {
     case 'feature':
-      return styles.typeFeature
+      return styles.typeFeature;
     case 'improvement':
-      return styles.typeImprovement
+      return styles.typeImprovement;
     case 'fix':
-      return styles.typeFix
+      return styles.typeFix;
     default:
-      return ''
+      return '';
   }
-}
+};
 
 const getTypeLabel = (type: string) => {
   switch (type) {
     case 'feature':
-      return 'New'
+      return 'New';
     case 'improvement':
-      return 'Improved'
+      return 'Improved';
     case 'fix':
-      return 'Fixed'
+      return 'Fixed';
     default:
-      return type
+      return type;
   }
-}
+};
 
 export default function ChangelogPage() {
   return (
@@ -267,5 +272,5 @@ export default function ChangelogPage() {
         </div>
       </div>
     </MarketingLayout>
-  )
+  );
 }

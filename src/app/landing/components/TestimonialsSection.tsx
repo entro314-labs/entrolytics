@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
-import { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
-import styles from './TestimonialsSection.module.css'
+import { motion, useInView } from 'framer-motion';
+import { useRef } from 'react';
+import styles from './TestimonialsSection.module.css';
 
 const testimonials = [
   {
@@ -45,11 +45,11 @@ const testimonials = [
       'The self-hosted option is a game-changer. Full control over our data, amazing performance, and the team collaboration features are top-notch.',
     rating: 5,
   },
-]
+];
 
 export function TestimonialsSection() {
-  const sectionRef = useRef<HTMLElement>(null)
-  const isInView = useInView(sectionRef, { once: true, margin: '-20%' })
+  const sectionRef = useRef<HTMLElement>(null);
+  const isInView = useInView(sectionRef, { once: true, margin: '-20%' });
 
   return (
     <section id="testimonials" ref={sectionRef} className={styles.section}>
@@ -134,5 +134,5 @@ export function TestimonialsSection() {
         </motion.div>
       </div>
     </section>
-  )
+  );
 }

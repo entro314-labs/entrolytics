@@ -1,18 +1,18 @@
 import {
-  Form,
-  FormField,
-  TextField,
-  Grid,
-  FormButtons,
-  FormSubmitButton,
   Button,
-  Loading,
   Column,
+  Form,
+  FormButtons,
+  FormField,
+  FormSubmitButton,
+  Grid,
   Label,
-} from '@entro314labs/entro-zen'
-import { useMessages, useReportQuery, useUpdateQuery } from '@/components/hooks'
-import { LookupField } from '@/components/input/LookupField'
-import { ActionSelect } from '@/components/input/ActionSelect'
+  Loading,
+  TextField,
+} from '@entro314labs/entro-zen';
+import { useMessages, useReportQuery, useUpdateQuery } from '@/components/hooks';
+import { ActionSelect } from '@/components/input/ActionSelect';
+import { LookupField } from '@/components/input/LookupField';
 
 export function GoalEditForm({
   id,
@@ -20,38 +20,38 @@ export function GoalEditForm({
   onSave,
   onClose,
 }: {
-  id?: string
-  websiteId: string
-  onSave?: () => void
-  onClose?: () => void
+  id?: string;
+  websiteId: string;
+  onSave?: () => void;
+  onClose?: () => void;
 }) {
-  const { formatMessage, labels } = useMessages()
-  const { data } = useReportQuery(id)
-  const { mutateAsync, error, isPending, touch } = useUpdateQuery(`/reports${id ? `/${id}` : ''}`)
+  const { formatMessage, labels } = useMessages();
+  const { data } = useReportQuery(id);
+  const { mutateAsync, error, isPending, touch } = useUpdateQuery(`/reports${id ? `/${id}` : ''}`);
 
   const handleSubmit = async (data: any) => {
     await mutateAsync(data, {
       onSuccess: async () => {
-        touch('reports')
-        onSave?.()
-        onClose?.()
+        touch('reports');
+        onSave?.();
+        onClose?.();
       },
-    })
-  }
+    });
+  };
 
   if (id && !data) {
-    return <Loading placement="absolute" />
+    return <Loading placement="absolute" />;
   }
 
   const defaultValues = {
     name: '',
     parameters: { type: 'path', value: '' },
-  }
+  };
 
   return (
     <Form onSubmit={handleSubmit} error={error?.message} defaultValues={data || defaultValues}>
       {({ watch }) => {
-        const type = watch('parameters.type')
+        const type = watch('parameters.type');
 
         return (
           <>
@@ -79,7 +79,7 @@ export function GoalEditForm({
                     rules={{ required: formatMessage(labels.required) }}
                   >
                     {({ field }) => {
-                      return <LookupField websiteId={websiteId} type={type} {...field} />
+                      return <LookupField websiteId={websiteId} type={type} {...field} />;
                     }}
                   </FormField>
                 </Column>
@@ -93,8 +93,8 @@ export function GoalEditForm({
               <FormSubmitButton>{formatMessage(labels.save)}</FormSubmitButton>
             </FormButtons>
           </>
-        )
+        );
       }}
     </Form>
-  )
+  );
 }

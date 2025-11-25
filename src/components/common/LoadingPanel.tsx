@@ -1,18 +1,18 @@
-import { ReactNode } from 'react'
-import { Loading, Column, type ColumnProps } from '@entro314labs/entro-zen'
-import { ErrorMessage } from '@/components/common/ErrorMessage'
-import { Empty } from '@/components/common/Empty'
+import { Column, type ColumnProps, Loading } from '@entro314labs/entro-zen';
+import type { ReactNode } from 'react';
+import { Empty } from '@/components/common/Empty';
+import { ErrorMessage } from '@/components/common/ErrorMessage';
 
 export interface LoadingPanelProps extends ColumnProps {
-  data?: any
-  error?: Error
-  isEmpty?: boolean
-  isLoading?: boolean
-  isFetching?: boolean
-  loadingIcon?: 'dots' | 'spinner'
-  loadingPlacement?: 'center' | 'inline' | 'absolute'
-  renderEmpty?: () => ReactNode
-  children: ReactNode
+  data?: any;
+  error?: Error;
+  isEmpty?: boolean;
+  isLoading?: boolean;
+  isFetching?: boolean;
+  loadingIcon?: 'dots' | 'spinner';
+  loadingPlacement?: 'center' | 'inline' | 'absolute';
+  renderEmpty?: () => ReactNode;
+  children: ReactNode;
 }
 
 export function LoadingPanel({
@@ -27,10 +27,10 @@ export function LoadingPanel({
   children,
   ...props
 }: LoadingPanelProps) {
-  const empty = isEmpty ?? checkEmpty(data)
+  const empty = isEmpty ?? checkEmpty(data);
 
   // Defensive guard: if data becomes null/undefined while not loading, keep showing loading
-  const isActuallyLoading = isLoading || isFetching || (!data && !error)
+  const isActuallyLoading = isLoading || isFetching || (!data && !error);
 
   return (
     <>
@@ -50,24 +50,24 @@ export function LoadingPanel({
       {/* Show main content when data exists and stable */}
       {!isActuallyLoading && !error && !empty && data && children}
     </>
-  )
+  );
 }
 
 function checkEmpty(data: any) {
-  if (!data) return true
+  if (!data) return true;
 
   // Handle PageResult objects (has data array and pagination info)
   if (typeof data === 'object' && 'data' in data && Array.isArray(data.data)) {
-    return data.data.length <= 0
+    return data.data.length <= 0;
   }
 
   if (Array.isArray(data)) {
-    return data.length <= 0
+    return data.length <= 0;
   }
 
   if (typeof data === 'object') {
-    return Object.keys(data).length <= 0
+    return Object.keys(data).length <= 0;
   }
 
-  return !data
+  return !data;
 }

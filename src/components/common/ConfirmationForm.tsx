@@ -1,15 +1,15 @@
-import { ReactNode } from 'react'
-import { Box, Button, FormSubmitButton, Form, FormButtons } from '@entro314labs/entro-zen'
-import { useMessages } from '@/components/hooks'
+import { Box, Button, Form, FormButtons, FormSubmitButton } from '@entro314labs/entro-zen';
+import type { ReactNode } from 'react';
+import { useMessages } from '@/components/hooks';
 
 export interface ConfirmationFormProps {
-  message: ReactNode
-  buttonLabel?: ReactNode
-  buttonVariant?: 'primary' | 'quiet' | 'danger'
-  isLoading?: boolean
-  error?: string | Error
-  onConfirm?: () => void
-  onClose?: () => void
+  message: ReactNode;
+  buttonLabel?: ReactNode;
+  buttonVariant?: 'primary' | 'quiet' | 'danger';
+  isLoading?: boolean;
+  error?: string | Error;
+  onConfirm?: () => void;
+  onClose?: () => void;
 }
 
 export function ConfirmationForm({
@@ -21,7 +21,7 @@ export function ConfirmationForm({
   onConfirm,
   onClose,
 }: ConfirmationFormProps) {
-  const { formatMessage, labels } = useMessages()
+  const { formatMessage, labels } = useMessages();
 
   return (
     <Form onSubmit={onConfirm} error={error}>
@@ -38,5 +38,5 @@ export function ConfirmationForm({
         </FormSubmitButton>
       </FormButtons>
     </Form>
-  )
+  );
 }

@@ -7,14 +7,14 @@ import {
   MenuTrigger,
   Popover,
   Text,
-} from '@entro314labs/entro-zen'
-import { Fragment } from 'react'
-import { MoreVertical as More, Share, Edit } from '@/components/icons'
-import { useMessages, useNavigation } from '@/components/hooks'
+} from '@entro314labs/entro-zen';
+import { Fragment } from 'react';
+import { useMessages, useNavigation } from '@/components/hooks';
+import { Edit, MoreVertical as More, Share } from '@/components/icons';
 
 export function WebsiteMenu({ websiteId }: { websiteId: string }) {
-  const { formatMessage, labels } = useMessages()
-  const { router, updateParams, renderUrl } = useNavigation()
+  const { formatMessage, labels } = useMessages();
+  const { router, updateParams, renderUrl } = useNavigation();
 
   const menuItems = [
     { id: 'share', label: formatMessage(labels.share), icon: <Share /> },
@@ -24,15 +24,15 @@ export function WebsiteMenu({ websiteId }: { websiteId: string }) {
       icon: <Edit />,
       seperator: true,
     },
-  ]
+  ];
 
   const handleAction = (id: any) => {
     if (id === 'compare') {
-      router.push(updateParams({ compare: 'prev' }))
+      router.push(updateParams({ compare: 'prev' }));
     } else if (id === 'edit') {
-      router.push(renderUrl(`/settings/websites/${websiteId}`))
+      router.push(renderUrl(`/settings/websites/${websiteId}`));
     }
-  }
+  };
 
   return (
     <MenuTrigger>
@@ -52,10 +52,10 @@ export function WebsiteMenu({ websiteId }: { websiteId: string }) {
                   <Text>{label}</Text>
                 </MenuItem>
               </Fragment>
-            )
+            );
           })}
         </Menu>
       </Popover>
     </MenuTrigger>
-  )
+  );
 }

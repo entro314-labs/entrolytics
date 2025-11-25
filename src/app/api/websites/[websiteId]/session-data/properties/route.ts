@@ -1,38 +1,38 @@
-import { z } from 'zod'
-import { getQueryFilters, parseRequest } from '@/lib/request'
-import { unauthorized, json } from '@/lib/response'
-import { canViewWebsite } from '@/validations'
-import { getSessionDataProperties } from '@/queries/sql'
+import { z } from 'zod';
+import { getQueryFilters, parseRequest } from '@/lib/request';
+import { json, unauthorized } from '@/lib/response';
+import { getSessionDataProperties } from '@/queries/sql';
+import { canViewWebsite } from '@/validations';
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ websiteId: string }> }
+  { params }: { params: Promise<{ websiteId: string }> },
 ) {
   const schema = z.object({
     startAt: z.coerce.number().int(),
     endAt: z.coerce.number().int(),
     propertyName: z.string().optional(),
-  })
+  });
 
-  const { auth, query, error } = await parseRequest(request, schema)
+  const { auth, query, error } = await parseRequest(request, schema);
 
   if (error) {
-    return error()
+    return error();
   }
 
-  const { websiteId } = await params
+  const { websiteId } = await params;
 
   if (!(await canViewWebsite(auth, websiteId))) {
-    return unauthorized()
+    return unauthorized();
   }
 
-  const { propertyName } = query
-  const filters = await getQueryFilters(query, websiteId)
+  const { propertyName } = query;
+  const filters = await getQueryFilters(query, websiteId);
 
   const data = await getSessionDataProperties(websiteId, {
     ...filters,
     propertyName,
-  })
+  });
 
-  return json(data)
+  return json(data);
 }

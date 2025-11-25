@@ -1,23 +1,23 @@
-import 'dotenv/config'
-import { createRequire } from 'module'
+import 'dotenv/config';
+import { createRequire } from 'module';
 
-const require = createRequire(import.meta.url)
+const require = createRequire(import.meta.url);
 
-const pkg = require('./package.json')
+const pkg = require('./package.json');
 
-const TRACKER_SCRIPT = '/script.js'
+const TRACKER_SCRIPT = '/script.js';
 
-const basePath = process.env.BASE_PATH
-const collectApiEndpoint = process.env.COLLECT_API_ENDPOINT
-const edgeMode = process.env.EDGE_MODE
-const edgeUrl = process.env.EDGE_URL
-const enableEdgeProxy = process.env.ENABLE_EDGE_PROXY
-const corsMaxAge = process.env.CORS_MAX_AGE
-const defaultLocale = process.env.DEFAULT_LOCALE
-const forceSSL = process.env.FORCE_SSL
-const frameAncestors = process.env.ALLOWED_FRAME_URLS ?? ''
-const trackerScriptName = process.env.TRACKER_SCRIPT_NAME
-const trackerScriptURL = process.env.TRACKER_SCRIPT_URL
+const basePath = process.env.BASE_PATH;
+const collectApiEndpoint = process.env.COLLECT_API_ENDPOINT;
+const edgeMode = process.env.EDGE_MODE;
+const edgeUrl = process.env.EDGE_URL;
+const enableEdgeProxy = process.env.ENABLE_EDGE_PROXY;
+const corsMaxAge = process.env.CORS_MAX_AGE;
+const defaultLocale = process.env.DEFAULT_LOCALE;
+const forceSSL = process.env.FORCE_SSL;
+const frameAncestors = process.env.ALLOWED_FRAME_URLS ?? '';
+const trackerScriptName = process.env.TRACKER_SCRIPT_NAME;
+const trackerScriptURL = process.env.TRACKER_SCRIPT_URL;
 
 const contentSecurityPolicy = [
   `default-src 'self'`,
@@ -29,7 +29,7 @@ const contentSecurityPolicy = [
   `frame-src 'self' https://accounts.entrolytics.click https://clerk.entrolytics.click https://*.clerk.accounts.dev https://*.clerk.com https://challenges.cloudflare.com https://*.cloudflare.com`,
   `frame-ancestors 'self' ${frameAncestors}`,
   `worker-src 'self' blob:`,
-]
+];
 
 const defaultHeaders = [
   {
@@ -43,13 +43,13 @@ const defaultHeaders = [
       .replace(/\s{2,}/g, ' ')
       .trim(),
   },
-]
+];
 
 if (forceSSL) {
   defaultHeaders.push({
     key: 'Strict-Transport-Security',
     value: 'max-age=63072000; includeSubDomains; preload',
-  })
+  });
 }
 
 const trackerHeaders = [
@@ -61,7 +61,7 @@ const trackerHeaders = [
     key: 'Cache-Control',
     value: 'public, max-age=86400, must-revalidate',
   },
-]
+];
 
 const apiHeaders = [
   {
@@ -84,7 +84,7 @@ const apiHeaders = [
     key: 'Cache-Control',
     value: 'no-cache',
   },
-]
+];
 
 const headers = [
   {
@@ -99,35 +99,35 @@ const headers = [
     source: TRACKER_SCRIPT,
     headers: trackerHeaders,
   },
-]
+];
 
-const rewrites = []
+const rewrites = [];
 
 // Edge proxy for /api/send - routes through edge runtime for lower latency
 if (enableEdgeProxy) {
   rewrites.push({
     source: '/api/send',
     destination: '/api/send-edge',
-  })
+  });
 }
 
 if (trackerScriptURL) {
   rewrites.push({
     source: TRACKER_SCRIPT,
     destination: trackerScriptURL,
-  })
+  });
 }
 
 if (collectApiEndpoint) {
   headers.push({
     source: collectApiEndpoint,
     headers: apiHeaders,
-  })
+  });
 
   rewrites.push({
     source: collectApiEndpoint,
     destination: '/api/send',
-  })
+  });
 }
 
 const redirects = [
@@ -151,26 +151,26 @@ const redirects = [
     destination: '/admin/users',
     permanent: false,
   },
-]
+];
 
 // Adding rewrites + headers for all alternative tracker script names.
 if (trackerScriptName) {
-  const names = trackerScriptName?.split(',').map((name) => name.trim())
+  const names = trackerScriptName?.split(',').map(name => name.trim());
 
   if (names) {
-    names.forEach((name) => {
-      const normalizedSource = `/${name.replace(/^\/+/, '')}`
+    names.forEach(name => {
+      const normalizedSource = `/${name.replace(/^\/+/, '')}`;
 
       rewrites.push({
         source: normalizedSource,
         destination: TRACKER_SCRIPT,
-      })
+      });
 
       headers.push({
         source: normalizedSource,
         headers: trackerHeaders,
-      })
-    })
+      });
+    });
   }
 }
 
@@ -179,13 +179,13 @@ if (edgeMode && edgeUrl) {
     source: '/settings/:path*',
     destination: `${edgeUrl}/settings/:path*`,
     permanent: false,
-  })
+  });
 
   redirects.push({
     source: '/login',
     destination: edgeUrl,
     permanent: false,
-  })
+  });
 }
 
 /** @type {import('next').NextConfig} */
@@ -205,7 +205,7 @@ export default {
   },
   serverExternalPackages: ['@neondatabase/serverless'],
   async headers() {
-    return headers
+    return headers;
   },
   async rewrites() {
     return [
@@ -218,9 +218,9 @@ export default {
         source: '/orgs/:orgId/:path*',
         destination: '/:path*',
       },
-    ]
+    ];
   },
   async redirects() {
-    return [...redirects]
+    return [...redirects];
   },
-}
+};

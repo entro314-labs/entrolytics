@@ -1,17 +1,17 @@
-import { DataTable, DataColumn, Row } from '@entro314labs/entro-zen'
-import { useMessages, useNavigation } from '@/components/hooks'
-import { Empty } from '@/components/common/Empty'
-import { DateDistance } from '@/components/common/DateDistance'
-import { SegmentEditButton } from '@/app/(main)/websites/[websiteId]/segments/SegmentEditButton'
-import { SegmentDeleteButton } from '@/app/(main)/websites/[websiteId]/segments/SegmentDeleteButton'
-import Link from 'next/link'
+import { DataColumn, DataTable, Row } from '@entro314labs/entro-zen';
+import Link from 'next/link';
+import { SegmentDeleteButton } from '@/app/(main)/websites/[websiteId]/segments/SegmentDeleteButton';
+import { SegmentEditButton } from '@/app/(main)/websites/[websiteId]/segments/SegmentEditButton';
+import { DateDistance } from '@/components/common/DateDistance';
+import { Empty } from '@/components/common/Empty';
+import { useMessages, useNavigation } from '@/components/hooks';
 
 export function SegmentsTable({ data = [] }) {
-  const { formatMessage, labels } = useMessages()
-  const { websiteId, renderUrl } = useNavigation()
+  const { formatMessage, labels } = useMessages();
+  const { websiteId, renderUrl } = useNavigation();
 
   if (data.length === 0) {
-    return <Empty />
+    return <Empty />;
   }
 
   return (
@@ -28,16 +28,16 @@ export function SegmentsTable({ data = [] }) {
       </DataColumn>
       <DataColumn id="action" align="end" width="100px">
         {(row: any) => {
-          const { id, name } = row
+          const { id, name } = row;
 
           return (
             <Row>
               <SegmentEditButton segmentId={id} websiteId={websiteId} />
               <SegmentDeleteButton segmentId={id} websiteId={websiteId} name={name} />
             </Row>
-          )
+          );
         }}
       </DataColumn>
     </DataTable>
-  )
+  );
 }

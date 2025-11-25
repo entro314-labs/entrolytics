@@ -1,54 +1,54 @@
-import { Key } from 'react'
-import { useRouter } from 'next/navigation'
 import {
-  Text,
+  Column,
   Icon,
+  IconLabel,
   Menu,
   MenuItem,
-  MenuTrigger,
   MenuSection,
   MenuSeparator,
+  MenuTrigger,
   Popover,
-  Row,
-  Column,
-  SidebarItem,
   Pressable,
-  IconLabel,
-} from '@entro314labs/entro-zen'
+  Row,
+  SidebarItem,
+  Text,
+} from '@entro314labs/entro-zen';
+import { useRouter } from 'next/navigation';
+import type { Key } from 'react';
 import {
   useLoginQuery,
   useMessages,
   useMobile,
-  useUserOrgsQuery,
   useNavigation,
-} from '@/components/hooks'
-import { ChevronRight, User, Users } from '@/components/icons'
+  useUserOrgsQuery,
+} from '@/components/hooks';
+import { ChevronRight, User, Users } from '@/components/icons';
 
 export interface NavButtonProps {
-  showText?: boolean
-  onAction?: (id: Key) => void
+  showText?: boolean;
+  onAction?: (id: Key) => void;
 }
 
 export function NavButton({ showText = true, onAction }: NavButtonProps) {
-  const { user } = useLoginQuery()
-  const { formatMessage, labels } = useMessages()
-  const { data } = useUserOrgsQuery(user.id)
-  const { orgId, renderUrl } = useNavigation()
-  const { isMobile } = useMobile()
-  const router = useRouter()
-  const org = data?.data?.find((o) => o.orgId === orgId)
-  const selectedKeys = new Set([orgId || user.id])
-  const label = orgId ? org?.name : user.displayName || user.email
+  const { user } = useLoginQuery();
+  const { formatMessage, labels } = useMessages();
+  const { data } = useUserOrgsQuery(user.id);
+  const { orgId, renderUrl } = useNavigation();
+  const { isMobile } = useMobile();
+  const router = useRouter();
+  const org = data?.data?.find(o => o.orgId === orgId);
+  const selectedKeys = new Set([orgId || user.id]);
+  const label = orgId ? org?.name : user.displayName || user.email;
 
   const handleSelect = (id: Key) => {
     if (onAction) {
-      onAction(id)
+      onAction(id);
     }
-    router.push(id === user.id ? renderUrl('/websites', false) : `/orgs/${id}/websites`)
-  }
+    router.push(id === user.id ? renderUrl('/websites', false) : `/orgs/${id}/websites`);
+  };
 
   if (!data?.count) {
-    return null
+    return null;
   }
 
   return (
@@ -107,5 +107,5 @@ export function NavButton({ showText = true, onAction }: NavButtonProps) {
         </Column>
       </Popover>
     </MenuTrigger>
-  )
+  );
 }

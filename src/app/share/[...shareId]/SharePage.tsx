@@ -1,18 +1,18 @@
-'use client'
-import { Column } from '@entro314labs/entro-zen'
-import { WebsiteProvider } from '@/app/(main)/websites/WebsiteProvider'
-import { WebsitePage } from '@/app/(main)/websites/[websiteId]/WebsitePage'
-import { WebsiteHeader } from '@/app/(main)/websites/[websiteId]/WebsiteHeader'
-import { useShareTokenQuery } from '@/components/hooks'
-import { PageBody } from '@/components/common/PageBody'
-import { Header } from './Header'
-import { Footer } from './Footer'
+'use client';
+import { Column } from '@entro314labs/entro-zen';
+import { WebsiteHeader } from '@/app/(main)/websites/[websiteId]/WebsiteHeader';
+import { WebsitePage } from '@/app/(main)/websites/[websiteId]/WebsitePage';
+import { WebsiteProvider } from '@/app/(main)/websites/WebsiteProvider';
+import { PageBody } from '@/components/common/PageBody';
+import { useShareTokenQuery } from '@/components/hooks';
+import { Footer } from './Footer';
+import { Header } from './Header';
 
 export function SharePage({ shareId }) {
-  const { shareToken, isLoading } = useShareTokenQuery(shareId)
+  const { shareToken, isLoading } = useShareTokenQuery(shareId);
 
   if (isLoading || !shareToken) {
-    return null
+    return null;
   }
 
   return (
@@ -26,5 +26,5 @@ export function SharePage({ shareId }) {
         <Footer />
       </PageBody>
     </Column>
-  )
+  );
 }

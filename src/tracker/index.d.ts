@@ -5,7 +5,7 @@ export type TrackedProperties = {
    * @description extracted from `window.location.hostname`
    * @example 'analytics.entrolytics.click'
    */
-  hostname: string
+  hostname: string;
 
   /**
    * Browser language
@@ -13,7 +13,7 @@ export type TrackedProperties = {
    * @description extracted from `window.navigator.language`
    * @example 'en-US', 'fr-FR'
    */
-  language: string
+  language: string;
 
   /**
    * Page referrer
@@ -21,7 +21,7 @@ export type TrackedProperties = {
    * @description extracted from `window.navigator.language`
    * @example 'https://analytics.entrolytics.click/docs/getting-started'
    */
-  referrer: string
+  referrer: string;
 
   /**
    * Screen dimensions
@@ -29,7 +29,7 @@ export type TrackedProperties = {
    * @description extracted from `window.screen.width` and `window.screen.height`
    * @example '1920x1080', '2560x1440'
    */
-  screen: string
+  screen: string;
 
   /**
    * Page title
@@ -37,7 +37,7 @@ export type TrackedProperties = {
    * @description extracted from `document.querySelector('head > title')`
    * @example 'entrolytics'
    */
-  title: string
+  title: string;
 
   /**
    * Page url
@@ -45,17 +45,17 @@ export type TrackedProperties = {
    * @description built from `${window.location.pathname}${window.location.search}`
    * @example 'docs/getting-started'
    */
-  url: string
+  url: string;
 
   /**
    * Website ID (required)
    *
    * @example 'b59e9c65-ae32-47f1-8400-119fcf4861c4'
    */
-  website: string
-}
+  website: string;
+};
 
-export type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] }
+export type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
 
 /**
  *
@@ -66,20 +66,20 @@ export type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] }
  * - Objects have a max of 50 properties. Arrays are considered 1 property.
  */
 export interface EventData {
-  [key: string]: number | string | EventData | number[] | string[] | EventData[]
+  [key: string]: number | string | EventData | number[] | string[] | EventData[];
 }
 
 export type EventProperties = {
   /**
    * NOTE: event names will be truncated past 50 characters
    */
-  name: string
-  data?: EventData
-} & WithRequired<TrackedProperties, 'website'>
-export type PageViewProperties = WithRequired<TrackedProperties, 'website'>
+  name: string;
+  data?: EventData;
+} & WithRequired<TrackedProperties, 'website'>;
+export type PageViewProperties = WithRequired<TrackedProperties, 'website'>;
 export type CustomEventFunction = (
-  props: PageViewProperties
-) => EventProperties | PageViewProperties
+  props: PageViewProperties,
+) => EventProperties | PageViewProperties;
 
 export type EntrolyticsTracker = {
   track: {
@@ -90,7 +90,7 @@ export type EntrolyticsTracker = {
      * entrolytics.track();
      * ```
      */
-    (): Promise<string>
+    (): Promise<string>;
 
     /**
      * Track an event with a given name
@@ -101,7 +101,7 @@ export type EntrolyticsTracker = {
      * entrolytics.track('signup-button');
      * ```
      */
-    (eventName: string): Promise<string>
+    (eventName: string): Promise<string>;
 
     /**
      * Tracks an event with dynamic data.
@@ -125,7 +125,7 @@ export type EntrolyticsTracker = {
      * entrolytics.track('signup-button', { name: 'newsletter', id: 123 });
      * ```
      */
-    (eventName: string, obj: EventData): Promise<string>
+    (eventName: string, obj: EventData): Promise<string>;
 
     /**
      * Tracks a page view with custom properties
@@ -134,7 +134,7 @@ export type EntrolyticsTracker = {
      * entrolytics.track({ website: 'e676c9b4-11e4-4ef1-a4d7-87001773e9f2', url: '/home', title: 'Home page' });
      * ```
      */
-    (properties: PageViewProperties): Promise<string>
+    (properties: PageViewProperties): Promise<string>;
 
     /**
      * Tracks an event with fully customizable dynamic data
@@ -144,10 +144,10 @@ export type EntrolyticsTracker = {
      * entrolytics.track((props) => ({ ...props, url: path }));
      * ```
      */
-    (eventFunction: CustomEventFunction): Promise<string>
-  }
-}
+    (eventFunction: CustomEventFunction): Promise<string>;
+  };
+};
 
 interface Window {
-  entrolytics: EntrolyticsTracker
+  entrolytics: EntrolyticsTracker;
 }

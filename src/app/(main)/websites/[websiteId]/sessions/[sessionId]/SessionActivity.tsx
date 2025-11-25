@@ -1,20 +1,20 @@
-import { isSameDay } from 'date-fns'
 import {
-  Icon,
-  StatusLight,
-  Column,
-  Row,
-  Heading,
-  Text,
   Button,
-  DialogTrigger,
-  Popover,
+  Column,
   Dialog,
-} from '@entro314labs/entro-zen'
-import { LoadingPanel } from '@/components/common/LoadingPanel'
-import { LightningSvg, Eye, FileText } from '@/components/icons'
-import { useMessages, useSessionActivityQuery, useTimezone } from '@/components/hooks'
-import { EventData } from '@/components/metrics/EventData'
+  DialogTrigger,
+  Heading,
+  Icon,
+  Popover,
+  Row,
+  StatusLight,
+  Text,
+} from '@entro314labs/entro-zen';
+import { isSameDay } from 'date-fns';
+import { LoadingPanel } from '@/components/common/LoadingPanel';
+import { useMessages, useSessionActivityQuery, useTimezone } from '@/components/hooks';
+import { Eye, FileText, LightningSvg } from '@/components/icons';
+import { EventData } from '@/components/metrics/EventData';
 
 export function SessionActivity({
   websiteId,
@@ -22,27 +22,27 @@ export function SessionActivity({
   startDate,
   endDate,
 }: {
-  websiteId: string
-  sessionId: string
-  startDate: Date
-  endDate: Date
+  websiteId: string;
+  sessionId: string;
+  startDate: Date;
+  endDate: Date;
 }) {
-  const { formatMessage, labels } = useMessages()
-  const { formatTimezoneDate } = useTimezone()
+  const { formatMessage, labels } = useMessages();
+  const { formatTimezoneDate } = useTimezone();
   const { data, isLoading, error } = useSessionActivityQuery(
     websiteId,
     sessionId,
     startDate,
-    endDate
-  )
-  let lastDay = null
+    endDate,
+  );
+  let lastDay = null;
 
   return (
     <LoadingPanel data={data} isLoading={isLoading} error={error}>
       <Column gap>
         {data?.map(({ eventId, createdAt, urlPath, eventName, visitId, hasData }) => {
-          const showHeader = !lastDay || !isSameDay(new Date(lastDay), new Date(createdAt))
-          lastDay = createdAt
+          const showHeader = !lastDay || !isSameDay(new Date(lastDay), new Date(createdAt));
+          lastDay = createdAt;
 
           return (
             <Column key={eventId} gap>
@@ -65,14 +65,14 @@ export function SessionActivity({
                 </Row>
               </Row>
             </Column>
-          )
+          );
         })}
       </Column>
     </LoadingPanel>
-  )
+  );
 }
 
-const PropertiesButton = (props) => {
+const PropertiesButton = props => {
   return (
     <DialogTrigger>
       <Button variant="quiet">
@@ -88,5 +88,5 @@ const PropertiesButton = (props) => {
         </Dialog>
       </Popover>
     </DialogTrigger>
-  )
-}
+  );
+};

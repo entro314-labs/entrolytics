@@ -1,14 +1,14 @@
-import clickhouse from '@/lib/clickhouse'
-import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
-import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
-import { QueryFilters } from '@/lib/types'
+import { getDateSQL, getTimestampDiffSQL, parseFilters, rawQuery } from '@/lib/analytics-utils';
+import clickhouse from '@/lib/clickhouse';
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db';
+import type { QueryFilters } from '@/lib/types';
 
 export interface WebsiteEventData {
-  eventName?: string
-  propertyName: string
-  dataType: number
-  propertyValue?: string
-  total: number
+  eventName?: string;
+  propertyName: string;
+  dataType: number;
+  propertyValue?: string;
+  total: number;
 }
 
 export async function getEventDataEvents(
@@ -17,13 +17,13 @@ export async function getEventDataEvents(
   return runQuery({
     [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  })
+  });
 }
 
 async function relationalQuery(websiteId: string, filters: QueryFilters) {
   // Using rawQuery FROM analytics-utils
-  const { event } = filters
-  const { queryParams } = parseFilters({ ...filters, websiteId })
+  const { event } = filters;
+  const { queryParams } = parseFilters({ ...filters, websiteId });
 
   if (event) {
     return rawQuery(
@@ -43,8 +43,8 @@ async function relationalQuery(websiteId: string, filters: QueryFilters) {
       GROUP BY website_event.event_name, event_data.data_key, event_data.data_type, event_data.string_value
       ORDER BY 1 asc, 2 asc, 3 asc, 5 desc
       `,
-      queryParams
-    )
+      queryParams,
+    );
   }
 
   return rawQuery(
@@ -63,20 +63,20 @@ async function relationalQuery(websiteId: string, filters: QueryFilters) {
     ORDER BY 1 asc, 2 asc
     limit 500
     `,
-    queryParams
-  )
+    queryParams,
+  );
 }
 
 async function clickhouseQuery(
   websiteId: string,
-  filters: QueryFilters
+  filters: QueryFilters,
 ): Promise<{ eventName: string; propertyName: string; dataType: number; total: number }[]> {
-  const { rawQuery, parseFilters } = clickhouse
-  const { event } = filters
+  const { rawQuery, parseFilters } = clickhouse;
+  const { event } = filters;
   const { filterQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
-  })
+  });
 
   if (event) {
     return rawQuery(
@@ -102,8 +102,8 @@ async function clickhouseQuery(
       order by 1 asc, 2 asc, 3 asc, 5 desc
       limit 500
       `,
-      queryParams
-    )
+      queryParams,
+    );
   }
 
   return rawQuery(
@@ -127,6 +127,6 @@ async function clickhouseQuery(
     order by 1 asc, 2 asc
     limit 500
     `,
-    queryParams
-  )
+    queryParams,
+  );
 }

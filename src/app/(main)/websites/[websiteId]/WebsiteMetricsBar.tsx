@@ -1,23 +1,23 @@
-import { useDateRange, useMessages } from '@/components/hooks'
-import { MetricCard } from '@/components/metrics/MetricCard'
-import { MetricsBar } from '@/components/metrics/MetricsBar'
-import { formatShortTime, formatLongNumber } from '@/lib/format'
-import { useWebsiteStatsQuery } from '@/components/hooks/queries/useWebsiteStatsQuery'
-import { LoadingPanel } from '@/components/common/LoadingPanel'
+import { LoadingPanel } from '@/components/common/LoadingPanel';
+import { useDateRange, useMessages } from '@/components/hooks';
+import { useWebsiteStatsQuery } from '@/components/hooks/queries/useWebsiteStatsQuery';
+import { MetricCard } from '@/components/metrics/MetricCard';
+import { MetricsBar } from '@/components/metrics/MetricsBar';
+import { formatLongNumber, formatShortTime } from '@/lib/format';
 
 export function WebsiteMetricsBar({
   websiteId,
 }: {
-  websiteId: string
-  showChange?: boolean
-  compareMode?: boolean
+  websiteId: string;
+  showChange?: boolean;
+  compareMode?: boolean;
 }) {
-  const { dateRange } = useDateRange()
-  const { formatMessage, labels } = useMessages()
-  const { data, isLoading, isFetching, error } = useWebsiteStatsQuery(websiteId)
-  const isAllTime = dateRange.value === 'all'
+  const { dateRange } = useDateRange();
+  const { formatMessage, labels } = useMessages();
+  const { data, isLoading, isFetching, error } = useWebsiteStatsQuery(websiteId);
+  const isAllTime = dateRange.value === 'all';
 
-  const { pageviews, visitors, visits, bounces, totaltime, comparison } = data || {}
+  const { pageviews, visitors, visits, bounces, totaltime, comparison } = data || {};
 
   const metrics = data
     ? [
@@ -46,7 +46,7 @@ export function WebsiteMetricsBar({
           change:
             (Math.min(visits, bounces) / visits) * 100 -
             (Math.min(comparison.visits, comparison.bounces) / comparison.visits) * 100,
-          formatValue: (n) => Math.round(+n) + '%',
+          formatValue: n => Math.round(+n) + '%',
           reverseColors: true,
         },
         {
@@ -54,11 +54,11 @@ export function WebsiteMetricsBar({
           value: totaltime / visits,
           prev: comparison.totaltime / comparison.visits,
           change: totaltime / visits - comparison.totaltime / comparison.visits,
-          formatValue: (n) =>
+          formatValue: n =>
             `${+n < 0 ? '-' : ''}${formatShortTime(Math.abs(~~n), ['m', 's'], ' ')}`,
         },
       ]
-    : null
+    : null;
 
   return (
     <LoadingPanel
@@ -81,9 +81,9 @@ export function WebsiteMetricsBar({
               reverseColors={reverseColors}
               showChange={!isAllTime}
             />
-          )
+          );
         })}
       </MetricsBar>
     </LoadingPanel>
-  )
+  );
 }

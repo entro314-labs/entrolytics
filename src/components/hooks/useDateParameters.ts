@@ -1,11 +1,11 @@
-import { useDateRange } from './useDateRange'
-import { useTimezone } from './useTimezone'
+import { useDateRange } from './useDateRange';
+import { useTimezone } from './useTimezone';
 
 export function useDateParameters() {
   const {
     dateRange: { startDate, endDate, unit },
-  } = useDateRange()
-  const { timezone, localToUtc, canonicalizeTimezone } = useTimezone()
+  } = useDateRange();
+  const { timezone, localToUtc, canonicalizeTimezone } = useTimezone();
 
   return {
     startAt: +localToUtc(startDate),
@@ -14,5 +14,5 @@ export function useDateParameters() {
     endDate: localToUtc(endDate).toISOString(),
     unit,
     timezone: canonicalizeTimezone(timezone),
-  }
+  };
 }

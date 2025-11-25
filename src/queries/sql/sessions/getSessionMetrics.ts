@@ -1,14 +1,14 @@
-import clickhouse from '@/lib/clickhouse'
-import { EVENT_COLUMNS, FILTER_COLUMNS, SESSION_COLUMNS } from '@/lib/constants'
-import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
-import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
+import { getDateSQL, getTimestampDiffSQL, parseFilters, rawQuery } from '@/lib/analytics-utils';
+import clickhouse from '@/lib/clickhouse';
+import { EVENT_COLUMNS, FILTER_COLUMNS, SESSION_COLUMNS } from '@/lib/constants';
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db';
 
-import { QueryFilters } from '@/lib/types'
+import type { QueryFilters } from '@/lib/types';
 
 export interface SessionMetricsParameters {
-  type: string
-  limit?: number | string
-  offset?: number | string
+  type: string;
+  limit?: number | string;
+  offset?: number | string;
 }
 
 export async function getSessionMetrics(
@@ -17,16 +17,16 @@ export async function getSessionMetrics(
   return runQuery({
     [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  })
+  });
 }
 
 async function relationalQuery(
   websiteId: string,
   parameters: SessionMetricsParameters,
-  filters: QueryFilters
+  filters: QueryFilters,
 ) {
-  const { type, limit = 500, offset = 0 } = parameters
-  let column = FILTER_COLUMNS[type] || type
+  const { type, limit = 500, offset = 0 } = parameters;
+  let column = FILTER_COLUMNS[type] || type;
   // Using rawQuery FROM analytics-utils
   const { filterQuery, joinSessionQuery, cohortQuery, queryParams } = parseFilters(
     {
@@ -35,12 +35,12 @@ async function relationalQuery(
     },
     {
       joinSession: SESSION_COLUMNS.includes(type),
-    }
-  )
-  const includeCountry = column === 'city' || column === 'region'
+    },
+  );
+  const includeCountry = column === 'city' || column === 'region';
 
   if (type === 'language') {
-    column = `lower(left(${type}, 2))`
+    column = `lower(left(${type}, 2))`;
   }
 
   return rawQuery(
@@ -62,34 +62,34 @@ async function relationalQuery(
     limit ${limit}
     offset ${offset}
     `,
-    { ...queryParams, ...parameters }
-  )
+    { ...queryParams, ...parameters },
+  );
 }
 
 async function clickhouseQuery(
   websiteId: string,
   parameters: SessionMetricsParameters,
-  filters: QueryFilters
+  filters: QueryFilters,
 ): Promise<{ x: string; y: number }[]> {
-  const { type, limit = 500, offset = 0 } = parameters
-  let column = FILTER_COLUMNS[type] || type
-  const { parseFilters, rawQuery } = clickhouse
+  const { type, limit = 500, offset = 0 } = parameters;
+  let column = FILTER_COLUMNS[type] || type;
+  const { parseFilters, rawQuery } = clickhouse;
   const { filterQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
-  })
-  const includeCountry = column === 'city' || column === 'region'
+  });
+  const includeCountry = column === 'city' || column === 'region';
 
   if (type === 'language') {
-    column = `lower(left(${type}, 2))`
+    column = `lower(left(${type}, 2))`;
   }
 
-  let sql = ''
+  let sql = '';
 
   if (
     filters &&
     typeof filters === 'object' &&
-    EVENT_COLUMNS.some((item) => Object.keys(filters).includes(item))
+    EVENT_COLUMNS.some(item => Object.keys(filters).includes(item))
   ) {
     sql = `
     SELECT
@@ -106,7 +106,7 @@ async function clickhouseQuery(
     ORDER BY y desc
     limit ${limit}
     offset ${offset}
-    `
+    `;
   } else {
     sql = `
     SELECT
@@ -123,8 +123,8 @@ async function clickhouseQuery(
     ORDER BY y desc
     limit ${limit}
     offset ${offset}
-    `
+    `;
   }
 
-  return rawQuery(sql, { ...queryParams, ...parameters })
+  return rawQuery(sql, { ...queryParams, ...parameters });
 }

@@ -1,15 +1,15 @@
-'use client'
-import { PageBody } from '@/components/common/PageBody'
-import { Column } from '@entro314labs/entro-zen'
-import { PageHeader } from '@/components/common/PageHeader'
-import { LinkAddButton } from './LinkAddButton'
-import { useMessages, useNavigation } from '@/components/hooks'
-import { LinksDataTable } from '@/app/(main)/links/LinksDataTable'
-import { Panel } from '@/components/common/Panel'
+'use client';
+import { Column } from '@entro314labs/entro-zen';
+import { LinksDataTable } from '@/app/(main)/links/LinksDataTable';
+import { PageBody } from '@/components/common/PageBody';
+import { PageHeader } from '@/components/common/PageHeader';
+import { Panel } from '@/components/common/Panel';
+import { useMessages, useNavigation } from '@/components/hooks';
+import { LinkAddButton } from './LinkAddButton';
 
 export function LinksPage() {
-  const { formatMessage, labels } = useMessages()
-  const { orgId } = useNavigation()
+  const { formatMessage, labels } = useMessages();
+  const { orgId } = useNavigation();
 
   return (
     <PageBody>
@@ -22,5 +22,5 @@ export function LinksPage() {
         </Panel>
       </Column>
     </PageBody>
-  )
+  );
 }

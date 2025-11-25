@@ -1,22 +1,28 @@
-import { SetStateAction, useMemo, useState } from 'react'
-import { endOfDay, subMonths } from 'date-fns'
-import { ComboBox, ListItem, Loading, useDebounce, ComboBoxProps } from '@entro314labs/entro-zen'
-import { Empty } from '@/components/common/Empty'
-import { useMessages, useWebsiteValuesQuery } from '@/components/hooks'
+import {
+  ComboBox,
+  type ComboBoxProps,
+  ListItem,
+  Loading,
+  useDebounce,
+} from '@entro314labs/entro-zen';
+import { endOfDay, subMonths } from 'date-fns';
+import { type SetStateAction, useMemo, useState } from 'react';
+import { Empty } from '@/components/common/Empty';
+import { useMessages, useWebsiteValuesQuery } from '@/components/hooks';
 
 export interface LookupFieldProps extends ComboBoxProps {
-  websiteId: string
-  type: string
-  value: string
-  onChange: (value: string) => void
+  websiteId: string;
+  type: string;
+  value: string;
+  onChange: (value: string) => void;
 }
 
 export function LookupField({ websiteId, type, value, onChange, ...props }: LookupFieldProps) {
-  const { formatMessage, messages } = useMessages()
-  const [search, setSearch] = useState(value)
-  const searchValue = useDebounce(search, 300)
-  const startDate = subMonths(endOfDay(new Date()), 6)
-  const endDate = endOfDay(new Date())
+  const { formatMessage, messages } = useMessages();
+  const [search, setSearch] = useState(value);
+  const searchValue = useDebounce(search, 300);
+  const startDate = subMonths(endOfDay(new Date()), 6);
+  const endDate = endOfDay(new Date());
 
   const { data, isLoading } = useWebsiteValuesQuery({
     websiteId,
@@ -24,15 +30,15 @@ export function LookupField({ websiteId, type, value, onChange, ...props }: Look
     search: searchValue,
     startDate,
     endDate,
-  })
+  });
 
   const items: string[] = useMemo(() => {
-    return data?.map(({ value }) => value) || []
-  }, [data])
+    return data?.map(({ value }) => value) || [];
+  }, [data]);
 
   const handleSearch = (value: SetStateAction<string>) => {
-    setSearch(value)
-  }
+    setSearch(value);
+  };
 
   return (
     <ComboBox
@@ -40,9 +46,9 @@ export function LookupField({ websiteId, type, value, onChange, ...props }: Look
       {...props}
       items={items}
       inputValue={value}
-      onInputChange={(value) => {
-        handleSearch(value)
-        onChange?.(value)
+      onInputChange={value => {
+        handleSearch(value);
+        onChange?.(value);
       }}
       formValue="text"
       allowsEmptyCollection
@@ -55,11 +61,11 @@ export function LookupField({ websiteId, type, value, onChange, ...props }: Look
         )
       }
     >
-      {items.map((item) => (
+      {items.map(item => (
         <ListItem key={item} id={item}>
           {item}
         </ListItem>
       ))}
     </ComboBox>
-  )
+  );
 }

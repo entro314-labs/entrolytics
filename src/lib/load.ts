@@ -1,40 +1,40 @@
-import { Website, Session } from '@/lib/db'
-import redis from '@/lib/redis'
-import { getWebsite } from '@/queries/drizzle'
-import { getWebsiteSession } from '@/queries/sql'
+import type { Session, Website } from '@/lib/db';
+import redis from '@/lib/redis';
+import { getWebsite } from '@/queries/drizzle';
+import { getWebsiteSession } from '@/queries/sql';
 
 export async function fetchWebsite(websiteId: string): Promise<Website> {
-  let website = null
+  let website = null;
 
   if (redis.enabled) {
-    website = await redis.client.fetch(`website:${websiteId}`, () => getWebsite(websiteId), 86400)
+    website = await redis.client.fetch(`website:${websiteId}`, () => getWebsite(websiteId), 86400);
   } else {
-    website = await getWebsite(websiteId)
+    website = await getWebsite(websiteId);
   }
 
   if (!website || website.deletedAt) {
-    return null
+    return null;
   }
 
-  return website
+  return website;
 }
 
 export async function fetchSession(websiteId: string, sessionId: string): Promise<Session> {
-  let session = null
+  let session = null;
 
   if (redis.enabled) {
     session = await redis.client.fetch(
       `session:${sessionId}`,
       () => getWebsiteSession(websiteId, sessionId),
-      86400
-    )
+      86400,
+    );
   } else {
-    session = await getWebsiteSession(websiteId, sessionId)
+    session = await getWebsiteSession(websiteId, sessionId);
   }
 
   if (!session) {
-    return null
+    return null;
   }
 
-  return session
+  return session;
 }

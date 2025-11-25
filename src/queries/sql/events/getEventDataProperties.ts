@@ -1,7 +1,7 @@
-import clickhouse from '@/lib/clickhouse'
-import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
-import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
-import { QueryFilters } from '@/lib/types'
+import { getDateSQL, getTimestampDiffSQL, parseFilters, rawQuery } from '@/lib/analytics-utils';
+import clickhouse from '@/lib/clickhouse';
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db';
+import type { QueryFilters } from '@/lib/types';
 
 export async function getEventDataProperties(
   ...args: [websiteId: string, filters: QueryFilters & { propertyName?: string }]
@@ -9,20 +9,20 @@ export async function getEventDataProperties(
   return runQuery({
     [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  })
+  });
 }
 
 async function relationalQuery(
   websiteId: string,
-  filters: QueryFilters & { propertyName?: string }
+  filters: QueryFilters & { propertyName?: string },
 ) {
   // Using rawQuery FROM analytics-utils
   const { filterQuery, cohortQuery, joinSessionQuery, queryParams } = parseFilters(
     { ...filters, websiteId },
     {
       columns: { propertyName: 'data_key' },
-    }
-  )
+    },
+  );
 
   return rawQuery(
     `
@@ -43,21 +43,21 @@ async function relationalQuery(
     ORDER BY 3 desc
     limit 500
     `,
-    queryParams
-  )
+    queryParams,
+  );
 }
 
 async function clickhouseQuery(
   websiteId: string,
-  filters: QueryFilters & { propertyName?: string }
+  filters: QueryFilters & { propertyName?: string },
 ): Promise<{ eventName: string; propertyName: string; total: number }[]> {
-  const { rawQuery, parseFilters } = clickhouse
+  const { rawQuery, parseFilters } = clickhouse;
   const { filterQuery, cohortQuery, queryParams } = parseFilters(
     { ...filters, websiteId },
     {
       columns: { propertyName: 'data_key' },
-    }
-  )
+    },
+  );
 
   return rawQuery(
     `
@@ -79,6 +79,6 @@ async function clickhouseQuery(
     ORDER BY 1, 3 desc
     limit 500
     `,
-    queryParams
-  )
+    queryParams,
+  );
 }

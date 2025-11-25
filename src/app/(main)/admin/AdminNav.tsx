@@ -1,10 +1,10 @@
-import { SideMenu } from '@/components/common/SideMenu'
-import { useMessages, useNavigation } from '@/components/hooks'
-import { Globe, User, Users } from '@/components/icons'
+import { SideMenu } from '@/components/common/SideMenu';
+import { useMessages, useNavigation } from '@/components/hooks';
+import { Globe, User, Users } from '@/components/icons';
 
 export function AdminNav({ onItemClick }: { onItemClick?: () => void }) {
-  const { formatMessage, labels } = useMessages()
-  const { pathname } = useNavigation()
+  const { formatMessage, labels } = useMessages();
+  const { pathname } = useNavigation();
 
   const items = [
     {
@@ -30,11 +30,11 @@ export function AdminNav({ onItemClick }: { onItemClick?: () => void }) {
         },
       ],
     },
-  ]
+  ];
 
   const selectedKey = items
-    .flatMap((e) => e.items)
-    ?.find(({ path }) => path && pathname.startsWith(path))?.id
+    .flatMap(e => e.items)
+    ?.find(({ path }) => path && pathname.startsWith(path))?.id;
 
   return (
     <SideMenu
@@ -44,5 +44,5 @@ export function AdminNav({ onItemClick }: { onItemClick?: () => void }) {
       allowMinimize={false}
       onItemClick={onItemClick}
     />
-  )
+  );
 }

@@ -1,16 +1,16 @@
-import { useApi } from '../useApi'
-import { useModified } from '@/components/hooks'
-import { keepPreviousData } from '@tanstack/react-query'
-import { ReactQueryOptions } from '@/lib/types'
-import { isValidUuid } from '@/lib/uuid'
+import { keepPreviousData } from '@tanstack/react-query';
+import { useModified } from '@/components/hooks';
+import type { ReactQueryOptions } from '@/lib/types';
+import { isValidUuid } from '@/lib/uuid';
+import { useApi } from '../useApi';
 
 export function useWebsiteCohortQuery(
   websiteId: string,
   cohortId: string,
-  options?: ReactQueryOptions
+  options?: ReactQueryOptions,
 ) {
-  const { get, useQuery } = useApi()
-  const { modified } = useModified(`cohorts`)
+  const { get, useQuery } = useApi();
+  const { modified } = useModified(`cohorts`);
 
   return useQuery({
     queryKey: ['website:cohorts', { websiteId, cohortId, modified }],
@@ -18,5 +18,5 @@ export function useWebsiteCohortQuery(
     enabled: !!(websiteId && cohortId) && isValidUuid(websiteId) && isValidUuid(cohortId),
     placeholderData: keepPreviousData,
     ...options,
-  })
+  });
 }

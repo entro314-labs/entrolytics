@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import styles from './WordPressSelect.module.css';
 
 interface ConnectData {
@@ -69,7 +69,7 @@ export default function WordPressSelectPage() {
   const handleConnect = async () => {
     if (!selectedWebsite || !connectData) return;
 
-    const website = websites.find((w) => w.id === selectedWebsite);
+    const website = websites.find(w => w.id === selectedWebsite);
     if (!website) return;
 
     // Build callback URL with website info
@@ -200,7 +200,7 @@ export default function WordPressSelectPage() {
             <>
               <h3>Select an existing website:</h3>
               <div className={styles.websiteList}>
-                {websites.map((website) => (
+                {websites.map(website => (
                   <div
                     key={website.id}
                     className={`${styles.websiteItem} ${selectedWebsite === website.id ? styles.selected : ''}`}

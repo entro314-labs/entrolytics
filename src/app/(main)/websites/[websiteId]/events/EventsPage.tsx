@@ -1,32 +1,32 @@
-'use client'
-import { TabList, Tab, Tabs, TabPanel, Column } from '@entro314labs/entro-zen'
-import { MetricsTable } from '@/components/metrics/MetricsTable'
-import { useState, Key } from 'react'
-import { EventsDataTable } from './EventsDataTable'
-import { Panel } from '@/components/common/Panel'
-import { EventsChart } from '@/components/metrics/EventsChart'
-import { useMessages } from '@/components/hooks'
-import { EventProperties } from './EventProperties'
-import { WebsiteControls } from '@/app/(main)/websites/[websiteId]/WebsiteControls'
-import { getItem, setItem } from '@/lib/storage'
-import { SessionModal } from '@/app/(main)/websites/[websiteId]/sessions/SessionModal'
+'use client';
+import { Column, Tab, TabList, TabPanel, Tabs } from '@entro314labs/entro-zen';
+import { type Key, useState } from 'react';
+import { SessionModal } from '@/app/(main)/websites/[websiteId]/sessions/SessionModal';
+import { WebsiteControls } from '@/app/(main)/websites/[websiteId]/WebsiteControls';
+import { Panel } from '@/components/common/Panel';
+import { useMessages } from '@/components/hooks';
+import { EventsChart } from '@/components/metrics/EventsChart';
+import { MetricsTable } from '@/components/metrics/MetricsTable';
+import { getItem, setItem } from '@/lib/storage';
+import { EventProperties } from './EventProperties';
+import { EventsDataTable } from './EventsDataTable';
 
-const KEY_NAME = 'entrolytics.events.tab'
+const KEY_NAME = 'entrolytics.events.tab';
 
 export function EventsPage({ websiteId }) {
-  const [tab, setTab] = useState(getItem(KEY_NAME) || 'chart')
-  const { formatMessage, labels } = useMessages()
+  const [tab, setTab] = useState(getItem(KEY_NAME) || 'chart');
+  const { formatMessage, labels } = useMessages();
 
   const handleSelect = (value: Key) => {
-    setItem(KEY_NAME, value)
-    setTab(value)
-  }
+    setItem(KEY_NAME, value);
+    setTab(value);
+  };
 
   return (
     <Column gap="3">
       <WebsiteControls websiteId={websiteId} />
       <Panel>
-        <Tabs selectedKey={tab} onSelectionChange={(key) => handleSelect(key)}>
+        <Tabs selectedKey={tab} onSelectionChange={key => handleSelect(key)}>
           <TabList>
             <Tab id="chart">{formatMessage(labels.chart)}</Tab>
             <Tab id="activity">{formatMessage(labels.activity)}</Tab>
@@ -55,5 +55,5 @@ export function EventsPage({ websiteId }) {
       </Panel>
       <SessionModal websiteId={websiteId} />
     </Column>
-  )
+  );
 }

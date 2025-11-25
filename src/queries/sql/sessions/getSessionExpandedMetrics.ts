@@ -1,23 +1,23 @@
-import clickhouse from '@/lib/clickhouse'
-import { FILTER_COLUMNS, SESSION_COLUMNS } from '@/lib/constants'
-import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
-import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
+import { getDateSQL, getTimestampDiffSQL, parseFilters, rawQuery } from '@/lib/analytics-utils';
+import clickhouse from '@/lib/clickhouse';
+import { FILTER_COLUMNS, SESSION_COLUMNS } from '@/lib/constants';
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db';
 
-import { QueryFilters } from '@/lib/types'
+import type { QueryFilters } from '@/lib/types';
 
 export interface SessionExpandedMetricsParameters {
-  type: string
-  limit?: number | string
-  offset?: number | string
+  type: string;
+  limit?: number | string;
+  offset?: number | string;
 }
 
 export interface SessionExpandedMetricsData {
-  name: string
-  pageviews: number
-  visitors: number
-  visits: number
-  bounces: number
-  totaltime: number
+  name: string;
+  pageviews: number;
+  visitors: number;
+  visits: number;
+  bounces: number;
+  totaltime: number;
 }
 
 export async function getSessionExpandedMetrics(
@@ -26,16 +26,16 @@ export async function getSessionExpandedMetrics(
   return runQuery({
     [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  })
+  });
 }
 
 async function relationalQuery(
   websiteId: string,
   parameters: SessionExpandedMetricsParameters,
-  filters: QueryFilters
+  filters: QueryFilters,
 ): Promise<SessionExpandedMetricsData[]> {
-  const { type, limit = 500, offset = 0 } = parameters
-  let column = FILTER_COLUMNS[type] || type
+  const { type, limit = 500, offset = 0 } = parameters;
+  let column = FILTER_COLUMNS[type] || type;
   // Using rawQuery FROM analytics-utils
   const { filterQuery, joinSessionQuery, cohortQuery, queryParams } = parseFilters(
     {
@@ -44,12 +44,12 @@ async function relationalQuery(
     },
     {
       joinSession: SESSION_COLUMNS.includes(type),
-    }
-  )
-  const includeCountry = column === 'city' || column === 'region'
+    },
+  );
+  const includeCountry = column === 'city' || column === 'region';
 
   if (type === 'language') {
-    column = `lower(left(${type}, 2))`
+    column = `lower(left(${type}, 2))`;
   }
 
   return rawQuery(
@@ -71,26 +71,26 @@ async function relationalQuery(
     limit ${limit}
     offset ${offset}
     `,
-    { ...queryParams, ...parameters }
-  )
+    { ...queryParams, ...parameters },
+  );
 }
 
 async function clickhouseQuery(
   websiteId: string,
   parameters: SessionExpandedMetricsParameters,
-  filters: QueryFilters
+  filters: QueryFilters,
 ): Promise<SessionExpandedMetricsData[]> {
-  const { type, limit = 500, offset = 0 } = parameters
-  let column = FILTER_COLUMNS[type] || type
-  const { parseFilters, rawQuery } = clickhouse
+  const { type, limit = 500, offset = 0 } = parameters;
+  let column = FILTER_COLUMNS[type] || type;
+  const { parseFilters, rawQuery } = clickhouse;
   const { filterQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
-  })
-  const includeCountry = column === 'city' || column === 'region'
+  });
+  const includeCountry = column === 'city' || column === 'region';
 
   if (type === 'language') {
-    column = `lower(left(${type}, 2))`
+    column = `lower(left(${type}, 2))`;
   }
 
   return rawQuery(
@@ -128,6 +128,6 @@ async function clickhouseQuery(
     limit ${limit}
     offset ${offset}
     `,
-    { ...queryParams, ...parameters }
-  )
+    { ...queryParams, ...parameters },
+  );
 }

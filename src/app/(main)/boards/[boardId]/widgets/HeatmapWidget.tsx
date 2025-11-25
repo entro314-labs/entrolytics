@@ -1,10 +1,10 @@
-'use client'
-import { WeeklyTraffic } from '@/components/metrics/WeeklyTraffic'
+'use client';
+import { WeeklyTraffic } from '@/components/metrics/WeeklyTraffic';
 
 export interface HeatmapWidgetProps {
-  websiteId: string
+  websiteId: string;
 }
 
 export function HeatmapWidget({ websiteId }: HeatmapWidgetProps) {
-  return <WeeklyTraffic websiteId={websiteId} />
+  return <WeeklyTraffic websiteId={websiteId} />;
 }

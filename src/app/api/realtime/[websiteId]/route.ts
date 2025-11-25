@@ -1,30 +1,30 @@
-import { REALTIME_RANGE } from '@/lib/constants'
-import { getQueryFilters, parseRequest } from '@/lib/request'
-import { json, unauthorized } from '@/lib/response'
-import { timezoneParam } from '@/lib/schema'
-import { canViewWebsite } from '@/validations'
-import { getRealtimeData } from '@/queries/sql'
-import { startOfMinute, subMinutes } from 'date-fns'
-import { z } from 'zod'
+import { startOfMinute, subMinutes } from 'date-fns';
+import { z } from 'zod';
+import { REALTIME_RANGE } from '@/lib/constants';
+import { getQueryFilters, parseRequest } from '@/lib/request';
+import { json, unauthorized } from '@/lib/response';
+import { timezoneParam } from '@/lib/schema';
+import { getRealtimeData } from '@/queries/sql';
+import { canViewWebsite } from '@/validations';
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ websiteId: string }> }
+  { params }: { params: Promise<{ websiteId: string }> },
 ) {
   const schema = z.object({
     timezone: timezoneParam,
-  })
+  });
 
-  const { auth, query, error } = await parseRequest(request, schema)
+  const { auth, query, error } = await parseRequest(request, schema);
 
   if (error) {
-    return error()
+    return error();
   }
 
-  const { websiteId } = await params
+  const { websiteId } = await params;
 
   if (!(await canViewWebsite(auth, websiteId))) {
-    return unauthorized()
+    return unauthorized();
   }
 
   const filters = await getQueryFilters(
@@ -33,10 +33,10 @@ export async function GET(
       startAt: subMinutes(startOfMinute(new Date()), REALTIME_RANGE).getTime(),
       endAt: Date.now(),
     },
-    websiteId
-  )
+    websiteId,
+  );
 
-  const data = await getRealtimeData(websiteId, filters)
+  const data = await getRealtimeData(websiteId, filters);
 
-  return json(data)
+  return json(data);
 }

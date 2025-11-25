@@ -1,10 +1,10 @@
-import { useMessages } from '@/components/hooks'
-import { Plus } from '@/components/icons'
-import { CohortEditForm } from './CohortEditForm'
-import { DialogButton } from '@/components/input/DialogButton'
+import { useMessages } from '@/components/hooks';
+import { Plus } from '@/components/icons';
+import { DialogButton } from '@/components/input/DialogButton';
+import { CohortEditForm } from './CohortEditForm';
 
 export function CohortAddButton({ websiteId }: { websiteId: string }) {
-  const { formatMessage, labels } = useMessages()
+  const { formatMessage, labels } = useMessages();
 
   return (
     <DialogButton
@@ -14,8 +14,8 @@ export function CohortAddButton({ websiteId }: { websiteId: string }) {
       width="800px"
     >
       {({ close }) => {
-        return <CohortEditForm websiteId={websiteId} onClose={close} />
+        return <CohortEditForm websiteId={websiteId} onClose={close} />;
       }}
     </DialogButton>
-  )
+  );
 }

@@ -1,5 +1,5 @@
-import { ReactNode } from 'react'
-import { Button, Icon, Modal, Text, DialogTrigger } from '@entro314labs/entro-zen'
+import { Button, DialogTrigger, Icon, Modal, Text } from '@entro314labs/entro-zen';
+import type { ReactNode } from 'react';
 
 export function ActionButton({
   onClick,
@@ -7,10 +7,10 @@ export function ActionButton({
   title,
   children,
 }: {
-  onClick?: () => void
-  icon?: ReactNode
-  title?: string
-  children?: ReactNode
+  onClick?: () => void;
+  icon?: ReactNode;
+  title?: string;
+  children?: ReactNode;
 }) {
   return (
     <DialogTrigger>
@@ -21,5 +21,5 @@ export function ActionButton({
       </Text>
       <Modal>{children}</Modal>
     </DialogTrigger>
-  )
+  );
 }

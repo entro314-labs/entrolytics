@@ -1,65 +1,64 @@
-import { EVENT_NAME_LENGTH, URL_LENGTH, EVENT_TYPE, PAGE_TITLE_LENGTH } from '@/lib/constants'
-import { CLICKHOUSE, DRIZZLE, runQuery, db, websiteEvent } from '@/lib/db'
-import clickhouse from '@/lib/clickhouse'
-import kafka from '@/lib/kafka'
-
-import { uuid } from '@/lib/crypto'
-import { saveEventData } from './saveEventData'
-import { saveRevenue } from './saveRevenue'
+import clickhouse from '@/lib/clickhouse';
+import { EVENT_NAME_LENGTH, EVENT_TYPE, PAGE_TITLE_LENGTH, URL_LENGTH } from '@/lib/constants';
+import { uuid } from '@/lib/crypto';
+import { CLICKHOUSE, DRIZZLE, db, runQuery, websiteEvent } from '@/lib/db';
+import kafka from '@/lib/kafka';
+import { saveEventData } from './saveEventData';
+import { saveRevenue } from './saveRevenue';
 
 export interface SaveEventArgs {
-  websiteId: string
-  sessionId: string
-  visitId: string
-  eventType: number
-  createdAt?: Date
+  websiteId: string;
+  sessionId: string;
+  visitId: string;
+  eventType: number;
+  createdAt?: Date;
 
   // Page
-  pageTitle?: string
-  hostname?: string
-  urlPath: string
-  urlQuery?: string
-  referrerPath?: string
-  referrerQuery?: string
-  referrerDomain?: string
+  pageTitle?: string;
+  hostname?: string;
+  urlPath: string;
+  urlQuery?: string;
+  referrerPath?: string;
+  referrerQuery?: string;
+  referrerDomain?: string;
 
   // Session
-  distinctId?: string
-  browser?: string
-  os?: string
-  device?: string
-  screen?: string
-  language?: string
-  country?: string
-  region?: string
-  city?: string
+  distinctId?: string;
+  browser?: string;
+  os?: string;
+  device?: string;
+  screen?: string;
+  language?: string;
+  country?: string;
+  region?: string;
+  city?: string;
 
   // Events
-  eventName?: string
-  eventData?: any
-  tag?: string
+  eventName?: string;
+  eventData?: any;
+  tag?: string;
 
   // UTM
-  utmSource?: string
-  utmMedium?: string
-  utmCampaign?: string
-  utmContent?: string
-  utmTerm?: string
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
+  utmContent?: string;
+  utmTerm?: string;
 
   // Click IDs
-  gclid?: string
-  fbclid?: string
-  msclkid?: string
-  ttclid?: string
-  lifatid?: string
-  twclid?: string
+  gclid?: string;
+  fbclid?: string;
+  msclkid?: string;
+  ttclid?: string;
+  lifatid?: string;
+  twclid?: string;
 }
 
 export async function saveEvent(args: SaveEventArgs) {
   return runQuery({
     [DRIZZLE]: () => relationalQuery(args),
     [CLICKHOUSE]: () => clickhouseQuery(args),
-  })
+  });
 }
 
 async function relationalQuery({
@@ -90,7 +89,7 @@ async function relationalQuery({
   lifatid,
   twclid,
 }: SaveEventArgs) {
-  const websiteEventId = uuid()
+  const websiteEventId = uuid();
 
   await db.insert(websiteEvent).values({
     eventId: websiteEventId,
@@ -119,7 +118,7 @@ async function relationalQuery({
     tag,
     hostname,
     createdAt,
-  })
+  });
 
   if (eventData) {
     await saveEventData({
@@ -130,9 +129,9 @@ async function relationalQuery({
       eventName: eventName?.substring(0, EVENT_NAME_LENGTH),
       eventData,
       createdAt,
-    })
+    });
 
-    const { revenue, currency } = eventData
+    const { revenue, currency } = eventData;
 
     if (revenue > 0 && currency) {
       await saveRevenue({
@@ -143,7 +142,7 @@ async function relationalQuery({
         currency,
         revenue,
         createdAt,
-      })
+      });
     }
   }
 }
@@ -184,9 +183,9 @@ async function clickhouseQuery({
   lifatid,
   twclid,
 }: SaveEventArgs) {
-  const { insert, getUTCString } = clickhouse
-  const { sendMessage } = kafka
-  const eventId = uuid()
+  const { insert, getUTCString } = clickhouse;
+  const { sendMessage } = kafka;
+  const eventId = uuid();
 
   const message = {
     website_id: websiteId,
@@ -224,12 +223,12 @@ async function clickhouseQuery({
     screen,
     language,
     hostname,
-  }
+  };
 
   if (kafka.enabled) {
-    await sendMessage('event', message)
+    await sendMessage('event', message);
   } else {
-    await insert('website_event', [message])
+    await insert('website_event', [message]);
   }
 
   if (eventData) {
@@ -241,6 +240,6 @@ async function clickhouseQuery({
       eventName: eventName?.substring(0, EVENT_NAME_LENGTH),
       eventData,
       createdAt,
-    })
+    });
   }
 }

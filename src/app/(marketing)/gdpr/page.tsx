@@ -1,13 +1,13 @@
-import { Metadata } from 'next'
-import { MarketingLayout } from '@/components/marketing'
-import styles from '@/components/marketing/ContentPage.module.css'
-import Link from 'next/link'
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { MarketingLayout } from '@/components/marketing';
+import styles from '@/components/marketing/ContentPage.module.css';
 
 export const metadata: Metadata = {
   title: 'GDPR Compliance | Entrolytics',
   description:
     'Learn how Entrolytics ensures GDPR compliance and protects EU user data with privacy-first analytics.',
-}
+};
 
 export default function GDPRPage() {
   return (
@@ -186,9 +186,7 @@ export default function GDPRPage() {
             </ul>
 
             <h2 id="breach-notification">Breach Notification</h2>
-            <p>
-              In the unlikely event of a data breach affecting personal data, we will:
-            </p>
+            <p>In the unlikely event of a data breach affecting personal data, we will:</p>
             <ul>
               <li>Notify affected customers within 72 hours</li>
               <li>Provide details about the nature and scope of the breach</li>
@@ -277,5 +275,5 @@ export default function GDPRPage() {
         </div>
       </div>
     </MarketingLayout>
-  )
+  );
 }

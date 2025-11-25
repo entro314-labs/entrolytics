@@ -17,5 +17,5 @@
 export function setClientAuthToken(token: string): void {
   // With Clerk, authentication is handled automatically
   // This function is kept for backward compatibility with existing SSO flows
-  console.warn('setClientAuthToken is deprecated - Clerk handles authentication automatically')
+  console.warn('setClientAuthToken is deprecated - Clerk handles authentication automatically');
 }

@@ -1,40 +1,40 @@
-import { z } from 'zod'
-import { canViewBoardWidget, canUpdateBoardWidget, canDeleteBoardWidget } from '@/validations'
-import { parseRequest } from '@/lib/request'
-import { ok, json, unauthorized, serverError, badRequest } from '@/lib/response'
-import { getBoardWidget, updateBoardWidget, deleteBoardWidget } from '@/queries/drizzle'
-import { isValidUuid } from '@/lib/uuid'
+import { z } from 'zod';
+import { parseRequest } from '@/lib/request';
+import { badRequest, json, ok, serverError, unauthorized } from '@/lib/response';
+import { isValidUuid } from '@/lib/uuid';
+import { deleteBoardWidget, getBoardWidget, updateBoardWidget } from '@/queries/drizzle';
+import { canDeleteBoardWidget, canUpdateBoardWidget, canViewBoardWidget } from '@/validations';
 
-const WIDGET_TYPES = ['stats', 'chart', 'list', 'map', 'heatmap'] as const
+const WIDGET_TYPES = ['stats', 'chart', 'list', 'map', 'heatmap'] as const;
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ boardId: string; widgetId: string }> }
+  { params }: { params: Promise<{ boardId: string; widgetId: string }> },
 ) {
-  const { auth, error } = await parseRequest(request)
+  const { auth, error } = await parseRequest(request);
 
   if (error) {
-    return error()
+    return error();
   }
 
-  const { widgetId } = await params
+  const { widgetId } = await params;
 
   if (!isValidUuid(widgetId)) {
-    return badRequest('Invalid widget ID format')
+    return badRequest('Invalid widget ID format');
   }
 
   if (!(await canViewBoardWidget(auth, widgetId))) {
-    return unauthorized()
+    return unauthorized();
   }
 
-  const widget = await getBoardWidget(widgetId)
+  const widget = await getBoardWidget(widgetId);
 
-  return json(widget)
+  return json(widget);
 }
 
 export async function POST(
   request: Request,
-  { params }: { params: Promise<{ boardId: string; widgetId: string }> }
+  { params }: { params: Promise<{ boardId: string; widgetId: string }> },
 ) {
   const schema = z.object({
     websiteId: z.string().uuid().optional(),
@@ -42,23 +42,23 @@ export async function POST(
     title: z.string().max(100).nullable().optional(),
     config: z.any().nullable().optional(),
     position: z.number().int().min(0).optional(),
-  })
+  });
 
-  const { auth, body, error } = await parseRequest(request, schema)
+  const { auth, body, error } = await parseRequest(request, schema);
 
   if (error) {
-    return error()
+    return error();
   }
 
-  const { widgetId } = await params
-  const { websiteId, type, title, config, position } = body
+  const { widgetId } = await params;
+  const { websiteId, type, title, config, position } = body;
 
   if (!isValidUuid(widgetId)) {
-    return badRequest('Invalid widget ID format')
+    return badRequest('Invalid widget ID format');
   }
 
   if (!(await canUpdateBoardWidget(auth, widgetId))) {
-    return unauthorized()
+    return unauthorized();
   }
 
   try {
@@ -68,35 +68,35 @@ export async function POST(
       title,
       config,
       position,
-    })
+    });
 
-    return Response.json(result)
+    return Response.json(result);
   } catch (e: any) {
-    return serverError(e)
+    return serverError(e);
   }
 }
 
 export async function DELETE(
   request: Request,
-  { params }: { params: Promise<{ boardId: string; widgetId: string }> }
+  { params }: { params: Promise<{ boardId: string; widgetId: string }> },
 ) {
-  const { auth, error } = await parseRequest(request)
+  const { auth, error } = await parseRequest(request);
 
   if (error) {
-    return error()
+    return error();
   }
 
-  const { widgetId } = await params
+  const { widgetId } = await params;
 
   if (!isValidUuid(widgetId)) {
-    return badRequest('Invalid widget ID format')
+    return badRequest('Invalid widget ID format');
   }
 
   if (!(await canDeleteBoardWidget(auth, widgetId))) {
-    return unauthorized()
+    return unauthorized();
   }
 
-  await deleteBoardWidget(widgetId)
+  await deleteBoardWidget(widgetId);
 
-  return ok()
+  return ok();
 }

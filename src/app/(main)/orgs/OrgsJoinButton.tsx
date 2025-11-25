@@ -1,17 +1,25 @@
-import { Button, Icon, Modal, DialogTrigger, Dialog, Text, useToast } from '@entro314labs/entro-zen'
-import { UserPlus as AddUser } from '@/components/icons'
-import { useMessages, useModified } from '@/components/hooks'
-import { OrgJoinForm } from './OrgJoinForm'
+import {
+  Button,
+  Dialog,
+  DialogTrigger,
+  Icon,
+  Modal,
+  Text,
+  useToast,
+} from '@entro314labs/entro-zen';
+import { useMessages, useModified } from '@/components/hooks';
+import { UserPlus as AddUser } from '@/components/icons';
+import { OrgJoinForm } from './OrgJoinForm';
 
 export function OrgsJoinButton() {
-  const { formatMessage, labels, messages } = useMessages()
-  const { toast } = useToast()
-  const { touch } = useModified()
+  const { formatMessage, labels, messages } = useMessages();
+  const { toast } = useToast();
+  const { touch } = useModified();
 
   const handleJoin = () => {
-    toast(formatMessage(messages.saved))
-    touch('orgs')
-  }
+    toast(formatMessage(messages.saved));
+    touch('orgs');
+  };
 
   return (
     <DialogTrigger>
@@ -27,5 +35,5 @@ export function OrgsJoinButton() {
         </Dialog>
       </Modal>
     </DialogTrigger>
-  )
+  );
 }

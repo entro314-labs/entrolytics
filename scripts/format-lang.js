@@ -1,38 +1,38 @@
-import path from 'node:path'
-import fs from 'fs-extra'
-import { deleteSync } from 'del'
-import prettier from 'prettier'
-import { createRequire } from 'module'
+import path from 'node:path';
+import { deleteSync } from 'del';
+import fs from 'fs-extra';
+import { createRequire } from 'module';
+import prettier from 'prettier';
 
-const require = createRequire(import.meta.url)
-const src = path.resolve(process.cwd(), 'src/lang')
-const dest = path.resolve(process.cwd(), 'build/messages')
-const files = fs.readdirSync(src)
+const require = createRequire(import.meta.url);
+const src = path.resolve(process.cwd(), 'src/lang');
+const dest = path.resolve(process.cwd(), 'build/messages');
+const files = fs.readdirSync(src);
 
-deleteSync([path.join(dest)])
+deleteSync([path.join(dest)]);
 
 /*
 This script takes the files from the `lang` folder and formats them into
 the format that format-js expects.
  */
 async function run() {
-  await fs.ensureDir(dest)
+  await fs.ensureDir(dest);
 
   for (const file of files) {
-    const lang = require(path.resolve(process.cwd(), `src/lang/${file}`))
-    const keys = Object.keys(lang).sort()
+    const lang = require(path.resolve(process.cwd(), `src/lang/${file}`));
+    const keys = Object.keys(lang).sort();
 
     const formatted = keys.reduce((obj, key) => {
-      obj[key] = { defaultMessage: lang[key] }
-      return obj
-    }, {})
+      obj[key] = { defaultMessage: lang[key] };
+      return obj;
+    }, {});
 
     const json = await prettier.format(JSON.stringify(formatted), {
       parser: 'json',
-    })
+    });
 
-    fs.writeFileSync(path.resolve(dest, file), json)
+    fs.writeFileSync(path.resolve(dest, file), json);
   }
 }
 
-run()
+run();

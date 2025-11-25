@@ -1,28 +1,27 @@
-import { Form, FormField, FormSubmitButton, Row, TextField, Button } from '@entro314labs/entro-zen'
-import { useUpdateQuery } from '@/components/hooks'
-import { DOMAIN_REGEX } from '@/lib/constants'
-import { useMessages } from '@/components/hooks'
+import { Button, Form, FormField, FormSubmitButton, Row, TextField } from '@entro314labs/entro-zen';
+import { useMessages, useUpdateQuery } from '@/components/hooks';
+import { DOMAIN_REGEX } from '@/lib/constants';
 
 export function WebsiteAddForm({
   orgId,
   onSave,
   onClose,
 }: {
-  orgId?: string
-  onSave?: () => void
-  onClose?: () => void
+  orgId?: string;
+  onSave?: () => void;
+  onClose?: () => void;
 }) {
-  const { formatMessage, labels, messages } = useMessages()
-  const { mutateAsync, error, isPending } = useUpdateQuery('/websites', { orgId })
+  const { formatMessage, labels, messages } = useMessages();
+  const { mutateAsync, error, isPending } = useUpdateQuery('/websites', { orgId });
 
   const handleSubmit = async (data: any) => {
     await mutateAsync(data, {
       onSuccess: async () => {
-        onSave?.()
-        onClose?.()
+        onSave?.();
+        onClose?.();
       },
-    })
-  }
+    });
+  };
 
   return (
     <Form onSubmit={handleSubmit} error={error?.message}>
@@ -60,5 +59,5 @@ export function WebsiteAddForm({
         </FormSubmitButton>
       </Row>
     </Form>
-  )
+  );
 }

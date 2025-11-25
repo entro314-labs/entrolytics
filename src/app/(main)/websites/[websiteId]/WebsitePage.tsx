@@ -1,11 +1,11 @@
-'use client'
-import { Column } from '@entro314labs/entro-zen'
-import { Panel } from '@/components/common/Panel'
-import { WebsiteChart } from './WebsiteChart'
-import { WebsiteMetricsBar } from './WebsiteMetricsBar'
-import { WebsitePanels } from './WebsitePanels'
-import { WebsiteControls } from './WebsiteControls'
-import { ExpandedViewModal } from '@/app/(main)/websites/[websiteId]/ExpandedViewModal'
+'use client';
+import { Column } from '@entro314labs/entro-zen';
+import { ExpandedViewModal } from '@/app/(main)/websites/[websiteId]/ExpandedViewModal';
+import { Panel } from '@/components/common/Panel';
+import { WebsiteChart } from './WebsiteChart';
+import { WebsiteControls } from './WebsiteControls';
+import { WebsiteMetricsBar } from './WebsiteMetricsBar';
+import { WebsitePanels } from './WebsitePanels';
 
 export function WebsitePage({ websiteId }: { websiteId: string }) {
   return (
@@ -18,5 +18,5 @@ export function WebsitePage({ websiteId }: { websiteId: string }) {
       <WebsitePanels websiteId={websiteId} />
       <ExpandedViewModal websiteId={websiteId} />
     </Column>
-  )
+  );
 }

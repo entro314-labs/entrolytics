@@ -1,6 +1,6 @@
-import { eq, and, or, ilike, sql, desc, asc } from 'drizzle-orm'
-import { db, report, user, website } from '@/lib/db'
-import { PageResult, QueryFilters } from '@/lib/types'
+import { and, asc, desc, eq, ilike, or, sql } from 'drizzle-orm';
+import { db, report, user, website } from '@/lib/db';
+import type { PageResult, QueryFilters } from '@/lib/types';
 
 export async function findReport(reportId: string) {
   return db
@@ -8,20 +8,20 @@ export async function findReport(reportId: string) {
     .from(report)
     .where(eq(report.reportId, reportId))
     .limit(1)
-    .then((rows) => rows[0] || null)
+    .then(rows => rows[0] || null);
 }
 
 export async function getReport(reportId: string) {
-  return findReport(reportId)
+  return findReport(reportId);
 }
 
 export async function getReports(
   whereClause: any = {},
-  filters: QueryFilters = {}
+  filters: QueryFilters = {},
 ): Promise<PageResult<any[]>> {
-  const { search, page = 1, pageSize = 20, orderBy = 'createdAt', sortDescending = true } = filters
+  const { search, page = 1, pageSize = 20, orderBy = 'createdAt', sortDescending = true } = filters;
 
-  const conditions = []
+  const conditions = [];
 
   if (search) {
     conditions.push(
@@ -32,13 +32,13 @@ export async function getReports(
         ilike(user.displayName, `%${search}%`),
         ilike(user.email, `%${search}%`),
         ilike(website.name, `%${search}%`),
-        ilike(website.domain, `%${search}%`)
-      )
-    )
+        ilike(website.domain, `%${search}%`),
+      ),
+    );
   }
 
   if (whereClause) {
-    conditions.push(whereClause)
+    conditions.push(whereClause);
   }
 
   // Build query with conditional where clause
@@ -90,7 +90,7 @@ export async function getReports(
           })
           .from(report)
           .leftJoin(user, eq(report.userId, user.userId))
-          .leftJoin(website, eq(report.websiteId, website.websiteId))
+          .leftJoin(website, eq(report.websiteId, website.websiteId));
 
   // Get total count with conditional where clause
   const countQuery =
@@ -105,16 +105,16 @@ export async function getReports(
           .select({ count: sql<number>`count(*)` })
           .from(report)
           .leftJoin(user, eq(report.userId, user.userId))
-          .leftJoin(website, eq(report.websiteId, website.websiteId))
+          .leftJoin(website, eq(report.websiteId, website.websiteId));
 
-  const [{ count }] = await countQuery
+  const [{ count }] = await countQuery;
 
   // Apply pagination and ordering
-  const offset = (page - 1) * pageSize
+  const offset = (page - 1) * pageSize;
   const data = await query
     .orderBy(sortDescending ? desc(report[orderBy]) : asc(report[orderBy]))
     .limit(pageSize)
-    .offset(offset)
+    .offset(offset);
 
   return {
     data,
@@ -123,21 +123,21 @@ export async function getReports(
     pageSize,
     orderBy,
     search,
-  }
+  };
 }
 
 export async function getUserReports(
   userId: string,
-  filters?: QueryFilters
+  filters?: QueryFilters,
 ): Promise<PageResult<any[]>> {
-  return getReports(eq(report.userId, userId), filters)
+  return getReports(eq(report.userId, userId), filters);
 }
 
 export async function getWebsiteReports(
   websiteId: string,
-  filters: QueryFilters = {}
+  filters: QueryFilters = {},
 ): Promise<PageResult<any[]>> {
-  return getReports(eq(report.websiteId, websiteId), filters)
+  return getReports(eq(report.websiteId, websiteId), filters);
 }
 
 export async function createReport(data: any) {
@@ -152,32 +152,32 @@ export async function createReport(data: any) {
       description: data.description,
       parameters: data.parameters,
     })
-    .returning()
+    .returning();
 
-  return newReport
+  return newReport;
 }
 
 export async function updateReport(reportId: string, data: any) {
   const updateData: any = {
     updatedAt: new Date(),
-  }
+  };
 
-  if (data.type) updateData.type = data.type
-  if (data.name) updateData.name = data.name
-  if (data.description) updateData.description = data.description
-  if (data.parameters) updateData.parameters = data.parameters
+  if (data.type) updateData.type = data.type;
+  if (data.name) updateData.name = data.name;
+  if (data.description) updateData.description = data.description;
+  if (data.parameters) updateData.parameters = data.parameters;
 
   const [updatedReport] = await db
     .update(report)
     .set(updateData)
     .where(eq(report.reportId, reportId))
-    .returning()
+    .returning();
 
-  return updatedReport
+  return updatedReport;
 }
 
 export async function deleteReport(reportId: string) {
-  const [deletedReport] = await db.delete(report).where(eq(report.reportId, reportId)).returning()
+  const [deletedReport] = await db.delete(report).where(eq(report.reportId, reportId)).returning();
 
-  return deletedReport
+  return deletedReport;
 }

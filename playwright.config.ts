@@ -1,4 +1,4 @@
-import { defineConfig, devices } from '@playwright/test'
+import { defineConfig, devices } from '@playwright/test';
 
 /**
  * Playwright configuration for end-to-end tests
@@ -51,4 +51,4 @@ export default defineConfig({
     reuseExistingServer: !process.env.CI,
     timeout: 120000,
   },
-})
+});

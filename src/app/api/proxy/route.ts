@@ -1,34 +1,34 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { z } from 'zod'
-import { parseRequest } from '@/lib/request'
-import { unauthorized, badRequest, json } from '@/lib/response'
+import { type NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
+import { parseRequest } from '@/lib/request';
+import { badRequest, json, unauthorized } from '@/lib/response';
 
 const proxySchema = z.object({
   url: z.string().url('Invalid URL provided'),
   method: z.enum(['GET', 'POST', 'PUT', 'DELETE', 'PATCH']).default('GET'),
   headers: z.record(z.string(), z.string()).optional(),
   body: z.any().optional(),
-})
+});
 
 export async function POST(request: NextRequest) {
   try {
-    const { auth, body, error } = await parseRequest(request, proxySchema)
+    const { auth, body, error } = await parseRequest(request, proxySchema);
 
     if (error) {
-      return error()
+      return error();
     }
 
     // Only authenticated users can use the proxy
     if (!auth?.user) {
-      return unauthorized()
+      return unauthorized();
     }
 
-    const { url, method, headers: customHeaders, body: requestBody } = body
+    const { url, method, headers: customHeaders, body: requestBody } = body;
 
     // Security: Only allow HTTPS URLs and specific domains if needed
-    const urlObj = new URL(url)
+    const urlObj = new URL(url);
     if (urlObj.protocol !== 'https:') {
-      return badRequest('Only HTTPS URLs are allowed')
+      return badRequest('Only HTTPS URLs are allowed');
     }
 
     // Optional: Add domain whitelist for additional security
@@ -42,12 +42,12 @@ export async function POST(request: NextRequest) {
       'User-Agent': 'Entrolytics-Analytics/1.0',
       Accept: 'application/json, text/plain, */*',
       ...customHeaders,
-    }
+    };
 
     // Remove potentially problematic headers
-    delete proxyHeaders['host']
-    delete proxyHeaders['origin']
-    delete proxyHeaders['referer']
+    delete proxyHeaders['host'];
+    delete proxyHeaders['origin'];
+    delete proxyHeaders['referer'];
 
     // Make the proxied request
     const proxyResponse = await fetch(url, {
@@ -56,17 +56,17 @@ export async function POST(request: NextRequest) {
       body: requestBody ? JSON.stringify(requestBody) : undefined,
       // Add timeout to prevent hanging requests
       signal: AbortSignal.timeout(10000), // 10 second timeout
-    })
+    });
 
     // Get response data
-    const responseText = await proxyResponse.text()
-    let responseData: any
+    const responseText = await proxyResponse.text();
+    let responseData: any;
 
     // Try to parse as JSON, fallback to text
     try {
-      responseData = JSON.parse(responseText)
+      responseData = JSON.parse(responseText);
     } catch {
-      responseData = responseText
+      responseData = responseText;
     }
 
     // Return the proxied response
@@ -82,10 +82,10 @@ export async function POST(request: NextRequest) {
         headers: {
           'Content-Type': 'application/json',
         },
-      }
-    )
+      },
+    );
   } catch (error) {
-    console.error('Proxy error:', error)
+    console.error('Proxy error:', error);
 
     if (error instanceof Error && error.name === 'AbortError') {
       return new NextResponse(
@@ -96,8 +96,8 @@ export async function POST(request: NextRequest) {
         {
           status: 408,
           headers: { 'Content-Type': 'application/json' },
-        }
-      )
+        },
+      );
     }
 
     return new NextResponse(
@@ -108,19 +108,19 @@ export async function POST(request: NextRequest) {
       {
         status: 500,
         headers: { 'Content-Type': 'application/json' },
-      }
-    )
+      },
+    );
   }
 }
 
 // Also support GET for simple proxy requests with URL in query params
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url)
-    const url = searchParams.get('url')
+    const { searchParams } = new URL(request.url);
+    const url = searchParams.get('url');
 
     if (!url) {
-      return badRequest('URL parameter is required')
+      return badRequest('URL parameter is required');
     }
 
     // Reuse POST logic by creating a mock body
@@ -131,11 +131,11 @@ export async function GET(request: NextRequest) {
         url,
         method: 'GET',
       }),
-    })
+    });
 
-    return POST(mockRequest as NextRequest)
+    return POST(mockRequest as NextRequest);
   } catch (error) {
-    console.error('Proxy GET error:', error)
+    console.error('Proxy GET error:', error);
     return new NextResponse(
       JSON.stringify({
         error: 'Proxy error',
@@ -144,7 +144,7 @@ export async function GET(request: NextRequest) {
       {
         status: 500,
         headers: { 'Content-Type': 'application/json' },
-      }
-    )
+      },
+    );
   }
 }

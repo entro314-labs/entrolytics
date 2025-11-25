@@ -1,10 +1,10 @@
-import { Button, DialogTrigger, Dialog, Icon, Text, Modal } from '@entro314labs/entro-zen'
-import { useMessages } from '@/components/hooks'
-import { FunnelEditForm } from './FunnelEditForm'
-import { Plus } from '@/components/icons'
+import { Button, Dialog, DialogTrigger, Icon, Modal, Text } from '@entro314labs/entro-zen';
+import { useMessages } from '@/components/hooks';
+import { Plus } from '@/components/icons';
+import { FunnelEditForm } from './FunnelEditForm';
 
 export function FunnelAddButton({ websiteId }: { websiteId: string }) {
-  const { formatMessage, labels } = useMessages()
+  const { formatMessage, labels } = useMessages();
 
   return (
     <DialogTrigger>
@@ -24,5 +24,5 @@ export function FunnelAddButton({ websiteId }: { websiteId: string }) {
         </Dialog>
       </Modal>
     </DialogTrigger>
-  )
+  );
 }

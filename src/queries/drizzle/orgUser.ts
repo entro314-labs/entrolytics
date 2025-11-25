@@ -1,7 +1,7 @@
-import { eq, and, or, ilike, sql, desc, asc } from 'drizzle-orm'
-import { db, orgUser, user } from '@/lib/db'
-import { uuid } from '@/lib/crypto'
-import { PageResult, QueryFilters } from '@/lib/types'
+import { and, asc, desc, eq, ilike, or, sql } from 'drizzle-orm';
+import { uuid } from '@/lib/crypto';
+import { db, orgUser, user } from '@/lib/db';
+import type { PageResult, QueryFilters } from '@/lib/types';
 
 export async function findOrgUser(orgUserId: string) {
   return db
@@ -9,7 +9,7 @@ export async function findOrgUser(orgUserId: string) {
     .from(orgUser)
     .where(eq(orgUser.orgUserId, orgUserId))
     .limit(1)
-    .then((rows) => rows[0] || null)
+    .then(rows => rows[0] || null);
 }
 
 export async function getOrgUser(orgId: string, userId: string) {
@@ -18,23 +18,23 @@ export async function getOrgUser(orgId: string, userId: string) {
     .from(orgUser)
     .where(and(eq(orgUser.orgId, orgId), eq(orgUser.userId, userId)))
     .limit(1)
-    .then((rows) => rows[0] || null)
+    .then(rows => rows[0] || null);
 }
 
 export async function getOrgUsers(
   whereClause: any = null,
-  filters: QueryFilters = {}
+  filters: QueryFilters = {},
 ): Promise<PageResult<any[]>> {
-  const { search, page = 1, pageSize = 20, orderBy = 'createdAt', sortDescending = true } = filters
+  const { search, page = 1, pageSize = 20, orderBy = 'createdAt', sortDescending = true } = filters;
 
-  const conditions = []
+  const conditions = [];
 
   if (search) {
-    conditions.push(or(ilike(user.displayName, `%${search}%`), ilike(user.email, `%${search}%`)))
+    conditions.push(or(ilike(user.displayName, `%${search}%`), ilike(user.email, `%${search}%`)));
   }
 
   if (whereClause) {
-    conditions.push(whereClause)
+    conditions.push(whereClause);
   }
 
   // Build query with conditional where clause
@@ -72,7 +72,7 @@ export async function getOrgUsers(
             userImageUrl: user.imageUrl,
           })
           .from(orgUser)
-          .leftJoin(user, eq(orgUser.userId, user.userId))
+          .leftJoin(user, eq(orgUser.userId, user.userId));
 
   // Get total count with conditional where clause
   const countQuery =
@@ -85,16 +85,16 @@ export async function getOrgUsers(
       : db
           .select({ count: sql<number>`count(*)` })
           .from(orgUser)
-          .leftJoin(user, eq(orgUser.userId, user.userId))
+          .leftJoin(user, eq(orgUser.userId, user.userId));
 
-  const [{ count }] = await countQuery
+  const [{ count }] = await countQuery;
 
   // Apply pagination and ordering
-  const offset = (page - 1) * pageSize
+  const offset = (page - 1) * pageSize;
   const rawData = await query
     .orderBy(sortDescending ? desc(orgUser[orderBy]) : asc(orgUser[orderBy]))
     .limit(pageSize)
-    .offset(offset)
+    .offset(offset);
 
   // Transform flattened data into nested structure
   const data = rawData.map(row => ({
@@ -112,7 +112,7 @@ export async function getOrgUsers(
       lastName: row.userLastName,
       imageUrl: row.userImageUrl,
     },
-  }))
+  }));
 
   return {
     data,
@@ -121,7 +121,7 @@ export async function getOrgUsers(
     pageSize,
     orderBy,
     search,
-  }
+  };
 }
 
 export async function createOrgUser(userId: string, orgId: string, role: string) {
@@ -133,27 +133,27 @@ export async function createOrgUser(userId: string, orgId: string, role: string)
       orgId: orgId,
       role: role,
     })
-    .returning()
+    .returning();
 
-  return newOrgUser
+  return newOrgUser;
 }
 
 export async function updateOrgUser(orgUserId: string, data: any) {
   const updateData: any = {
     updatedAt: new Date(),
-  }
+  };
 
-  if (data.role) updateData.role = data.role
+  if (data.role) updateData.role = data.role;
 
   const [updatedOrgUser] = await db
     .update(orgUser)
     .set(updateData)
     .where(eq(orgUser.orgUserId, orgUserId))
-    .returning()
+    .returning();
 
-  return updatedOrgUser
+  return updatedOrgUser;
 }
 
 export async function deleteOrgUser(orgId: string, userId: string) {
-  return db.delete(orgUser).where(and(eq(orgUser.orgId, orgId), eq(orgUser.userId, userId)))
+  return db.delete(orgUser).where(and(eq(orgUser.orgId, orgId), eq(orgUser.userId, userId)));
 }

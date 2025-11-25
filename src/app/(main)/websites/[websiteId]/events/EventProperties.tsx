@@ -1,32 +1,32 @@
-import { useMemo, useState } from 'react'
-import { Select, ListItem, Grid } from '@entro314labs/entro-zen'
+import { Grid, ListItem, Select } from '@entro314labs/entro-zen';
+import { useMemo, useState } from 'react';
+import { PieChart } from '@/components/charts/PieChart';
+import { LoadingPanel } from '@/components/common/LoadingPanel';
 import {
   useEventDataPropertiesQuery,
   useEventDataValuesQuery,
   useMessages,
-} from '@/components/hooks'
-import { LoadingPanel } from '@/components/common/LoadingPanel'
-import { PieChart } from '@/components/charts/PieChart'
-import { CHART_COLORS } from '@/lib/constants'
-import { ListTable } from '@/components/metrics/ListTable'
+} from '@/components/hooks';
+import { ListTable } from '@/components/metrics/ListTable';
+import { CHART_COLORS } from '@/lib/constants';
 
 export function EventProperties({ websiteId }: { websiteId: string }) {
-  const [propertyName, setPropertyName] = useState('')
-  const [eventName, setEventName] = useState('')
+  const [propertyName, setPropertyName] = useState('');
+  const [eventName, setEventName] = useState('');
 
-  const { formatMessage, labels } = useMessages()
-  const { data, isLoading, isFetching, error } = useEventDataPropertiesQuery(websiteId)
+  const { formatMessage, labels } = useMessages();
+  const { data, isLoading, isFetching, error } = useEventDataPropertiesQuery(websiteId);
 
   const events: string[] =
     data && Array.isArray(data)
       ? data.reduce((arr: string[], e: { eventName: any }) => {
-          return !arr.includes(e.eventName) ? arr.concat(e.eventName) : arr
+          return !arr.includes(e.eventName) ? arr.concat(e.eventName) : arr;
         }, [])
-      : []
+      : [];
   const properties: string[] =
     eventName && data && Array.isArray(data)
-      ? data.filter((e) => e.eventName === eventName).map((e) => e.propertyName)
-      : []
+      ? data.filter(e => e.eventName === eventName).map(e => e.propertyName)
+      : [];
 
   return (
     <LoadingPanel
@@ -45,7 +45,7 @@ export function EventProperties({ websiteId }: { websiteId: string }) {
             onChange={setEventName}
             placeholder=""
           >
-            {events?.map((p) => (
+            {events?.map(p => (
               <ListItem key={p} id={p}>
                 {p}
               </ListItem>
@@ -58,7 +58,7 @@ export function EventProperties({ websiteId }: { websiteId: string }) {
             isDisabled={!eventName}
             placeholder=""
           >
-            {properties?.map((p) => (
+            {properties?.map(p => (
               <ListItem key={p} id={p}>
                 {p}
               </ListItem>
@@ -70,7 +70,7 @@ export function EventProperties({ websiteId }: { websiteId: string }) {
         <EventValues websiteId={websiteId} eventName={eventName} propertyName={propertyName} />
       )}
     </LoadingPanel>
-  )
+  );
 }
 
 const EventValues = ({ websiteId, eventName, propertyName }) => {
@@ -79,14 +79,14 @@ const EventValues = ({ websiteId, eventName, propertyName }) => {
     isLoading,
     isFetching,
     error,
-  } = useEventDataValuesQuery(websiteId, eventName, propertyName)
+  } = useEventDataValuesQuery(websiteId, eventName, propertyName);
 
   const propertySum = useMemo(() => {
-    return values && Array.isArray(values) ? values.reduce((sum, { total }) => sum + total, 0) : 0
-  }, [values])
+    return values && Array.isArray(values) ? values.reduce((sum, { total }) => sum + total, 0) : 0;
+  }, [values]);
 
   const chartData = useMemo(() => {
-    if (!propertyName || !values || !Array.isArray(values)) return null
+    if (!propertyName || !values || !Array.isArray(values)) return null;
     return {
       labels: values.map(({ value }) => value),
       datasets: [
@@ -96,17 +96,17 @@ const EventValues = ({ websiteId, eventName, propertyName }) => {
           borderWidth: 0,
         },
       ],
-    }
-  }, [propertyName, values])
+    };
+  }, [propertyName, values]);
 
   const tableData = useMemo(() => {
-    if (!propertyName || !values || !Array.isArray(values) || propertySum === 0) return []
+    if (!propertyName || !values || !Array.isArray(values) || propertySum === 0) return [];
     return values.map(({ value, total }) => ({
       label: value,
       count: total,
       percent: 100 * (total / propertySum),
-    }))
-  }, [propertyName, values, propertySum])
+    }));
+  }, [propertyName, values, propertySum]);
 
   return (
     <LoadingPanel
@@ -124,5 +124,5 @@ const EventValues = ({ websiteId, eventName, propertyName }) => {
         </Grid>
       )}
     </LoadingPanel>
-  )
-}
+  );
+};

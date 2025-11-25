@@ -1,8 +1,8 @@
-'use client'
-import { ReactNode } from 'react'
-import { Grid, Column } from '@entro314labs/entro-zen'
-import { PageBody } from '@/components/common/PageBody'
-import { SettingsNav } from './SettingsNav'
+'use client';
+import { Column, Grid } from '@entro314labs/entro-zen';
+import type { ReactNode } from 'react';
+import { PageBody } from '@/components/common/PageBody';
+import { SettingsNav } from './SettingsNav';
 
 export function SettingsLayout({ children }: { children: ReactNode }) {
   return (
@@ -20,5 +20,5 @@ export function SettingsLayout({ children }: { children: ReactNode }) {
         <PageBody>{children}</PageBody>
       </Column>
     </Grid>
-  )
+  );
 }

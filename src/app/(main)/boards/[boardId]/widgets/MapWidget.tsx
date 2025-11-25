@@ -1,10 +1,10 @@
-'use client'
-import { WorldMap } from '@/components/metrics/WorldMap'
+'use client';
+import { WorldMap } from '@/components/metrics/WorldMap';
 
 export interface MapWidgetProps {
-  websiteId: string
+  websiteId: string;
 }
 
 export function MapWidget({ websiteId }: MapWidgetProps) {
-  return <WorldMap websiteId={websiteId} />
+  return <WorldMap websiteId={websiteId} />;
 }

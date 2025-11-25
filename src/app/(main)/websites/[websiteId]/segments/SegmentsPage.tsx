@@ -1,8 +1,8 @@
-'use client'
-import { Column } from '@entro314labs/entro-zen'
-import { SegmentsDataTable } from './SegmentsDataTable'
-import { WebsiteControls } from '@/app/(main)/websites/[websiteId]/WebsiteControls'
-import { Panel } from '@/components/common/Panel'
+'use client';
+import { Column } from '@entro314labs/entro-zen';
+import { WebsiteControls } from '@/app/(main)/websites/[websiteId]/WebsiteControls';
+import { Panel } from '@/components/common/Panel';
+import { SegmentsDataTable } from './SegmentsDataTable';
 
 export function SegmentsPage({ websiteId }) {
   return (
@@ -12,5 +12,5 @@ export function SegmentsPage({ websiteId }) {
         <SegmentsDataTable websiteId={websiteId} />
       </Panel>
     </Column>
-  )
+  );
 }

@@ -1,9 +1,9 @@
-import { User } from '@/components/icons'
-import { PageHeader } from '@/components/common/PageHeader'
-import { useUser } from '@/components/hooks'
+import { PageHeader } from '@/components/common/PageHeader';
+import { useUser } from '@/components/hooks';
+import { User } from '@/components/icons';
 
 export function UserHeader() {
-  const user = useUser()
+  const user = useUser();
 
-  return <PageHeader title={user?.displayName} icon={<User />} />
+  return <PageHeader title={user?.displayName} icon={<User />} />;
 }

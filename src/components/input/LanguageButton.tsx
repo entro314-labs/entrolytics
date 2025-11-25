@@ -1,17 +1,17 @@
-import { Icon, Button, MenuTrigger, Popover, Grid, Text, Dialog } from '@entro314labs/entro-zen'
-import { languages } from '@/lib/lang'
-import { useLocale } from '@/components/hooks'
-import { Globe } from 'lucide-react'
+import { Button, Dialog, Grid, Icon, MenuTrigger, Popover, Text } from '@entro314labs/entro-zen';
+import { Globe } from 'lucide-react';
+import { useLocale } from '@/components/hooks';
+import { languages } from '@/lib/lang';
 
 export function LanguageButton() {
-  const { locale, saveLocale } = useLocale()
-  const items = Object.keys(languages).map((key) => ({
+  const { locale, saveLocale } = useLocale();
+  const items = Object.keys(languages).map(key => ({
     ...languages[key],
     value: key,
-  }))
+  }));
 
   function handleSelect(value: string) {
-    saveLocale(value)
+    saveLocale(value);
   }
 
   return (
@@ -34,11 +34,11 @@ export function LanguageButton() {
                     {label}
                   </Text>
                 </Button>
-              )
+              );
             })}
           </Grid>
         </Dialog>
       </Popover>
     </MenuTrigger>
-  )
+  );
 }

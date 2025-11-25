@@ -1,18 +1,26 @@
-import { useMessages, useModified } from '@/components/hooks'
-import { Button, Icon, Modal, Dialog, DialogTrigger, Text, useToast } from '@entro314labs/entro-zen'
-import { Plus } from '@/components/icons'
-import { WebsiteAddForm } from './WebsiteAddForm'
+import {
+  Button,
+  Dialog,
+  DialogTrigger,
+  Icon,
+  Modal,
+  Text,
+  useToast,
+} from '@entro314labs/entro-zen';
+import { useMessages, useModified } from '@/components/hooks';
+import { Plus } from '@/components/icons';
+import { WebsiteAddForm } from './WebsiteAddForm';
 
 export function WebsiteAddButton({ orgId, onSave }: { orgId: string; onSave?: () => void }) {
-  const { formatMessage, labels, messages } = useMessages()
-  const { toast } = useToast()
-  const { touch } = useModified()
+  const { formatMessage, labels, messages } = useMessages();
+  const { toast } = useToast();
+  const { touch } = useModified();
 
   const handleSave = async () => {
-    toast(formatMessage(messages.saved))
-    touch('websites')
-    onSave?.()
-  }
+    toast(formatMessage(messages.saved));
+    touch('websites');
+    onSave?.();
+  };
 
   return (
     <DialogTrigger>
@@ -28,5 +36,5 @@ export function WebsiteAddButton({ orgId, onSave }: { orgId: string; onSave?: ()
         </Dialog>
       </Modal>
     </DialogTrigger>
-  )
+  );
 }

@@ -1,9 +1,9 @@
-import { Metadata } from 'next'
-import { AdminWebsitesPage } from './AdminWebsitesPage'
+import type { Metadata } from 'next';
+import { AdminWebsitesPage } from './AdminWebsitesPage';
 
 export default function () {
-  return <AdminWebsitesPage />
+  return <AdminWebsitesPage />;
 }
 export const metadata: Metadata = {
   title: 'Websites',
-}
+};

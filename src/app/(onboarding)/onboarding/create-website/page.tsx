@@ -1,29 +1,29 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useOnboarding } from '@/contexts/OnboardingContext'
-import { useUser } from '@clerk/nextjs'
+import { useUser } from '@clerk/nextjs';
+import { useState } from 'react';
+import { useOnboarding } from '@/contexts/OnboardingContext';
 
 export default function CreateWebsitePage() {
-  const { setWebsiteId, nextStep, skipOnboarding } = useOnboarding()
-  const { user } = useUser()
+  const { setWebsiteId, nextStep, skipOnboarding } = useOnboarding();
+  const { user } = useUser();
   const [formData, setFormData] = useState({
     name: '',
     domain: '',
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [error, setError] = useState('')
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (!formData.name.trim()) {
-      setError('Website name is required')
-      return
+      setError('Website name is required');
+      return;
     }
 
-    setIsSubmitting(true)
-    setError('')
+    setIsSubmitting(true);
+    setError('');
 
     try {
       const response = await fetch('/api/websites', {
@@ -34,18 +34,18 @@ export default function CreateWebsitePage() {
           domain: formData.domain.trim() || undefined,
           userId: user?.id,
         }),
-      })
+      });
 
       if (!response.ok) {
-        const data = await response.json()
-        throw new Error(data.error || 'Failed to create website')
+        const data = await response.json();
+        throw new Error(data.error || 'Failed to create website');
       }
 
-      const data = await response.json()
-      const websiteId = data.websiteId || data.id
+      const data = await response.json();
+      const websiteId = data.websiteId || data.id;
 
       // Save to onboarding context
-      setWebsiteId(websiteId)
+      setWebsiteId(websiteId);
 
       // Track onboarding step
       await fetch('/api/user/onboarding', {
@@ -56,14 +56,14 @@ export default function CreateWebsitePage() {
           step: 'create-website',
           websiteId,
         }),
-      })
+      });
 
-      nextStep()
+      nextStep();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to create website')
-      setIsSubmitting(false)
+      setError(err instanceof Error ? err.message : 'Failed to create website');
+      setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <>
@@ -77,12 +77,8 @@ export default function CreateWebsitePage() {
       </div>
 
       <div className="onboarding-card">
-        <h1 className="onboarding-title">
-          Create Your First Website
-        </h1>
-        <p className="onboarding-subtitle">
-          Add the site you want to track
-        </p>
+        <h1 className="onboarding-title">Create Your First Website</h1>
+        <p className="onboarding-subtitle">Add the site you want to track</p>
 
         <form className="onboarding-form" onSubmit={handleSubmit}>
           <div className="form-field">
@@ -95,7 +91,7 @@ export default function CreateWebsitePage() {
               className="onboarding-input"
               placeholder="My Awesome Site"
               value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              onChange={e => setFormData({ ...formData, name: e.target.value })}
               required
               autoFocus
             />
@@ -111,7 +107,7 @@ export default function CreateWebsitePage() {
               className="onboarding-input"
               placeholder="example.com"
               value={formData.domain}
-              onChange={(e) => setFormData({ ...formData, domain: e.target.value })}
+              onChange={e => setFormData({ ...formData, domain: e.target.value })}
             />
             <span className="onboarding-hint">
               ℹ️ Used for organization only. You can track multiple domains per website.
@@ -133,16 +129,12 @@ export default function CreateWebsitePage() {
             >
               Skip
             </button>
-            <button
-              type="submit"
-              className="onboarding-btn-primary"
-              disabled={isSubmitting}
-            >
+            <button type="submit" className="onboarding-btn-primary" disabled={isSubmitting}>
               {isSubmitting ? 'Creating...' : 'Create & Continue →'}
             </button>
           </div>
         </form>
       </div>
     </>
-  )
+  );
 }

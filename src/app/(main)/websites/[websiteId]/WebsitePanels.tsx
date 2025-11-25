@@ -1,24 +1,24 @@
-import { Grid, Tabs, Tab, TabList, TabPanel, Heading, Row } from '@entro314labs/entro-zen'
-import { GridRow } from '@/components/common/GridRow'
-import { Panel } from '@/components/common/Panel'
-import { useMessages, useNavigation } from '@/components/hooks'
-import { EventsChart } from '@/components/metrics/EventsChart'
-import { MetricsTable } from '@/components/metrics/MetricsTable'
-import { WeeklyTraffic } from '@/components/metrics/WeeklyTraffic'
-import { WorldMap } from '@/components/metrics/WorldMap'
+import { Grid, Heading, Row, Tab, TabList, TabPanel, Tabs } from '@entro314labs/entro-zen';
+import { GridRow } from '@/components/common/GridRow';
+import { Panel } from '@/components/common/Panel';
+import { useMessages, useNavigation } from '@/components/hooks';
+import { EventsChart } from '@/components/metrics/EventsChart';
+import { MetricsTable } from '@/components/metrics/MetricsTable';
+import { WeeklyTraffic } from '@/components/metrics/WeeklyTraffic';
+import { WorldMap } from '@/components/metrics/WorldMap';
 
 export function WebsitePanels({ websiteId }: { websiteId: string }) {
-  const { formatMessage, labels } = useMessages()
-  const { pathname } = useNavigation()
+  const { formatMessage, labels } = useMessages();
+  const { pathname } = useNavigation();
   const tableProps = {
     websiteId,
     limit: 10,
     allowDownload: false,
     showMore: true,
     metric: formatMessage(labels.visitors),
-  }
-  const rowProps = { minHeight: '570px' }
-  const isSharePage = pathname.includes('/share/')
+  };
+  const rowProps = { minHeight: '570px' };
+  const isSharePage = pathname.includes('/share/');
 
   return (
     <Grid gap="3">
@@ -134,5 +134,5 @@ export function WebsitePanels({ websiteId }: { websiteId: string }) {
         </GridRow>
       )}
     </Grid>
-  )
+  );
 }

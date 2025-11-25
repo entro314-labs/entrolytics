@@ -1,33 +1,33 @@
-import { useState } from 'react'
-import { Grid, Heading, Column, Row, Select, ListItem } from '@entro314labs/entro-zen'
-import { useDateRange, useMessages, useNavigation } from '@/components/hooks'
-import { MetricsTable } from '@/components/metrics/MetricsTable'
-import { Panel } from '@/components/common/Panel'
-import { DateDisplay } from '@/components/common/DateDisplay'
-import { ChangeLabel } from '@/components/metrics/ChangeLabel'
-import { getCompareDate } from '@/lib/date'
-import { formatNumber } from '@/lib/format'
+import { Column, Grid, Heading, ListItem, Row, Select } from '@entro314labs/entro-zen';
+import { useState } from 'react';
+import { DateDisplay } from '@/components/common/DateDisplay';
+import { Panel } from '@/components/common/Panel';
+import { useDateRange, useMessages, useNavigation } from '@/components/hooks';
+import { ChangeLabel } from '@/components/metrics/ChangeLabel';
+import { MetricsTable } from '@/components/metrics/MetricsTable';
+import { getCompareDate } from '@/lib/date';
+import { formatNumber } from '@/lib/format';
 
 export function CompareTables({ websiteId }: { websiteId: string }) {
-  const [data, setData] = useState([])
-  const { dateRange, compare } = useDateRange()
-  const { formatMessage, labels } = useMessages()
+  const [data, setData] = useState([]);
+  const { dateRange, compare } = useDateRange();
+  const { formatMessage, labels } = useMessages();
   const {
     router,
     updateParams,
     query: { view = 'path' },
-  } = useNavigation()
-  const compareDate = getCompareDate(compare, dateRange.startDate, dateRange.endDate)
-  const { startDate = dateRange.startDate, endDate = dateRange.endDate } = compareDate
+  } = useNavigation();
+  const compareDate = getCompareDate(compare, dateRange.startDate, dateRange.endDate);
+  const { startDate = dateRange.startDate, endDate = dateRange.endDate } = compareDate;
 
   const params = {
     startAt: startDate.getTime(),
     endAt: endDate.getTime(),
-  }
+  };
 
   const renderPath = (view: string) => {
-    return updateParams({ view })
-  }
+    return updateParams({ view });
+  };
 
   const items = [
     {
@@ -100,12 +100,12 @@ export function CompareTables({ websiteId }: { websiteId: string }) {
       label: formatMessage(labels.tags),
       path: renderPath('tag'),
     },
-  ]
+  ];
 
   const renderChange = ({ label, count }) => {
-    const prev = data.find((d) => d.x === label)?.y
-    const value = count - prev
-    const change = Math.abs(((count - prev) / prev) * 100)
+    const prev = data.find(d => d.x === label)?.y;
+    const value = count - prev;
+    const change = Math.abs(((count - prev) / prev) * 100);
 
     return (
       !isNaN(change) && (
@@ -113,12 +113,12 @@ export function CompareTables({ websiteId }: { websiteId: string }) {
           <ChangeLabel value={value}>{formatNumber(change)}%</ChangeLabel>
         </Row>
       )
-    )
-  }
+    );
+  };
 
   const handleChange = (id: any) => {
-    router.push(renderPath(id))
-  }
+    router.push(renderPath(id));
+  };
 
   return (
     <>
@@ -169,5 +169,5 @@ export function CompareTables({ websiteId }: { websiteId: string }) {
         </Grid>
       </Panel>
     </>
-  )
+  );
 }

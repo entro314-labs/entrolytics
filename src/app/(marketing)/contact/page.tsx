@@ -1,14 +1,14 @@
-import { Metadata } from 'next'
-import { MarketingLayout } from '@/components/marketing'
-import styles from './contact.module.css'
-import contentStyles from '@/components/marketing/ContentPage.module.css'
-import Link from 'next/link'
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { MarketingLayout } from '@/components/marketing';
+import contentStyles from '@/components/marketing/ContentPage.module.css';
+import styles from './contact.module.css';
 
 export const metadata: Metadata = {
   title: 'Contact Us | Entrolytics',
   description:
-    'Get in touch with the Entrolytics team. We\'re here to help with questions about our analytics platform, enterprise solutions, or partnership opportunities.',
-}
+    "Get in touch with the Entrolytics team. We're here to help with questions about our analytics platform, enterprise solutions, or partnership opportunities.",
+};
 
 export default function ContactPage() {
   return (
@@ -155,11 +155,7 @@ export default function ContactPage() {
                 </div>
                 <h3>Help Center</h3>
                 <p>Find answers in our docs:</p>
-                <a
-                  href="https://docs.entrolytics.click"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <a href="https://docs.entrolytics.click" target="_blank" rel="noopener noreferrer">
                   docs.entrolytics.click
                 </a>
                 <p className={styles.responseTime}>Guides, tutorials, and API reference</p>
@@ -193,21 +189,22 @@ export default function ContactPage() {
               <div className={styles.faqItem}>
                 <h4>How quickly will I get a response?</h4>
                 <p>
-                  We aim to respond to all inquiries within 24 hours during business days. Enterprise
-                  customers have priority support with faster response times.
+                  We aim to respond to all inquiries within 24 hours during business days.
+                  Enterprise customers have priority support with faster response times.
                 </p>
               </div>
               <div className={styles.faqItem}>
                 <h4>Do you offer demos?</h4>
                 <p>
-                  Yes! Select "Sales & Enterprise" as your subject, and we'll schedule a personalized
-                  demo of Entrolytics tailored to your needs.
+                  Yes! Select "Sales & Enterprise" as your subject, and we'll schedule a
+                  personalized demo of Entrolytics tailored to your needs.
                 </p>
               </div>
               <div className={styles.faqItem}>
                 <h4>I found a bug. How do I report it?</h4>
                 <p>
-                  We appreciate bug reports! You can submit them through this form or directly on our{' '}
+                  We appreciate bug reports! You can submit them through this form or directly on
+                  our{' '}
                   <a
                     href="https://github.com/entro314-labs/entrolytics/issues"
                     target="_blank"
@@ -233,5 +230,5 @@ export default function ContactPage() {
         </div>
       </div>
     </MarketingLayout>
-  )
+  );
 }

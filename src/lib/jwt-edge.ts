@@ -11,18 +11,18 @@
  * - These JWTs are only for session caching and share tokens
  */
 
-import { SignJWT, jwtVerify, type JWTPayload } from 'jose'
+import { type JWTPayload, jwtVerify, SignJWT } from 'jose';
 
 /**
  * Parse expiration string to seconds
  * Supports formats like "1h", "7d", "30m", "1y"
  */
 function parseExpiration(exp: string): string {
-  const match = exp.match(/^(\d+)([smhdwy])$/)
-  if (!match) return exp
+  const match = exp.match(/^(\d+)([smhdwy])$/);
+  if (!match) return exp;
 
-  const [, num, unit] = match
-  const value = parseInt(num, 10)
+  const [, num, unit] = match;
+  const value = parseInt(num, 10);
 
   const multipliers: Record<string, number> = {
     s: 1,
@@ -31,10 +31,10 @@ function parseExpiration(exp: string): string {
     d: 86400,
     w: 604800,
     y: 31536000,
-  }
+  };
 
-  const seconds = value * (multipliers[unit] || 1)
-  return `${seconds}s`
+  const seconds = value * (multipliers[unit] || 1);
+  return `${seconds}s`;
 }
 
 /**
@@ -46,17 +46,17 @@ function parseExpiration(exp: string): string {
 export async function createToken(
   payload: JWTPayload,
   secret: string,
-  options?: { expiresIn?: string }
+  options?: { expiresIn?: string },
 ): Promise<string> {
-  const key = new TextEncoder().encode(secret)
+  const key = new TextEncoder().encode(secret);
 
-  const jwt = new SignJWT(payload).setProtectedHeader({ alg: 'HS256' }).setIssuedAt()
+  const jwt = new SignJWT(payload).setProtectedHeader({ alg: 'HS256' }).setIssuedAt();
 
   if (options?.expiresIn) {
-    jwt.setExpirationTime(parseExpiration(options.expiresIn))
+    jwt.setExpirationTime(parseExpiration(options.expiresIn));
   }
 
-  return jwt.sign(key)
+  return jwt.sign(key);
 }
 
 /**
@@ -67,10 +67,10 @@ export async function createToken(
  */
 export async function parseToken(token: string, secret: string): Promise<JWTPayload | null> {
   try {
-    const key = new TextEncoder().encode(secret)
-    const { payload } = await jwtVerify(token, key)
-    return payload
+    const key = new TextEncoder().encode(secret);
+    const { payload } = await jwtVerify(token, key);
+    return payload;
   } catch {
-    return null
+    return null;
   }
 }

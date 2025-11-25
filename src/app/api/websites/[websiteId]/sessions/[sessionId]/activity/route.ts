@@ -1,33 +1,33 @@
-import { z } from 'zod'
-import { parseRequest, getQueryFilters } from '@/lib/request'
-import { unauthorized, json } from '@/lib/response'
-import { canViewWebsite } from '@/validations'
-import { getSessionActivity } from '@/queries/sql'
+import { z } from 'zod';
+import { getQueryFilters, parseRequest } from '@/lib/request';
+import { json, unauthorized } from '@/lib/response';
+import { getSessionActivity } from '@/queries/sql';
+import { canViewWebsite } from '@/validations';
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ websiteId: string; sessionId: string }> }
+  { params }: { params: Promise<{ websiteId: string; sessionId: string }> },
 ) {
   const schema = z.object({
     startAt: z.coerce.number().int(),
     endAt: z.coerce.number().int(),
-  })
+  });
 
-  const { auth, query, error } = await parseRequest(request, schema)
+  const { auth, query, error } = await parseRequest(request, schema);
 
   if (error) {
-    return error()
+    return error();
   }
 
-  const { websiteId, sessionId } = await params
+  const { websiteId, sessionId } = await params;
 
   if (!(await canViewWebsite(auth, websiteId))) {
-    return unauthorized()
+    return unauthorized();
   }
 
-  const filters = await getQueryFilters(query, websiteId)
+  const filters = await getQueryFilters(query, websiteId);
 
-  const data = await getSessionActivity(websiteId, sessionId, filters)
+  const data = await getSessionActivity(websiteId, sessionId, filters);
 
-  return json(data)
+  return json(data);
 }

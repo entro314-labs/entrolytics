@@ -1,7 +1,7 @@
-import { WebsitesTable } from './WebsitesTable'
-import { DataGrid } from '@/components/common/DataGrid'
-import { TableErrorBoundary } from '@/components/common/TableErrorBoundary'
-import { useUserWebsitesQuery } from '@/components/hooks'
+import { DataGrid } from '@/components/common/DataGrid';
+import { TableErrorBoundary } from '@/components/common/TableErrorBoundary';
+import { useUserWebsitesQuery } from '@/components/hooks';
+import { WebsitesTable } from './WebsitesTable';
 
 export function WebsitesDataTable({
   orgId,
@@ -9,22 +9,22 @@ export function WebsitesDataTable({
   allowView = true,
   showActions = true,
 }: {
-  orgId?: string
-  allowEdit?: boolean
-  allowView?: boolean
-  showActions?: boolean
+  orgId?: string;
+  allowEdit?: boolean;
+  allowView?: boolean;
+  showActions?: boolean;
 }) {
-  const queryResult = useUserWebsitesQuery({ orgId })
+  const queryResult = useUserWebsitesQuery({ orgId });
 
   return (
     <DataGrid query={queryResult} allowSearch allowPaging>
-      {(result) => {
+      {result => {
         try {
           // PageResult contains data in the 'data' property
-          const websitesData = result?.data
+          const websitesData = result?.data;
 
           // Ensure we always pass a valid array to WebsitesTable
-          const safeWebsitesData = Array.isArray(websitesData) ? websitesData : []
+          const safeWebsitesData = Array.isArray(websitesData) ? websitesData : [];
 
           return (
             <TableErrorBoundary>
@@ -36,12 +36,12 @@ export function WebsitesDataTable({
                 allowView={allowView}
               />
             </TableErrorBoundary>
-          )
+          );
         } catch (error) {
-          console.error('Error rendering WebsitesTable:', error)
-          return <div>Error loading websites. Please try again.</div>
+          console.error('Error rendering WebsitesTable:', error);
+          return <div>Error loading websites. Please try again.</div>;
         }
       }}
     </DataGrid>
-  )
+  );
 }

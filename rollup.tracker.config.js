@@ -1,6 +1,6 @@
-import 'dotenv/config'
-import replace from '@rollup/plugin-replace'
-import terser from '@rollup/plugin-terser'
+import 'dotenv/config';
+import replace from '@rollup/plugin-replace';
+import terser from '@rollup/plugin-terser';
 
 export default {
   input: 'src/tracker/index.js',
@@ -17,4 +17,4 @@ export default {
     }),
     terser({ compress: { evaluate: false } }),
   ],
-}
+};

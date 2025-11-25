@@ -1,19 +1,19 @@
-import { Button, Icon, Modal, DialogTrigger, Dialog, Text } from '@entro314labs/entro-zen'
-import { useMessages, useLoginQuery } from '@/components/hooks'
-import { Trash } from '@/components/icons'
-import { UserDeleteForm } from './UserDeleteForm'
+import { Button, Dialog, DialogTrigger, Icon, Modal, Text } from '@entro314labs/entro-zen';
+import { useLoginQuery, useMessages } from '@/components/hooks';
+import { Trash } from '@/components/icons';
+import { UserDeleteForm } from './UserDeleteForm';
 
 export function UserDeleteButton({
   userId,
   displayName,
   onDelete,
 }: {
-  userId: string
-  displayName: string
-  onDelete?: () => void
+  userId: string;
+  displayName: string;
+  onDelete?: () => void;
 }) {
-  const { formatMessage, labels } = useMessages()
-  const { user } = useLoginQuery()
+  const { formatMessage, labels } = useMessages();
+  const { user } = useLoginQuery();
 
   return (
     <DialogTrigger>
@@ -36,5 +36,5 @@ export function UserDeleteButton({
         </Dialog>
       </Modal>
     </DialogTrigger>
-  )
+  );
 }

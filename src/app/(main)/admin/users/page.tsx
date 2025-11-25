@@ -1,9 +1,9 @@
-import { Metadata } from 'next'
-import { UsersPage } from './UsersPage'
+import type { Metadata } from 'next';
+import { UsersPage } from './UsersPage';
 
 export default function () {
-  return <UsersPage />
+  return <UsersPage />;
 }
 export const metadata: Metadata = {
   title: 'Users',
-}
+};

@@ -1,80 +1,82 @@
-import { useCallback } from 'react'
-import * as reactQuery from '@tanstack/react-query'
-import { useAuth } from '@clerk/nextjs'
-import { SHARE_TOKEN_HEADER } from '@/lib/constants'
-import { httpGet, httpPost, httpPut, httpDelete, FetchResponse } from '@/lib/fetch'
-import { useApp } from '@/store/app'
+import { useAuth } from '@clerk/nextjs';
+import * as reactQuery from '@tanstack/react-query';
+import { useCallback } from 'react';
+import { SHARE_TOKEN_HEADER } from '@/lib/constants';
+import { type FetchResponse, httpDelete, httpGet, httpPost, httpPut } from '@/lib/fetch';
+import { useApp } from '@/store/app';
 
-const selector = (state: { shareToken: { token?: string } }) => state.shareToken
+const selector = (state: { shareToken: { token?: string } }) => state.shareToken;
 
 async function handleResponse(res: FetchResponse): Promise<any> {
   if (res.error) {
-    const { message, code } = res?.error?.error || {}
-    return Promise.reject(new Error(code || message || 'Unexpectd error.'))
+    const { message, code } = res?.error?.error || {};
+    return Promise.reject(new Error(code || message || 'Unexpectd error.'));
   }
-  return Promise.resolve(res.data)
+  return Promise.resolve(res.data);
 }
 
 function handleError(err: Error | string) {
-  return Promise.reject((err as Error)?.message || err || null)
+  return Promise.reject((err as Error)?.message || err || null);
 }
 
 export function useApi() {
-  const { getToken } = useAuth()
-  const shareToken = useApp(selector)
+  const { getToken } = useAuth();
+  const shareToken = useApp(selector);
 
   const getDefaultHeaders = async () => {
-    const token = await getToken()
+    const token = await getToken();
     return {
       ...(token && { authorization: `Bearer ${token}` }),
       [SHARE_TOKEN_HEADER]: shareToken?.token,
-    }
-  }
-  const basePath = process.env.basePath
+    };
+  };
+  const basePath = process.env.basePath;
 
   const getUrl = (url: string) => {
-    return url.startsWith('http') ? url : `${basePath || ''}/api${url}`
-  }
+    return url.startsWith('http') ? url : `${basePath || ''}/api${url}`;
+  };
 
   const getHeaders = async (headers: any = {}) => {
-    const defaultHeaders = await getDefaultHeaders()
-    return { ...defaultHeaders, ...headers }
-  }
+    const defaultHeaders = await getDefaultHeaders();
+    return { ...defaultHeaders, ...headers };
+  };
 
   return {
     get: useCallback(
       async (url: string, params: object = {}, headers: object = {}) => {
-        const requestHeaders = await getHeaders(headers)
-        return httpGet(getUrl(url), params, requestHeaders).then(handleResponse).catch(handleError)
+        const requestHeaders = await getHeaders(headers);
+        return httpGet(getUrl(url), params, requestHeaders).then(handleResponse).catch(handleError);
       },
-      [httpGet]
+      [httpGet],
     ),
 
     post: useCallback(
       async (url: string, params: object = {}, headers: object = {}) => {
-        const requestHeaders = await getHeaders(headers)
-        return httpPost(getUrl(url), params, requestHeaders).then(handleResponse).catch(handleError)
+        const requestHeaders = await getHeaders(headers);
+        return httpPost(getUrl(url), params, requestHeaders)
+          .then(handleResponse)
+          .catch(handleError);
       },
-      [httpPost]
+      [httpPost],
     ),
 
     put: useCallback(
       async (url: string, params: object = {}, headers: object = {}) => {
-        const requestHeaders = await getHeaders(headers)
-        return httpPut(getUrl(url), params, requestHeaders).then(handleResponse).catch(handleError)
+        const requestHeaders = await getHeaders(headers);
+        return httpPut(getUrl(url), params, requestHeaders).then(handleResponse).catch(handleError);
       },
-      [httpPut]
+      [httpPut],
     ),
 
     del: useCallback(
       async (url: string, params: object = {}, headers: object = {}) => {
-        const requestHeaders = await getHeaders(headers)
+        const requestHeaders = await getHeaders(headers);
         return httpDelete(getUrl(url), params, requestHeaders)
           .then(handleResponse)
-          .catch(handleError)
+          .catch(handleError);
       },
-      [httpDelete]
+      [httpDelete],
     ),
     ...reactQuery,
-  }
+  };
 }

@@ -1,13 +1,13 @@
-import { Metadata } from 'next'
-import { MarketingLayout } from '@/components/marketing'
-import styles from '@/components/marketing/ContentPage.module.css'
-import Link from 'next/link'
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { MarketingLayout } from '@/components/marketing';
+import styles from '@/components/marketing/ContentPage.module.css';
 
 export const metadata: Metadata = {
   title: 'Terms of Service | Entrolytics',
   description:
     'Read our Terms of Service to understand the rules and guidelines for using Entrolytics analytics platform.',
-}
+};
 
 export default function TermsOfServicePage() {
   return (
@@ -81,9 +81,7 @@ export default function TermsOfServicePage() {
               <li>Attempt to gain unauthorized access to our systems</li>
               <li>Interfere with the Service's operation or other users' access</li>
               <li>Track websites you don't own or have permission to track</li>
-              <li>
-                Collect personal data in violation of privacy laws (GDPR, CCPA, etc.)
-              </li>
+              <li>Collect personal data in violation of privacy laws (GDPR, CCPA, etc.)</li>
               <li>Use the Service for any illegal or unauthorized purpose</li>
             </ul>
 
@@ -95,9 +93,7 @@ export default function TermsOfServicePage() {
                 collection
               </li>
               <li>Comply with applicable privacy laws in your jurisdiction</li>
-              <li>
-                Obtain necessary consents from visitors where required by law
-              </li>
+              <li>Obtain necessary consents from visitors where required by law</li>
               <li>Use collected data in accordance with your privacy policy</li>
               <li>Not attempt to re-identify anonymized visitor data</li>
             </ul>
@@ -147,8 +143,7 @@ export default function TermsOfServicePage() {
             <p>
               Our handling of personal data is governed by our{' '}
               <Link href="/privacy">Privacy Policy</Link>. For business customers requiring a formal
-              agreement, we offer a{' '}
-              <Link href="/dpa">Data Processing Agreement (DPA)</Link>.
+              agreement, we offer a <Link href="/dpa">Data Processing Agreement (DPA)</Link>.
             </p>
 
             <h2 id="availability">9. Service Availability</h2>
@@ -279,5 +274,5 @@ export default function TermsOfServicePage() {
         </div>
       </div>
     </MarketingLayout>
-  )
+  );
 }

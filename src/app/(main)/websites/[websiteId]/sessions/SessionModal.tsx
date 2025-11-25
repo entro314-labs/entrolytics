@@ -1,10 +1,10 @@
-'use client'
-import { Dialog, Modal, ModalProps, Column } from '@entro314labs/entro-zen'
-import { SessionDetailsPage } from '@/app/(main)/websites/[websiteId]/sessions/[sessionId]/SessionDetailsPage'
-import { useNavigation } from '@/components/hooks'
+'use client';
+import { Column, Dialog, Modal, type ModalProps } from '@entro314labs/entro-zen';
+import { SessionDetailsPage } from '@/app/(main)/websites/[websiteId]/sessions/[sessionId]/SessionDetailsPage';
+import { useNavigation } from '@/components/hooks';
 
 export interface SessionModalProps extends ModalProps {
-  websiteId: string
+  websiteId: string;
 }
 
 export function SessionModal({ websiteId, ...props }: SessionModalProps) {
@@ -12,13 +12,13 @@ export function SessionModal({ websiteId, ...props }: SessionModalProps) {
     router,
     query: { session },
     updateParams,
-  } = useNavigation()
+  } = useNavigation();
 
   const handleOpenChange = (isOpen: boolean) => {
     if (!isOpen) {
-      router.push(updateParams({ session: undefined }))
+      router.push(updateParams({ session: undefined }));
     }
-  }
+  };
 
   return (
     <Modal
@@ -37,5 +37,5 @@ export function SessionModal({ websiteId, ...props }: SessionModalProps) {
         </Dialog>
       </Column>
     </Modal>
-  )
+  );
 }

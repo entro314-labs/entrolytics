@@ -1,25 +1,25 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
-import { useAuth } from '@clerk/nextjs'
-import Link from 'next/link'
-import { motion, useScroll, useTransform } from 'framer-motion'
-import styles from './Navbar.module.css'
+import { useAuth } from '@clerk/nextjs';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import styles from './Navbar.module.css';
 
 export function Navbar() {
-  const { isSignedIn, isLoaded } = useAuth()
-  const [isScrolled, setIsScrolled] = useState(false)
-  const { scrollY } = useScroll()
-  const opacity = useTransform(scrollY, [0, 100], [1, 0.95])
+  const { isSignedIn, isLoaded } = useAuth();
+  const [isScrolled, setIsScrolled] = useState(false);
+  const { scrollY } = useScroll();
+  const opacity = useTransform(scrollY, [0, 100], [1, 0.95]);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20)
-    }
+      setIsScrolled(window.scrollY > 20);
+    };
 
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <motion.header
@@ -66,5 +66,5 @@ export function Navbar() {
         </div>
       </nav>
     </motion.header>
-  )
+  );
 }

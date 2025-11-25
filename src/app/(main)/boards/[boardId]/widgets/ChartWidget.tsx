@@ -1,15 +1,15 @@
-'use client'
-import { useDateRange, useWebsitePageviewsQuery } from '@/components/hooks'
-import { PageviewsChart } from '@/components/metrics/PageviewsChart'
-import { LoadingPanel } from '@/components/common/LoadingPanel'
+'use client';
+import { LoadingPanel } from '@/components/common/LoadingPanel';
+import { useDateRange, useWebsitePageviewsQuery } from '@/components/hooks';
+import { PageviewsChart } from '@/components/metrics/PageviewsChart';
 
 export interface ChartWidgetProps {
-  websiteId: string
+  websiteId: string;
 }
 
 export function ChartWidget({ websiteId }: ChartWidgetProps) {
-  const { dateRange } = useDateRange()
-  const { data, isLoading, isFetching, error } = useWebsitePageviewsQuery({ websiteId })
+  const { dateRange } = useDateRange();
+  const { data, isLoading, isFetching, error } = useWebsitePageviewsQuery({ websiteId });
 
   return (
     <LoadingPanel data={data} isLoading={isLoading} isFetching={isFetching} error={error}>
@@ -22,5 +22,5 @@ export function ChartWidget({ websiteId }: ChartWidgetProps) {
         />
       )}
     </LoadingPanel>
-  )
+  );
 }

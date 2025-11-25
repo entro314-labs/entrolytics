@@ -1,20 +1,20 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useOnboarding } from '@/contexts/OnboardingContext'
+import { useState } from 'react';
+import { useOnboarding } from '@/contexts/OnboardingContext';
 
 export default function WelcomePage() {
-  const { nextStep, skipOnboarding } = useOnboarding()
+  const { nextStep, skipOnboarding } = useOnboarding();
   const [formData, setFormData] = useState({
     companySize: '',
     industry: '',
     useCase: '',
     referralSource: '',
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleContinue = async () => {
-    setIsSubmitting(true)
+    setIsSubmitting(true);
     try {
       // Save welcome data
       await fetch('/api/user/onboarding', {
@@ -27,22 +27,22 @@ export default function WelcomePage() {
           useCase: formData.useCase,
           referralSource: formData.referralSource,
         }),
-      })
+      });
 
-      nextStep()
+      nextStep();
     } catch (error) {
-      console.error('Failed to save onboarding data:', error)
+      console.error('Failed to save onboarding data:', error);
       // Continue anyway - this data is optional
-      nextStep()
+      nextStep();
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   const handleSkip = async () => {
-    setIsSubmitting(true)
-    await skipOnboarding()
-  }
+    setIsSubmitting(true);
+    await skipOnboarding();
+  };
 
   return (
     <>
@@ -56,14 +56,16 @@ export default function WelcomePage() {
       </div>
 
       <div className="onboarding-card">
-        <h1 className="onboarding-title">
-          Welcome to Entrolytics! 👋
-        </h1>
-        <p className="onboarding-subtitle">
-          Let's get you set up in less than 2 minutes
-        </p>
+        <h1 className="onboarding-title">Welcome to Entrolytics! 👋</h1>
+        <p className="onboarding-subtitle">Let's get you set up in less than 2 minutes</p>
 
-        <form className="onboarding-form" onSubmit={(e) => { e.preventDefault(); handleContinue(); }}>
+        <form
+          className="onboarding-form"
+          onSubmit={e => {
+            e.preventDefault();
+            handleContinue();
+          }}
+        >
           <div className="form-field">
             <label htmlFor="companySize" className="onboarding-label">
               Company Size (Optional)
@@ -72,7 +74,7 @@ export default function WelcomePage() {
               id="companySize"
               className="onboarding-select"
               value={formData.companySize}
-              onChange={(e) => setFormData({ ...formData, companySize: e.target.value })}
+              onChange={e => setFormData({ ...formData, companySize: e.target.value })}
             >
               <option value="">Select company size</option>
               <option value="solo">Just me</option>
@@ -93,7 +95,7 @@ export default function WelcomePage() {
               className="onboarding-input"
               placeholder="e.g., SaaS, E-commerce, Media"
               value={formData.industry}
-              onChange={(e) => setFormData({ ...formData, industry: e.target.value })}
+              onChange={e => setFormData({ ...formData, industry: e.target.value })}
             />
           </div>
 
@@ -107,7 +109,7 @@ export default function WelcomePage() {
               placeholder="e.g., User behavior on my SaaS dashboard, E-commerce conversion funnel"
               rows={3}
               value={formData.useCase}
-              onChange={(e) => setFormData({ ...formData, useCase: e.target.value })}
+              onChange={e => setFormData({ ...formData, useCase: e.target.value })}
             />
           </div>
 
@@ -119,7 +121,7 @@ export default function WelcomePage() {
               id="referralSource"
               className="onboarding-select"
               value={formData.referralSource}
-              onChange={(e) => setFormData({ ...formData, referralSource: e.target.value })}
+              onChange={e => setFormData({ ...formData, referralSource: e.target.value })}
             >
               <option value="">Select source</option>
               <option value="search">Google Search</option>
@@ -139,16 +141,12 @@ export default function WelcomePage() {
             >
               Skip for now
             </button>
-            <button
-              type="submit"
-              className="onboarding-btn-primary"
-              disabled={isSubmitting}
-            >
+            <button type="submit" className="onboarding-btn-primary" disabled={isSubmitting}>
               {isSubmitting ? 'Saving...' : 'Continue →'}
             </button>
           </div>
         </form>
       </div>
     </>
-  )
+  );
 }

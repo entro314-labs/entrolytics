@@ -1,13 +1,13 @@
-import { useApi } from '../useApi'
-import { useFilterParameters } from '../useFilterParameters'
-import { useDateParameters } from '../useDateParameters'
-import { ReactQueryOptions } from '@/lib/types'
-import { isValidUuid } from '@/lib/uuid'
+import type { ReactQueryOptions } from '@/lib/types';
+import { isValidUuid } from '@/lib/uuid';
+import { useApi } from '../useApi';
+import { useDateParameters } from '../useDateParameters';
+import { useFilterParameters } from '../useFilterParameters';
 
 export function useEventDataQuery(websiteId: string, eventId: string, options?: ReactQueryOptions) {
-  const { get, useQuery } = useApi()
-  const { startAt, endAt, unit, timezone } = useDateParameters()
-  const params = useFilterParameters()
+  const { get, useQuery } = useApi();
+  const { startAt, endAt, unit, timezone } = useDateParameters();
+  const params = useFilterParameters();
 
   return useQuery({
     queryKey: [
@@ -24,5 +24,5 @@ export function useEventDataQuery(websiteId: string, eventId: string, options?: 
       }),
     enabled: !!(websiteId && eventId) && isValidUuid(websiteId) && isValidUuid(eventId),
     ...options,
-  })
+  });
 }

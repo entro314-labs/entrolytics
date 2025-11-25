@@ -1,10 +1,10 @@
-import { useMessages } from '@/components/hooks'
-import { Button, Icon, Modal, Dialog, DialogTrigger, Text } from '@entro314labs/entro-zen'
-import { Plus } from '@/components/icons'
-import { PixelEditForm } from './PixelEditForm'
+import { Button, Dialog, DialogTrigger, Icon, Modal, Text } from '@entro314labs/entro-zen';
+import { useMessages } from '@/components/hooks';
+import { Plus } from '@/components/icons';
+import { PixelEditForm } from './PixelEditForm';
 
 export function PixelAddButton({ orgId }: { orgId?: string }) {
-  const { formatMessage, labels } = useMessages()
+  const { formatMessage, labels } = useMessages();
 
   return (
     <DialogTrigger>
@@ -20,5 +20,5 @@ export function PixelAddButton({ orgId }: { orgId?: string }) {
         </Dialog>
       </Modal>
     </DialogTrigger>
-  )
+  );
 }

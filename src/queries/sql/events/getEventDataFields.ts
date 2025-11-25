@@ -1,14 +1,14 @@
-import clickhouse from '@/lib/clickhouse'
-import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
-import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
+import { getDateSQL, getTimestampDiffSQL, parseFilters, rawQuery } from '@/lib/analytics-utils';
+import clickhouse from '@/lib/clickhouse';
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db';
 
-import { QueryFilters } from '@/lib/types'
+import type { QueryFilters } from '@/lib/types';
 
 export async function getEventDataFields(...args: [websiteId: string, filters: QueryFilters]) {
   return runQuery({
     [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  })
+  });
 }
 
 async function relationalQuery(websiteId: string, filters: QueryFilters) {
@@ -16,7 +16,7 @@ async function relationalQuery(websiteId: string, filters: QueryFilters) {
   const { filterQuery, cohortQuery, joinSessionQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
-  })
+  });
 
   return rawQuery(
     `
@@ -42,26 +42,26 @@ async function relationalQuery(websiteId: string, filters: QueryFilters) {
     ORDER BY 2 desc
     limit 100
     `,
-    queryParams
-  )
+    queryParams,
+  );
 }
 
 async function clickhouseQuery(
   websiteId: string,
-  filters: QueryFilters
+  filters: QueryFilters,
 ): Promise<
   {
-    propertyName: string
-    dataType: number
-    propertyValue: string
-    total: number
+    propertyName: string;
+    dataType: number;
+    propertyValue: string;
+    total: number;
   }[]
 > {
-  const { rawQuery, parseFilters } = clickhouse
+  const { rawQuery, parseFilters } = clickhouse;
   const { filterQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
-  })
+  });
 
   return rawQuery(
     `
@@ -86,6 +86,6 @@ async function clickhouseQuery(
     order by 2 desc
     limit 100
     `,
-    queryParams
-  )
+    queryParams,
+  );
 }

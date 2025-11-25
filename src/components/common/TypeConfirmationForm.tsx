@@ -3,10 +3,10 @@ import {
   Form,
   FormButtons,
   FormField,
-  TextField,
   FormSubmitButton,
-} from '@entro314labs/entro-zen'
-import { useMessages } from '@/components/hooks'
+  TextField,
+} from '@entro314labs/entro-zen';
+import { useMessages } from '@/components/hooks';
 
 export function TypeConfirmationForm({
   confirmationValue,
@@ -17,18 +17,18 @@ export function TypeConfirmationForm({
   onConfirm,
   onClose,
 }: {
-  confirmationValue: string
-  buttonLabel?: string
-  buttonVariant?: 'primary' | 'outline' | 'quiet' | 'danger' | 'zero'
-  isLoading?: boolean
-  error?: string | Error
-  onConfirm?: () => void
-  onClose?: () => void
+  confirmationValue: string;
+  buttonLabel?: string;
+  buttonVariant?: 'primary' | 'outline' | 'quiet' | 'danger' | 'zero';
+  isLoading?: boolean;
+  error?: string | Error;
+  onConfirm?: () => void;
+  onClose?: () => void;
 }) {
-  const { formatMessage, labels, messages } = useMessages()
+  const { formatMessage, labels, messages } = useMessages();
 
   if (!confirmationValue) {
-    return null
+    return null;
   }
 
   return (
@@ -41,7 +41,7 @@ export function TypeConfirmationForm({
       <FormField
         label={formatMessage(labels.confirm)}
         name="confirm"
-        rules={{ validate: (value) => value === confirmationValue }}
+        rules={{ validate: value => value === confirmationValue }}
       >
         <TextField autoComplete="off" />
       </FormField>
@@ -52,5 +52,5 @@ export function TypeConfirmationForm({
         </FormSubmitButton>
       </FormButtons>
     </Form>
-  )
+  );
 }

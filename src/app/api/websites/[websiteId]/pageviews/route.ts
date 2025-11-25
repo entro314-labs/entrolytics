@@ -1,45 +1,45 @@
-import { z } from 'zod'
-import { canViewWebsite } from '@/validations'
-import { getQueryFilters, parseRequest } from '@/lib/request'
-import { dateRangeParams, filterParams } from '@/lib/schema'
-import { getCompareDate } from '@/lib/date'
-import { unauthorized, json } from '@/lib/response'
-import { getPageviewStats, getSessionStats } from '@/queries/sql'
+import { z } from 'zod';
+import { getCompareDate } from '@/lib/date';
+import { getQueryFilters, parseRequest } from '@/lib/request';
+import { json, unauthorized } from '@/lib/response';
+import { dateRangeParams, filterParams } from '@/lib/schema';
+import { getPageviewStats, getSessionStats } from '@/queries/sql';
+import { canViewWebsite } from '@/validations';
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ websiteId: string }> }
+  { params }: { params: Promise<{ websiteId: string }> },
 ) {
   const schema = z.object({
     ...dateRangeParams,
     ...filterParams,
-  })
+  });
 
-  const { auth, query, error } = await parseRequest(request, schema)
+  const { auth, query, error } = await parseRequest(request, schema);
 
   if (error) {
-    return error()
+    return error();
   }
 
-  const { websiteId } = await params
+  const { websiteId } = await params;
 
   if (!(await canViewWebsite(auth, websiteId))) {
-    return unauthorized()
+    return unauthorized();
   }
 
-  const filters = await getQueryFilters(query, websiteId)
+  const filters = await getQueryFilters(query, websiteId);
 
   const [pageviews, sessions] = await Promise.all([
     getPageviewStats(websiteId, filters),
     getSessionStats(websiteId, filters),
-  ])
+  ]);
 
   if (filters.compare) {
     const { startDate: compareStartDate, endDate: compareEndDate } = getCompareDate(
       filters.compare,
       filters.startDate,
-      filters.endDate
-    )
+      filters.endDate,
+    );
 
     const [comparePageviews, compareSessions] = await Promise.all([
       getPageviewStats(websiteId, {
@@ -52,7 +52,7 @@ export async function GET(
         startDate: compareStartDate,
         endDate: compareEndDate,
       }),
-    ])
+    ]);
 
     return json({
       pageviews,
@@ -65,8 +65,8 @@ export async function GET(
         startDate: compareStartDate,
         endDate: compareEndDate,
       },
-    })
+    });
   }
 
-  return json({ pageviews, sessions })
+  return json({ pageviews, sessions });
 }

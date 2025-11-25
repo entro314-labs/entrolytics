@@ -1,13 +1,13 @@
-import { Metadata } from 'next'
-import { MarketingLayout } from '@/components/marketing'
-import styles from '@/components/marketing/ContentPage.module.css'
-import Link from 'next/link'
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { MarketingLayout } from '@/components/marketing';
+import styles from '@/components/marketing/ContentPage.module.css';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy | Entrolytics',
   description:
     'Learn how Entrolytics collects, uses, and protects your data. Our privacy-first approach ensures your information is handled with care.',
-}
+};
 
 export default function PrivacyPolicyPage() {
   return (
@@ -247,5 +247,5 @@ export default function PrivacyPolicyPage() {
         </div>
       </div>
     </MarketingLayout>
-  )
+  );
 }

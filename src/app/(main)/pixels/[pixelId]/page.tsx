@@ -1,12 +1,12 @@
-import { PixelPage } from './PixelPage'
-import { Metadata } from 'next'
+import type { Metadata } from 'next';
+import { PixelPage } from './PixelPage';
 
 export default async function ({ params }: { params: Promise<{ pixelId: string }> }) {
-  const { pixelId } = await params
+  const { pixelId } = await params;
 
-  return <PixelPage pixelId={pixelId} />
+  return <PixelPage pixelId={pixelId} />;
 }
 
 export const metadata: Metadata = {
   title: 'Pixel',
-}
+};

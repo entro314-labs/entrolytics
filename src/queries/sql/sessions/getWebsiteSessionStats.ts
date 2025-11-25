@@ -1,18 +1,18 @@
-import clickhouse from '@/lib/clickhouse'
-import { EVENT_COLUMNS } from '@/lib/constants'
-import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
-import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
+import { getDateSQL, getTimestampDiffSQL, parseFilters, rawQuery } from '@/lib/analytics-utils';
+import clickhouse from '@/lib/clickhouse';
+import { EVENT_COLUMNS } from '@/lib/constants';
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db';
 
-import { QueryFilters } from '@/lib/types'
+import type { QueryFilters } from '@/lib/types';
 
-const FUNCTION_NAME = 'getWebsiteSessionStats'
+const FUNCTION_NAME = 'getWebsiteSessionStats';
 
 export interface WebsiteSessionStatsData {
-  pageviews: number
-  visitors: number
-  visits: number
-  countries: number
-  events: number
+  pageviews: number;
+  visitors: number;
+  visits: number;
+  countries: number;
+  events: number;
 }
 
 export async function getWebsiteSessionStats(
@@ -21,18 +21,18 @@ export async function getWebsiteSessionStats(
   return runQuery({
     [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  })
+  });
 }
 
 async function relationalQuery(
   websiteId: string,
-  filters: QueryFilters
+  filters: QueryFilters,
 ): Promise<WebsiteSessionStatsData[]> {
   // Using rawQuery FROM analytics-utils
   const { filterQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
-  })
+  });
 
   return rawQuery(
     `
@@ -51,26 +51,26 @@ async function relationalQuery(
       ${filterQuery}
     `,
     queryParams,
-    FUNCTION_NAME
-  )
+    FUNCTION_NAME,
+  );
 }
 
 async function clickhouseQuery(
   websiteId: string,
-  filters: QueryFilters
+  filters: QueryFilters,
 ): Promise<WebsiteSessionStatsData[]> {
-  const { rawQuery, parseFilters } = clickhouse
+  const { rawQuery, parseFilters } = clickhouse;
   const { filterQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
-  })
+  });
 
-  let sql = ''
+  let sql = '';
 
   if (
     filters &&
     typeof filters === 'object' &&
-    EVENT_COLUMNS.some((item) => Object.keys(filters).includes(item))
+    EVENT_COLUMNS.some(item => Object.keys(filters).includes(item))
   ) {
     sql = `
     SELECT
@@ -84,7 +84,7 @@ async function clickhouseQuery(
     WHERE website_id = {websiteId:UUID}
         AND created_at between {startDate:DateTime64} AND {endDate:DateTime64}
         ${filterQuery}
-    `
+    `;
   } else {
     sql = `
     SELECT
@@ -98,8 +98,8 @@ async function clickhouseQuery(
     WHERE website_id = {websiteId:UUID}
         AND created_at between {startDate:DateTime64} AND {endDate:DateTime64}
         ${filterQuery}
-    `
+    `;
   }
 
-  return rawQuery(sql, queryParams, FUNCTION_NAME)
+  return rawQuery(sql, queryParams, FUNCTION_NAME);
 }

@@ -1,25 +1,25 @@
-import { canViewWebsite } from '@/validations'
-import { json, unauthorized } from '@/lib/response'
-import { getActiveVisitors } from '@/queries/sql'
-import { parseRequest } from '@/lib/request'
+import { parseRequest } from '@/lib/request';
+import { json, unauthorized } from '@/lib/response';
+import { getActiveVisitors } from '@/queries/sql';
+import { canViewWebsite } from '@/validations';
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ websiteId: string }> }
+  { params }: { params: Promise<{ websiteId: string }> },
 ) {
-  const { auth, error } = await parseRequest(request)
+  const { auth, error } = await parseRequest(request);
 
   if (error) {
-    return error()
+    return error();
   }
 
-  const { websiteId } = await params
+  const { websiteId } = await params;
 
   if (!(await canViewWebsite(auth, websiteId))) {
-    return unauthorized()
+    return unauthorized();
   }
 
-  const visitors = await getActiveVisitors(websiteId)
+  const visitors = await getActiveVisitors(websiteId);
 
-  return json(visitors)
+  return json(visitors);
 }

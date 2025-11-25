@@ -1,9 +1,9 @@
-import { DataGrid } from '@/components/common/DataGrid'
-import { useUserWebsitesQuery } from '@/components/hooks'
-import { WebsitesTable } from '@/app/(main)/websites/WebsitesTable'
+import { WebsitesTable } from '@/app/(main)/websites/WebsitesTable';
+import { DataGrid } from '@/components/common/DataGrid';
+import { useUserWebsitesQuery } from '@/components/hooks';
 
 export function UserWebsites({ userId }) {
-  const queryResult = useUserWebsitesQuery({ userId })
+  const queryResult = useUserWebsitesQuery({ userId });
 
   return (
     <DataGrid query={queryResult}>
@@ -11,5 +11,5 @@ export function UserWebsites({ userId }) {
         <WebsitesTable data={data} showActions={true} allowEdit={true} allowView={true} />
       )}
     </DataGrid>
-  )
+  );
 }

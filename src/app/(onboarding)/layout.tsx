@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import { OnboardingProvider } from '@/contexts/OnboardingContext'
-import '@/styles/onboarding.css'
+import { OnboardingProvider } from '@/contexts/OnboardingContext';
+import '@/styles/onboarding.css';
 
 export default function OnboardingLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -14,5 +14,5 @@ export default function OnboardingLayout({ children }: { children: React.ReactNo
         <div className="onboarding-content">{children}</div>
       </div>
     </OnboardingProvider>
-  )
+  );
 }

@@ -1,16 +1,16 @@
-'use client'
-import { useMessages, useWebsiteMetricsQuery } from '@/components/hooks'
-import { ListTable } from '@/components/metrics/ListTable'
-import { LoadingPanel } from '@/components/common/LoadingPanel'
+'use client';
+import { LoadingPanel } from '@/components/common/LoadingPanel';
+import { useMessages, useWebsiteMetricsQuery } from '@/components/hooks';
+import { ListTable } from '@/components/metrics/ListTable';
 
 export interface ListWidgetConfig {
-  type?: string // path, country, browser, os, device, referrer, channel, etc.
-  limit?: number
+  type?: string; // path, country, browser, os, device, referrer, channel, etc.
+  limit?: number;
 }
 
 export interface ListWidgetProps {
-  websiteId: string
-  config?: ListWidgetConfig
+  websiteId: string;
+  config?: ListWidgetConfig;
 }
 
 const TYPE_LABELS: Record<string, string> = {
@@ -25,20 +25,20 @@ const TYPE_LABELS: Record<string, string> = {
   exit: 'exitPages',
   city: 'cities',
   region: 'regions',
-}
+};
 
 export function ListWidget({ websiteId, config }: ListWidgetProps) {
-  const { formatMessage, labels } = useMessages()
-  const listType = config?.type || 'path'
-  const limit = config?.limit || 10
+  const { formatMessage, labels } = useMessages();
+  const listType = config?.type || 'path';
+  const limit = config?.limit || 10;
 
   const { data, isLoading, isFetching, error } = useWebsiteMetricsQuery(websiteId, {
     type: listType,
     limit,
-  })
+  });
 
-  const labelKey = TYPE_LABELS[listType] || listType
-  const title = labels[labelKey] ? formatMessage(labels[labelKey]) : listType
+  const labelKey = TYPE_LABELS[listType] || listType;
+  const title = labels[labelKey] ? formatMessage(labels[labelKey]) : listType;
 
   return (
     <LoadingPanel data={data} isLoading={isLoading} isFetching={isFetching} error={error}>
@@ -49,5 +49,5 @@ export function ListWidget({ websiteId, config }: ListWidgetProps) {
         itemCount={limit}
       />
     </LoadingPanel>
-  )
+  );
 }

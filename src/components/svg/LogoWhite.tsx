@@ -1,5 +1,5 @@
-import * as React from 'react'
-import type { SVGProps } from 'react'
+import type { SVGProps } from 'react';
+import * as React from 'react';
 
 const SvgLogoWhite = (props: SVGProps<SVGSVGElement>) => (
   <svg
@@ -28,6 +28,6 @@ const SvgLogoWhite = (props: SVGProps<SVGSVGElement>) => (
     <path d="M40 511c-2.673 5.039-6.147 9.314-11.746 11.935 2.417-4.27 5.205-8.563 9.636-12.711.822.356 1.645.567 2.468.778l-.358-.002z" />
     <path d="M40.076 510.644c-.898.147-1.72-.065-2.804-.463.45-1.772 1.161-3.357 2.171-5.092.436 1.631.572 3.415.633 5.555z" />
   </svg>
-)
+);
 
-export default SvgLogoWhite
+export default SvgLogoWhite;

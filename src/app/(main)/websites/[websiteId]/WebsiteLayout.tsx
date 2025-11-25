@@ -1,16 +1,16 @@
-'use client'
-import { ReactNode } from 'react'
-import { Column, Grid } from '@entro314labs/entro-zen'
-import { WebsiteProvider } from '@/app/(main)/websites/WebsiteProvider'
-import { useNavigation } from '@/components/hooks'
-import { PageBody } from '@/components/common/PageBody'
-import { WebsiteHeader } from './WebsiteHeader'
-import { WebsiteNav } from './WebsiteNav'
+'use client';
+import { Column, Grid } from '@entro314labs/entro-zen';
+import type { ReactNode } from 'react';
+import { WebsiteProvider } from '@/app/(main)/websites/WebsiteProvider';
+import { PageBody } from '@/components/common/PageBody';
+import { useNavigation } from '@/components/hooks';
+import { WebsiteHeader } from './WebsiteHeader';
+import { WebsiteNav } from './WebsiteNav';
 
 export function WebsiteLayout({ websiteId, children }: { websiteId: string; children: ReactNode }) {
-  const { pathname } = useNavigation()
+  const { pathname } = useNavigation();
 
-  const isSettings = pathname.endsWith('/settings')
+  const isSettings = pathname.endsWith('/settings');
 
   return (
     <WebsiteProvider websiteId={websiteId}>
@@ -32,5 +32,5 @@ export function WebsiteLayout({ websiteId, children }: { websiteId: string; chil
         </PageBody>
       </Grid>
     </WebsiteProvider>
-  )
+  );
 }

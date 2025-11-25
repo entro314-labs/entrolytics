@@ -1,15 +1,15 @@
-import clickhouse from '@/lib/clickhouse'
-import { EVENT_TYPE } from '@/lib/constants'
-import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
-import { getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
-import { QueryFilters } from '@/lib/types'
+import { getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils';
+import clickhouse from '@/lib/clickhouse';
+import { EVENT_TYPE } from '@/lib/constants';
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db';
+import type { QueryFilters } from '@/lib/types';
 
-const FUNCTION_NAME = 'getEventStats'
+const FUNCTION_NAME = 'getEventStats';
 
 interface WebsiteEventMetric {
-  x: string
-  t: string
-  y: number
+  x: string;
+  t: string;
+  y: number;
 }
 
 export async function getEventStats(
@@ -18,16 +18,16 @@ export async function getEventStats(
   return runQuery({
     [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  })
+  });
 }
 
 async function relationalQuery(websiteId: string, filters: QueryFilters) {
-  const { timezone = 'utc', unit = 'day' } = filters
+  const { timezone = 'utc', unit = 'day' } = filters;
   const { filterQuery, cohortQuery, joinSessionQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
     eventType: EVENT_TYPE.customEvent,
-  })
+  });
 
   return rawQuery(
     `
@@ -45,23 +45,23 @@ async function relationalQuery(websiteId: string, filters: QueryFilters) {
     ORDER BY 2
     `,
     queryParams,
-    FUNCTION_NAME
-  )
+    FUNCTION_NAME,
+  );
 }
 
 async function clickhouseQuery(
   websiteId: string,
-  filters: QueryFilters
+  filters: QueryFilters,
 ): Promise<{ x: string; t: string; y: number }[]> {
-  const { timezone = 'UTC', unit = 'day' } = filters
-  const { rawQuery, getDateSQL, parseFilters } = clickhouse
+  const { timezone = 'UTC', unit = 'day' } = filters;
+  const { rawQuery, getDateSQL, parseFilters } = clickhouse;
   const { filterQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
     eventType: EVENT_TYPE.customEvent,
-  })
+  });
 
-  let sql = ''
+  let sql = '';
 
   if (filterQuery || cohortQuery) {
     sql = `
@@ -76,7 +76,7 @@ async function clickhouseQuery(
       ${filterQuery}
     group by x, t
     order by t
-    `
+    `;
   } else {
     sql = `
     select
@@ -93,8 +93,8 @@ async function clickhouseQuery(
     ) as g
     group by x, t
     order by t
-    `
+    `;
   }
 
-  return rawQuery(sql, queryParams, FUNCTION_NAME)
+  return rawQuery(sql, queryParams, FUNCTION_NAME);
 }

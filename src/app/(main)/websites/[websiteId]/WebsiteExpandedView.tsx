@@ -1,45 +1,45 @@
-import { Grid, Column } from '@entro314labs/entro-zen'
-import { useMessages, useNavigation } from '@/components/hooks'
-import { MetricsExpandedTable } from '@/components/metrics/MetricsExpandedTable'
-import { SideMenu } from '@/components/common/SideMenu'
+import { Column, Grid } from '@entro314labs/entro-zen';
+import { SideMenu } from '@/components/common/SideMenu';
+import { useMessages, useNavigation } from '@/components/hooks';
 import {
-  SquareSlash,
-  LogOut,
-  LogIn,
-  Search,
-  Type,
-  SquareArrowRight,
-  Megaphone,
+  AppWindow,
+  CaseSensitive,
+  Cpu,
   Earth,
   Globe,
   Landmark,
-  MapPin,
-  AppWindow,
-  Laptop,
   Languages,
-  Monitor,
-  Cpu,
+  Laptop,
   LightningSvg,
-  CaseSensitive,
+  LogIn,
+  LogOut,
+  MapPin,
+  Megaphone,
+  Monitor,
+  Search,
+  SquareArrowRight,
+  SquareSlash,
   Tag,
-} from '@/components/icons'
+  Type,
+} from '@/components/icons';
+import { MetricsExpandedTable } from '@/components/metrics/MetricsExpandedTable';
 
 export function WebsiteExpandedView({
   websiteId,
   excludedIds = [],
   onClose,
 }: {
-  websiteId: string
-  excludedIds?: string[]
-  onClose?: () => void
+  websiteId: string;
+  excludedIds?: string[];
+  onClose?: () => void;
 }) {
-  const { formatMessage, labels } = useMessages()
+  const { formatMessage, labels } = useMessages();
   const {
     updateParams,
     query: { view },
-  } = useNavigation()
+  } = useNavigation();
 
-  const filterExcluded = (item: { id: string }) => !excludedIds.includes(item.id)
+  const filterExcluded = (item: { id: string }) => !excludedIds.includes(item.id);
 
   const items = [
     {
@@ -181,7 +181,7 @@ export function WebsiteExpandedView({
         },
       ].filter(filterExcluded),
     },
-  ]
+  ];
 
   return (
     <Grid
@@ -209,5 +209,5 @@ export function WebsiteExpandedView({
         />
       </Column>
     </Grid>
-  )
+  );
 }

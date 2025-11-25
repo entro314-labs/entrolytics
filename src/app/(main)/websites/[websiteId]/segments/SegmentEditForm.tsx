@@ -4,13 +4,13 @@ import {
   FormButtons,
   FormField,
   FormSubmitButton,
-  TextField,
-  Loading,
   Label,
-} from '@entro314labs/entro-zen'
-import { FieldFilters } from '@/components/input/FieldFilters'
-import { useMessages, useUpdateQuery, useWebsiteSegmentQuery } from '@/components/hooks'
-import { messages } from '@/components/messages'
+  Loading,
+  TextField,
+} from '@entro314labs/entro-zen';
+import { useMessages, useUpdateQuery, useWebsiteSegmentQuery } from '@/components/hooks';
+import { FieldFilters } from '@/components/input/FieldFilters';
+import { messages } from '@/components/messages';
 
 export function SegmentEditForm({
   segmentId,
@@ -20,36 +20,36 @@ export function SegmentEditForm({
   onSave,
   onClose,
 }: {
-  segmentId?: string
-  websiteId: string
-  filters?: any[]
-  showFilters?: boolean
-  onSave?: () => void
-  onClose?: () => void
+  segmentId?: string;
+  websiteId: string;
+  filters?: any[];
+  showFilters?: boolean;
+  onSave?: () => void;
+  onClose?: () => void;
 }) {
-  const { data } = useWebsiteSegmentQuery(websiteId, segmentId)
-  const { formatMessage, labels } = useMessages()
+  const { data } = useWebsiteSegmentQuery(websiteId, segmentId);
+  const { formatMessage, labels } = useMessages();
 
   const { mutateAsync, error, isPending, touch, toast } = useUpdateQuery(
     `/websites/${websiteId}/segments${segmentId ? `/${segmentId}` : ''}`,
     {
       type: 'segment',
-    }
-  )
+    },
+  );
 
   const handleSubmit = async (formData: any) => {
     await mutateAsync(formData, {
       onSuccess: async () => {
-        toast(formatMessage(messages.saved))
-        touch('segments')
-        onSave?.()
-        onClose?.()
+        toast(formatMessage(messages.saved));
+        touch('segments');
+        onSave?.();
+        onClose?.();
       },
-    })
-  }
+    });
+  };
 
   if (segmentId && !data) {
-    return <Loading placement="absolute" />
+    return <Loading placement="absolute" />;
   }
 
   return (
@@ -78,5 +78,5 @@ export function SegmentEditForm({
         </FormSubmitButton>
       </FormButtons>
     </Form>
-  )
+  );
 }

@@ -1,16 +1,16 @@
-import { Metadata } from 'next'
-import { WebsiteLayout } from '@/app/(main)/websites/[websiteId]/WebsiteLayout'
+import type { Metadata } from 'next';
+import { WebsiteLayout } from '@/app/(main)/websites/[websiteId]/WebsiteLayout';
 
 export default async function ({
   children,
   params,
 }: {
-  children: any
-  params: Promise<{ websiteId: string }>
+  children: any;
+  params: Promise<{ websiteId: string }>;
 }) {
-  const { websiteId } = await params
+  const { websiteId } = await params;
 
-  return <WebsiteLayout websiteId={websiteId}>{children}</WebsiteLayout>
+  return <WebsiteLayout websiteId={websiteId}>{children}</WebsiteLayout>;
 }
 
 export const metadata: Metadata = {
@@ -18,4 +18,4 @@ export const metadata: Metadata = {
     template: '%s | Entrolytics',
     default: 'Websites | Entrolytics',
   },
-}
+};

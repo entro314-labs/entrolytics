@@ -1,22 +1,22 @@
-import { useApi } from '../useApi'
-import { useModified } from '@/components/hooks'
-import { keepPreviousData } from '@tanstack/react-query'
-import { ReactQueryOptions } from '@/lib/types'
-import { useFilterParameters } from '@/components/hooks/useFilterParameters'
-import { isValidUuid } from '@/lib/uuid'
+import { keepPreviousData } from '@tanstack/react-query';
+import { useModified } from '@/components/hooks';
+import { useFilterParameters } from '@/components/hooks/useFilterParameters';
+import type { ReactQueryOptions } from '@/lib/types';
+import { isValidUuid } from '@/lib/uuid';
+import { useApi } from '../useApi';
 
 export function useWebsiteSegmentsQuery(
   websiteId: string,
   params?: Record<string, string>,
-  options?: ReactQueryOptions
+  options?: ReactQueryOptions,
 ) {
-  const { get, useQuery } = useApi()
-  const { modified } = useModified(`segments`)
-  const filters = useFilterParameters()
+  const { get, useQuery } = useApi();
+  const { modified } = useModified(`segments`);
+  const filters = useFilterParameters();
 
   return useQuery({
     queryKey: ['website:segments', { websiteId, modified, ...filters, ...params }],
-    queryFn: (pageParams) =>
+    queryFn: pageParams =>
       get(`/websites/${websiteId}/segments`, {
         ...pageParams,
         ...filters,
@@ -25,5 +25,5 @@ export function useWebsiteSegmentsQuery(
     enabled: !!websiteId && isValidUuid(websiteId),
     placeholderData: keepPreviousData,
     ...options,
-  })
+  });
 }

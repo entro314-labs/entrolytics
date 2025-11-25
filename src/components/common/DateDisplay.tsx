@@ -1,12 +1,12 @@
-import { Icon, Row, Text } from '@entro314labs/entro-zen'
-import { differenceInDays, isSameDay } from 'date-fns'
-import { useLocale } from '@/components/hooks'
-import { Calendar } from '@/components/icons'
-import { formatDate } from '@/lib/date'
+import { Icon, Row, Text } from '@entro314labs/entro-zen';
+import { differenceInDays, isSameDay } from 'date-fns';
+import { useLocale } from '@/components/hooks';
+import { Calendar } from '@/components/icons';
+import { formatDate } from '@/lib/date';
 
 export function DateDisplay({ startDate, endDate }) {
-  const { locale } = useLocale()
-  const isSingleDate = differenceInDays(endDate, startDate) === 0
+  const { locale } = useLocale();
+  const isSingleDate = differenceInDays(endDate, startDate) === 0;
 
   return (
     <Row gap="3" alignItems="center" wrap="nowrap">
@@ -24,5 +24,5 @@ export function DateDisplay({ startDate, endDate }) {
         )}
       </Text>
     </Row>
-  )
+  );
 }

@@ -1,8 +1,8 @@
-import { useMessages, useModified } from '@/components/hooks'
-import { Dialog, useToast } from '@entro314labs/entro-zen'
-import { OrgMemberEditForm } from './OrgMemberEditForm'
-import { ActionButton } from '@/components/input/ActionButton'
-import { Edit } from '@/components/icons'
+import { Dialog, useToast } from '@entro314labs/entro-zen';
+import { useMessages, useModified } from '@/components/hooks';
+import { Edit } from '@/components/icons';
+import { ActionButton } from '@/components/input/ActionButton';
+import { OrgMemberEditForm } from './OrgMemberEditForm';
 
 export function OrgMemberEditButton({
   orgId,
@@ -10,20 +10,20 @@ export function OrgMemberEditButton({
   role,
   onSave,
 }: {
-  orgId: string
-  userId: string
-  role: string
-  onSave?: () => void
+  orgId: string;
+  userId: string;
+  role: string;
+  onSave?: () => void;
 }) {
-  const { formatMessage, labels, messages } = useMessages()
-  const { toast } = useToast()
-  const { touch } = useModified()
+  const { formatMessage, labels, messages } = useMessages();
+  const { toast } = useToast();
+  const { touch } = useModified();
 
   const handleSave = () => {
-    touch('orgs:members')
-    toast(formatMessage(messages.saved))
-    onSave?.()
-  }
+    touch('orgs:members');
+    toast(formatMessage(messages.saved));
+    onSave?.();
+  };
 
   return (
     <ActionButton title={formatMessage(labels.edit)} icon={<Edit />}>
@@ -39,5 +39,5 @@ export function OrgMemberEditButton({
         )}
       </Dialog>
     </ActionButton>
-  )
+  );
 }

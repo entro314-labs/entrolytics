@@ -1,11 +1,11 @@
-'use client'
+'use client';
 
-import { useBreakpoint } from '@entro314labs/entro-zen'
+import { useBreakpoint } from '@entro314labs/entro-zen';
 
 export function useMobile() {
-  const breakpoint = useBreakpoint()
-  const isMobile = ['xs', 'sm', 'md'].includes(breakpoint)
-  const isPhone = ['xs', 'sm'].includes(breakpoint)
+  const breakpoint = useBreakpoint();
+  const isMobile = ['xs', 'sm', 'md'].includes(breakpoint);
+  const isPhone = ['xs', 'sm'].includes(breakpoint);
 
-  return { breakpoint, isMobile, isPhone }
+  return { breakpoint, isMobile, isPhone };
 }

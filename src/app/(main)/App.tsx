@@ -1,78 +1,77 @@
-'use client'
-import { Grid, Loading, Column, Row } from '@entro314labs/entro-zen'
-import Script from 'next/script'
-import { usePathname } from 'next/navigation'
-import { useEffect } from 'react'
-import { UpdateNotice } from './UpdateNotice'
-import { SideNav } from '@/app/(main)/SideNav'
-import { MobileNav } from '@/app/(main)/MobileNav'
-import { useLoginQuery, useConfig } from '@/components/hooks'
-import { useRouter } from 'next/navigation'
-import { LAST_ORG_CONFIG } from '@/lib/constants'
-import { getItem, setItem } from '@/lib/storage'
-import { useUser } from '@clerk/nextjs'
+'use client';
+import { useUser } from '@clerk/nextjs';
+import { Column, Grid, Loading, Row } from '@entro314labs/entro-zen';
+import { usePathname, useRouter } from 'next/navigation';
+import Script from 'next/script';
+import { useEffect } from 'react';
+import { MobileNav } from '@/app/(main)/MobileNav';
+import { SideNav } from '@/app/(main)/SideNav';
+import { useConfig, useLoginQuery } from '@/components/hooks';
+import { LAST_ORG_CONFIG } from '@/lib/constants';
+import { getItem, setItem } from '@/lib/storage';
+import { UpdateNotice } from './UpdateNotice';
 
 export function App({ children }) {
-  const { user, isLoading, error } = useLoginQuery()
-  const { user: clerkUser } = useUser()
-  const config = useConfig()
-  const pathname = usePathname()
-  const router = useRouter()
+  const { user, isLoading, error } = useLoginQuery();
+  const { user: clerkUser } = useUser();
+  const config = useConfig();
+  const pathname = usePathname();
+  const router = useRouter();
 
   // Redirect to onboarding if user hasn't completed it
   useEffect(() => {
     if (!isLoading && user && clerkUser) {
-      const onboardingCompleted = clerkUser.publicMetadata?.onboardingCompleted === true
-      const onboardingSkipped = clerkUser.publicMetadata?.onboardingSkipped === true
+      const onboardingCompleted = clerkUser.publicMetadata?.onboardingCompleted === true;
+      const onboardingSkipped = clerkUser.publicMetadata?.onboardingSkipped === true;
 
       // If onboarding not completed and not on onboarding page, redirect
       if (!onboardingCompleted && !onboardingSkipped && !pathname.startsWith('/onboarding')) {
-        router.replace('/onboarding')
-        return
+        router.replace('/onboarding');
+        return;
       }
     }
-  }, [user, clerkUser, isLoading, pathname, router])
+  }, [user, clerkUser, isLoading, pathname, router]);
 
   // Redirect to last org on initial websites page load (only if onboarding complete)
   // Also verify user is actually a member of that org
   useEffect(() => {
     if (pathname === '/websites' && user && clerkUser) {
-      const onboardingCompleted = clerkUser.publicMetadata?.onboardingCompleted === true
-      const onboardingSkipped = clerkUser.publicMetadata?.onboardingSkipped === true
+      const onboardingCompleted = clerkUser.publicMetadata?.onboardingCompleted === true;
+      const onboardingSkipped = clerkUser.publicMetadata?.onboardingSkipped === true;
 
       // Only redirect to last org if user has completed/skipped onboarding
       if (onboardingCompleted || onboardingSkipped) {
-        const lastOrg = getItem(LAST_ORG_CONFIG)
+        const lastOrg = getItem(LAST_ORG_CONFIG);
         // Clear the lastOrg from storage - we'll verify it's valid first
         if (lastOrg) {
           // TODO: Verify user is member of this org before redirecting
           // For now, just clear it to prevent 401 errors for new users
           // They'll need to select an org from the orgs page
-          setItem(LAST_ORG_CONFIG, '')
+          setItem(LAST_ORG_CONFIG, '');
         }
       }
     }
-  }, [pathname, router, user, clerkUser])
+  }, [pathname, router, user, clerkUser]);
 
   // Remember last visited org
   useEffect(() => {
-    const orgMatch = pathname.match(/\/orgs\/([^/]+)/)
+    const orgMatch = pathname.match(/\/orgs\/([^/]+)/);
     if (orgMatch?.[1]) {
-      setItem(LAST_ORG_CONFIG, orgMatch[1])
+      setItem(LAST_ORG_CONFIG, orgMatch[1]);
     }
-  }, [pathname])
+  }, [pathname]);
 
   if (isLoading) {
-    return <Loading placement="absolute" />
+    return <Loading placement="absolute" />;
   }
 
   if (error) {
-    window.location.href = `${process.env.basePath || ''}/sign-in`
-    return null
+    window.location.href = `${process.env.basePath || ''}/sign-in`;
+    return null;
   }
 
   if (!user || !config) {
-    return null
+    return null;
   }
 
   return (
@@ -96,5 +95,5 @@ export function App({ children }) {
         <Script src={`${process.env.basePath || ''}/telemetry.js`} />
       )}
     </Grid>
-  )
+  );
 }

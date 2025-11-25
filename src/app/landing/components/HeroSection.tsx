@@ -1,14 +1,14 @@
-'use client'
+'use client';
 
-import { useEffect, useRef } from 'react'
-import { motion } from 'framer-motion'
-import { gsap } from 'gsap'
-import { AuthAwareCTA } from './AuthAwareCTA'
-import styles from './HeroSection.module.css'
+import { motion } from 'framer-motion';
+import { gsap } from 'gsap';
+import { useEffect, useRef } from 'react';
+import { AuthAwareCTA } from './AuthAwareCTA';
+import styles from './HeroSection.module.css';
 
 export function HeroSection() {
-  const dashboardRef = useRef<HTMLDivElement>(null)
-  const gradientRef = useRef<HTMLDivElement>(null)
+  const dashboardRef = useRef<HTMLDivElement>(null);
+  const gradientRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Animate dashboard on load - synced with stats animation
@@ -20,7 +20,7 @@ export function HeroSection() {
         duration: 1.2,
         ease: 'power3.out',
         delay: 0.7,
-      })
+      });
     }
 
     // Animate gradient mesh
@@ -31,23 +31,23 @@ export function HeroSection() {
         ease: 'none',
         repeat: -1,
         yoyo: true,
-      })
+      });
     }
 
     // Parallax effect on scroll - reduced for better sync
     const handleScroll = () => {
-      const scrollY = window.scrollY
+      const scrollY = window.scrollY;
       if (dashboardRef.current) {
         gsap.to(dashboardRef.current, {
           y: scrollY * 0.3,
           duration: 0.3,
-        })
+        });
       }
-    }
+    };
 
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <section className={styles.hero}>
@@ -177,5 +177,5 @@ export function HeroSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

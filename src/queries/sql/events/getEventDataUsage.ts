@@ -1,21 +1,21 @@
-import clickhouse from '@/lib/clickhouse'
-import { CLICKHOUSE, DRIZZLE, runQuery, notImplemented } from '@/lib/db'
-import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
-import { QueryFilters } from '@/lib/types'
+import { getDateSQL, getTimestampDiffSQL, parseFilters, rawQuery } from '@/lib/analytics-utils';
+import clickhouse from '@/lib/clickhouse';
+import { CLICKHOUSE, DRIZZLE, notImplemented, runQuery } from '@/lib/db';
+import type { QueryFilters } from '@/lib/types';
 
 export function getEventDataUsage(...args: [websiteIds: string[], filters: QueryFilters]) {
   return runQuery({
     [DRIZZLE]: notImplemented,
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  })
+  });
 }
 
 function clickhouseQuery(
   websiteIds: string[],
-  filters: QueryFilters
+  filters: QueryFilters,
 ): Promise<{ websiteId: string; COUNT: number }[]> {
-  const { rawQuery } = clickhouse
-  const { startDate, endDate } = filters
+  const { rawQuery } = clickhouse;
+  const { startDate, endDate } = filters;
 
   return rawQuery(
     `
@@ -31,6 +31,6 @@ function clickhouseQuery(
       websiteIds,
       startDate,
       endDate,
-    }
-  )
+    },
+  );
 }

@@ -1,63 +1,63 @@
-import { z } from 'zod'
-import { canUpdateWebsite, canDeleteWebsite, canViewWebsite } from '@/validations'
-import { SHARE_ID_REGEX } from '@/lib/constants'
-import { parseRequest } from '@/lib/request'
-import { ok, json, unauthorized, serverError, badRequest } from '@/lib/response'
-import { deleteWebsite, getWebsite, updateWebsite } from '@/queries/drizzle'
-import { isValidUuid } from '@/lib/uuid'
+import { z } from 'zod';
+import { SHARE_ID_REGEX } from '@/lib/constants';
+import { parseRequest } from '@/lib/request';
+import { badRequest, json, ok, serverError, unauthorized } from '@/lib/response';
+import { isValidUuid } from '@/lib/uuid';
+import { deleteWebsite, getWebsite, updateWebsite } from '@/queries/drizzle';
+import { canDeleteWebsite, canUpdateWebsite, canViewWebsite } from '@/validations';
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ websiteId: string }> }
+  { params }: { params: Promise<{ websiteId: string }> },
 ) {
-  const { auth, error } = await parseRequest(request)
+  const { auth, error } = await parseRequest(request);
 
   if (error) {
-    return error()
+    return error();
   }
 
-  const { websiteId } = await params
+  const { websiteId } = await params;
 
   // Validate websiteId is a proper UUID
   if (!isValidUuid(websiteId)) {
-    return badRequest('Invalid website ID format')
+    return badRequest('Invalid website ID format');
   }
 
   if (!(await canViewWebsite(auth, websiteId))) {
-    return unauthorized()
+    return unauthorized();
   }
 
-  const website = await getWebsite(websiteId)
+  const website = await getWebsite(websiteId);
 
-  return json(website)
+  return json(website);
 }
 
 export async function POST(
   request: Request,
-  { params }: { params: Promise<{ websiteId: string }> }
+  { params }: { params: Promise<{ websiteId: string }> },
 ) {
   const schema = z.object({
     name: z.string().optional(),
     domain: z.string().optional(),
     shareId: z.string().regex(SHARE_ID_REGEX).nullable().optional(),
-  })
+  });
 
-  const { auth, body, error } = await parseRequest(request, schema)
+  const { auth, body, error } = await parseRequest(request, schema);
 
   if (error) {
-    return error()
+    return error();
   }
 
-  const { websiteId } = await params
-  const { name, domain, shareId } = body
+  const { websiteId } = await params;
+  const { name, domain, shareId } = body;
 
   // Validate websiteId is a proper UUID
   if (!isValidUuid(websiteId)) {
-    return badRequest('Invalid website ID format')
+    return badRequest('Invalid website ID format');
   }
 
   if (!(await canUpdateWebsite(auth, websiteId))) {
-    return unauthorized()
+    return unauthorized();
   }
 
   try {
@@ -65,40 +65,40 @@ export async function POST(
       name,
       domain,
       share_id: shareId,
-    })
+    });
 
-    return Response.json(website)
+    return Response.json(website);
   } catch (e: any) {
     if (e.message.toLowerCase().includes('unique constraint') && e.message.includes('share_id')) {
-      return badRequest('That share ID is already taken.')
+      return badRequest('That share ID is already taken.');
     }
 
-    return serverError(e)
+    return serverError(e);
   }
 }
 
 export async function DELETE(
   request: Request,
-  { params }: { params: Promise<{ websiteId: string }> }
+  { params }: { params: Promise<{ websiteId: string }> },
 ) {
-  const { auth, error } = await parseRequest(request)
+  const { auth, error } = await parseRequest(request);
 
   if (error) {
-    return error()
+    return error();
   }
 
-  const { websiteId } = await params
+  const { websiteId } = await params;
 
   // Validate websiteId is a proper UUID
   if (!isValidUuid(websiteId)) {
-    return badRequest('Invalid website ID format')
+    return badRequest('Invalid website ID format');
   }
 
   if (!(await canDeleteWebsite(auth, websiteId))) {
-    return unauthorized()
+    return unauthorized();
   }
 
-  await deleteWebsite(websiteId)
+  await deleteWebsite(websiteId);
 
-  return ok()
+  return ok();
 }

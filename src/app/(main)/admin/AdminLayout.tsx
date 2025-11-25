@@ -1,15 +1,15 @@
-'use client'
-import { ReactNode } from 'react'
-import { Grid, Column } from '@entro314labs/entro-zen'
-import { useLoginQuery } from '@/components/hooks'
-import { PageBody } from '@/components/common/PageBody'
-import { AdminNav } from './AdminNav'
+'use client';
+import { Column, Grid } from '@entro314labs/entro-zen';
+import type { ReactNode } from 'react';
+import { PageBody } from '@/components/common/PageBody';
+import { useLoginQuery } from '@/components/hooks';
+import { AdminNav } from './AdminNav';
 
 export function AdminLayout({ children }: { children: ReactNode }) {
-  const { user } = useLoginQuery()
+  const { user } = useLoginQuery();
 
   if (!user.isAdmin || process.env.EDGE_MODE) {
-    return null
+    return null;
   }
 
   return (
@@ -28,5 +28,5 @@ export function AdminLayout({ children }: { children: ReactNode }) {
         <PageBody>{children}</PageBody>
       </Column>
     </Grid>
-  )
+  );
 }

@@ -1,26 +1,26 @@
-import { ReactNode } from 'react'
 import {
-  Heading,
-  NavMenu,
-  NavMenuItem,
-  Row,
   Column,
-  NavMenuGroup,
-  NavMenuProps,
+  Heading,
   IconLabel,
-} from '@entro314labs/entro-zen'
-import Link from 'next/link'
+  NavMenu,
+  NavMenuGroup,
+  NavMenuItem,
+  type NavMenuProps,
+  Row,
+} from '@entro314labs/entro-zen';
+import Link from 'next/link';
+import type { ReactNode } from 'react';
 
 export interface SideMenuProps extends NavMenuProps {
   items: {
-    label: string
-    items: { id: string; label: string; icon?: any; path: string }[]
-  }[]
-  title?: string
-  selectedKey?: string
-  allowMinimize?: boolean
-  onItemClick?: () => void
-  children?: ReactNode
+    label: string;
+    items: { id: string; label: string; icon?: any; path: string }[];
+  }[];
+  title?: string;
+  selectedKey?: string;
+  allowMinimize?: boolean;
+  onItemClick?: () => void;
+  children?: ReactNode;
 }
 
 export function SideMenu({
@@ -63,7 +63,7 @@ export function SideMenu({
               >
                 {Array.isArray(items) &&
                   items.map(({ id, label, icon, path }) => {
-                    const isSelected = selectedKey === id
+                    const isSelected = selectedKey === id;
 
                     return (
                       <Link key={id} href={path} onClick={onItemClick}>
@@ -71,12 +71,12 @@ export function SideMenu({
                           <IconLabel icon={icon}>{label}</IconLabel>
                         </NavMenuItem>
                       </Link>
-                    )
+                    );
                   })}
               </NavMenuGroup>
-            )
+            );
           })}
       </NavMenu>
     </Column>
-  )
+  );
 }

@@ -1,5 +1,5 @@
-import { ReactNode } from 'react'
-import { Heading, Icon, Row, Text, Column, Grid } from '@entro314labs/entro-zen'
+import { Column, Grid, Heading, Icon, Row, Text } from '@entro314labs/entro-zen';
+import type { ReactNode } from 'react';
 
 export function PageHeader({
   title,
@@ -9,14 +9,14 @@ export function PageHeader({
   showBorder = true,
   children,
 }: {
-  title: string
-  description?: string
-  label?: ReactNode
-  icon?: ReactNode
-  showBorder?: boolean
-  allowEdit?: boolean
-  className?: string
-  children?: ReactNode
+  title: string;
+  description?: string;
+  label?: ReactNode;
+  icon?: ReactNode;
+  showBorder?: boolean;
+  allowEdit?: boolean;
+  className?: string;
+  children?: ReactNode;
 }) {
   return (
     <Grid
@@ -43,5 +43,5 @@ export function PageHeader({
       </Column>
       <Row justifyContent="flex-end">{children}</Row>
     </Grid>
-  )
+  );
 }

@@ -1,8 +1,7 @@
-import { EventData } from '@/lib/db'
+import { getDateSQL, getTimestampDiffSQL, parseFilters, rawQuery } from '@/lib/analytics-utils';
 
-import clickhouse from '@/lib/clickhouse'
-import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
-import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
+import clickhouse from '@/lib/clickhouse';
+import { CLICKHOUSE, DRIZZLE, type EventData, runQuery } from '@/lib/db';
 
 export async function getEventData(
   ...args: [websiteId: string, eventId: string]
@@ -10,7 +9,7 @@ export async function getEventData(
   return runQuery({
     [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  })
+  });
 }
 
 async function relationalQuery(websiteId: string, eventId: string) {
@@ -33,12 +32,12 @@ async function relationalQuery(websiteId: string, eventId: string) {
     WHERE website_id = {{websiteId::uuid}}
       AND event_id = {{eventId::uuid}}
     `,
-    { websiteId, eventId }
-  )
+    { websiteId, eventId },
+  );
 }
 
 async function clickhouseQuery(websiteId: string, eventId: string): Promise<EventData[]> {
-  const { rawQuery } = clickhouse
+  const { rawQuery } = clickhouse;
 
   return rawQuery(
     `
@@ -57,6 +56,6 @@ async function clickhouseQuery(websiteId: string, eventId: string): Promise<Even
       WHERE website_id = {websiteId:UUID}
         AND event_id = {eventId:UUID}
     `,
-    { websiteId, eventId }
-  )
+    { websiteId, eventId },
+  );
 }

@@ -1,4 +1,3 @@
-import { ReactNode, useState } from 'react'
 import {
   Button,
   Column,
@@ -7,27 +6,28 @@ import {
   Icon,
   Row,
   SearchField,
-} from '@entro314labs/entro-zen'
-import { LoadingPanel } from '@/components/common/LoadingPanel'
-import { useMessages, useWebsiteExpandedMetricsQuery } from '@/components/hooks'
-import { X as Close } from '@/components/icons'
-import { DownloadButton } from '@/components/input/DownloadButton'
-import { formatShortTime } from '@/lib/format'
-import { MetricLabel } from '@/components/metrics/MetricLabel'
-import { SESSION_COLUMNS } from '@/lib/constants'
+} from '@entro314labs/entro-zen';
+import { type ReactNode, useState } from 'react';
+import { LoadingPanel } from '@/components/common/LoadingPanel';
+import { useMessages, useWebsiteExpandedMetricsQuery } from '@/components/hooks';
+import { X as Close } from '@/components/icons';
+import { DownloadButton } from '@/components/input/DownloadButton';
+import { MetricLabel } from '@/components/metrics/MetricLabel';
+import { SESSION_COLUMNS } from '@/lib/constants';
+import { formatShortTime } from '@/lib/format';
 
 export interface MetricsExpandedTableProps {
-  websiteId: string
-  type?: string
-  title?: string
-  dataFilter?: (data: any) => any
-  onSearch?: (search: string) => void
-  params?: { [key: string]: any }
-  allowSearch?: boolean
-  allowDownload?: boolean
-  renderLabel?: (row: any, index: number) => ReactNode
-  onClose?: () => void
-  children?: ReactNode
+  websiteId: string;
+  type?: string;
+  title?: string;
+  dataFilter?: (data: any) => any;
+  onSearch?: (search: string) => void;
+  params?: { [key: string]: any };
+  allowSearch?: boolean;
+  allowDownload?: boolean;
+  renderLabel?: (row: any, index: number) => ReactNode;
+  onClose?: () => void;
+  children?: ReactNode;
 }
 
 export function MetricsExpandedTable({
@@ -40,20 +40,20 @@ export function MetricsExpandedTable({
   onClose,
   children,
 }: MetricsExpandedTableProps) {
-  const [search, setSearch] = useState('')
-  const { formatMessage, labels } = useMessages()
-  const isType = ['browser', 'country', 'device', 'os'].includes(type)
-  const showBounceDuration = SESSION_COLUMNS.includes(type)
+  const [search, setSearch] = useState('');
+  const { formatMessage, labels } = useMessages();
+  const isType = ['browser', 'country', 'device', 'os'].includes(type);
+  const showBounceDuration = SESSION_COLUMNS.includes(type);
 
   const { data, isLoading, isFetching, error } = useWebsiteExpandedMetricsQuery(websiteId, {
     type,
     search: isType ? undefined : search,
     ...params,
-  })
+  });
 
   const items = Array.isArray(data)
     ? data.map(({ name, ...props }) => ({ label: name, ...props }))
-    : null
+    : null;
 
   return (
     <>
@@ -86,20 +86,20 @@ export function MetricsExpandedTable({
               rowKey={(row, index) => row?.label || row?.name || `metric-${index}`}
             >
               <DataColumn id="label" label={title} width="2fr" align="start">
-                {(row) => (
+                {row => (
                   <Row overflow="hidden">
                     <MetricLabel type={type} data={row} />
                   </Row>
                 )}
               </DataColumn>
               <DataColumn id="visitors" label={formatMessage(labels.visitors)} align="end">
-                {(row) => row?.['visitors']?.toLocaleString()}
+                {row => row?.['visitors']?.toLocaleString()}
               </DataColumn>
               <DataColumn id="visits" label={formatMessage(labels.visits)} align="end">
-                {(row) => row?.['visits']?.toLocaleString()}
+                {row => row?.['visits']?.toLocaleString()}
               </DataColumn>
               <DataColumn id="pageviews" label={formatMessage(labels.views)} align="end">
-                {(row) => row?.['pageviews']?.toLocaleString()}
+                {row => row?.['pageviews']?.toLocaleString()}
               </DataColumn>
               {showBounceDuration && [
                 <DataColumn
@@ -108,9 +108,9 @@ export function MetricsExpandedTable({
                   label={formatMessage(labels.bounceRate)}
                   align="end"
                 >
-                  {(row) => {
-                    const n = (Math.min(row?.['visits'], row?.['bounces']) / row?.['visits']) * 100
-                    return Math.round(+n) + '%'
+                  {row => {
+                    const n = (Math.min(row?.['visits'], row?.['bounces']) / row?.['visits']) * 100;
+                    return Math.round(+n) + '%';
                   }}
                 </DataColumn>,
 
@@ -120,9 +120,9 @@ export function MetricsExpandedTable({
                   label={formatMessage(labels.visitDuration)}
                   align="end"
                 >
-                  {(row) => {
-                    const n = row?.['totaltime'] / row?.['visits']
-                    return `${+n < 0 ? '-' : ''}${formatShortTime(Math.abs(~~n), ['m', 's'], ' ')}`
+                  {row => {
+                    const n = row?.['totaltime'] / row?.['visits'];
+                    return `${+n < 0 ? '-' : ''}${formatShortTime(Math.abs(~~n), ['m', 's'], ' ')}`;
                   }}
                 </DataColumn>,
               ]}
@@ -131,5 +131,5 @@ export function MetricsExpandedTable({
         </Column>
       </LoadingPanel>
     </>
-  )
+  );
 }

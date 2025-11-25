@@ -1,19 +1,19 @@
-import { json, notFound } from '@/lib/response'
-import { createToken } from '@/lib/jwt'
-import { secret } from '@/lib/crypto'
-import { getSharedWebsite } from '@/queries/drizzle'
+import { secret } from '@/lib/crypto';
+import { createToken } from '@/lib/jwt';
+import { json, notFound } from '@/lib/response';
+import { getSharedWebsite } from '@/queries/drizzle';
 
 export async function GET(request: Request, { params }: { params: Promise<{ shareId: string }> }) {
-  const { shareId } = await params
+  const { shareId } = await params;
 
-  const website = await getSharedWebsite(shareId)
+  const website = await getSharedWebsite(shareId);
 
   if (!website) {
-    return notFound()
+    return notFound();
   }
 
-  const data = { websiteId: website.websiteId }
-  const token = createToken(data, secret())
+  const data = { websiteId: website.websiteId };
+  const token = createToken(data, secret());
 
-  return json({ ...data, token })
+  return json({ ...data, token });
 }

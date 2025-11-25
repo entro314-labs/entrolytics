@@ -1,13 +1,13 @@
-'use client'
-import { Column } from '@entro314labs/entro-zen'
-import { useMessages } from '@/components/hooks'
-import { Panel } from '@/components/common/Panel'
-import { PreferenceSettings } from './PreferenceSettings'
-import { PageHeader } from '@/components/common/PageHeader'
-import { PageBody } from '@/components/common/PageBody'
+'use client';
+import { Column } from '@entro314labs/entro-zen';
+import { PageBody } from '@/components/common/PageBody';
+import { PageHeader } from '@/components/common/PageHeader';
+import { Panel } from '@/components/common/Panel';
+import { useMessages } from '@/components/hooks';
+import { PreferenceSettings } from './PreferenceSettings';
 
 export function PreferencesPage() {
-  const { formatMessage, labels } = useMessages()
+  const { formatMessage, labels } = useMessages();
 
   return (
     <PageBody>
@@ -18,5 +18,5 @@ export function PreferencesPage() {
         </Panel>
       </Column>
     </PageBody>
-  )
+  );
 }

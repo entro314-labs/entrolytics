@@ -1,24 +1,24 @@
-import { Button, Modal, DialogTrigger, Dialog, Column } from '@entro314labs/entro-zen'
+import { Button, Column, Dialog, DialogTrigger, Modal } from '@entro314labs/entro-zen';
+import { ActionForm } from '@/components/common/ActionForm';
 import {
   useLoginQuery,
   useMessages,
   useModified,
-  useUserOrgsQuery,
   useNavigation,
-} from '@/components/hooks'
-import { WebsiteDeleteForm } from './WebsiteDeleteForm'
-import { WebsiteResetForm } from './WebsiteResetForm'
-import { WebsiteTransferForm } from './WebsiteTransferForm'
-import { ActionForm } from '@/components/common/ActionForm'
-import { ROLES } from '@/lib/constants'
+  useUserOrgsQuery,
+} from '@/components/hooks';
+import { ROLES } from '@/lib/constants';
+import { WebsiteDeleteForm } from './WebsiteDeleteForm';
+import { WebsiteResetForm } from './WebsiteResetForm';
+import { WebsiteTransferForm } from './WebsiteTransferForm';
 
 export function WebsiteData({ websiteId, onSave }: { websiteId: string; onSave?: () => void }) {
-  const { formatMessage, labels, messages } = useMessages()
-  const { user } = useLoginQuery()
-  const { touch } = useModified()
-  const { router, pathname, orgId, renderUrl } = useNavigation()
-  const { data: orgs } = useUserOrgsQuery(user.id)
-  const isAdmin = pathname.startsWith('/admin')
+  const { formatMessage, labels, messages } = useMessages();
+  const { user } = useLoginQuery();
+  const { touch } = useModified();
+  const { router, pathname, orgId, renderUrl } = useNavigation();
+  const { data: orgs } = useUserOrgsQuery(user.id);
+  const isAdmin = pathname.startsWith('/admin');
 
   const canTransferWebsite =
     (
@@ -26,25 +26,25 @@ export function WebsiteData({ websiteId, onSave }: { websiteId: string; onSave?:
         orgs?.data?.filter(({ members }) =>
           members.find(
             ({ role, userId }) =>
-              [ROLES.orgOwner, ROLES.orgManager].includes(role) && userId === user.id
-          )
+              [ROLES.orgOwner, ROLES.orgManager].includes(role) && userId === user.id,
+          ),
         )) ||
       []
     ).length > 0 ||
     (orgId &&
       !!orgs?.data
         ?.find(({ id }) => id === orgId)
-        ?.members.find(({ role, userId }) => role === ROLES.orgOwner && userId === user.id))
+        ?.members.find(({ role, userId }) => role === ROLES.orgOwner && userId === user.id));
 
   const handleSave = () => {
-    touch('websites')
-    onSave?.()
-    router.push(renderUrl(`/settings/websites`))
-  }
+    touch('websites');
+    onSave?.();
+    router.push(renderUrl(`/settings/websites`));
+  };
 
   const handleReset = async () => {
-    onSave?.()
-  }
+    onSave?.();
+  };
 
   return (
     <Column gap="6">
@@ -100,5 +100,5 @@ export function WebsiteData({ websiteId, onSave }: { websiteId: string; onSave?:
         </DialogTrigger>
       </ActionForm>
     </Column>
-  )
+  );
 }

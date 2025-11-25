@@ -1,61 +1,61 @@
-import { Key } from 'react'
-import { subMonths, endOfDay } from 'date-fns'
 import {
-  Grid,
+  Button,
   Column,
+  Grid,
+  Icon,
   List,
   ListItem,
-  Row,
-  Button,
-  Popover,
-  MenuTrigger,
   Menu,
   MenuItem,
-  Icon,
-} from '@entro314labs/entro-zen'
-import { useFields, useMessages } from '@/components/hooks'
-import { Plus } from '@/components/icons'
-import { FilterRecord } from '@/components/common/FilterRecord'
-import { Empty } from '@/components/common/Empty'
+  MenuTrigger,
+  Popover,
+  Row,
+} from '@entro314labs/entro-zen';
+import { endOfDay, subMonths } from 'date-fns';
+import type { Key } from 'react';
+import { Empty } from '@/components/common/Empty';
+import { FilterRecord } from '@/components/common/FilterRecord';
+import { useFields, useMessages } from '@/components/hooks';
+import { Plus } from '@/components/icons';
 
 export interface FieldFiltersProps {
-  websiteId: string
-  value?: { name: string; operator: string; value: string }[]
-  exclude?: string[]
-  onChange?: (data: any) => void
+  websiteId: string;
+  value?: { name: string; operator: string; value: string }[];
+  exclude?: string[];
+  onChange?: (data: any) => void;
 }
 
 export function FieldFilters({ websiteId, value, exclude = [], onChange }: FieldFiltersProps) {
-  const { formatMessage, messages } = useMessages()
-  const { fields } = useFields()
-  const startDate = subMonths(endOfDay(new Date()), 6)
-  const endDate = endOfDay(new Date())
+  const { formatMessage, messages } = useMessages();
+  const { fields } = useFields();
+  const startDate = subMonths(endOfDay(new Date()), 6);
+  const endDate = endOfDay(new Date());
 
   const updateFilter = (name: string, props: Record<string, any>) => {
     // Ensure value is always an array before calling map
-    const safeValue = Array.isArray(value) ? value : []
-    onChange(safeValue.map((filter) => (filter.name === name ? { ...filter, ...props } : filter)))
-  }
+    const safeValue = Array.isArray(value) ? value : [];
+    onChange(safeValue.map(filter => (filter.name === name ? { ...filter, ...props } : filter)));
+  };
 
   const handleAdd = (name: Key) => {
     // Ensure value is always an array before calling concat
-    const safeValue = Array.isArray(value) ? value : []
-    onChange(safeValue.concat({ name: name.toString(), operator: 'eq', value: '' }))
-  }
+    const safeValue = Array.isArray(value) ? value : [];
+    onChange(safeValue.concat({ name: name.toString(), operator: 'eq', value: '' }));
+  };
 
   const handleChange = (name: string, value: Key) => {
-    updateFilter(name, { value })
-  }
+    updateFilter(name, { value });
+  };
 
   const handleSelect = (name: string, operator: Key) => {
-    updateFilter(name, { operator })
-  }
+    updateFilter(name, { operator });
+  };
 
   const handleRemove = (name: string) => {
     // Ensure value is always an array before calling filter
-    const safeValue = Array.isArray(value) ? value : []
-    onChange(safeValue.filter((filter) => filter.name !== name))
-  }
+    const safeValue = Array.isArray(value) ? value : [];
+    onChange(safeValue.filter(filter => filter.name !== name));
+  };
 
   return (
     <Grid columns={{ xs: '1fr', md: '180px 1fr' }} overflow="hidden" gapY="6">
@@ -70,13 +70,13 @@ export function FieldFilters({ websiteId, value, exclude = [], onChange }: Field
             <Menu onAction={handleAdd}>
               {fields
                 .filter(({ name }) => !exclude.includes(name))
-                .map((field) => {
-                  const isDisabled = !!value?.find(({ name }) => name === field.name)
+                .map(field => {
+                  const isDisabled = !!value?.find(({ name }) => name === field.name);
                   return (
                     <MenuItem key={field.name} id={field.name} isDisabled={isDisabled}>
                       {field.label}
                     </MenuItem>
-                  )
+                  );
                 })}
             </Menu>
           </Popover>
@@ -86,19 +86,19 @@ export function FieldFilters({ websiteId, value, exclude = [], onChange }: Field
         <List onAction={handleAdd}>
           {fields
             .filter(({ name }) => !exclude.includes(name))
-            .map((field) => {
-              const isDisabled = !!value?.find(({ name }) => name === field.name)
+            .map(field => {
+              const isDisabled = !!value?.find(({ name }) => name === field.name);
               return (
                 <ListItem key={field.name} id={field.name} isDisabled={isDisabled}>
                   {field.label}
                 </ListItem>
-              )
+              );
             })}
         </List>
       </Column>
       <Column overflow="auto" gapY="4" style={{ contain: 'layout' }}>
         {Array.isArray(value)
-          ? value.map((filter) => {
+          ? value.map(filter => {
               return (
                 <FilterRecord
                   key={filter.name}
@@ -111,7 +111,7 @@ export function FieldFilters({ websiteId, value, exclude = [], onChange }: Field
                   onRemove={handleRemove}
                   onChange={handleChange}
                 />
-              )
+              );
             })
           : []}
         {!Array.isArray(value) || value.length === 0 ? (
@@ -119,5 +119,5 @@ export function FieldFilters({ websiteId, value, exclude = [], onChange }: Field
         ) : null}
       </Column>
     </Grid>
-  )
+  );
 }

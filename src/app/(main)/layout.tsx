@@ -1,13 +1,13 @@
-import { Suspense } from 'react'
-import { Metadata } from 'next'
-import { App } from './App'
+import type { Metadata } from 'next';
+import { Suspense } from 'react';
+import { App } from './App';
 
 export default function ({ children }) {
   return (
     <Suspense>
       <App>{children}</App>
     </Suspense>
-  )
+  );
 }
 
 export const metadata: Metadata = {
@@ -15,4 +15,4 @@ export const metadata: Metadata = {
     template: '%s | Entrolytics',
     default: 'Entrolytics',
   },
-}
+};

@@ -1,31 +1,30 @@
-import { useState } from 'react'
-import { Row, Text, Icon, DataTable, DataColumn, MenuItem, Modal } from '@entro314labs/entro-zen'
-import Link from 'next/link'
-import { Trash } from '@/components/icons'
-import { useMessages } from '@/components/hooks'
-import { Edit } from '@/components/icons'
-import { MenuButton } from '@/components/input/MenuButton'
-import { DateDistance } from '@/components/common/DateDistance'
+import { DataColumn, DataTable, Icon, MenuItem, Modal, Row, Text } from '@entro314labs/entro-zen';
+import Link from 'next/link';
+import { useState } from 'react';
+import { DateDistance } from '@/components/common/DateDistance';
+import { useMessages } from '@/components/hooks';
+import { Edit, Trash } from '@/components/icons';
+import { MenuButton } from '@/components/input/MenuButton';
 
 export function AdminOrgsTable({
   data = [],
   showActions = true,
 }: {
-  data: any[]
-  showActions?: boolean
+  data: any[];
+  showActions?: boolean;
 }) {
-  const { formatMessage, labels } = useMessages()
-  const [deleteUser, setDeleteUser] = useState(null)
+  const { formatMessage, labels } = useMessages();
+  const [deleteUser, setDeleteUser] = useState(null);
 
   // Ensure data is valid and has required fields
   const safeData = Array.isArray(data)
     ? data
-        .filter((item) => item && (item.orgId || item.id))
+        .filter(item => item && (item.orgId || item.id))
         .map((item, index) => ({
           ...item,
           orgId: item.orgId || item.id || `fallback-${index}`,
         }))
-    : []
+    : [];
 
   return (
     <>
@@ -42,14 +41,14 @@ export function AdminOrgsTable({
         <DataColumn id="owner" label={formatMessage(labels.owner)}>
           {(row: any) => {
             const member =
-              Array.isArray(row?.members) && row.members.length > 0 ? row.members[0] : null
-            const name = member?.user?.username
+              Array.isArray(row?.members) && row.members.length > 0 ? row.members[0] : null;
+            const name = member?.user?.username;
 
             return (
               <Text title={name} truncate>
                 {member ? <Link href={`/admin/users/${member.user?.id}`}>{name}</Link> : name}
               </Text>
-            )
+            );
           }}
         </DataColumn>
         <DataColumn id="created" label={formatMessage(labels.created)} width="160px">
@@ -58,7 +57,7 @@ export function AdminOrgsTable({
         {showActions && (
           <DataColumn id="action" align="end" width="50px">
             {(row: any) => {
-              const { orgId } = row
+              const { orgId } = row;
 
               return (
                 <MenuButton>
@@ -87,12 +86,12 @@ export function AdminOrgsTable({
                     </Row>
                   </MenuItem>
                 </MenuButton>
-              )
+              );
             }}
           </DataColumn>
         )}
       </DataTable>
       <Modal isOpen={!!deleteUser}></Modal>
     </>
-  )
+  );
 }

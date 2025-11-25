@@ -1,11 +1,11 @@
-import { parseRequest } from '@/lib/request'
-import { json } from '@/lib/response'
+import { parseRequest } from '@/lib/request';
+import { json } from '@/lib/response';
 
 export async function GET(request: Request) {
-  const { error } = await parseRequest(request, null, { skipAuth: true })
+  const { error } = await parseRequest(request, null, { skipAuth: true });
 
   if (error) {
-    return error()
+    return error();
   }
 
   return json({
@@ -18,5 +18,5 @@ export async function GET(request: Request) {
     telemetryDisabled: !!process.env.DISABLE_TELEMETRY,
     trackerScriptName: process.env.TRACKER_SCRIPT_NAME,
     updatesDisabled: !!process.env.DISABLE_UPDATES,
-  })
+  });
 }

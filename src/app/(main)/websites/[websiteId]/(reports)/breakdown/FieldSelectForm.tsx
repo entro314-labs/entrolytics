@@ -1,28 +1,28 @@
-import { Column, List, ListItem, Grid, Button } from '@entro314labs/entro-zen'
-import { useFields, useMessages } from '@/components/hooks'
-import { useState } from 'react'
+import { Button, Column, Grid, List, ListItem } from '@entro314labs/entro-zen';
+import { useState } from 'react';
+import { useFields, useMessages } from '@/components/hooks';
 
 export function FieldSelectForm({
   selectedFields = [],
   onChange,
   onClose,
 }: {
-  selectedFields?: string[]
-  onChange: (values: string[]) => void
-  onClose?: () => void
+  selectedFields?: string[];
+  onChange: (values: string[]) => void;
+  onClose?: () => void;
 }) {
-  const [selected, setSelected] = useState(selectedFields)
-  const { formatMessage, labels } = useMessages()
-  const { fields } = useFields()
+  const [selected, setSelected] = useState(selectedFields);
+  const { formatMessage, labels } = useMessages();
+  const { fields } = useFields();
 
   const handleChange = (value: string[]) => {
-    setSelected(value)
-  }
+    setSelected(value);
+  };
 
   const handleApply = () => {
-    onChange?.(selected)
-    onClose()
-  }
+    onChange?.(selected);
+    onClose();
+  };
 
   return (
     <Column gap="6">
@@ -32,7 +32,7 @@ export function FieldSelectForm({
             <ListItem key={name} id={name}>
               {label}
             </ListItem>
-          )
+          );
         })}
       </List>
       <Grid columns="1fr 1fr" gap>
@@ -42,5 +42,5 @@ export function FieldSelectForm({
         </Button>
       </Grid>
     </Column>
-  )
+  );
 }

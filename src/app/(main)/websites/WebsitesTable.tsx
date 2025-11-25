@@ -1,25 +1,25 @@
-import { ReactNode } from 'react'
 import {
+  DataColumn,
+  DataTable,
+  type DataTableProps,
+  Icon,
+  MenuItem,
   Row,
   Text,
-  Icon,
-  DataTable,
-  DataColumn,
-  MenuItem,
-  DataTableProps,
-} from '@entro314labs/entro-zen'
-import { useMessages, useNavigation } from '@/components/hooks'
-import { MenuButton } from '@/components/input/MenuButton'
-import { Eye, SquarePen } from '@/components/icons'
-import { TableErrorBoundary } from '@/components/common/TableErrorBoundary'
-import Link from 'next/link'
+} from '@entro314labs/entro-zen';
+import Link from 'next/link';
+import type { ReactNode } from 'react';
+import { TableErrorBoundary } from '@/components/common/TableErrorBoundary';
+import { useMessages, useNavigation } from '@/components/hooks';
+import { Eye, SquarePen } from '@/components/icons';
+import { MenuButton } from '@/components/input/MenuButton';
 
 export interface WebsitesTableProps extends DataTableProps {
-  showActions?: boolean
-  allowEdit?: boolean
-  allowView?: boolean
-  orgId?: string
-  children?: ReactNode
+  showActions?: boolean;
+  allowEdit?: boolean;
+  allowView?: boolean;
+  orgId?: string;
+  children?: ReactNode;
 }
 
 export function WebsitesTable({
@@ -29,29 +29,29 @@ export function WebsitesTable({
   children,
   ...props
 }: WebsitesTableProps) {
-  const { formatMessage, labels } = useMessages()
-  const { renderUrl, pathname } = useNavigation()
-  const isSettings = pathname.includes('/settings')
+  const { formatMessage, labels } = useMessages();
+  const { renderUrl, pathname } = useNavigation();
+  const isSettings = pathname.includes('/settings');
 
   // Get data from props
-  const data = props.data as Record<string, any>[] | undefined
+  const data = props.data as Record<string, any>[] | undefined;
 
   // Defensive guards
   if (!data || !Array.isArray(data) || data.length === 0) {
-    return children || null
+    return children || null;
   }
 
   // Additional safety check for data integrity
-  const safeData = data.filter((item) => {
-    if (!item) return false
+  const safeData = data.filter(item => {
+    if (!item) return false;
 
     // Check for expected website identifier fields
-    const hasId = item.websiteId || item.id || item.website_id
-    return hasId
-  })
+    const hasId = item.websiteId || item.id || item.website_id;
+    return hasId;
+  });
 
   if (safeData.length === 0) {
-    return children || null
+    return children || null;
   }
 
   return (
@@ -61,21 +61,21 @@ export function WebsitesTable({
         data={safeData}
         rowKey={(row: any, index: number) => {
           // Try multiple possible ID fields for compatibility
-          const id = row.websiteId || row.id || row.website_id
+          const id = row.websiteId || row.id || row.website_id;
           if (!id) {
-            return `fallback-${index}-${row.name || row.domain || 'unknown'}`
+            return `fallback-${index}-${row.name || row.domain || 'unknown'}`;
           }
-          return id
+          return id;
         }}
       >
         <DataColumn id="name" label={formatMessage(labels.name)}>
           {(row: any) => {
             // Handle multiple possible ID fields for compatibility
-            const websiteId = row.websiteId || row.id || row.website_id
-            const name = row.displayName || row.name
+            const websiteId = row.websiteId || row.id || row.website_id;
+            const name = row.displayName || row.name;
 
             if (!websiteId) {
-              return <span>{name || 'Unknown Website'}</span>
+              return <span>{name || 'Unknown Website'}</span>;
             }
 
             return (
@@ -84,22 +84,22 @@ export function WebsitesTable({
               >
                 {name || 'Unnamed Website'}
               </Link>
-            )
+            );
           }}
         </DataColumn>
         <DataColumn id="domain" label={formatMessage(labels.domain)}>
           {(row: any) => {
-            return row.domain || 'No domain'
+            return row.domain || 'No domain';
           }}
         </DataColumn>
         {showActions && (
           <DataColumn id="action" label=" " align="end">
             {(row: any) => {
               // Handle multiple possible ID fields for compatibility
-              const websiteId = row.websiteId || row.id || row.website_id
+              const websiteId = row.websiteId || row.id || row.website_id;
 
               if (!websiteId) {
-                return null
+                return null;
               }
 
               return (
@@ -128,11 +128,11 @@ export function WebsitesTable({
                     </MenuItem>
                   )}
                 </MenuButton>
-              )
+              );
             }}
           </DataColumn>
         )}
       </DataTable>
     </TableErrorBoundary>
-  )
+  );
 }

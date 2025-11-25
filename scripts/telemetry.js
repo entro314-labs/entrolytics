@@ -1,16 +1,16 @@
-import os from 'node:os'
-import path from 'node:path'
-import isCI from 'is-ci'
-import { createRequire } from 'module'
+import os from 'node:os';
+import path from 'node:path';
+import isCI from 'is-ci';
+import { createRequire } from 'module';
 
-const require = createRequire(import.meta.url)
-const pkg = require(path.resolve(process.cwd(), 'package.json'))
+const require = createRequire(import.meta.url);
+const pkg = require(path.resolve(process.cwd(), 'package.json'));
 
-const url = 'https://api.entrolytics.click/v1/telemetry'
+const url = 'https://api.entrolytics.click/v1/telemetry';
 
 export async function sendTelemetry(type) {
-  const { default: isDocker } = await import('is-docker')
-  const { default: fetch } = await import('node-fetch')
+  const { default: isDocker } = await import('is-docker');
+  const { default: fetch } = await import('node-fetch');
 
   const data = {
     type,
@@ -23,7 +23,7 @@ export async function sendTelemetry(type) {
       is_docker: isDocker(),
       is_ci: isCI,
     },
-  }
+  };
 
   try {
     await fetch(url, {
@@ -33,7 +33,7 @@ export async function sendTelemetry(type) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
-    })
+    });
   } catch {
     // Ignore
   }

@@ -1,35 +1,34 @@
-import { useState } from 'react'
-import Link from 'next/link'
 import {
-  Row,
-  Text,
-  Icon,
-  DataTable,
   DataColumn,
+  DataTable,
+  Dialog,
+  Icon,
   MenuItem,
   Modal,
-  Dialog,
-} from '@entro314labs/entro-zen'
-import { Trash, Users } from '@/components/icons'
-import { useMessages } from '@/components/hooks'
-import { Edit } from '@/components/icons'
-import { MenuButton } from '@/components/input/MenuButton'
-import { DateDistance } from '@/components/common/DateDistance'
-import { WebsiteDeleteForm } from '@/app/(main)/websites/[websiteId]/settings/WebsiteDeleteForm'
+  Row,
+  Text,
+} from '@entro314labs/entro-zen';
+import Link from 'next/link';
+import { useState } from 'react';
+import { WebsiteDeleteForm } from '@/app/(main)/websites/[websiteId]/settings/WebsiteDeleteForm';
+import { DateDistance } from '@/components/common/DateDistance';
+import { useMessages } from '@/components/hooks';
+import { Edit, Trash, Users } from '@/components/icons';
+import { MenuButton } from '@/components/input/MenuButton';
 
 export function AdminWebsitesTable({ data = [] }: { data: any[] }) {
-  const { formatMessage, labels } = useMessages()
-  const [deleteWebsite, setDeleteWebsite] = useState(null)
+  const { formatMessage, labels } = useMessages();
+  const [deleteWebsite, setDeleteWebsite] = useState(null);
 
   // Ensure data is valid and has required fields
   const safeData = Array.isArray(data)
     ? data
-        .filter((item) => item && (item.websiteId || item.id))
+        .filter(item => item && (item.websiteId || item.id))
         .map((item, index) => ({
           ...item,
           websiteId: item.websiteId || item.id || `fallback-${index}`,
         }))
-    : []
+    : [];
 
   return (
     <>
@@ -56,7 +55,7 @@ export function AdminWebsitesTable({ data = [] }: { data: any[] }) {
                     <Link href={`/admin/orgs/${row?.org?.orgId}`}>{row?.org?.name}</Link>
                   </Text>
                 </Row>
-              )
+              );
             }
             return (
               <Text truncate>
@@ -64,7 +63,7 @@ export function AdminWebsitesTable({ data = [] }: { data: any[] }) {
                   {row?.user?.displayName || row?.user?.email}
                 </Link>
               </Text>
-            )
+            );
           }}
         </DataColumn>
         <DataColumn id="created" label={formatMessage(labels.created)} width="180px">
@@ -72,7 +71,7 @@ export function AdminWebsitesTable({ data = [] }: { data: any[] }) {
         </DataColumn>
         <DataColumn id="action" align="end" width="50px">
           {(row: any) => {
-            const { websiteId } = row
+            const { websiteId } = row;
 
             return (
               <MenuButton>
@@ -101,7 +100,7 @@ export function AdminWebsitesTable({ data = [] }: { data: any[] }) {
                   </Row>
                 </MenuItem>
               </MenuButton>
-            )
+            );
           }}
         </DataColumn>
       </DataTable>
@@ -111,5 +110,5 @@ export function AdminWebsitesTable({ data = [] }: { data: any[] }) {
         </Dialog>
       </Modal>
     </>
-  )
+  );
 }

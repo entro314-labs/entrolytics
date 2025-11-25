@@ -1,14 +1,14 @@
-import { Metadata } from 'next'
-import { MarketingLayout } from '@/components/marketing'
-import styles from './faq.module.css'
-import contentStyles from '@/components/marketing/ContentPage.module.css'
-import Link from 'next/link'
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { MarketingLayout } from '@/components/marketing';
+import contentStyles from '@/components/marketing/ContentPage.module.css';
+import styles from './faq.module.css';
 
 export const metadata: Metadata = {
   title: 'FAQ | Entrolytics',
   description:
     'Find answers to frequently asked questions about Entrolytics privacy-first analytics platform.',
-}
+};
 
 const faqCategories = [
   {
@@ -20,11 +20,11 @@ const faqCategories = [
       },
       {
         q: 'How is Entrolytics different from Google Analytics?',
-        a: 'Entrolytics is built from the ground up with privacy in mind. Unlike Google Analytics, we don\'t use cookies, don\'t track users across sites, don\'t collect personal data, and don\'t share data with third parties. Your data stays yours, and your visitors stay anonymous.',
+        a: "Entrolytics is built from the ground up with privacy in mind. Unlike Google Analytics, we don't use cookies, don't track users across sites, don't collect personal data, and don't share data with third parties. Your data stays yours, and your visitors stay anonymous.",
       },
       {
         q: 'Do I need to show a cookie consent banner?',
-        a: 'In most cases, no! Since Entrolytics doesn\'t use cookies and doesn\'t collect personal data, you typically don\'t need cookie consent for our analytics. However, laws vary by region, so we recommend consulting with your legal team for your specific situation.',
+        a: "In most cases, no! Since Entrolytics doesn't use cookies and doesn't collect personal data, you typically don't need cookie consent for our analytics. However, laws vary by region, so we recommend consulting with your legal team for your specific situation.",
       },
       {
         q: 'Is Entrolytics open source?',
@@ -37,11 +37,11 @@ const faqCategories = [
     faqs: [
       {
         q: 'Is Entrolytics GDPR compliant?',
-        a: 'Yes, Entrolytics is fully GDPR compliant. We minimize data collection, don\'t store personal data, process data in EU data centers (optional), and provide all the documentation you need for compliance.',
+        a: "Yes, Entrolytics is fully GDPR compliant. We minimize data collection, don't store personal data, process data in EU data centers (optional), and provide all the documentation you need for compliance.",
       },
       {
         q: 'What data does Entrolytics collect?',
-        a: 'We collect only essential analytics data: page URL, referrer, browser type, operating system, screen size (generalized), and country/region. We hash IP addresses immediately and never store them in raw form. We don\'t collect names, emails, or any personal identifiers.',
+        a: "We collect only essential analytics data: page URL, referrer, browser type, operating system, screen size (generalized), and country/region. We hash IP addresses immediately and never store them in raw form. We don't collect names, emails, or any personal identifiers.",
       },
       {
         q: 'Can visitors opt out of tracking?',
@@ -99,7 +99,7 @@ const faqCategories = [
       },
       {
         q: 'Can I use Entrolytics with WordPress?',
-        a: 'Yes! We offer a WordPress plugin for easy installation. Just install the plugin, enter your site ID, and you\'re ready to go.',
+        a: "Yes! We offer a WordPress plugin for easy installation. Just install the plugin, enter your site ID, and you're ready to go.",
       },
     ],
   },
@@ -108,11 +108,11 @@ const faqCategories = [
     faqs: [
       {
         q: 'Is there a free plan?',
-        a: 'Yes! Our Starter plan is free forever and includes up to 10,000 pageviews per month. It\'s perfect for personal projects and small websites.',
+        a: "Yes! Our Starter plan is free forever and includes up to 10,000 pageviews per month. It's perfect for personal projects and small websites.",
       },
       {
         q: 'What happens if I exceed my pageview limit?',
-        a: 'We won\'t cut you off or charge you unexpectedly. If you consistently exceed your limit, we\'ll reach out to help you find the right plan. Occasional traffic spikes are no problem.',
+        a: "We won't cut you off or charge you unexpectedly. If you consistently exceed your limit, we'll reach out to help you find the right plan. Occasional traffic spikes are no problem.",
       },
       {
         q: 'Can I cancel anytime?',
@@ -120,7 +120,7 @@ const faqCategories = [
       },
       {
         q: 'Do you offer refunds?',
-        a: 'We offer a 14-day money-back guarantee. If you\'re not satisfied within your first 14 days, contact us for a full refund.',
+        a: "We offer a 14-day money-back guarantee. If you're not satisfied within your first 14 days, contact us for a full refund.",
       },
       {
         q: 'Is there a discount for annual billing?',
@@ -128,7 +128,7 @@ const faqCategories = [
       },
     ],
   },
-]
+];
 
 export default function FAQPage() {
   return (
@@ -145,7 +145,7 @@ export default function FAQPage() {
           </header>
 
           <nav className={styles.categoryNav}>
-            {faqCategories.map((category) => (
+            {faqCategories.map(category => (
               <a
                 key={category.name}
                 href={`#${category.name.toLowerCase().replace(/\s+/g, '-')}`}
@@ -157,7 +157,7 @@ export default function FAQPage() {
           </nav>
 
           <div className={styles.faqContent}>
-            {faqCategories.map((category) => (
+            {faqCategories.map(category => (
               <section
                 key={category.name}
                 id={category.name.toLowerCase().replace(/\s+/g, '-')}
@@ -165,7 +165,7 @@ export default function FAQPage() {
               >
                 <h2 className={styles.sectionTitle}>{category.name}</h2>
                 <div className={styles.faqList}>
-                  {category.faqs.map((faq) => (
+                  {category.faqs.map(faq => (
                     <details key={faq.q} className={styles.faqItem}>
                       <summary className={styles.question}>
                         {faq.q}
@@ -189,7 +189,9 @@ export default function FAQPage() {
 
           <section className={styles.ctaSection}>
             <h2>Still have questions?</h2>
-            <p>Our team is here to help. Reach out and we'll get back to you as soon as possible.</p>
+            <p>
+              Our team is here to help. Reach out and we'll get back to you as soon as possible.
+            </p>
             <div className={styles.ctaButtons}>
               <Link href="/contact" className="marketing-btn-primary">
                 Contact Support
@@ -207,5 +209,5 @@ export default function FAQPage() {
         </div>
       </div>
     </MarketingLayout>
-  )
+  );
 }

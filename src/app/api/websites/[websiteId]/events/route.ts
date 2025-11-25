@@ -1,15 +1,15 @@
-import { getQueryFilters, parseRequest } from '@/lib/request'
-import { json, unauthorized, serverError } from '@/lib/response'
-import { filterParams, pagingParams, searchParams } from '@/lib/schema'
-import { canViewWebsite } from '@/validations'
-import { getWebsiteEvents } from '@/queries/sql'
-import { z } from 'zod'
+import { z } from 'zod';
+import { getQueryFilters, parseRequest } from '@/lib/request';
+import { json, serverError, unauthorized } from '@/lib/response';
+import { filterParams, pagingParams, searchParams } from '@/lib/schema';
+import { getWebsiteEvents } from '@/queries/sql';
+import { canViewWebsite } from '@/validations';
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ websiteId: string }> }
+  { params }: { params: Promise<{ websiteId: string }> },
 ) {
-  console.log('[events] GET request started')
+  console.log('[events] GET request started');
   try {
     const schema = z.object({
       startAt: z.coerce.number().optional(),
@@ -17,37 +17,37 @@ export async function GET(
       ...filterParams,
       ...pagingParams,
       ...searchParams,
-    })
+    });
 
-    const { auth, query, error } = await parseRequest(request, schema)
+    const { auth, query, error } = await parseRequest(request, schema);
 
     if (error) {
-      return error()
+      return error();
     }
 
-    const { websiteId } = await params
+    const { websiteId } = await params;
 
     if (!(await canViewWebsite(auth, websiteId))) {
-      return unauthorized()
+      return unauthorized();
     }
 
     try {
-      const filters = await getQueryFilters(query, websiteId)
-      const data = await getWebsiteEvents(websiteId, filters)
-      return json(data)
+      const filters = await getQueryFilters(query, websiteId);
+      const data = await getWebsiteEvents(websiteId, filters);
+      return json(data);
     } catch (err) {
-      const error = err as Error
+      const error = err as Error;
       console.error('[API Error] /api/websites/[websiteId]/events:', {
         websiteId,
         query,
         error: error.message,
         stack: error.stack,
-      })
-      return serverError({ message: error.message, stack: error.stack })
+      });
+      return serverError({ message: error.message, stack: error.stack });
     }
   } catch (err) {
-    const error = err as Error
-    console.error('[FATAL] Unhandled error in events route:', error)
-    return serverError({ message: error.message, stack: error.stack })
+    const error = err as Error;
+    console.error('[FATAL] Unhandled error in events route:', error);
+    return serverError({ message: error.message, stack: error.stack });
   }
 }

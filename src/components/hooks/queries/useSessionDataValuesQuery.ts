@@ -1,16 +1,16 @@
-import { useApi } from '../useApi'
-import { useFilterParameters } from '../useFilterParameters'
-import { useDateParameters } from '../useDateParameters'
-import { ReactQueryOptions } from '@/lib/types'
+import type { ReactQueryOptions } from '@/lib/types';
+import { useApi } from '../useApi';
+import { useDateParameters } from '../useDateParameters';
+import { useFilterParameters } from '../useFilterParameters';
 
 export function useSessionDataValuesQuery(
   websiteId: string,
   propertyName: string,
-  options?: ReactQueryOptions
+  options?: ReactQueryOptions,
 ) {
-  const { get, useQuery } = useApi()
-  const { startAt, endAt, unit, timezone } = useDateParameters()
-  const filters = useFilterParameters()
+  const { get, useQuery } = useApi();
+  const { startAt, endAt, unit, timezone } = useDateParameters();
+  const filters = useFilterParameters();
 
   return useQuery<any>({
     queryKey: [
@@ -28,5 +28,5 @@ export function useSessionDataValuesQuery(
       }),
     enabled: !!(websiteId && propertyName),
     ...options,
-  })
+  });
 }

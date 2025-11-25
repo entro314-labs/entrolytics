@@ -1,19 +1,19 @@
-import clickhouse from '@/lib/clickhouse'
-import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
-import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
-import { QueryFilters } from '@/lib/types'
+import { getDateSQL, getTimestampDiffSQL, parseFilters, rawQuery } from '@/lib/analytics-utils';
+import clickhouse from '@/lib/clickhouse';
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db';
+import type { QueryFilters } from '@/lib/types';
 
 export async function getEventDataStats(
   ...args: [websiteId: string, filters: QueryFilters]
 ): Promise<{
-  events: number
-  properties: number
-  records: number
+  events: number;
+  properties: number;
+  records: number;
 }> {
   return runQuery({
     [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  }).then((results) => results?.[0])
+  }).then(results => results?.[0]);
 }
 
 async function relationalQuery(websiteId: string, filters: QueryFilters) {
@@ -21,7 +21,7 @@ async function relationalQuery(websiteId: string, filters: QueryFilters) {
   const { filterQuery, joinSessionQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
-  })
+  });
 
   return rawQuery(
     `
@@ -46,19 +46,19 @@ async function relationalQuery(websiteId: string, filters: QueryFilters) {
       GROUP BY website_event_id, data_key
       ) as t
     `,
-    queryParams
-  )
+    queryParams,
+  );
 }
 
 async function clickhouseQuery(
   websiteId: string,
-  filters: QueryFilters
+  filters: QueryFilters,
 ): Promise<{ events: number; properties: number; records: number }[]> {
-  const { rawQuery, parseFilters } = clickhouse
+  const { rawQuery, parseFilters } = clickhouse;
   const { filterQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
-  })
+  });
 
   return rawQuery(
     `
@@ -84,6 +84,6 @@ async function clickhouseQuery(
       group by event_id, data_key
       ) as t
     `,
-    queryParams
-  )
+    queryParams,
+  );
 }

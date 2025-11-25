@@ -1,27 +1,27 @@
 import {
-  Form,
-  FormField,
-  FormButtons,
-  TextField,
   Button,
+  Form,
+  FormButtons,
+  FormField,
   FormSubmitButton,
-} from '@entro314labs/entro-zen'
-import { useMessages, useModified, useUpdateQuery } from '@/components/hooks'
+  TextField,
+} from '@entro314labs/entro-zen';
+import { useMessages, useModified, useUpdateQuery } from '@/components/hooks';
 
 export function OrgJoinForm({ onSave, onClose }: { onSave: () => void; onClose: () => void }) {
-  const { formatMessage, labels } = useMessages()
-  const { mutateAsync, error } = useUpdateQuery('/orgs/join')
-  const { touch } = useModified()
+  const { formatMessage, labels } = useMessages();
+  const { mutateAsync, error } = useUpdateQuery('/orgs/join');
+  const { touch } = useModified();
 
   const handleSubmit = async (data: any) => {
     await mutateAsync(data, {
       onSuccess: async () => {
-        touch('orgs:members')
-        onSave?.()
-        onClose?.()
+        touch('orgs:members');
+        onSave?.();
+        onClose?.();
       },
-    })
-  }
+    });
+  };
 
   return (
     <Form onSubmit={handleSubmit} error={error}>
@@ -37,5 +37,5 @@ export function OrgJoinForm({ onSave, onClose }: { onSave: () => void; onClose: 
         <FormSubmitButton variant="primary">{formatMessage(labels.join)}</FormSubmitButton>
       </FormButtons>
     </Form>
-  )
+  );
 }

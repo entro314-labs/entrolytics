@@ -1,57 +1,57 @@
 import {
+  Button,
+  Column,
   Form,
   FormButtons,
-  TextField,
-  Button,
-  Switch,
   FormSubmitButton,
-  Column,
+  IconLabel,
   Label,
   Row,
-  IconLabel,
-} from '@entro314labs/entro-zen'
-import { useState } from 'react'
-import { getRandomChars } from '@/lib/crypto'
-import { useMessages, useUpdateQuery } from '@/components/hooks'
-import { RefreshCcw } from '@/components/icons'
+  Switch,
+  TextField,
+} from '@entro314labs/entro-zen';
+import { useState } from 'react';
+import { useMessages, useUpdateQuery } from '@/components/hooks';
+import { RefreshCcw } from '@/components/icons';
+import { getRandomChars } from '@/lib/crypto';
 
-const generateId = () => getRandomChars(16)
+const generateId = () => getRandomChars(16);
 
 export interface WebsiteShareFormProps {
-  websiteId: string
-  shareId?: string
-  onSave?: () => void
-  onClose?: () => void
+  websiteId: string;
+  shareId?: string;
+  onSave?: () => void;
+  onClose?: () => void;
 }
 
 export function WebsiteShareForm({ websiteId, shareId, onSave, onClose }: WebsiteShareFormProps) {
-  const { formatMessage, labels, messages } = useMessages()
-  const [currentId, setCurrentId] = useState(shareId)
-  const { mutateAsync, error, isPending, touch, toast } = useUpdateQuery(`/websites/${websiteId}`)
+  const { formatMessage, labels, messages } = useMessages();
+  const [currentId, setCurrentId] = useState(shareId);
+  const { mutateAsync, error, isPending, touch, toast } = useUpdateQuery(`/websites/${websiteId}`);
 
-  const url = `${window?.location.origin}${process.env.basePath || ''}/share/${currentId}`
+  const url = `${window?.location.origin}${process.env.basePath || ''}/share/${currentId}`;
 
   const handleGenerate = () => {
-    setCurrentId(generateId())
-  }
+    setCurrentId(generateId());
+  };
 
   const handleSwitch = () => {
-    setCurrentId(currentId ? null : generateId())
-  }
+    setCurrentId(currentId ? null : generateId());
+  };
 
   const handleSave = async () => {
     const data = {
       shareId: currentId,
-    }
+    };
     await mutateAsync(data, {
       onSuccess: async () => {
-        toast(formatMessage(messages.saved))
-        touch(`website:${websiteId}`)
-        onSave?.()
-        onClose?.()
+        toast(formatMessage(messages.saved));
+        touch(`website:${websiteId}`);
+        onSave?.();
+        onClose?.();
       },
-    })
-  }
+    });
+  };
 
   return (
     <Form onSubmit={handleSave} error={error} values={{ url }}>
@@ -82,5 +82,5 @@ export function WebsiteShareForm({ websiteId, shareId, onSave, onClose }: Websit
         </FormButtons>
       </Column>
     </Form>
-  )
+  );
 }

@@ -1,27 +1,27 @@
-import { eq, and, or, ilike, isNull, inArray, desc, asc, sql, count } from 'drizzle-orm'
+import { and, asc, count, desc, eq, ilike, inArray, isNull, or, sql } from 'drizzle-orm';
+import { ROLES } from '@/lib/constants';
 import {
   db,
-  website,
-  user,
+  eventData,
   org,
   orgUser,
-  eventData,
-  sessionData,
-  websiteEvent,
-  session,
   report,
-} from '@/lib/db'
-import { PageResult, QueryFilters } from '@/lib/types'
-import { ROLES } from '@/lib/constants'
-import redis from '@/lib/redis'
+  session,
+  sessionData,
+  user,
+  website,
+  websiteEvent,
+} from '@/lib/db';
+import redis from '@/lib/redis';
+import type { PageResult, QueryFilters } from '@/lib/types';
 
 export async function getWebsiteCount(userId: string): Promise<number> {
   const result = await db
     .select({ count: count() })
     .from(website)
-    .where(and(eq(website.userId, userId), isNull(website.deletedAt)))
+    .where(and(eq(website.userId, userId), isNull(website.deletedAt)));
 
-  return result[0]?.count || 0
+  return result[0]?.count || 0;
 }
 
 export async function findWebsite(websiteId: string) {
@@ -30,11 +30,11 @@ export async function findWebsite(websiteId: string) {
     .from(website)
     .where(eq(website.websiteId, websiteId))
     .limit(1)
-    .then((rows) => rows[0] || null)
+    .then(rows => rows[0] || null);
 }
 
 export async function getWebsite(websiteId: string) {
-  return findWebsite(websiteId)
+  return findWebsite(websiteId);
 }
 
 export async function getSharedWebsite(shareId: string) {
@@ -43,46 +43,46 @@ export async function getSharedWebsite(shareId: string) {
     .from(website)
     .where(and(eq(website.shareId, shareId), isNull(website.deletedAt)))
     .limit(1)
-    .then((rows) => rows[0] || null)
+    .then(rows => rows[0] || null);
 }
 
 export async function getWebsites(
   whereClause: any = {},
-  filters: QueryFilters = {}
+  filters: QueryFilters = {},
 ): Promise<PageResult<any[]>> {
-  const { search, page = 1, pageSize = 20, orderBy = 'createdAt', sortDescending = true } = filters
+  const { search, page = 1, pageSize = 20, orderBy = 'createdAt', sortDescending = true } = filters;
 
-  const conditions = [isNull(website.deletedAt)]
+  const conditions = [isNull(website.deletedAt)];
 
   if (search) {
-    conditions.push(or(ilike(website.name, `%${search}%`), ilike(website.domain, `%${search}%`)))
+    conditions.push(or(ilike(website.name, `%${search}%`), ilike(website.domain, `%${search}%`)));
   }
 
   // Only add whereClause if it's a valid SQL condition (not an empty object)
   if (whereClause && Object.keys(whereClause).length > 0) {
-    conditions.push(whereClause)
+    conditions.push(whereClause);
   }
 
   // Build query with conditions
   const query = db
     .select()
     .from(website)
-    .where(and(...conditions))
+    .where(and(...conditions));
 
   // Get total count
   const countQuery = db
     .select({ count: sql<number>`count(*)` })
     .from(website)
-    .where(and(...conditions))
+    .where(and(...conditions));
 
-  const [{ count }] = await countQuery
+  const [{ count }] = await countQuery;
 
   // Apply pagination and ordering
-  const offset = (page - 1) * pageSize
+  const offset = (page - 1) * pageSize;
   const data = await query
     .orderBy(sortDescending ? desc(website[orderBy]) : asc(website[orderBy]))
     .limit(pageSize)
-    .offset(offset)
+    .offset(offset);
 
   return {
     data,
@@ -91,7 +91,7 @@ export async function getWebsites(
     pageSize,
     orderBy,
     search,
-  }
+  };
 }
 
 export async function getAllWebsites(userId: string) {
@@ -103,9 +103,9 @@ export async function getAllWebsites(userId: string) {
     .where(
       and(
         or(eq(website.userId, userId), and(eq(orgUser.userId, userId), isNull(org.deletedAt))),
-        isNull(website.deletedAt)
-      )
-    )
+        isNull(website.deletedAt),
+      ),
+    );
 }
 
 export async function getAllUserWebsitesIncludingOrgOwner(userId: string) {
@@ -117,14 +117,14 @@ export async function getAllUserWebsitesIncludingOrgOwner(userId: string) {
     .where(
       or(
         eq(website.userId, userId),
-        and(eq(orgUser.userId, userId), eq(orgUser.role, ROLES.orgOwner), isNull(org.deletedAt))
-      )
-    )
+        and(eq(orgUser.userId, userId), eq(orgUser.role, ROLES.orgOwner), isNull(org.deletedAt)),
+      ),
+    );
 }
 
 export async function getUserWebsites(
   userId: string,
-  filters?: QueryFilters
+  filters?: QueryFilters,
 ): Promise<PageResult<any[]>> {
   const {
     search,
@@ -132,12 +132,12 @@ export async function getUserWebsites(
     pageSize = 20,
     orderBy = 'name',
     sortDescending = false,
-  } = filters || {}
+  } = filters || {};
 
-  const conditions = [eq(website.userId, userId), isNull(website.deletedAt)]
+  const conditions = [eq(website.userId, userId), isNull(website.deletedAt)];
 
   if (search) {
-    conditions.push(or(ilike(website.name, `%${search}%`), ilike(website.domain, `%${search}%`)))
+    conditions.push(or(ilike(website.name, `%${search}%`), ilike(website.domain, `%${search}%`)));
   }
 
   // Build query with conditions
@@ -162,22 +162,22 @@ export async function getUserWebsites(
     })
     .from(website)
     .leftJoin(user, eq(website.userId, user.userId))
-    .where(and(...conditions))
+    .where(and(...conditions));
 
   // Get total count
   const countQuery = db
     .select({ count: sql<number>`count(*)` })
     .from(website)
-    .where(and(...conditions))
+    .where(and(...conditions));
 
-  const [{ count }] = await countQuery
+  const [{ count }] = await countQuery;
 
   // Apply pagination and ordering
-  const offset = (page - 1) * pageSize
+  const offset = (page - 1) * pageSize;
   const data = await query
     .orderBy(sortDescending ? desc(website[orderBy]) : asc(website[orderBy]))
     .limit(pageSize)
-    .offset(offset)
+    .offset(offset);
 
   return {
     data,
@@ -186,14 +186,14 @@ export async function getUserWebsites(
     pageSize,
     orderBy,
     search,
-  }
+  };
 }
 
 export async function getOrgWebsites(
   orgId: string,
-  filters?: QueryFilters
+  filters?: QueryFilters,
 ): Promise<PageResult<any[]>> {
-  return getWebsites(eq(website.orgId, orgId), filters)
+  return getWebsites(eq(website.orgId, orgId), filters);
 }
 
 export async function createWebsite(data: any) {
@@ -209,33 +209,33 @@ export async function createWebsite(data: any) {
       createdBy: data.created_by,
       orgId: data.org_id,
     })
-    .returning()
+    .returning();
 
-  return newWebsite
+  return newWebsite;
 }
 
 export async function updateWebsite(websiteId: string, data: any) {
-  const updateData: any = {}
+  const updateData: any = {};
 
-  if (data.name) updateData.name = data.name
-  if (data.domain) updateData.domain = data.domain
-  if (data.share_id) updateData.shareId = data.share_id
-  if (data.reset_at) updateData.resetAt = data.reset_at
-  if (data.user_id) updateData.userId = data.user_id
-  if (data.org_id) updateData.orgId = data.org_id
-  if (data.updated_at) updateData.updatedAt = data.updated_at
+  if (data.name) updateData.name = data.name;
+  if (data.domain) updateData.domain = data.domain;
+  if (data.share_id) updateData.shareId = data.share_id;
+  if (data.reset_at) updateData.resetAt = data.reset_at;
+  if (data.user_id) updateData.userId = data.user_id;
+  if (data.org_id) updateData.orgId = data.org_id;
+  if (data.updated_at) updateData.updatedAt = data.updated_at;
 
   const [updatedWebsite] = await db
     .update(website)
     .set(updateData)
     .where(eq(website.websiteId, websiteId))
-    .returning()
+    .returning();
 
-  return updatedWebsite
+  return updatedWebsite;
 }
 
 export async function resetWebsite(websiteId: string) {
-  const edgeMode = !!process.env.EDGE_MODE
+  const edgeMode = !!process.env.EDGE_MODE;
 
   // Delete all related data - Note: Without transactions, these operations are not atomic
   await Promise.all([
@@ -243,24 +243,24 @@ export async function resetWebsite(websiteId: string) {
     db.delete(sessionData).where(eq(sessionData.websiteId, websiteId)),
     db.delete(websiteEvent).where(eq(websiteEvent.websiteId, websiteId)),
     db.delete(session).where(eq(session.websiteId, websiteId)),
-  ])
+  ]);
 
   // Update reset timestamp
   const [updatedWebsite] = await db
     .update(website)
     .set({ resetAt: new Date() })
     .where(eq(website.websiteId, websiteId))
-    .returning()
+    .returning();
 
   if (edgeMode) {
-    await redis.client.set(`website:${websiteId}`, updatedWebsite)
+    await redis.client.set(`website:${websiteId}`, updatedWebsite);
   }
 
-  return updatedWebsite
+  return updatedWebsite;
 }
 
 export async function deleteWebsite(websiteId: string) {
-  const edgeMode = !!process.env.EDGE_MODE
+  const edgeMode = !!process.env.EDGE_MODE;
 
   // Delete all related data - Note: Without transactions, these operations are not atomic
   await Promise.all([
@@ -269,22 +269,22 @@ export async function deleteWebsite(websiteId: string) {
     db.delete(websiteEvent).where(eq(websiteEvent.websiteId, websiteId)),
     db.delete(session).where(eq(session.websiteId, websiteId)),
     db.delete(report).where(eq(report.websiteId, websiteId)),
-  ])
+  ]);
 
-  let deletedWebsite
+  let deletedWebsite;
   if (edgeMode) {
     // Soft delete in edge mode
-    ;[deletedWebsite] = await db
+    [deletedWebsite] = await db
       .update(website)
       .set({ deletedAt: new Date() })
       .where(eq(website.websiteId, websiteId))
-      .returning()
+      .returning();
 
-    await redis.client.del(`website:${websiteId}`)
+    await redis.client.del(`website:${websiteId}`);
   } else {
     // Hard delete in non-edge mode
-    ;[deletedWebsite] = await db.delete(website).where(eq(website.websiteId, websiteId)).returning()
+    [deletedWebsite] = await db.delete(website).where(eq(website.websiteId, websiteId)).returning();
   }
 
-  return deletedWebsite
+  return deletedWebsite;
 }

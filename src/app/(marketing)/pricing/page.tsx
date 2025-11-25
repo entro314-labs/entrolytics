@@ -1,14 +1,14 @@
-import { Metadata } from 'next'
-import { MarketingLayout } from '@/components/marketing'
-import styles from './pricing.module.css'
-import contentStyles from '@/components/marketing/ContentPage.module.css'
-import Link from 'next/link'
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { MarketingLayout } from '@/components/marketing';
+import contentStyles from '@/components/marketing/ContentPage.module.css';
+import styles from './pricing.module.css';
 
 export const metadata: Metadata = {
   title: 'Pricing | Entrolytics',
   description:
     'Simple, transparent pricing for privacy-first analytics. Start free, scale as you grow. No hidden fees.',
-}
+};
 
 const plans = [
   {
@@ -94,7 +94,7 @@ const plans = [
     cta: 'Contact Sales',
     ctaLink: '/contact?subject=sales',
   },
-]
+];
 
 const faqs = [
   {
@@ -103,11 +103,11 @@ const faqs = [
   },
   {
     q: 'Can I upgrade or downgrade anytime?',
-    a: 'Yes! You can change your plan at any time. When upgrading, you\'ll be charged the prorated difference. When downgrading, credit will be applied to future bills.',
+    a: "Yes! You can change your plan at any time. When upgrading, you'll be charged the prorated difference. When downgrading, credit will be applied to future bills.",
   },
   {
     q: 'What happens if I exceed my pageview limit?',
-    a: 'We don\'t cut you off. If you consistently exceed your limit, we\'ll reach out to help you find the right plan. Occasional spikes are no problem.',
+    a: "We don't cut you off. If you consistently exceed your limit, we'll reach out to help you find the right plan. Occasional spikes are no problem.",
   },
   {
     q: 'Is there a free trial?',
@@ -121,7 +121,7 @@ const faqs = [
     q: 'Do you offer discounts for annual billing?',
     a: 'Yes! Pay annually and get 2 months free (17% discount). Annual plans are available at checkout.',
   },
-]
+];
 
 export default function PricingPage() {
   return (
@@ -139,7 +139,7 @@ export default function PricingPage() {
           </header>
 
           <div className={styles.plansGrid}>
-            {plans.map((plan) => (
+            {plans.map(plan => (
               <div
                 key={plan.name}
                 className={`${styles.planCard} ${plan.highlighted ? styles.planHighlighted : ''}`}
@@ -160,7 +160,7 @@ export default function PricingPage() {
                   {plan.cta}
                 </Link>
                 <ul className={styles.featureList}>
-                  {plan.features.map((feature) => (
+                  {plan.features.map(feature => (
                     <li key={feature} className={styles.featureItem}>
                       <svg
                         className={styles.checkIcon}
@@ -174,7 +174,7 @@ export default function PricingPage() {
                       {feature}
                     </li>
                   ))}
-                  {plan.limitations.map((limitation) => (
+                  {plan.limitations.map(limitation => (
                     <li key={limitation} className={styles.limitationItem}>
                       <svg
                         className={styles.minusIcon}
@@ -242,7 +242,7 @@ export default function PricingPage() {
           <section className={styles.faqSection}>
             <h2>Frequently Asked Questions</h2>
             <div className={styles.faqGrid}>
-              {faqs.map((faq) => (
+              {faqs.map(faq => (
                 <div key={faq.q} className={styles.faqItem}>
                   <h4>{faq.q}</h4>
                   <p>{faq.a}</p>
@@ -269,5 +269,5 @@ export default function PricingPage() {
         </div>
       </div>
     </MarketingLayout>
-  )
+  );
 }

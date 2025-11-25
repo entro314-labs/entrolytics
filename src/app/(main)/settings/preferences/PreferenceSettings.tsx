@@ -1,16 +1,16 @@
-import { Column, Label } from '@entro314labs/entro-zen'
-import { useLoginQuery, useMessages } from '@/components/hooks'
-import { TimezoneSetting } from './TimezoneSetting'
-import { DateRangeSetting } from './DateRangeSetting'
-import { LanguageSetting } from './LanguageSetting'
-import { ThemeSetting } from './ThemeSetting'
+import { Column, Label } from '@entro314labs/entro-zen';
+import { useLoginQuery, useMessages } from '@/components/hooks';
+import { DateRangeSetting } from './DateRangeSetting';
+import { LanguageSetting } from './LanguageSetting';
+import { ThemeSetting } from './ThemeSetting';
+import { TimezoneSetting } from './TimezoneSetting';
 
 export function PreferenceSettings() {
-  const { user } = useLoginQuery()
-  const { formatMessage, labels } = useMessages()
+  const { user } = useLoginQuery();
+  const { formatMessage, labels } = useMessages();
 
   if (!user) {
-    return null
+    return null;
   }
 
   return (
@@ -32,5 +32,5 @@ export function PreferenceSettings() {
         <ThemeSetting />
       </Column>
     </Column>
-  )
+  );
 }

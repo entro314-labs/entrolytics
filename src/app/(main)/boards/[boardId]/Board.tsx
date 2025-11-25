@@ -1,20 +1,20 @@
-'use client'
-import { PageBody } from '@/components/common/PageBody'
-import { BoardProvider } from '../BoardProvider'
-import { BoardHeader } from './BoardHeader'
-import { Panel } from '@/components/common/Panel'
-import { Column, Grid, Text, Row } from '@entro314labs/entro-zen'
-import { useMessages, useBoardWidgetsQuery, useBoard } from '@/components/hooks'
-import { LayoutDashboard } from 'lucide-react'
-import { Widget, WidgetAddButton } from './widgets'
-import { LoadingPanel } from '@/components/common/LoadingPanel'
+'use client';
+import { Column, Grid, Row, Text } from '@entro314labs/entro-zen';
+import { LayoutDashboard } from 'lucide-react';
+import { LoadingPanel } from '@/components/common/LoadingPanel';
+import { PageBody } from '@/components/common/PageBody';
+import { Panel } from '@/components/common/Panel';
+import { useBoard, useBoardWidgetsQuery, useMessages } from '@/components/hooks';
+import { BoardProvider } from '../BoardProvider';
+import { BoardHeader } from './BoardHeader';
+import { Widget, WidgetAddButton } from './widgets';
 
 function BoardWidgets() {
-  const board = useBoard()
-  const { formatMessage, labels } = useMessages()
-  const { data: widgets, isLoading, isFetching, error } = useBoardWidgetsQuery(board?.boardId)
+  const board = useBoard();
+  const { formatMessage, labels } = useMessages();
+  const { data: widgets, isLoading, isFetching, error } = useBoardWidgetsQuery(board?.boardId);
 
-  const hasWidgets = widgets && widgets.length > 0
+  const hasWidgets = widgets && widgets.length > 0;
 
   return (
     <Column gap="4">
@@ -39,7 +39,7 @@ function BoardWidgets() {
         )}
       </LoadingPanel>
     </Column>
-  )
+  );
 }
 
 export function Board({ boardId }: { boardId: string }) {
@@ -54,5 +54,5 @@ export function Board({ boardId }: { boardId: string }) {
         </Column>
       </Grid>
     </BoardProvider>
-  )
+  );
 }

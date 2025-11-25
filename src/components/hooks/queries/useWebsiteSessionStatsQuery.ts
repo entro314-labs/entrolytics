@@ -1,12 +1,12 @@
-import { useApi } from '../useApi'
-import { useFilterParameters } from '../useFilterParameters'
-import { useDateParameters } from '../useDateParameters'
-import { isValidUuid } from '@/lib/uuid'
+import { isValidUuid } from '@/lib/uuid';
+import { useApi } from '../useApi';
+import { useDateParameters } from '../useDateParameters';
+import { useFilterParameters } from '../useFilterParameters';
 
 export function useWebsiteSessionStatsQuery(websiteId: string, options?: Record<string, string>) {
-  const { get, useQuery } = useApi()
-  const { startAt, endAt, unit, timezone } = useDateParameters()
-  const filters = useFilterParameters()
+  const { get, useQuery } = useApi();
+  const { startAt, endAt, unit, timezone } = useDateParameters();
+  const filters = useFilterParameters();
 
   return useQuery({
     queryKey: ['sessions:stats', { websiteId, startAt, endAt, unit, timezone, ...filters }],
@@ -20,5 +20,5 @@ export function useWebsiteSessionStatsQuery(websiteId: string, options?: Record<
       }),
     enabled: !!websiteId && isValidUuid(websiteId),
     ...options,
-  })
+  });
 }

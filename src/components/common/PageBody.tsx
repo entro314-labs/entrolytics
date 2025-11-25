@@ -1,7 +1,7 @@
-'use client'
-import { ReactNode } from 'react'
-import { AlertBanner, Loading, Column, ColumnProps } from '@entro314labs/entro-zen'
-import { useMessages } from '@/components/hooks'
+'use client';
+import { AlertBanner, Column, type ColumnProps, Loading } from '@entro314labs/entro-zen';
+import type { ReactNode } from 'react';
+import { useMessages } from '@/components/hooks';
 
 export function PageBody({
   maxWidth = '1320px',
@@ -10,19 +10,19 @@ export function PageBody({
   children,
   ...props
 }: {
-  maxWidth?: string
-  error?: unknown
-  isLoading?: boolean
-  children?: ReactNode
+  maxWidth?: string;
+  error?: unknown;
+  isLoading?: boolean;
+  children?: ReactNode;
 } & ColumnProps) {
-  const { formatMessage, messages } = useMessages()
+  const { formatMessage, messages } = useMessages();
 
   if (error) {
-    return <AlertBanner title={formatMessage(messages.error)} variant="error" />
+    return <AlertBanner title={formatMessage(messages.error)} variant="error" />;
   }
 
   if (isLoading) {
-    return <Loading placement="absolute" />
+    return <Loading placement="absolute" />;
   }
 
   return (
@@ -36,5 +36,5 @@ export function PageBody({
     >
       {children}
     </Column>
-  )
+  );
 }

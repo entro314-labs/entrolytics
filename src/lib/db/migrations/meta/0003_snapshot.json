@@ -533,9 +533,7 @@
         "link_slug_unique": {
           "name": "link_slug_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "slug"
-          ]
+          "columns": ["slug"]
         }
       },
       "policies": {},
@@ -614,9 +612,7 @@
         "org_access_code_unique": {
           "name": "org_access_code_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "access_code"
-          ]
+          "columns": ["access_code"]
         }
       },
       "policies": {},
@@ -826,9 +822,7 @@
         "pixel_slug_unique": {
           "name": "pixel_slug_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "slug"
-          ]
+          "columns": ["slug"]
         }
       },
       "policies": {},
@@ -1795,9 +1789,7 @@
         "user_clerk_id_unique": {
           "name": "user_clerk_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "clerk_id"
-          ]
+          "columns": ["clerk_id"]
         }
       },
       "policies": {},
@@ -1960,9 +1952,7 @@
         "website_share_id_unique": {
           "name": "website_share_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "share_id"
-          ]
+          "columns": ["share_id"]
         }
       },
       "policies": {},

@@ -1,9 +1,9 @@
 export function ok() {
-  return Response.json({ ok: true })
+  return Response.json({ ok: true });
 }
 
 export function json(data: any = {}) {
-  return Response.json(data)
+  return Response.json(data);
 }
 
 export function badRequest(error?: any) {
@@ -16,8 +16,8 @@ export function badRequest(error?: any) {
         ...error,
       },
     },
-    { status: 400 }
-  )
+    { status: 400 },
+  );
 }
 
 export function unauthorized(error?: any) {
@@ -30,8 +30,8 @@ export function unauthorized(error?: any) {
         ...error,
       },
     },
-    { status: 401 }
-  )
+    { status: 401 },
+  );
 }
 
 export function forbidden(error?: any) {
@@ -39,8 +39,8 @@ export function forbidden(error?: any) {
     {
       error: { message: 'Forbidden', code: 'forbidden', status: 403, ...error },
     },
-    { status: 403 }
-  )
+    { status: 403 },
+  );
 }
 
 export function notFound(error?: any) {
@@ -48,8 +48,8 @@ export function notFound(error?: any) {
     {
       error: { message: 'Not found', code: 'not-found', status: 404, ...error },
     },
-    { status: 404 }
-  )
+    { status: 404 },
+  );
 }
 
 export function serverError(error?: any) {
@@ -62,6 +62,6 @@ export function serverError(error?: any) {
         ...error,
       },
     },
-    { status: 500 }
-  )
+    { status: 500 },
+  );
 }

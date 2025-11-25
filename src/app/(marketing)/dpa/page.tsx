@@ -1,13 +1,13 @@
-import { Metadata } from 'next'
-import { MarketingLayout } from '@/components/marketing'
-import styles from '@/components/marketing/ContentPage.module.css'
-import Link from 'next/link'
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { MarketingLayout } from '@/components/marketing';
+import styles from '@/components/marketing/ContentPage.module.css';
 
 export const metadata: Metadata = {
   title: 'Data Processing Agreement | Entrolytics',
   description:
     'Entrolytics Data Processing Agreement (DPA) for GDPR compliance and enterprise data protection requirements.',
-}
+};
 
 export default function DPAPage() {
   return (
@@ -119,9 +119,7 @@ export default function DPAPage() {
             <h3>4.1 Processing Instructions</h3>
             <ul>
               <li>Process Personal Data only on documented instructions from the Customer</li>
-              <li>
-                Inform the Customer if any instruction infringes Data Protection Laws
-              </li>
+              <li>Inform the Customer if any instruction infringes Data Protection Laws</li>
               <li>Not process Personal Data for any purpose other than providing the Services</li>
             </ul>
 
@@ -150,15 +148,15 @@ export default function DPAPage() {
 
             <h3>4.5 Data Subject Rights</h3>
             <ul>
-              <li>
-                Assist Customer in responding to data subject requests
-              </li>
+              <li>Assist Customer in responding to data subject requests</li>
               <li>Provide reasonable assistance with data subject rights fulfillment</li>
             </ul>
 
             <h3>4.6 Data Breach</h3>
             <ul>
-              <li>Notify Customer without undue delay upon becoming aware of a Personal Data breach</li>
+              <li>
+                Notify Customer without undue delay upon becoming aware of a Personal Data breach
+              </li>
               <li>
                 Provide sufficient information to enable Customer to meet breach notification
                 obligations
@@ -200,18 +198,14 @@ export default function DPAPage() {
             <h2 id="international-transfers">7. International Data Transfers</h2>
             <p>When transferring Personal Data outside the EEA:</p>
             <ul>
-              <li>
-                Transfers will be made in accordance with EU Standard Contractual Clauses
-              </li>
+              <li>Transfers will be made in accordance with EU Standard Contractual Clauses</li>
               <li>Additional supplementary measures will be implemented as necessary</li>
               <li>Customer will be notified of any transfer arrangements</li>
             </ul>
 
             <h2 id="audit-rights">8. Audit Rights</h2>
             <ul>
-              <li>
-                Customer may request documentation of Entrolytics' compliance with this DPA
-              </li>
+              <li>Customer may request documentation of Entrolytics' compliance with this DPA</li>
               <li>
                 Entrolytics will make available information necessary to demonstrate compliance
               </li>
@@ -296,5 +290,5 @@ export default function DPAPage() {
         </div>
       </div>
     </MarketingLayout>
-  )
+  );
 }

@@ -1,25 +1,25 @@
-import { Fragment } from 'react'
 import {
-  Icon,
   Button,
-  MenuTrigger,
-  Popover,
+  Icon,
   Menu,
   MenuItem,
-  MenuSeparator,
   MenuSection,
-  Text,
+  MenuSeparator,
+  MenuTrigger,
+  Popover,
   Row,
-} from '@entro314labs/entro-zen'
-import { useMessages, useLoginQuery, useNavigation } from '@/components/hooks'
-import { LogOut, UserCircle, LockKeyhole, BookText, LifeBuoy } from '@/components/icons'
-import { DOCS_URL } from '@/lib/constants'
+  Text,
+} from '@entro314labs/entro-zen';
+import { Fragment } from 'react';
+import { useLoginQuery, useMessages, useNavigation } from '@/components/hooks';
+import { BookText, LifeBuoy, LockKeyhole, LogOut, UserCircle } from '@/components/icons';
+import { DOCS_URL } from '@/lib/constants';
 
 export function ProfileButton() {
-  const { formatMessage, labels } = useMessages()
-  const { user } = useLoginQuery()
-  const { renderUrl } = useNavigation()
-  const edgeMode = !!process.env.EDGE_MODE
+  const { formatMessage, labels } = useMessages();
+  const { user } = useLoginQuery();
+  const { renderUrl } = useNavigation();
+  const edgeMode = !!process.env.EDGE_MODE;
 
   const items = [
     {
@@ -56,7 +56,7 @@ export function ProfileButton() {
       icon: <LogOut />,
       separator: true,
     },
-  ].filter((n) => n)
+  ].filter(n => n);
 
   return (
     <MenuTrigger>
@@ -80,11 +80,11 @@ export function ProfileButton() {
                     </Row>
                   </MenuItem>
                 </Fragment>
-              )
+              );
             })}
           </MenuSection>
         </Menu>
       </Popover>
     </MenuTrigger>
-  )
+  );
 }

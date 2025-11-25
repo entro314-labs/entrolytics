@@ -1,34 +1,34 @@
-import Link from 'next/link'
 import {
-  Sidebar,
-  SidebarSection,
-  SidebarItem,
-  SidebarHeader,
   Row,
-  SidebarProps,
+  Sidebar,
+  SidebarHeader,
+  SidebarItem,
+  type SidebarProps,
+  SidebarSection,
   ThemeButton,
-} from '@entro314labs/entro-zen'
+} from '@entro314labs/entro-zen';
+import Link from 'next/link';
+import { useGlobalState, useMessages, useNavigation } from '@/components/hooks';
 import {
   Globe,
   LayoutDashboard,
   Link as LinkIcon,
   LogoSvg as Logo,
+  PanelLeft,
   Grid2x2 as Pixel,
   Settings,
-  PanelLeft,
-} from '@/components/icons'
-import { useMessages, useNavigation, useGlobalState } from '@/components/hooks'
-import { NavButton } from '@/components/input/NavButton'
-import { PanelButton } from '@/components/input/PanelButton'
-import { ProfileButton } from '@/components/input/ProfileButton'
-import { LanguageButton } from '@/components/input/LanguageButton'
+} from '@/components/icons';
+import { LanguageButton } from '@/components/input/LanguageButton';
+import { NavButton } from '@/components/input/NavButton';
+import { PanelButton } from '@/components/input/PanelButton';
+import { ProfileButton } from '@/components/input/ProfileButton';
 
 export function SideNav(props: SidebarProps) {
-  const { formatMessage, labels } = useMessages()
-  const { pathname, renderUrl, websiteId } = useNavigation()
-  const [isCollapsed, setIsCollapsed] = useGlobalState('sidenav-collapsed')
+  const { formatMessage, labels } = useMessages();
+  const { pathname, renderUrl, websiteId } = useNavigation();
+  const [isCollapsed, setIsCollapsed] = useGlobalState('sidenav-collapsed');
 
-  const hasNav = !!(websiteId || pathname.startsWith('/admin') || pathname.includes('/settings'))
+  const hasNav = !!(websiteId || pathname.startsWith('/admin') || pathname.includes('/settings'));
 
   const links = [
     {
@@ -55,7 +55,7 @@ export function SideNav(props: SidebarProps) {
       path: '/pixels',
       icon: <Pixel />,
     },
-  ]
+  ];
 
   const bottomLinks = [
     {
@@ -64,7 +64,7 @@ export function SideNav(props: SidebarProps) {
       path: renderUrl('/settings'),
       icon: <Settings />,
     },
-  ]
+  ];
 
   return (
     <Row height="100%" backgroundColor border="right">
@@ -92,7 +92,7 @@ export function SideNav(props: SidebarProps) {
                   role="button"
                 />
               </Link>
-            )
+            );
           })}
         </SidebarSection>
         <SidebarSection>
@@ -106,7 +106,7 @@ export function SideNav(props: SidebarProps) {
                   role="button"
                 />
               </Link>
-            )
+            );
           })}
           <Row alignItems="center" justifyContent="space-between" height="40px">
             <ProfileButton />
@@ -120,5 +120,5 @@ export function SideNav(props: SidebarProps) {
         </SidebarSection>
       </Sidebar>
     </Row>
-  )
+  );
 }

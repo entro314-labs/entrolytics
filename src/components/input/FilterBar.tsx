@@ -1,53 +1,53 @@
 import {
   Button,
-  Icon,
-  Text,
-  Row,
-  TooltipTrigger,
-  Tooltip,
-  Modal,
   Dialog,
   DialogTrigger,
-} from '@entro314labs/entro-zen'
+  Icon,
+  Modal,
+  Row,
+  Text,
+  Tooltip,
+  TooltipTrigger,
+} from '@entro314labs/entro-zen';
+import { SegmentEditForm } from '@/app/(main)/websites/[websiteId]/segments/SegmentEditForm';
 import {
-  useNavigation,
-  useMessages,
-  useFormat,
   useFilters,
+  useFormat,
+  useMessages,
+  useNavigation,
   useWebsiteSegmentQuery,
-} from '@/components/hooks'
-import { X as Close, Bookmark } from '@/components/icons'
-import { isSearchOperator } from '@/lib/params'
-import { SegmentEditForm } from '@/app/(main)/websites/[websiteId]/segments/SegmentEditForm'
+} from '@/components/hooks';
+import { Bookmark, X as Close } from '@/components/icons';
+import { isSearchOperator } from '@/lib/params';
 
 export function FilterBar({ websiteId }: { websiteId: string }) {
-  const { formatMessage, labels } = useMessages()
-  const { formatValue } = useFormat()
+  const { formatMessage, labels } = useMessages();
+  const { formatValue } = useFormat();
   const {
     router,
     pathname,
     updateParams,
     replaceParams,
     query: { segment, cohort },
-  } = useNavigation()
-  const { filters, operatorLabels } = useFilters()
-  const { data, isLoading } = useWebsiteSegmentQuery(websiteId, segment || cohort)
-  const canSaveSegment = filters.length > 0 && !segment && !cohort && !pathname.includes('/share')
+  } = useNavigation();
+  const { filters, operatorLabels } = useFilters();
+  const { data, isLoading } = useWebsiteSegmentQuery(websiteId, segment || cohort);
+  const canSaveSegment = filters.length > 0 && !segment && !cohort && !pathname.includes('/share');
 
   const handleCloseFilter = (param: string) => {
-    router.push(updateParams({ [param]: undefined }))
-  }
+    router.push(updateParams({ [param]: undefined }));
+  };
 
   const handleResetFilter = () => {
-    router.push(replaceParams())
-  }
+    router.push(replaceParams());
+  };
 
   const handleSegmentRemove = (type: string) => {
-    router.push(updateParams({ [type]: undefined }))
-  }
+    router.push(updateParams({ [type]: undefined }));
+  };
 
   if (!filters.length && !segment && !cohort) {
-    return null
+    return null;
   }
 
   return (
@@ -71,9 +71,9 @@ export function FilterBar({ websiteId }: { websiteId: string }) {
             onRemove={() => handleSegmentRemove('cohort')}
           />
         )}
-        {filters.map((filter) => {
-          const { name, label, operator, value } = filter
-          const paramValue = isSearchOperator(operator) ? value : formatValue(value, name)
+        {filters.map(filter => {
+          const { name, label, operator, value } = filter;
+          const paramValue = isSearchOperator(operator) ? value : formatValue(value, name);
 
           return (
             <FilterItem
@@ -84,7 +84,7 @@ export function FilterBar({ websiteId }: { websiteId: string }) {
               value={paramValue}
               onRemove={(name: string) => handleCloseFilter(name)}
             />
-          )
+          );
         })}
       </Row>
       <Row alignItems="center">
@@ -104,7 +104,7 @@ export function FilterBar({ websiteId }: { websiteId: string }) {
           <Modal>
             <Dialog title={formatMessage(labels.segment)} style={{ width: 800, minHeight: 300 }}>
               {({ close }) => {
-                return <SegmentEditForm websiteId={websiteId} onClose={close} filters={filters} />
+                return <SegmentEditForm websiteId={websiteId} onClose={close} filters={filters} />;
               }}
             </Dialog>
           </Modal>
@@ -121,7 +121,7 @@ export function FilterBar({ websiteId }: { websiteId: string }) {
         </TooltipTrigger>
       </Row>
     </Row>
-  )
+  );
 }
 
 const FilterItem = ({ name, label, operator, value, onRemove }) => {
@@ -151,5 +151,5 @@ const FilterItem = ({ name, label, operator, value, onRemove }) => {
         </Icon>
       </Row>
     </Row>
-  )
-}
+  );
+};

@@ -1,20 +1,19 @@
-import { useState } from 'react'
-import { useMessages, useWebsiteEventsQuery } from '@/components/hooks'
-import { EventsTable } from './EventsTable'
-import { DataGrid } from '@/components/common/DataGrid'
-import { ReactNode } from 'react'
-import { FilterButtons } from '@/components/input/FilterButtons'
+import { type ReactNode, useState } from 'react';
+import { DataGrid } from '@/components/common/DataGrid';
+import { useMessages, useWebsiteEventsQuery } from '@/components/hooks';
+import { FilterButtons } from '@/components/input/FilterButtons';
+import { EventsTable } from './EventsTable';
 
 export function EventsDataTable({
   websiteId,
 }: {
-  websiteId?: string
-  orgId?: string
-  children?: ReactNode
+  websiteId?: string;
+  orgId?: string;
+  children?: ReactNode;
 }) {
-  const { formatMessage, labels } = useMessages()
-  const [view, setView] = useState('all')
-  const query = useWebsiteEventsQuery(websiteId, { view })
+  const { formatMessage, labels } = useMessages();
+  const [view, setView] = useState('all');
+  const query = useWebsiteEventsQuery(websiteId, { view });
 
   const buttons = [
     {
@@ -29,11 +28,11 @@ export function EventsDataTable({
       id: 'events',
       label: formatMessage(labels.events),
     },
-  ]
+  ];
 
   const renderActions = () => {
-    return <FilterButtons items={buttons} value={view} onChange={setView} />
-  }
+    return <FilterButtons items={buttons} value={view} onChange={setView} />;
+  };
 
   return (
     <DataGrid
@@ -45,5 +44,5 @@ export function EventsDataTable({
     >
       {({ data }) => <EventsTable data={data} />}
     </DataGrid>
-  )
+  );
 }

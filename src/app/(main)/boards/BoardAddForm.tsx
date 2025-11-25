@@ -1,5 +1,5 @@
-import { Form, FormField, FormSubmitButton, Row, TextField, Button } from '@entro314labs/entro-zen'
-import { useUpdateQuery, useModified, useBoardQuery, useMessages } from '@/components/hooks'
+import { Button, Form, FormField, FormSubmitButton, Row, TextField } from '@entro314labs/entro-zen';
+import { useBoardQuery, useMessages, useModified, useUpdateQuery } from '@/components/hooks';
 
 export function BoardAddForm({
   boardId,
@@ -7,32 +7,32 @@ export function BoardAddForm({
   onSave,
   onClose,
 }: {
-  boardId?: string
-  orgId?: string
-  onSave?: () => void
-  onClose?: () => void
+  boardId?: string;
+  orgId?: string;
+  onSave?: () => void;
+  onClose?: () => void;
 }) {
-  const { formatMessage, labels, messages } = useMessages()
-  const { touch } = useModified()
-  const { data: board, isLoading } = useBoardQuery(boardId)
+  const { formatMessage, labels, messages } = useMessages();
+  const { touch } = useModified();
+  const { data: board, isLoading } = useBoardQuery(boardId);
   const { mutateAsync, error, isPending, toast } = useUpdateQuery(
     boardId ? `/boards/${boardId}` : '/boards',
-    { id: boardId, orgId }
-  )
+    { id: boardId, orgId },
+  );
 
   const handleSubmit = async (data: any) => {
     await mutateAsync(data, {
       onSuccess: async () => {
-        toast(formatMessage(messages.saved))
-        touch('boards')
-        onSave?.()
-        onClose?.()
+        toast(formatMessage(messages.saved));
+        touch('boards');
+        onSave?.();
+        onClose?.();
       },
-    })
-  }
+    });
+  };
 
   if (boardId && isLoading) {
-    return null
+    return null;
   }
 
   return (
@@ -65,5 +65,5 @@ export function BoardAddForm({
         </FormSubmitButton>
       </Row>
     </Form>
-  )
+  );
 }

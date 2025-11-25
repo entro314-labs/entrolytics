@@ -1,29 +1,29 @@
-import { TypeConfirmationForm } from '@/components/common/TypeConfirmationForm'
-import { useDeleteQuery, useMessages } from '@/components/hooks'
+import { TypeConfirmationForm } from '@/components/common/TypeConfirmationForm';
+import { useDeleteQuery, useMessages } from '@/components/hooks';
 
-const CONFIRM_VALUE = 'DELETE'
+const CONFIRM_VALUE = 'DELETE';
 
 export function OrgDeleteForm({
   orgId,
   onSave,
   onClose,
 }: {
-  orgId: string
-  onSave?: () => void
-  onClose?: () => void
+  orgId: string;
+  onSave?: () => void;
+  onClose?: () => void;
 }) {
-  const { labels, formatMessage } = useMessages()
-  const { mutateAsync, error, isPending, touch } = useDeleteQuery(`/orgs/${orgId}`)
+  const { labels, formatMessage } = useMessages();
+  const { mutateAsync, error, isPending, touch } = useDeleteQuery(`/orgs/${orgId}`);
 
   const handleConfirm = async () => {
     await mutateAsync(null, {
       onSuccess: async () => {
-        touch('orgs')
-        onSave?.()
-        onClose?.()
+        touch('orgs');
+        onSave?.();
+        onClose?.();
       },
-    })
-  }
+    });
+  };
 
   return (
     <TypeConfirmationForm
@@ -35,5 +35,5 @@ export function OrgDeleteForm({
       buttonLabel={formatMessage(labels.delete)}
       buttonVariant="danger"
     />
-  )
+  );
 }

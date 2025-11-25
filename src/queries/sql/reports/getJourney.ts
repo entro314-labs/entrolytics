@@ -1,26 +1,26 @@
-import clickhouse from '@/lib/clickhouse'
-import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
-import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
+import { getDateSQL, getTimestampDiffSQL, parseFilters, rawQuery } from '@/lib/analytics-utils';
+import clickhouse from '@/lib/clickhouse';
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db';
 
-import { QueryFilters } from '@/lib/types'
+import type { QueryFilters } from '@/lib/types';
 
 export interface JourneyParameters {
-  startDate: Date
-  endDate: Date
-  steps: number
-  startStep?: string
-  endStep?: string
+  startDate: Date;
+  endDate: Date;
+  steps: number;
+  startStep?: string;
+  endStep?: string;
 }
 
 export interface JourneyResult {
-  e1: string
-  e2: string
-  e3: string
-  e4: string
-  e5: string
-  e6: string
-  e7: string
-  COUNT: number
+  e1: string;
+  e2: string;
+  e3: string;
+  e4: string;
+  e5: string;
+  e6: string;
+  e7: string;
+  COUNT: number;
 }
 
 export async function getJourney(
@@ -29,53 +29,53 @@ export async function getJourney(
   return runQuery({
     [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  })
+  });
 }
 
 async function relationalQuery(
   websiteId: string,
   parameters: JourneyParameters,
-  filters: QueryFilters
+  filters: QueryFilters,
 ): Promise<JourneyResult[]> {
-  const { startDate, endDate, steps, startStep, endStep } = parameters
+  const { startDate, endDate, steps, startStep, endStep } = parameters;
   // Using rawQuery FROM analytics-utils
   const { sequenceQuery, startStepQuery, endStepQuery, params } = getJourneyQuery(
     steps,
     startStep,
-    endStep
-  )
+    endStep,
+  );
   const { filterQuery, joinSessionQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
     startDate,
     endDate,
-  })
+  });
 
   function getJourneyQuery(
     steps: number,
     startStep?: string,
-    endStep?: string
+    endStep?: string,
   ): {
-    sequenceQuery: string
-    startStepQuery: string
-    endStepQuery: string
-    params: Record<string, string>
+    sequenceQuery: string;
+    startStepQuery: string;
+    endStepQuery: string;
+    params: Record<string, string>;
   } {
-    const params = {}
-    let sequenceQuery = ''
-    let startStepQuery = ''
-    let endStepQuery = ''
+    const params = {};
+    let sequenceQuery = '';
+    let startStepQuery = '';
+    let endStepQuery = '';
 
     // create sequence query
-    let selectQuery = ''
-    let maxQuery = ''
-    let groupByQuery = ''
+    let selectQuery = '';
+    let maxQuery = '';
+    let groupByQuery = '';
 
     for (let i = 1; i <= steps; i++) {
-      const endQuery = i < steps ? ',' : ''
-      selectQuery += `s.e${i},`
-      maxQuery += `\nmax(CASE WHEN event_number = ${i} THEN event ELSE NULL END) AS e${i}${endQuery}`
-      groupByQuery += `s.e${i}${endQuery} `
+      const endQuery = i < steps ? ',' : '';
+      selectQuery += `s.e${i},`;
+      maxQuery += `\nmax(CASE WHEN event_number = ${i} THEN event ELSE NULL END) AS e${i}${endQuery}`;
+      groupByQuery += `s.e${i}${endQuery} `;
     }
 
     sequenceQuery = `\nsequences as (
@@ -87,23 +87,23 @@ async function relationalQuery(
         FROM events
         GROUP BY visit_id) s
       GROUP BY ${groupByQuery})
-    `
+    `;
 
     // create start Step params query
     if (startStep) {
-      startStepQuery = `AND e1 = {{startStep}}`
-      params['startStep'] = startStep
+      startStepQuery = `AND e1 = {{startStep}}`;
+      params['startStep'] = startStep;
     }
 
     // create END Step params query
     if (endStep) {
       for (let i = 1; i < steps; i++) {
-        const startQuery = i === 1 ? 'AND (' : '\nor '
-        endStepQuery += `${startQuery}(e${i} = {{endStep}} AND e${i + 1} is null) `
+        const startQuery = i === 1 ? 'AND (' : '\nor ';
+        endStepQuery += `${startQuery}(e${i} = {{endStep}} AND e${i + 1} is null) `;
       }
-      endStepQuery += `\nor (e${steps} = {{endStep}}))`
+      endStepQuery += `\nor (e${steps} = {{endStep}}))`;
 
-      params['endStep'] = endStep
+      params['endStep'] = endStep;
     }
 
     return {
@@ -111,7 +111,7 @@ async function relationalQuery(
       startStepQuery,
       endStepQuery,
       params,
-    }
+    };
   }
 
   return rawQuery(
@@ -140,54 +140,54 @@ async function relationalQuery(
     {
       ...params,
       ...queryParams,
-    }
-  ).then(parseResult)
+    },
+  ).then(parseResult);
 }
 
 async function clickhouseQuery(
   websiteId: string,
   parameters: JourneyParameters,
-  filters: QueryFilters
+  filters: QueryFilters,
 ): Promise<JourneyResult[]> {
-  const { startDate, endDate, steps, startStep, endStep } = parameters
-  const { rawQuery, parseFilters } = clickhouse
+  const { startDate, endDate, steps, startStep, endStep } = parameters;
+  const { rawQuery, parseFilters } = clickhouse;
   const { sequenceQuery, startStepQuery, endStepQuery, params } = getJourneyQuery(
     steps,
     startStep,
-    endStep
-  )
+    endStep,
+  );
   const { filterQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
     startDate,
     endDate,
-  })
+  });
 
   function getJourneyQuery(
     steps: number,
     startStep?: string,
-    endStep?: string
+    endStep?: string,
   ): {
-    sequenceQuery: string
-    startStepQuery: string
-    endStepQuery: string
-    params: Record<string, string>
+    sequenceQuery: string;
+    startStepQuery: string;
+    endStepQuery: string;
+    params: Record<string, string>;
   } {
-    const params = {}
-    let sequenceQuery = ''
-    let startStepQuery = ''
-    let endStepQuery = ''
+    const params = {};
+    let sequenceQuery = '';
+    let startStepQuery = '';
+    let endStepQuery = '';
 
     // create sequence query
-    let selectQuery = ''
-    let maxQuery = ''
-    let groupByQuery = ''
+    let selectQuery = '';
+    let maxQuery = '';
+    let groupByQuery = '';
 
     for (let i = 1; i <= steps; i++) {
-      const endQuery = i < steps ? ',' : ''
-      selectQuery += `s.e${i},`
-      maxQuery += `\nmax(CASE WHEN event_number = ${i} THEN event ELSE NULL END) AS e${i}${endQuery}`
-      groupByQuery += `s.e${i}${endQuery} `
+      const endQuery = i < steps ? ',' : '';
+      selectQuery += `s.e${i},`;
+      maxQuery += `\nmax(CASE WHEN event_number = ${i} THEN event ELSE NULL END) AS e${i}${endQuery}`;
+      groupByQuery += `s.e${i}${endQuery} `;
     }
 
     sequenceQuery = `\nsequences as (
@@ -199,23 +199,23 @@ async function clickhouseQuery(
         FROM events
         GROUP BY visit_id) s
       GROUP BY ${groupByQuery})
-    `
+    `;
 
     // create start Step params query
     if (startStep) {
-      startStepQuery = `AND e1 = {startStep:String}`
-      params['startStep'] = startStep
+      startStepQuery = `AND e1 = {startStep:String}`;
+      params['startStep'] = startStep;
     }
 
     // create END Step params query
     if (endStep) {
       for (let i = 1; i < steps; i++) {
-        const startQuery = i === 1 ? 'AND (' : '\nor '
-        endStepQuery += `${startQuery}(e${i} = {endStep:String} AND e${i + 1} is null) `
+        const startQuery = i === 1 ? 'AND (' : '\nor ';
+        endStepQuery += `${startQuery}(e${i} = {endStep:String} AND e${i + 1} is null) `;
       }
-      endStepQuery += `\nor (e${steps} = {endStep:String}))`
+      endStepQuery += `\nor (e${steps} = {endStep:String}))`;
 
-      params['endStep'] = endStep
+      params['endStep'] = endStep;
     }
 
     return {
@@ -223,7 +223,7 @@ async function clickhouseQuery(
       startStepQuery,
       endStepQuery,
       params,
-    }
+    };
   }
 
   return rawQuery(
@@ -250,27 +250,27 @@ async function clickhouseQuery(
     {
       ...params,
       ...queryParams,
-    }
-  ).then(parseResult)
+    },
+  ).then(parseResult);
 }
 
 function combineSequentialDuplicates(array: any) {
-  if (array.length === 0) return array
+  if (array.length === 0) return array;
 
-  const result = [array[0]]
+  const result = [array[0]];
 
   for (let i = 1; i < array.length; i++) {
     if (array[i] !== array[i - 1]) {
-      result.push(array[i])
+      result.push(array[i]);
     }
   }
 
-  return result
+  return result;
 }
 
 function parseResult(data: any) {
   return data.map(({ e1, e2, e3, e4, e5, e6, e7, COUNT }) => ({
     items: combineSequentialDuplicates([e1, e2, e3, e4, e5, e6, e7]),
     COUNT: +Number(COUNT),
-  }))
+  }));
 }

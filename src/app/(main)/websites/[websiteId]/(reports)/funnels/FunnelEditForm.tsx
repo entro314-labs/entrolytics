@@ -1,24 +1,24 @@
 import {
+  Button,
   Form,
+  FormButtons,
+  FormController,
   FormField,
   FormFieldArray,
-  TextField,
-  Grid,
-  FormController,
-  FormButtons,
   FormSubmitButton,
-  Button,
-  RadioGroup,
-  Radio,
-  Text,
+  Grid,
   Icon,
-  Row,
   Loading,
-} from '@entro314labs/entro-zen'
-import { useMessages, useReportQuery, useUpdateQuery } from '@/components/hooks'
-import { File, LightningSvg as Lightning, X as Close, Plus } from '@/components/icons'
+  Radio,
+  RadioGroup,
+  Row,
+  Text,
+  TextField,
+} from '@entro314labs/entro-zen';
+import { useMessages, useReportQuery, useUpdateQuery } from '@/components/hooks';
+import { X as Close, File, LightningSvg as Lightning, Plus } from '@/components/icons';
 
-const FUNNEL_STEPS_MAX = 8
+const FUNNEL_STEPS_MAX = 8;
 
 export function FunnelEditForm({
   id,
@@ -26,37 +26,37 @@ export function FunnelEditForm({
   onSave,
   onClose,
 }: {
-  id?: string
-  websiteId: string
-  onSave?: () => void
-  onClose?: () => void
+  id?: string;
+  websiteId: string;
+  onSave?: () => void;
+  onClose?: () => void;
 }) {
-  const { formatMessage, labels } = useMessages()
-  const { data } = useReportQuery(id)
-  const { mutateAsync, error, isPending, touch } = useUpdateQuery(`/reports${id ? `/${id}` : ''}`)
+  const { formatMessage, labels } = useMessages();
+  const { data } = useReportQuery(id);
+  const { mutateAsync, error, isPending, touch } = useUpdateQuery(`/reports${id ? `/${id}` : ''}`);
 
   const handleSubmit = async ({ name, ...parameters }) => {
     await mutateAsync(
       { ...data, id, name, type: 'funnel', websiteId, parameters },
       {
         onSuccess: async () => {
-          touch('reports:funnel')
-          onSave?.()
-          onClose?.()
+          touch('reports:funnel');
+          onSave?.();
+          onClose?.();
         },
-      }
-    )
-  }
+      },
+    );
+  };
 
   if (id && !data) {
-    return <Loading placement="absolute" />
+    return <Loading placement="absolute" />;
   }
 
   const defaultValues = {
     name: data?.name || '',
     window: data?.parameters?.window || 60,
     steps: data?.parameters?.steps || [{ type: 'path', value: '' }],
-  }
+  };
 
   return (
     <Form onSubmit={handleSubmit} error={error?.message} defaultValues={defaultValues}>
@@ -78,7 +78,7 @@ export function FunnelEditForm({
         name="steps"
         label={formatMessage(labels.steps)}
         rules={{
-          validate: (value) => value.length > 1 || 'At least two steps are required',
+          validate: value => value.length > 1 || 'At least two steps are required',
         }}
       >
         {({ fields, append, remove, control }) => {
@@ -111,7 +111,7 @@ export function FunnelEditForm({
                               </Radio>
                             </Grid>
                           </RadioGroup>
-                        )
+                        );
                       }}
                     </FormController>
                     <FormController control={control} name={`steps.${index}.value`}>
@@ -123,7 +123,7 @@ export function FunnelEditForm({
                             defaultValue={field.value}
                             style={{ flexGrow: 1 }}
                           />
-                        )
+                        );
                       }}
                     </FormController>
                     <Button variant="quiet" onPress={() => remove(index)}>
@@ -132,7 +132,7 @@ export function FunnelEditForm({
                       </Icon>
                     </Button>
                   </Row>
-                )
+                );
               })}
               <Row>
                 <Button
@@ -146,7 +146,7 @@ export function FunnelEditForm({
                 </Button>
               </Row>
             </Grid>
-          )
+          );
         }}
       </FormFieldArray>
       <FormButtons>
@@ -156,5 +156,5 @@ export function FunnelEditForm({
         <FormSubmitButton>{formatMessage(labels.save)}</FormSubmitButton>
       </FormButtons>
     </Form>
-  )
+  );
 }

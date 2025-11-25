@@ -8,14 +8,14 @@
  * - No hardcoded values
  */
 
-import { promises as fs } from 'fs'
-import path from 'path'
+import { promises as fs } from 'fs';
+import path from 'path';
 
 interface ValidationError {
-  file: string
-  line: number
-  issue: string
-  codeBlock?: string
+  file: string;
+  line: number;
+  issue: string;
+  codeBlock?: string;
 }
 
 const VALIDATION_RULES = {
@@ -33,11 +33,7 @@ const VALIDATION_RULES = {
       'ENTROLYTICS_WEBSITE_ID',
       'ENTROLYTICS_HOST',
     ],
-    incorrect: [
-      'ENTROLYTICS_SITE_ID',
-      'ENTRO_WEBSITE_ID',
-      'WEBSITE_ID',
-    ],
+    incorrect: ['ENTROLYTICS_SITE_ID', 'ENTRO_WEBSITE_ID', 'WEBSITE_ID'],
   },
 
   // API endpoints
@@ -54,33 +50,33 @@ const VALIDATION_RULES = {
 
   // Placeholders that should be variables
   placeholders: ['website-id-here', 'your-website-id', 'INSERT_ID_HERE'],
-}
+};
 
 async function findMdxFiles(dir: string, files: string[] = []): Promise<string[]> {
-  const entries = await fs.readdir(dir, { withFileTypes: true })
+  const entries = await fs.readdir(dir, { withFileTypes: true });
 
   for (const entry of entries) {
-    const fullPath = path.join(dir, entry.name)
+    const fullPath = path.join(dir, entry.name);
 
     if (entry.isDirectory() && !entry.name.startsWith('.') && entry.name !== 'node_modules') {
-      await findMdxFiles(fullPath, files)
+      await findMdxFiles(fullPath, files);
     } else if (entry.name.endsWith('.mdx') || entry.name.endsWith('.md')) {
-      files.push(fullPath)
+      files.push(fullPath);
     }
   }
 
-  return files
+  return files;
 }
 
 function extractCodeBlocks(content: string): Array<{ code: string; line: number }> {
-  const blocks: Array<{ code: string; line: number }> = []
-  const lines = content.split('\n')
-  let inCodeBlock = false
-  let currentBlock: string[] = []
-  let blockStartLine = 0
+  const blocks: Array<{ code: string; line: number }> = [];
+  const lines = content.split('\n');
+  let inCodeBlock = false;
+  let currentBlock: string[] = [];
+  let blockStartLine = 0;
 
   for (let i = 0; i < lines.length; i++) {
-    const line = lines[i]
+    const line = lines[i];
 
     if (line.trim().startsWith('```')) {
       if (inCodeBlock) {
@@ -88,31 +84,31 @@ function extractCodeBlocks(content: string): Array<{ code: string; line: number 
         blocks.push({
           code: currentBlock.join('\n'),
           line: blockStartLine,
-        })
-        currentBlock = []
-        inCodeBlock = false
+        });
+        currentBlock = [];
+        inCodeBlock = false;
       } else {
         // Start of code block
-        inCodeBlock = true
-        blockStartLine = i + 1
+        inCodeBlock = true;
+        blockStartLine = i + 1;
       }
     } else if (inCodeBlock) {
-      currentBlock.push(line)
+      currentBlock.push(line);
     }
   }
 
-  return blocks
+  return blocks;
 }
 
 async function validateFile(filePath: string): Promise<ValidationError[]> {
-  const content = await fs.readFile(filePath, 'utf-8')
-  const errors: ValidationError[] = []
-  const relativePath = filePath.replace(process.cwd(), '')
+  const content = await fs.readFile(filePath, 'utf-8');
+  const errors: ValidationError[] = [];
+  const relativePath = filePath.replace(process.cwd(), '');
 
-  const codeBlocks = extractCodeBlocks(content)
+  const codeBlocks = extractCodeBlocks(content);
 
   for (const block of codeBlocks) {
-    const code = block.code
+    const code = block.code;
 
     // Check for incorrect env vars
     for (const incorrect of VALIDATION_RULES.envVars.incorrect) {
@@ -122,7 +118,7 @@ async function validateFile(filePath: string): Promise<ValidationError[]> {
           line: block.line,
           issue: `Uses incorrect environment variable name: ${incorrect}`,
           codeBlock: code.substring(0, 100),
-        })
+        });
       }
     }
 
@@ -134,7 +130,7 @@ async function validateFile(filePath: string): Promise<ValidationError[]> {
           line: block.line,
           issue: `Uses incorrect API host: ${incorrect}`,
           codeBlock: code.substring(0, 100),
-        })
+        });
       }
     }
 
@@ -146,7 +142,7 @@ async function validateFile(filePath: string): Promise<ValidationError[]> {
           line: block.line,
           issue: `Uses incorrect CLI command: ${incorrect}`,
           codeBlock: code.substring(0, 100),
-        })
+        });
       }
     }
 
@@ -158,69 +154,69 @@ async function validateFile(filePath: string): Promise<ValidationError[]> {
           line: block.line,
           issue: `Contains placeholder value: ${placeholder}`,
           codeBlock: code.substring(0, 100),
-        })
+        });
       }
     }
   }
 
-  return errors
+  return errors;
 }
 
 async function validateDocumentation() {
-  console.log('📚 Validating documentation...\n')
+  console.log('📚 Validating documentation...\n');
 
-  const docsDir = path.join(process.cwd(), '..', 'entro-docs', 'content')
+  const docsDir = path.join(process.cwd(), '..', 'entro-docs', 'content');
 
   try {
-    const mdxFiles = await findMdxFiles(docsDir)
-    console.log(`Found ${mdxFiles.length} documentation files\n`)
+    const mdxFiles = await findMdxFiles(docsDir);
+    console.log(`Found ${mdxFiles.length} documentation files\n`);
 
-    const allErrors: ValidationError[] = []
+    const allErrors: ValidationError[] = [];
 
     for (const file of mdxFiles) {
-      const errors = await validateFile(file)
-      allErrors.push(...errors)
+      const errors = await validateFile(file);
+      allErrors.push(...errors);
     }
 
     if (allErrors.length === 0) {
-      console.log('✅ All documentation validated successfully!')
-      console.log(`Checked ${mdxFiles.length} files`)
-      process.exit(0)
+      console.log('✅ All documentation validated successfully!');
+      console.log(`Checked ${mdxFiles.length} files`);
+      process.exit(0);
     } else {
-      console.log(`❌ Found ${allErrors.length} issue(s) in documentation:\n`)
+      console.log(`❌ Found ${allErrors.length} issue(s) in documentation:\n`);
 
       // Group by file
-      const byFile = new Map<string, ValidationError[]>()
+      const byFile = new Map<string, ValidationError[]>();
       for (const error of allErrors) {
         if (!byFile.has(error.file)) {
-          byFile.set(error.file, [])
+          byFile.set(error.file, []);
         }
-        byFile.get(error.file)!.push(error)
+        byFile.get(error.file)!.push(error);
       }
 
       for (const [file, errors] of byFile) {
-        console.log(`📄 ${file}`)
+        console.log(`📄 ${file}`);
         for (const error of errors) {
-          console.log(`   Line ${error.line}: ${error.issue}`)
+          console.log(`   Line ${error.line}: ${error.issue}`);
           if (error.codeBlock) {
-            console.log(`   Code: ${error.codeBlock}...`)
+            console.log(`   Code: ${error.codeBlock}...`);
           }
         }
-        console.log()
+        console.log();
       }
 
-      process.exit(1)
+      process.exit(1);
     }
   } catch (error) {
     if ((error as any).code === 'ENOENT') {
-      console.log('⚠️  Documentation directory not found, skipping validation')
-      process.exit(0)
+      console.log('⚠️  Documentation directory not found, skipping validation');
+      process.exit(0);
     }
-    throw error
+    throw error;
   }
 }
 
 validateDocumentation().catch(error => {
-  console.error('Fatal error:', error)
-  process.exit(1)
-})
+  console.error('Fatal error:', error);
+  process.exit(1);
+});

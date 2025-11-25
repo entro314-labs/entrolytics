@@ -1,8 +1,8 @@
-import { Row, Icon, Text, ThemeButton } from '@entro314labs/entro-zen'
-import Link from 'next/link'
-import { LanguageButton } from '@/components/input/LanguageButton'
-import { SettingsButton } from '@/components/input/SettingsButton'
-import { LogoSvg as Logo } from '@/components/icons'
+import { Icon, Row, Text, ThemeButton } from '@entro314labs/entro-zen';
+import Link from 'next/link';
+import { LogoSvg as Logo } from '@/components/icons';
+import { LanguageButton } from '@/components/input/LanguageButton';
+import { SettingsButton } from '@/components/input/SettingsButton';
 
 export function Header() {
   return (
@@ -21,5 +21,5 @@ export function Header() {
         <SettingsButton />
       </Row>
     </Row>
-  )
+  );
 }

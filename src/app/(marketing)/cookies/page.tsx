@@ -1,13 +1,13 @@
-import { Metadata } from 'next'
-import { MarketingLayout } from '@/components/marketing'
-import styles from '@/components/marketing/ContentPage.module.css'
-import Link from 'next/link'
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { MarketingLayout } from '@/components/marketing';
+import styles from '@/components/marketing/ContentPage.module.css';
 
 export const metadata: Metadata = {
   title: 'Cookie Policy | Entrolytics',
   description:
     'Learn about how Entrolytics uses cookies and similar technologies. We believe in cookie-free analytics.',
-}
+};
 
 export default function CookiePolicyPage() {
   return (
@@ -304,5 +304,5 @@ export default function CookiePolicyPage() {
         </div>
       </div>
     </MarketingLayout>
-  )
+  );
 }

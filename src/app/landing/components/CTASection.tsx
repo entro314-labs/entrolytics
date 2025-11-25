@@ -1,41 +1,41 @@
-'use client'
+'use client';
 
-import { useEffect, useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
-import { AuthAwareCTA } from './AuthAwareCTA'
-import { MarketingFooter } from '@/components/marketing/MarketingFooter'
-import styles from './CTASection.module.css'
+import { motion, useInView } from 'framer-motion';
+import { useEffect, useRef } from 'react';
+import { MarketingFooter } from '@/components/marketing/MarketingFooter';
+import { AuthAwareCTA } from './AuthAwareCTA';
+import styles from './CTASection.module.css';
 
 interface CTASectionProps {
-  showFooter?: boolean
+  showFooter?: boolean;
 }
 
 export function CTASection({ showFooter = true }: CTASectionProps) {
-  const sectionRef = useRef<HTMLElement>(null)
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-  const isInView = useInView(sectionRef, { once: true, margin: '-20%' })
+  const sectionRef = useRef<HTMLElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const isInView = useInView(sectionRef, { once: true, margin: '-20%' });
 
   useEffect(() => {
-    if (!canvasRef.current) return
+    if (!canvasRef.current) return;
 
-    const canvas = canvasRef.current
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
 
-    canvas.width = canvas.offsetWidth * window.devicePixelRatio
-    canvas.height = canvas.offsetHeight * window.devicePixelRatio
-    ctx.scale(window.devicePixelRatio, window.devicePixelRatio)
+    canvas.width = canvas.offsetWidth * window.devicePixelRatio;
+    canvas.height = canvas.offsetHeight * window.devicePixelRatio;
+    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
 
     // Particle system
     const particles: Array<{
-      x: number
-      y: number
-      vx: number
-      vy: number
-      size: number
-    }> = []
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      size: number;
+    }> = [];
 
-    const particleCount = 50
+    const particleCount = 50;
 
     for (let i = 0; i < particleCount; i++) {
       particles.push({
@@ -44,91 +44,91 @@ export function CTASection({ showFooter = true }: CTASectionProps) {
         vx: (Math.random() - 0.5) * 0.5,
         vy: (Math.random() - 0.5) * 0.5,
         size: Math.random() * 3 + 1,
-      })
+      });
     }
 
-    let mouseX = 0
-    let mouseY = 0
+    let mouseX = 0;
+    let mouseY = 0;
 
     const handleMouseMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect()
-      mouseX = e.clientX - rect.left
-      mouseY = e.clientY - rect.top
-    }
+      const rect = canvas.getBoundingClientRect();
+      mouseX = e.clientX - rect.left;
+      mouseY = e.clientY - rect.top;
+    };
 
-    canvas.addEventListener('mousemove', handleMouseMove)
+    canvas.addEventListener('mousemove', handleMouseMove);
 
     function animate() {
-      if (!ctx || !canvas) return
+      if (!ctx || !canvas) return;
 
       // Trail effect
-      ctx.fillStyle = 'rgba(250, 250, 250, 0.05)'
-      ctx.fillRect(0, 0, canvas.offsetWidth, canvas.offsetHeight)
+      ctx.fillStyle = 'rgba(250, 250, 250, 0.05)';
+      ctx.fillRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
 
-      particles.forEach((particle) => {
+      particles.forEach(particle => {
         // Mouse interaction
-        const dx = mouseX - particle.x
-        const dy = mouseY - particle.y
-        const distance = Math.sqrt(dx * dx + dy * dy)
+        const dx = mouseX - particle.x;
+        const dy = mouseY - particle.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance < 100) {
-          const force = (100 - distance) / 100
-          particle.vx -= (dx / distance) * force * 0.5
-          particle.vy -= (dy / distance) * force * 0.5
+          const force = (100 - distance) / 100;
+          particle.vx -= (dx / distance) * force * 0.5;
+          particle.vy -= (dy / distance) * force * 0.5;
         }
 
         // Update position
-        particle.x += particle.vx
-        particle.y += particle.vy
+        particle.x += particle.vx;
+        particle.y += particle.vy;
 
         // Damping
-        particle.vx *= 0.99
-        particle.vy *= 0.99
+        particle.vx *= 0.99;
+        particle.vy *= 0.99;
 
         // Boundary bounce
         if (particle.x < 0 || particle.x > canvas.offsetWidth) {
-          particle.vx *= -1
-          particle.x = Math.max(0, Math.min(canvas.offsetWidth, particle.x))
+          particle.vx *= -1;
+          particle.x = Math.max(0, Math.min(canvas.offsetWidth, particle.x));
         }
         if (particle.y < 0 || particle.y > canvas.offsetHeight) {
-          particle.vy *= -1
-          particle.y = Math.max(0, Math.min(canvas.offsetHeight, particle.y))
+          particle.vy *= -1;
+          particle.y = Math.max(0, Math.min(canvas.offsetHeight, particle.y));
         }
 
         // Draw particle
-        ctx.beginPath()
-        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
-        ctx.fillStyle = 'rgba(20, 122, 243, 0.6)'
-        ctx.fill()
-      })
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(20, 122, 243, 0.6)';
+        ctx.fill();
+      });
 
       // Draw connections
       particles.forEach((p1, i) => {
-        particles.slice(i + 1).forEach((p2) => {
-          const dx = p1.x - p2.x
-          const dy = p1.y - p2.y
-          const distance = Math.sqrt(dx * dx + dy * dy)
+        particles.slice(i + 1).forEach(p2 => {
+          const dx = p1.x - p2.x;
+          const dy = p1.y - p2.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
 
           if (distance < 150) {
-            ctx.beginPath()
-            ctx.moveTo(p1.x, p1.y)
-            ctx.lineTo(p2.x, p2.y)
-            ctx.strokeStyle = `rgba(20, 122, 243, ${0.2 * (1 - distance / 150)})`
-            ctx.lineWidth = 1
-            ctx.stroke()
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = `rgba(20, 122, 243, ${0.2 * (1 - distance / 150)})`;
+            ctx.lineWidth = 1;
+            ctx.stroke();
           }
-        })
-      })
+        });
+      });
 
-      requestAnimationFrame(animate)
+      requestAnimationFrame(animate);
     }
 
-    animate()
+    animate();
 
     return () => {
-      canvas.removeEventListener('mousemove', handleMouseMove)
-    }
-  }, [])
+      canvas.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
 
   return (
     <section ref={sectionRef} className={styles.section}>
@@ -175,5 +175,5 @@ export function CTASection({ showFooter = true }: CTASectionProps) {
 
       {showFooter && <MarketingFooter />}
     </section>
-  )
+  );
 }

@@ -1,13 +1,13 @@
-import Link from 'next/link'
-import { DataColumn, DataTable, DataTableProps } from '@entro314labs/entro-zen'
-import { useFormat, useMessages } from '@/components/hooks'
-import { Avatar } from '@/components/common/Avatar'
-import { TypeIcon } from '@/components/common/TypeIcon'
-import { DateDistance } from '@/components/common/DateDistance'
+import { DataColumn, DataTable, type DataTableProps } from '@entro314labs/entro-zen';
+import Link from 'next/link';
+import { Avatar } from '@/components/common/Avatar';
+import { DateDistance } from '@/components/common/DateDistance';
+import { TypeIcon } from '@/components/common/TypeIcon';
+import { useFormat, useMessages } from '@/components/hooks';
 
 export function SessionsTable(props: DataTableProps) {
-  const { formatMessage, labels } = useMessages()
-  const { formatValue } = useFormat()
+  const { formatMessage, labels } = useMessages();
+  const { formatValue } = useFormat();
 
   return (
     <DataTable {...props} rowKey={(row, index) => row?.id || `session-${index}`}>
@@ -53,5 +53,5 @@ export function SessionsTable(props: DataTableProps) {
         {(row: any) => <DateDistance date={new Date(row.createdAt)} />}
       </DataColumn>
     </DataTable>
-  )
+  );
 }

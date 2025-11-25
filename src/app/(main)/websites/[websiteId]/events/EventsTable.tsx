@@ -1,19 +1,19 @@
-import { DataTable, DataColumn, Icon, Row, Text } from '@entro314labs/entro-zen'
-import { useFormat, useMessages, useNavigation } from '@/components/hooks'
-import { Empty } from '@/components/common/Empty'
-import { Avatar } from '@/components/common/Avatar'
-import Link from 'next/link'
-import { LightningSvg, Eye } from '@/components/icons'
-import { DateDistance } from '@/components/common/DateDistance'
-import { TypeIcon } from '@/components/common/TypeIcon'
+import { DataColumn, DataTable, Icon, Row, Text } from '@entro314labs/entro-zen';
+import Link from 'next/link';
+import { Avatar } from '@/components/common/Avatar';
+import { DateDistance } from '@/components/common/DateDistance';
+import { Empty } from '@/components/common/Empty';
+import { TypeIcon } from '@/components/common/TypeIcon';
+import { useFormat, useMessages, useNavigation } from '@/components/hooks';
+import { Eye, LightningSvg } from '@/components/icons';
 
 export function EventsTable({ data = [] }) {
-  const { formatMessage, labels } = useMessages()
-  const { renderUrl } = useNavigation()
-  const { formatValue } = useFormat()
+  const { formatMessage, labels } = useMessages();
+  const { renderUrl } = useNavigation();
+  const { formatValue } = useFormat();
 
   if (data.length === 0) {
-    return <Empty />
+    return <Empty />;
   }
 
   return (
@@ -33,7 +33,7 @@ export function EventsTable({ data = [] }) {
                 {row.eventName || row.urlPath}
               </Text>
             </Row>
-          )
+          );
         }}
       </DataColumn>
       <DataColumn id="location" label={formatMessage(labels.location)}>
@@ -61,5 +61,5 @@ export function EventsTable({ data = [] }) {
         {(row: any) => <DateDistance date={new Date(row.createdAt)} />}
       </DataColumn>
     </DataTable>
-  )
+  );
 }

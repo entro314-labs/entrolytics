@@ -1,19 +1,19 @@
 import {
-  Select,
-  ListItem,
-  Form,
-  FormField,
-  FormButtons,
-  FormSubmitButton,
-  TextField,
   Button,
-} from '@entro314labs/entro-zen'
-import { useMessages, useUpdateQuery } from '@/components/hooks'
-import { ROLES } from '@/lib/constants'
+  Form,
+  FormButtons,
+  FormField,
+  FormSubmitButton,
+  ListItem,
+  Select,
+  TextField,
+} from '@entro314labs/entro-zen';
+import { useMessages, useUpdateQuery } from '@/components/hooks';
+import { ROLES } from '@/lib/constants';
 
 export function UserAddForm({ onSave, onClose }) {
-  const { mutateAsync, error, isPending } = useUpdateQuery(`/users`)
-  const { formatMessage, labels } = useMessages()
+  const { mutateAsync, error, isPending } = useUpdateQuery(`/users`);
+  const { formatMessage, labels } = useMessages();
 
   const handleSubmit = async (data: any) => {
     // Transform data to match Clerk/API expectations
@@ -24,15 +24,15 @@ export function UserAddForm({ onSave, onClose }) {
       lastName: data.lastName,
       displayName: data.displayName || data.email?.split('@')[0],
       role: data.role,
-    }
+    };
 
     await mutateAsync(userData, {
       onSuccess: async () => {
-        onSave(userData)
-        onClose()
+        onSave(userData);
+        onClose();
       },
-    })
-  }
+    });
+  };
 
   return (
     <Form onSubmit={handleSubmit} error={error}>
@@ -82,5 +82,5 @@ export function UserAddForm({ onSave, onClose }) {
         </FormSubmitButton>
       </FormButtons>
     </Form>
-  )
+  );
 }

@@ -1,31 +1,31 @@
-import { Dialog } from '@entro314labs/entro-zen'
-import { ActionButton } from '@/components/input/ActionButton'
-import { Trash } from '@/components/icons'
-import { ConfirmationForm } from '@/components/common/ConfirmationForm'
-import { messages } from '@/components/messages'
-import { useDeleteQuery, useMessages } from '@/components/hooks'
+import { Dialog } from '@entro314labs/entro-zen';
+import { ConfirmationForm } from '@/components/common/ConfirmationForm';
+import { useDeleteQuery, useMessages } from '@/components/hooks';
+import { Trash } from '@/components/icons';
+import { ActionButton } from '@/components/input/ActionButton';
+import { messages } from '@/components/messages';
 
 export function BoardDeleteButton({
   boardId,
   name,
   onSave,
 }: {
-  boardId: string
-  name: string
-  onSave?: () => void
+  boardId: string;
+  name: string;
+  onSave?: () => void;
 }) {
-  const { formatMessage, labels, getErrorMessage, FormattedMessage } = useMessages()
-  const { mutateAsync, isPending, error, touch } = useDeleteQuery(`/boards/${boardId}`)
+  const { formatMessage, labels, getErrorMessage, FormattedMessage } = useMessages();
+  const { mutateAsync, isPending, error, touch } = useDeleteQuery(`/boards/${boardId}`);
 
   const handleConfirm = async (close: () => void) => {
     await mutateAsync(null, {
       onSuccess: () => {
-        touch('boards')
-        onSave?.()
-        close()
+        touch('boards');
+        onSave?.();
+        close();
       },
-    })
-  }
+    });
+  };
 
   return (
     <ActionButton title={formatMessage(labels.delete)} icon={<Trash />}>
@@ -50,5 +50,5 @@ export function BoardDeleteButton({
         )}
       </Dialog>
     </ActionButton>
-  )
+  );
 }

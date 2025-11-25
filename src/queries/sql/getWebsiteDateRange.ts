@@ -1,13 +1,13 @@
-import clickhouse from '@/lib/clickhouse'
-import { runQuery, CLICKHOUSE, DRIZZLE } from '@/lib/db'
-import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
-import { DEFAULT_RESET_DATE } from '@/lib/constants'
+import { getDateSQL, getTimestampDiffSQL, parseFilters, rawQuery } from '@/lib/analytics-utils';
+import clickhouse from '@/lib/clickhouse';
+import { DEFAULT_RESET_DATE } from '@/lib/constants';
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db';
 
 export async function getWebsiteDateRange(...args: [websiteId: string]) {
   return runQuery({
     [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  })
+  });
 }
 
 async function relationalQuery(websiteId: string) {
@@ -15,7 +15,7 @@ async function relationalQuery(websiteId: string) {
   const { queryParams } = parseFilters({
     startDate: new Date(DEFAULT_RESET_DATE),
     websiteId,
-  })
+  });
 
   const result = await rawQuery(
     `
@@ -26,18 +26,18 @@ async function relationalQuery(websiteId: string) {
     WHERE website_id = {{websiteId::uuid}}
       AND created_at >= {{startDate}}
     `,
-    queryParams
-  )
+    queryParams,
+  );
 
-  return result[0] ?? null
+  return result[0] ?? null;
 }
 
 async function clickhouseQuery(websiteId: string) {
-  const { rawQuery, parseFilters } = clickhouse
+  const { rawQuery, parseFilters } = clickhouse;
   const { queryParams } = parseFilters({
     startDate: new Date(DEFAULT_RESET_DATE),
     websiteId,
-  })
+  });
 
   const result = await rawQuery(
     `
@@ -48,8 +48,8 @@ async function clickhouseQuery(websiteId: string) {
     WHERE website_id = {websiteId:UUID}
       AND created_at >= {startDate:DateTime64}
     `,
-    queryParams
-  )
+    queryParams,
+  );
 
-  return result[0] ?? null
+  return result[0] ?? null;
 }

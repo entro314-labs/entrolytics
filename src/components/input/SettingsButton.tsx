@@ -1,11 +1,11 @@
-import { Button, Icon, DialogTrigger, Popover, Column, Label } from '@entro314labs/entro-zen'
-import { TimezoneSetting } from '@/app/(main)/settings/preferences/TimezoneSetting'
-import { DateRangeSetting } from '@/app/(main)/settings/preferences/DateRangeSetting'
-import { Settings as Gear } from '@/components/icons'
-import { useMessages } from '@/components/hooks'
+import { Button, Column, DialogTrigger, Icon, Label, Popover } from '@entro314labs/entro-zen';
+import { DateRangeSetting } from '@/app/(main)/settings/preferences/DateRangeSetting';
+import { TimezoneSetting } from '@/app/(main)/settings/preferences/TimezoneSetting';
+import { useMessages } from '@/components/hooks';
+import { Settings as Gear } from '@/components/icons';
 
 export function SettingsButton() {
-  const { formatMessage, labels } = useMessages()
+  const { formatMessage, labels } = useMessages();
 
   return (
     <DialogTrigger>
@@ -23,5 +23,5 @@ export function SettingsButton() {
         </Column>
       </Popover>
     </DialogTrigger>
-  )
+  );
 }

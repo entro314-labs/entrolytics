@@ -1,26 +1,25 @@
-import clickhouse from '@/lib/clickhouse'
-import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
-import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
+import { getDateSQL, getTimestampDiffSQL, parseFilters, rawQuery } from '@/lib/analytics-utils';
+import clickhouse from '@/lib/clickhouse';
+import { EVENT_COLUMNS } from '@/lib/constants';
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db';
+import type { QueryFilters } from '@/lib/types';
 
-import { EVENT_COLUMNS } from '@/lib/constants'
-import { QueryFilters } from '@/lib/types'
-
-const FUNCTION_NAME = 'getPageviewStats'
+const FUNCTION_NAME = 'getPageviewStats';
 
 export async function getPageviewStats(...args: [websiteId: string, filters: QueryFilters]) {
   return runQuery({
     [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  })
+  });
 }
 
 async function relationalQuery(websiteId: string, filters: QueryFilters) {
-  const { timezone = 'utc', unit = 'day' } = filters
+  const { timezone = 'utc', unit = 'day' } = filters;
   // Using rawQuery FROM analytics-utils
   const { filterQuery, cohortQuery, joinSessionQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
-  })
+  });
 
   return rawQuery(
     `
@@ -38,27 +37,27 @@ async function relationalQuery(websiteId: string, filters: QueryFilters) {
     ORDER BY 1
     `,
     queryParams,
-    FUNCTION_NAME
-  )
+    FUNCTION_NAME,
+  );
 }
 
 async function clickhouseQuery(
   websiteId: string,
-  filters: QueryFilters
+  filters: QueryFilters,
 ): Promise<{ x: string; y: number }[]> {
-  const { timezone = 'utc', unit = 'day' } = filters
-  const { parseFilters, rawQuery, getDateSQL } = clickhouse
+  const { timezone = 'utc', unit = 'day' } = filters;
+  const { parseFilters, rawQuery, getDateSQL } = clickhouse;
   const { filterQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
-  })
+  });
 
-  let sql = ''
+  let sql = '';
 
   if (
     (filters &&
       typeof filters === 'object' &&
-      EVENT_COLUMNS.some((item) => Object.keys(filters).includes(item))) ||
+      EVENT_COLUMNS.some(item => Object.keys(filters).includes(item))) ||
     unit === 'minute'
   ) {
     sql = `
@@ -78,7 +77,7 @@ async function clickhouseQuery(
       GROUP BY t
     ) as g
     ORDER BY t
-    `
+    `;
   } else {
     sql = `
     SELECT
@@ -97,8 +96,8 @@ async function clickhouseQuery(
       GROUP BY t
     ) as g
     ORDER BY t
-    `
+    `;
   }
 
-  return rawQuery(sql, queryParams, FUNCTION_NAME)
+  return rawQuery(sql, queryParams, FUNCTION_NAME);
 }

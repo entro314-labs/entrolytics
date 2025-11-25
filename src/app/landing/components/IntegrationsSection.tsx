@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
-import { useEffect, useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
-import { gsap } from 'gsap'
-import styles from './IntegrationsSection.module.css'
+import { motion, useInView } from 'framer-motion';
+import { gsap } from 'gsap';
+import { useEffect, useRef } from 'react';
+import styles from './IntegrationsSection.module.css';
 
 const integrations = [
   { name: 'Next.js', color: '#000000' },
@@ -18,13 +18,13 @@ const integrations = [
   { name: 'Svelte', color: '#FF3E00' },
   { name: 'Angular', color: '#DD0031' },
   { name: 'Astro', color: '#FF5D01' },
-]
+];
 
 export function IntegrationsSection() {
-  const sectionRef = useRef<HTMLElement>(null)
-  const isInView = useInView(sectionRef, { once: true, margin: '-20%' })
-  const marqueeRef = useRef<HTMLDivElement>(null)
-  const marqueeRef2 = useRef<HTMLDivElement>(null)
+  const sectionRef = useRef<HTMLElement>(null);
+  const isInView = useInView(sectionRef, { once: true, margin: '-20%' });
+  const marqueeRef = useRef<HTMLDivElement>(null);
+  const marqueeRef2 = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (isInView) {
@@ -35,7 +35,7 @@ export function IntegrationsSection() {
           duration: 30,
           ease: 'none',
           repeat: -1,
-        })
+        });
       }
 
       // Second marquee - right to left
@@ -48,11 +48,11 @@ export function IntegrationsSection() {
             duration: 30,
             ease: 'none',
             repeat: -1,
-          }
-        )
+          },
+        );
       }
     }
-  }, [isInView])
+  }, [isInView]);
 
   return (
     <section id="integrations" ref={sectionRef} className={styles.section}>
@@ -142,5 +142,5 @@ export function IntegrationsSection() {
         </motion.div>
       </div>
     </section>
-  )
+  );
 }

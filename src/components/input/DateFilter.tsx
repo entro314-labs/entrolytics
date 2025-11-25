@@ -1,17 +1,17 @@
-import { useState, Key, Fragment } from 'react'
-import { Modal, Select, ListItem, ListSeparator, Dialog, Row } from '@entro314labs/entro-zen'
-import { endOfYear } from 'date-fns'
-import { DatePickerForm } from '@/components/metrics/DatePickerForm'
-import { useMessages } from '@/components/hooks'
-import { DateDisplay } from '@/components/common/DateDisplay'
-import { parseDateRange } from '@/lib/date'
+import { Dialog, ListItem, ListSeparator, Modal, Row, Select } from '@entro314labs/entro-zen';
+import { endOfYear } from 'date-fns';
+import { Fragment, type Key, useState } from 'react';
+import { DateDisplay } from '@/components/common/DateDisplay';
+import { useMessages } from '@/components/hooks';
+import { DatePickerForm } from '@/components/metrics/DatePickerForm';
+import { parseDateRange } from '@/lib/date';
 
 export interface DateFilterProps {
-  value?: string
-  onChange?: (value: string) => void
-  showAllTime?: boolean
-  renderDate?: boolean
-  placement?: string
+  value?: string;
+  onChange?: (value: string) => void;
+  showAllTime?: boolean;
+  renderDate?: boolean;
+  placement?: string;
 }
 
 export function DateFilter({
@@ -21,9 +21,9 @@ export function DateFilter({
   renderDate,
   placement = 'bottom',
 }: DateFilterProps) {
-  const { formatMessage, labels } = useMessages()
-  const [showPicker, setShowPicker] = useState(false)
-  const { startDate, endDate } = parseDateRange(value) || {}
+  const { formatMessage, labels } = useMessages();
+  const [showPicker, setShowPicker] = useState(false);
+  const { startDate, endDate } = parseDateRange(value) || {};
 
   const options = [
     { label: formatMessage(labels.today), value: '0day' },
@@ -74,29 +74,29 @@ export function DateFilter({
       divider: true,
     },
   ]
-    .filter((n) => n)
-    .map((a, id) => ({ ...a, id }))
+    .filter(n => n)
+    .map((a, id) => ({ ...a, id }));
 
   const handleChange = (value: Key) => {
     if (value === 'custom') {
-      setShowPicker(true)
-      return
+      setShowPicker(true);
+      return;
     }
-    onChange(value.toString())
-  }
+    onChange(value.toString());
+  };
 
   const handlePickerChange = (value: string) => {
-    setShowPicker(false)
-    onChange(value.toString())
-  }
+    setShowPicker(false);
+    onChange(value.toString());
+  };
 
   const renderValue = ({ defaultChildren }) => {
     return value?.startsWith('range') || renderDate ? (
       <DateDisplay startDate={startDate} endDate={endDate} />
     ) : (
       defaultChildren
-    )
-  }
+    );
+  };
 
   return (
     <Row minWidth="200px">
@@ -114,7 +114,7 @@ export function DateFilter({
               {divider && <ListSeparator />}
               <ListItem id={value}>{label}</ListItem>
             </Fragment>
-          )
+          );
         })}
       </Select>
       {showPicker && (
@@ -132,5 +132,5 @@ export function DateFilter({
         </Modal>
       )}
     </Row>
-  )
+  );
 }

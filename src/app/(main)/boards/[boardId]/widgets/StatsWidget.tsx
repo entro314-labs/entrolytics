@@ -1,21 +1,21 @@
-'use client'
-import { useDateRange, useMessages, useWebsiteStatsQuery } from '@/components/hooks'
-import { MetricCard } from '@/components/metrics/MetricCard'
-import { MetricsBar } from '@/components/metrics/MetricsBar'
-import { formatShortTime, formatLongNumber } from '@/lib/format'
-import { LoadingPanel } from '@/components/common/LoadingPanel'
+'use client';
+import { LoadingPanel } from '@/components/common/LoadingPanel';
+import { useDateRange, useMessages, useWebsiteStatsQuery } from '@/components/hooks';
+import { MetricCard } from '@/components/metrics/MetricCard';
+import { MetricsBar } from '@/components/metrics/MetricsBar';
+import { formatLongNumber, formatShortTime } from '@/lib/format';
 
 export interface StatsWidgetProps {
-  websiteId: string
+  websiteId: string;
 }
 
 export function StatsWidget({ websiteId }: StatsWidgetProps) {
-  const { dateRange } = useDateRange()
-  const { formatMessage, labels } = useMessages()
-  const { data, isLoading, isFetching, error } = useWebsiteStatsQuery(websiteId)
-  const isAllTime = dateRange.value === 'all'
+  const { dateRange } = useDateRange();
+  const { formatMessage, labels } = useMessages();
+  const { data, isLoading, isFetching, error } = useWebsiteStatsQuery(websiteId);
+  const isAllTime = dateRange.value === 'all';
 
-  const { pageviews, visitors, visits, bounces, totaltime, comparison } = data || {}
+  const { pageviews, visitors, visits, bounces, totaltime, comparison } = data || {};
 
   const metrics = data
     ? [
@@ -56,7 +56,7 @@ export function StatsWidget({ websiteId }: StatsWidgetProps) {
             `${+n < 0 ? '-' : ''}${formatShortTime(Math.abs(~~n), ['m', 's'], ' ')}`,
         },
       ]
-    : null
+    : null;
 
   return (
     <LoadingPanel data={metrics} isLoading={isLoading} isFetching={isFetching} error={error}>
@@ -73,9 +73,9 @@ export function StatsWidget({ websiteId }: StatsWidgetProps) {
               reverseColors={reverseColors}
               showChange={!isAllTime}
             />
-          )
+          );
         })}
       </MetricsBar>
     </LoadingPanel>
-  )
+  );
 }

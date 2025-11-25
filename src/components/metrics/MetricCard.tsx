@@ -1,18 +1,18 @@
-import { Text, Column } from '@entro314labs/entro-zen'
-import { useSpring } from '@react-spring/web'
-import { formatNumber } from '@/lib/format'
-import { AnimatedDiv } from '@/components/common/AnimatedDiv'
-import { ChangeLabel } from '@/components/metrics/ChangeLabel'
+import { Column, Text } from '@entro314labs/entro-zen';
+import { useSpring } from '@react-spring/web';
+import { AnimatedDiv } from '@/components/common/AnimatedDiv';
+import { ChangeLabel } from '@/components/metrics/ChangeLabel';
+import { formatNumber } from '@/lib/format';
 
 export interface MetricCardProps {
-  value: number
-  previousValue?: number
-  change?: number
-  label?: string
-  reverseColors?: boolean
-  formatValue?: (n: any) => string
-  showLabel?: boolean
-  showChange?: boolean
+  value: number;
+  previousValue?: number;
+  change?: number;
+  label?: string;
+  reverseColors?: boolean;
+  formatValue?: (n: any) => string;
+  showLabel?: boolean;
+  showChange?: boolean;
 }
 
 export const MetricCard = ({
@@ -24,10 +24,10 @@ export const MetricCard = ({
   showLabel = true,
   showChange = false,
 }: MetricCardProps) => {
-  const diff = value - change
-  const pct = ((value - diff) / diff) * 100
-  const props = useSpring({ x: Number(value) || 0, from: { x: 0 } })
-  const changeProps = useSpring({ x: Number(pct) || 0, from: { x: 0 } })
+  const diff = value - change;
+  const pct = ((value - diff) / diff) * 100;
+  const props = useSpring({ x: Number(value) || 0, from: { x: 0 } });
+  const changeProps = useSpring({ x: Number(pct) || 0, from: { x: 0 } });
 
   return (
     <Column
@@ -44,13 +44,13 @@ export const MetricCard = ({
         </Text>
       )}
       <Text size="8" weight="bold" wrap="nowrap">
-        <AnimatedDiv title={value?.toString()}>{props?.x?.to((x) => formatValue(x))}</AnimatedDiv>
+        <AnimatedDiv title={value?.toString()}>{props?.x?.to(x => formatValue(x))}</AnimatedDiv>
       </Text>
       {showChange && (
         <ChangeLabel value={change} title={formatValue(change)} reverseColors={reverseColors}>
-          <AnimatedDiv>{changeProps?.x?.to((x) => `${Math.abs(~~x)}%`)}</AnimatedDiv>
+          <AnimatedDiv>{changeProps?.x?.to(x => `${Math.abs(~~x)}%`)}</AnimatedDiv>
         </ChangeLabel>
       )}
     </Column>
-  )
-}
+  );
+};

@@ -1,5 +1,6 @@
-import * as React from 'react'
-import type { SVGProps } from 'react'
+import type { SVGProps } from 'react';
+import * as React from 'react';
+
 const SvgExport = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={512} height={512} viewBox="0 0 24 24" {...props}>
     <switch>
@@ -8,5 +9,5 @@ const SvgExport = (props: SVGProps<SVGSVGElement>) => (
       </g>
     </switch>
   </svg>
-)
-export default SvgExport
+);
+export default SvgExport;

@@ -1,11 +1,11 @@
-import { useState } from 'react'
-import { ToggleGroup, ToggleGroupItem, Box } from '@entro314labs/entro-zen'
+import { Box, ToggleGroup, ToggleGroupItem } from '@entro314labs/entro-zen';
+import { useState } from 'react';
 
 export interface FilterButtonsProps {
-  items: { id: string; label: string }[]
-  value: string
-  onChange?: (value: string) => void
-  ariaLabel?: string
+  items: { id: string; label: string }[];
+  value: string;
+  onChange?: (value: string) => void;
+  ariaLabel?: string;
 }
 
 export function FilterButtons({
@@ -14,18 +14,18 @@ export function FilterButtons({
   onChange,
   ariaLabel = 'Filter options',
 }: FilterButtonsProps) {
-  const [selected, setSelected] = useState(value)
+  const [selected, setSelected] = useState(value);
 
   const handleChange = (value: string) => {
-    setSelected(value)
-    onChange?.(value)
-  }
+    setSelected(value);
+    onChange?.(value);
+  };
 
   return (
     <Box>
       <ToggleGroup
         value={[selected]}
-        onChange={(e) => handleChange(e[0])}
+        onChange={e => handleChange(e[0])}
         disallowEmptySelection={true}
         aria-label={ariaLabel}
       >
@@ -37,5 +37,5 @@ export function FilterButtons({
           ))}
       </ToggleGroup>
     </Box>
-  )
+  );
 }

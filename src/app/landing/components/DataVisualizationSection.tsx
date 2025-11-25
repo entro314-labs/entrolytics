@@ -1,19 +1,19 @@
-'use client'
+'use client';
 
-import { useEffect, useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
-import { gsap } from 'gsap'
-import styles from './DataVisualizationSection.module.css'
+import { motion, useInView } from 'framer-motion';
+import { gsap } from 'gsap';
+import { useEffect, useRef } from 'react';
+import styles from './DataVisualizationSection.module.css';
 
 export function DataVisualizationSection() {
-  const sectionRef = useRef<HTMLElement>(null)
-  const isInView = useInView(sectionRef, { once: true, margin: '-20%' })
-  const chartRef = useRef<SVGSVGElement>(null)
+  const sectionRef = useRef<HTMLElement>(null);
+  const isInView = useInView(sectionRef, { once: true, margin: '-20%' });
+  const chartRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
     if (isInView && chartRef.current) {
       // Animate chart bars
-      const bars = chartRef.current.querySelectorAll(`.${styles.bar}`)
+      const bars = chartRef.current.querySelectorAll(`.${styles.bar}`);
       bars.forEach((bar, index) => {
         gsap.from(bar, {
           scaleY: 0,
@@ -21,13 +21,13 @@ export function DataVisualizationSection() {
           duration: 0.8,
           delay: index * 0.1,
           ease: 'power3.out',
-        })
-      })
+        });
+      });
 
       // Animate line chart
-      const line = chartRef.current.querySelector(`.${styles.line}`)
+      const line = chartRef.current.querySelector(`.${styles.line}`);
       if (line) {
-        const length = (line as SVGPathElement).getTotalLength()
+        const length = (line as SVGPathElement).getTotalLength();
         gsap.fromTo(
           line,
           {
@@ -38,11 +38,11 @@ export function DataVisualizationSection() {
             strokeDashoffset: 0,
             duration: 2,
             ease: 'power2.inOut',
-          }
-        )
+          },
+        );
       }
     }
-  }, [isInView])
+  }, [isInView]);
 
   return (
     <section ref={sectionRef} className={styles.section}>
@@ -111,7 +111,7 @@ export function DataVisualizationSection() {
 
               {/* Grid lines */}
               <g className={styles.grid}>
-                {[0, 1, 2, 3, 4].map((i) => (
+                {[0, 1, 2, 3, 4].map(i => (
                   <line
                     key={i}
                     x1="50"
@@ -203,5 +203,5 @@ export function DataVisualizationSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

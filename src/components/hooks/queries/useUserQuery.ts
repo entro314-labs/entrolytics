@@ -1,12 +1,12 @@
-import { useApi } from '../useApi'
-import { useModified } from '@/components/hooks'
-import { keepPreviousData } from '@tanstack/react-query'
-import { ReactQueryOptions } from '@/lib/types'
-import { isValidUuid } from '@/lib/uuid'
+import { keepPreviousData } from '@tanstack/react-query';
+import { useModified } from '@/components/hooks';
+import type { ReactQueryOptions } from '@/lib/types';
+import { isValidUuid } from '@/lib/uuid';
+import { useApi } from '../useApi';
 
 export function useUserQuery(userId: string, options?: ReactQueryOptions) {
-  const { get, useQuery } = useApi()
-  const { modified } = useModified(`user:${userId}`)
+  const { get, useQuery } = useApi();
+  const { modified } = useModified(`user:${userId}`);
 
   return useQuery({
     queryKey: ['users', { userId, modified }],
@@ -14,5 +14,5 @@ export function useUserQuery(userId: string, options?: ReactQueryOptions) {
     enabled: !!userId && isValidUuid(userId),
     placeholderData: keepPreviousData,
     ...options,
-  })
+  });
 }

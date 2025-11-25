@@ -1,15 +1,15 @@
-import { ReactNode } from 'react'
-import { Icon, Grid, Column, Row, Label, Text } from '@entro314labs/entro-zen'
-import { useFormat, useLocale, useMessages, useRegionNames } from '@/components/hooks'
-import { TypeIcon } from '@/components/common/TypeIcon'
-import { KeyRound, Calendar, MapPin, Landmark } from '@/components/icons'
-import { DateDistance } from '@/components/common/DateDistance'
+import { Column, Grid, Icon, Label, Row, Text } from '@entro314labs/entro-zen';
+import type { ReactNode } from 'react';
+import { DateDistance } from '@/components/common/DateDistance';
+import { TypeIcon } from '@/components/common/TypeIcon';
+import { useFormat, useLocale, useMessages, useRegionNames } from '@/components/hooks';
+import { Calendar, KeyRound, Landmark, MapPin } from '@/components/icons';
 
 export function SessionInfo({ data }) {
-  const { locale } = useLocale()
-  const { formatMessage, labels } = useMessages()
-  const { formatValue } = useFormat()
-  const { getRegionName } = useRegionNames(locale)
+  const { locale } = useLocale();
+  const { formatMessage, labels } = useMessages();
+  const { formatValue } = useFormat();
+  const { getRegionName } = useRegionNames(locale);
 
   return (
     <Grid columns="repeat(auto-fit, minmax(200px, 1fr))" gap>
@@ -61,7 +61,7 @@ export function SessionInfo({ data }) {
         {formatValue(data?.device, 'device')}
       </Info>
     </Grid>
-  )
+  );
 }
 
 const Info = ({
@@ -69,9 +69,9 @@ const Info = ({
   icon,
   children,
 }: {
-  label: string
-  icon?: ReactNode
-  children: ReactNode
+  label: string;
+  icon?: ReactNode;
+  children: ReactNode;
 }) => {
   return (
     <Column>
@@ -81,5 +81,5 @@ const Info = ({
         <Text>{children || '—'}</Text>
       </Row>
     </Column>
-  )
-}
+  );
+};

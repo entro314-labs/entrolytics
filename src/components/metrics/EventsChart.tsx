@@ -1,39 +1,39 @@
-import { BarChart, BarChartProps } from '@/components/charts/BarChart'
-import { LoadingPanel } from '@/components/common/LoadingPanel'
-import { useDateRange, useLocale, useWebsiteEventsSeriesQuery } from '@/components/hooks'
-import { renderDateLabels } from '@/lib/charts'
-import { CHART_COLORS } from '@/lib/constants'
-import { generateTimeSeries } from '@/lib/date'
-import { colord } from 'colord'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { colord } from 'colord';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { BarChart, type BarChartProps } from '@/components/charts/BarChart';
+import { LoadingPanel } from '@/components/common/LoadingPanel';
+import { useDateRange, useLocale, useWebsiteEventsSeriesQuery } from '@/components/hooks';
+import { renderDateLabels } from '@/lib/charts';
+import { CHART_COLORS } from '@/lib/constants';
+import { generateTimeSeries } from '@/lib/date';
 
 export interface EventsChartProps extends BarChartProps {
-  websiteId: string
-  focusLabel?: string
+  websiteId: string;
+  focusLabel?: string;
 }
 
 export function EventsChart({ websiteId, focusLabel }: EventsChartProps) {
   const {
     dateRange: { startDate, endDate, unit },
-  } = useDateRange()
-  const { locale, dateLocale } = useLocale()
-  const { data, isLoading, error } = useWebsiteEventsSeriesQuery(websiteId)
-  const [label, setLabel] = useState<string>(focusLabel)
+  } = useDateRange();
+  const { locale, dateLocale } = useLocale();
+  const { data, isLoading, error } = useWebsiteEventsSeriesQuery(websiteId);
+  const [label, setLabel] = useState<string>(focusLabel);
 
   const chartData: any = useMemo(() => {
-    if (!data) return
+    if (!data) return;
 
     const map = Array.isArray(data)
       ? data.reduce((obj, { x, t, y }) => {
           if (!obj[x]) {
-            obj[x] = []
+            obj[x] = [];
           }
 
-          obj[x].push({ x: t, y })
+          obj[x].push({ x: t, y });
 
-          return obj
+          return obj;
         }, {})
-      : {}
+      : {};
 
     if (!map || Object.keys(map).length === 0) {
       return {
@@ -44,11 +44,11 @@ export function EventsChart({ websiteId, focusLabel }: EventsChartProps) {
             borderWidth: 1,
           },
         ],
-      }
+      };
     } else {
       return {
         datasets: Object.keys(map).map((key, index) => {
-          const color = colord(CHART_COLORS[index % CHART_COLORS.length])
+          const color = colord(CHART_COLORS[index % CHART_COLORS.length]);
           return {
             label: key,
             data: generateTimeSeries(map[key], startDate, endDate, unit, dateLocale),
@@ -56,20 +56,20 @@ export function EventsChart({ websiteId, focusLabel }: EventsChartProps) {
             backgroundColor: color.alpha(0.6).toRgbString(),
             borderColor: color.alpha(0.7).toRgbString(),
             borderWidth: 1,
-          }
+          };
         }),
         focusLabel,
-      }
+      };
     }
-  }, [data, startDate, endDate, unit, focusLabel])
+  }, [data, startDate, endDate, unit, focusLabel]);
 
   useEffect(() => {
     if (label !== focusLabel) {
-      setLabel(focusLabel)
+      setLabel(focusLabel);
     }
-  }, [focusLabel])
+  }, [focusLabel]);
 
-  const renderXLabel = useCallback(renderDateLabels(unit, locale), [unit, locale])
+  const renderXLabel = useCallback(renderDateLabels(unit, locale), [unit, locale]);
 
   return (
     <LoadingPanel isLoading={isLoading} error={error} minHeight="400px">
@@ -85,5 +85,5 @@ export function EventsChart({ websiteId, focusLabel }: EventsChartProps) {
         />
       )}
     </LoadingPanel>
-  )
+  );
 }

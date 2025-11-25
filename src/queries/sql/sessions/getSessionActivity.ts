@@ -1,9 +1,9 @@
-import clickhouse from '@/lib/clickhouse'
-import { CLICKHOUSE, DRIZZLE, runQuery, db, websiteEvent } from '@/lib/db'
-import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
-import { eq, and, gte, lte, desc } from 'drizzle-orm'
+import { and, desc, eq, gte, lte } from 'drizzle-orm';
+import { getDateSQL, getTimestampDiffSQL, parseFilters, rawQuery } from '@/lib/analytics-utils';
+import clickhouse from '@/lib/clickhouse';
+import { CLICKHOUSE, DRIZZLE, db, runQuery, websiteEvent } from '@/lib/db';
 
-import { QueryFilters } from '@/lib/types'
+import type { QueryFilters } from '@/lib/types';
 
 export async function getSessionActivity(
   ...args: [websiteId: string, sessionId: string, filters: QueryFilters]
@@ -11,11 +11,11 @@ export async function getSessionActivity(
   return runQuery({
     [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  })
+  });
 }
 
 async function relationalQuery(websiteId: string, sessionId: string, filters: QueryFilters) {
-  const { startDate, endDate } = filters
+  const { startDate, endDate } = filters;
 
   return db
     .select()
@@ -25,16 +25,16 @@ async function relationalQuery(websiteId: string, sessionId: string, filters: Qu
         eq(websiteEvent.sessionId, sessionId),
         eq(websiteEvent.websiteId, websiteId),
         gte(websiteEvent.createdAt, startDate),
-        lte(websiteEvent.createdAt, endDate)
-      )
+        lte(websiteEvent.createdAt, endDate),
+      ),
     )
     .limit(500)
-    .orderBy(desc(websiteEvent.createdAt))
+    .orderBy(desc(websiteEvent.createdAt));
 }
 
 async function clickhouseQuery(websiteId: string, sessionId: string, filters: QueryFilters) {
-  const { rawQuery } = clickhouse
-  const { startDate, endDate } = filters
+  const { rawQuery } = clickhouse;
+  const { startDate, endDate } = filters;
 
   return rawQuery(
     `
@@ -59,6 +59,6 @@ async function clickhouseQuery(websiteId: string, sessionId: string, filters: Qu
     ORDER BY created_at desc
     limit 500
     `,
-    { websiteId, sessionId, startDate, endDate }
-  )
+    { websiteId, sessionId, startDate, endDate },
+  );
 }

@@ -1,15 +1,15 @@
-'use client'
+'use client';
 
-import { useAuth } from '@clerk/nextjs'
-import Link from 'next/link'
+import { useAuth } from '@clerk/nextjs';
+import Link from 'next/link';
 
 interface AuthAwareCTAProps {
-  className?: string
-  variant?: 'primary' | 'secondary'
+  className?: string;
+  variant?: 'primary' | 'secondary';
 }
 
 export function AuthAwareCTA({ className, variant = 'primary' }: AuthAwareCTAProps) {
-  const { isSignedIn, isLoaded } = useAuth()
+  const { isSignedIn, isLoaded } = useAuth();
 
   if (!isLoaded) {
     // Loading state - show a skeleton or disabled button
@@ -24,7 +24,7 @@ export function AuthAwareCTA({ className, variant = 'primary' }: AuthAwareCTAPro
       >
         Loading...
       </div>
-    )
+    );
   }
 
   if (isSignedIn) {
@@ -33,7 +33,7 @@ export function AuthAwareCTA({ className, variant = 'primary' }: AuthAwareCTAPro
       <Link href="/websites" className={className}>
         Go to Dashboard
       </Link>
-    )
+    );
   }
 
   // User is not authenticated - show sign up/sign in based on variant
@@ -42,12 +42,12 @@ export function AuthAwareCTA({ className, variant = 'primary' }: AuthAwareCTAPro
       <Link href="/sign-up" className={className}>
         Get Started Free
       </Link>
-    )
+    );
   }
 
   return (
     <Link href="/sign-in" className={className}>
       Sign In
     </Link>
-  )
+  );
 }

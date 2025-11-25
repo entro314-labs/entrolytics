@@ -1,28 +1,28 @@
-import { useMessages, useUpdateQuery } from '@/components/hooks'
-import { TypeConfirmationForm } from '@/components/common/TypeConfirmationForm'
+import { TypeConfirmationForm } from '@/components/common/TypeConfirmationForm';
+import { useMessages, useUpdateQuery } from '@/components/hooks';
 
-const CONFIRM_VALUE = 'RESET'
+const CONFIRM_VALUE = 'RESET';
 
 export function WebsiteResetForm({
   websiteId,
   onSave,
   onClose,
 }: {
-  websiteId: string
-  onSave?: () => void
-  onClose?: () => void
+  websiteId: string;
+  onSave?: () => void;
+  onClose?: () => void;
 }) {
-  const { formatMessage, labels } = useMessages()
-  const { mutateAsync, isPending, error } = useUpdateQuery(`/websites/${websiteId}/reset`)
+  const { formatMessage, labels } = useMessages();
+  const { mutateAsync, isPending, error } = useUpdateQuery(`/websites/${websiteId}/reset`);
 
   const handleConfirm = async () => {
     await mutateAsync(null, {
       onSuccess: async () => {
-        onSave?.()
-        onClose?.()
+        onSave?.();
+        onClose?.();
       },
-    })
-  }
+    });
+  };
 
   return (
     <TypeConfirmationForm
@@ -33,5 +33,5 @@ export function WebsiteResetForm({
       error={error}
       buttonLabel={formatMessage(labels.reset)}
     />
-  )
+  );
 }

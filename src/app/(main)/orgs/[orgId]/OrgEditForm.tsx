@@ -1,40 +1,40 @@
 import {
+  Button,
   Form,
-  FormField,
   FormButtons,
+  FormField,
   FormSubmitButton,
   TextField,
-  Button,
-} from '@entro314labs/entro-zen'
-import { getRandomChars } from '@/lib/crypto'
-import { useMessages, useOrg, useUpdateQuery } from '@/components/hooks'
+} from '@entro314labs/entro-zen';
+import { useMessages, useOrg, useUpdateQuery } from '@/components/hooks';
+import { getRandomChars } from '@/lib/crypto';
 
-const generateId = () => `org_${getRandomChars(16)}`
+const generateId = () => `org_${getRandomChars(16)}`;
 
 export function OrgEditForm({
   orgId,
   allowEdit,
   onSave,
 }: {
-  orgId: string
-  allowEdit?: boolean
-  onSave?: () => void
+  orgId: string;
+  allowEdit?: boolean;
+  onSave?: () => void;
 }) {
-  const org = useOrg()
-  const { formatMessage, labels, messages } = useMessages()
+  const org = useOrg();
+  const { formatMessage, labels, messages } = useMessages();
 
-  const { mutateAsync, error, isPending, touch, toast } = useUpdateQuery(`/orgs/${orgId}`)
+  const { mutateAsync, error, isPending, touch, toast } = useUpdateQuery(`/orgs/${orgId}`);
 
   const handleSubmit = async (data: any) => {
     await mutateAsync(data, {
       onSuccess: async () => {
-        toast(formatMessage(messages.saved))
-        touch('orgs')
-        touch(`orgs:${orgId}`)
-        onSave?.()
+        toast(formatMessage(messages.saved));
+        touch('orgs');
+        touch(`orgs:${orgId}`);
+        onSave?.();
       },
-    })
-  }
+    });
+  };
 
   return (
     <Form onSubmit={handleSubmit} error={error} defaultValues={{ ...org }}>
@@ -65,8 +65,8 @@ export function OrgEditForm({
               </FormButtons>
             )}
           </>
-        )
+        );
       }}
     </Form>
-  )
+  );
 }

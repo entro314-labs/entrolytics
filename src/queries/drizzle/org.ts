@@ -1,11 +1,11 @@
-import { eq, and, or, ilike, isNull, inArray, sql, desc, asc } from 'drizzle-orm'
-import { db, org, orgUser, user, website } from '@/lib/db'
-import { ROLES } from '@/lib/constants'
-import { uuid } from '@/lib/crypto'
-import { PageResult, QueryFilters } from '@/lib/types'
+import { and, asc, desc, eq, ilike, inArray, isNull, or, sql } from 'drizzle-orm';
+import { ROLES } from '@/lib/constants';
+import { uuid } from '@/lib/crypto';
+import { db, org, orgUser, user, website } from '@/lib/db';
+import type { PageResult, QueryFilters } from '@/lib/types';
 
 export async function findOrg(orgId: string, options: { includeMembers?: boolean } = {}) {
-  const { includeMembers } = options
+  const { includeMembers } = options;
 
   if (includeMembers) {
     const rows = await db
@@ -31,14 +31,14 @@ export async function findOrg(orgId: string, options: { includeMembers?: boolean
       .from(org)
       .leftJoin(orgUser, eq(org.orgId, orgUser.orgId))
       .leftJoin(user, eq(orgUser.userId, user.userId))
-      .where(eq(org.orgId, orgId))
+      .where(eq(org.orgId, orgId));
 
     if (!rows || rows.length === 0) {
-      return null
+      return null;
     }
 
     // Transform flattened rows into single org object with members array
-    const firstRow = rows[0]
+    const firstRow = rows[0];
     const orgData = {
       id: firstRow.orgId,
       orgId: firstRow.orgId,
@@ -49,8 +49,8 @@ export async function findOrg(orgId: string, options: { includeMembers?: boolean
       deletedAt: firstRow.deletedAt,
       logoUrl: firstRow.logoUrl,
       members: rows
-        .filter((row) => row.memberUserId) // Only include rows with actual members
-        .map((row) => ({
+        .filter(row => row.memberUserId) // Only include rows with actual members
+        .map(row => ({
           orgUserId: row.memberOrgUserId,
           userId: row.memberUserId,
           role: row.memberRole,
@@ -64,9 +64,9 @@ export async function findOrg(orgId: string, options: { includeMembers?: boolean
             username: row.memberUserDisplayName || row.memberUserEmail,
           },
         })),
-    }
+    };
 
-    return orgData
+    return orgData;
   }
 
   return db
@@ -74,11 +74,11 @@ export async function findOrg(orgId: string, options: { includeMembers?: boolean
     .from(org)
     .where(eq(org.orgId, orgId))
     .limit(1)
-    .then((rows) => rows[0] || null)
+    .then(rows => rows[0] || null);
 }
 
 export async function getOrg(orgId: string, options: { includeMembers?: boolean } = {}) {
-  return findOrg(orgId, options)
+  return findOrg(orgId, options);
 }
 
 export async function findOrgByAccessCode(accessCode: string) {
@@ -87,23 +87,23 @@ export async function findOrgByAccessCode(accessCode: string) {
     .from(org)
     .where(eq(org.accessCode, accessCode))
     .limit(1)
-    .then((rows) => rows[0] || null)
+    .then(rows => rows[0] || null);
 }
 
 export async function getOrgs(
   whereClause: any = {},
-  filters: QueryFilters = {}
+  filters: QueryFilters = {},
 ): Promise<PageResult<any[]>> {
-  const { search, page = 1, pageSize = 20, orderBy = 'createdAt', sortDescending = true } = filters
+  const { search, page = 1, pageSize = 20, orderBy = 'createdAt', sortDescending = true } = filters;
 
-  const conditions = []
+  const conditions = [];
 
   if (search) {
-    conditions.push(ilike(org.name, `%${search}%`))
+    conditions.push(ilike(org.name, `%${search}%`));
   }
 
   if (whereClause) {
-    conditions.push(whereClause)
+    conditions.push(whereClause);
   }
 
   // Build query with conditional where clause
@@ -113,7 +113,7 @@ export async function getOrgs(
           .select()
           .from(org)
           .where(and(...conditions))
-      : db.select().from(org)
+      : db.select().from(org);
 
   // Get total count with conditional where clause
   const countQuery =
@@ -122,16 +122,16 @@ export async function getOrgs(
           .select({ count: sql<number>`count(*)` })
           .from(org)
           .where(and(...conditions))
-      : db.select({ count: sql<number>`count(*)` }).from(org)
+      : db.select({ count: sql<number>`count(*)` }).from(org);
 
-  const [{ count }] = await countQuery
+  const [{ count }] = await countQuery;
 
   // Apply pagination and ordering
-  const offset = (page - 1) * pageSize
+  const offset = (page - 1) * pageSize;
   const data = await query
     .orderBy(sortDescending ? desc(org[orderBy]) : asc(org[orderBy]))
     .limit(pageSize)
-    .offset(offset)
+    .offset(offset);
 
   return {
     data,
@@ -140,16 +140,16 @@ export async function getOrgs(
     pageSize,
     orderBy,
     search,
-  }
+  };
 }
 
 export async function getUserOrgs(
   userId: string,
-  filters: QueryFilters = {}
+  filters: QueryFilters = {},
 ): Promise<PageResult<any[]>> {
-  const { search, page = 1, pageSize = 20, orderBy = 'createdAt', sortDescending = true } = filters
+  const { search, page = 1, pageSize = 20, orderBy = 'createdAt', sortDescending = true } = filters;
 
-  let query = db
+  const query = db
     .select({
       orgId: org.orgId,
       name: org.name,
@@ -168,18 +168,18 @@ export async function getUserOrgs(
     .from(org)
     .innerJoin(orgUser, eq(org.orgId, orgUser.orgId))
     .leftJoin(user, eq(orgUser.userId, user.userId))
-    .leftJoin(website, and(eq(org.orgId, website.orgId), isNull(website.deletedAt)))
+    .leftJoin(website, and(eq(org.orgId, website.orgId), isNull(website.deletedAt)));
 
-  const conditions = [isNull(org.deletedAt), eq(orgUser.userId, userId), isNull(user.deletedAt)]
+  const conditions = [isNull(org.deletedAt), eq(orgUser.userId, userId), isNull(user.deletedAt)];
 
   if (search) {
-    conditions.push(ilike(org.name, `%${search}%`))
+    conditions.push(ilike(org.name, `%${search}%`));
   }
 
   // Build the main query with conditions and grouping
   const mainQuery = query
     .where(and(...conditions))
-    .groupBy(org.orgId, orgUser.orgUserId, user.userId)
+    .groupBy(org.orgId, orgUser.orgUserId, user.userId);
 
   // Get total count with a separate query
   const countQuery = db
@@ -187,16 +187,16 @@ export async function getUserOrgs(
     .from(org)
     .innerJoin(orgUser, eq(org.orgId, orgUser.orgId))
     .leftJoin(user, eq(orgUser.userId, user.userId))
-    .where(and(...conditions))
+    .where(and(...conditions));
 
-  const [{ count }] = await countQuery
+  const [{ count }] = await countQuery;
 
   // Apply pagination and ordering
-  const offset = (page - 1) * pageSize
+  const offset = (page - 1) * pageSize;
   const data = await mainQuery
     .orderBy(sortDescending ? desc(org[orderBy]) : asc(org[orderBy]))
     .limit(pageSize)
-    .offset(offset)
+    .offset(offset);
 
   return {
     data,
@@ -205,7 +205,7 @@ export async function getUserOrgs(
     pageSize,
     orderBy,
     search,
-  }
+  };
 }
 
 export async function createOrg(data: any, userId: string) {
@@ -213,13 +213,13 @@ export async function createOrg(data: any, userId: string) {
     orgId: data.id,
     name: data.name,
     accessCode: data.access_code,
-  }
+  };
 
   if (data.logo_url) {
-    orgValues.logoUrl = data.logo_url
+    orgValues.logoUrl = data.logo_url;
   }
 
-  const [newOrg] = await db.insert(org).values(orgValues).returning()
+  const [newOrg] = await db.insert(org).values(orgValues).returning();
 
   const [newOrgUser] = await db
     .insert(orgUser)
@@ -229,27 +229,27 @@ export async function createOrg(data: any, userId: string) {
       userId: userId,
       role: ROLES.orgOwner,
     })
-    .returning()
+    .returning();
 
-  return [newOrg, newOrgUser]
+  return [newOrg, newOrgUser];
 }
 
 export async function updateOrg(orgId: string, data: any) {
   const updateData: any = {
     updatedAt: new Date(),
-  }
+  };
 
-  if (data.name) updateData.name = data.name
-  if (data.access_code) updateData.accessCode = data.access_code
-  if (data.logo_url) updateData.logoUrl = data.logo_url
+  if (data.name) updateData.name = data.name;
+  if (data.access_code) updateData.accessCode = data.access_code;
+  if (data.logo_url) updateData.logoUrl = data.logo_url;
 
-  const [updatedOrg] = await db.update(org).set(updateData).where(eq(org.orgId, orgId)).returning()
+  const [updatedOrg] = await db.update(org).set(updateData).where(eq(org.orgId, orgId)).returning();
 
-  return updatedOrg
+  return updatedOrg;
 }
 
 export async function deleteOrg(orgId: string) {
-  const edgeMode = !!process.env.EDGE_MODE
+  const edgeMode = !!process.env.EDGE_MODE;
 
   if (edgeMode) {
     // Soft delete in edge mode
@@ -257,15 +257,15 @@ export async function deleteOrg(orgId: string) {
       .update(org)
       .set({ deletedAt: new Date() })
       .where(eq(org.orgId, orgId))
-      .returning()
+      .returning();
 
-    return [deletedOrg]
+    return [deletedOrg];
   }
 
   // Hard delete in non-cloud mode
-  const deletedOrgUsers = await db.delete(orgUser).where(eq(orgUser.orgId, orgId))
+  const deletedOrgUsers = await db.delete(orgUser).where(eq(orgUser.orgId, orgId));
 
-  const [deletedOrg] = await db.delete(org).where(eq(org.orgId, orgId)).returning()
+  const [deletedOrg] = await db.delete(org).where(eq(org.orgId, orgId)).returning();
 
-  return [deletedOrgUsers, deletedOrg]
+  return [deletedOrgUsers, deletedOrg];
 }

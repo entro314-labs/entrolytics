@@ -237,7 +237,7 @@
 }
 
 .enterpriseList li::before {
-  content: '✓';
+  content: "✓";
   color: var(--marketing-tertiary);
   font-weight: 600;
 }

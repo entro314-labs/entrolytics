@@ -1,14 +1,14 @@
-import clickhouse from '@/lib/clickhouse'
-import { EVENT_TYPE } from '@/lib/constants'
-import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
-import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
+import { getDateSQL, getTimestampDiffSQL, parseFilters, rawQuery } from '@/lib/analytics-utils';
+import clickhouse from '@/lib/clickhouse';
+import { EVENT_TYPE } from '@/lib/constants';
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db';
 
-import { QueryFilters } from '@/lib/types'
+import type { QueryFilters } from '@/lib/types';
 
 export interface UTMParameters {
-  column: string
-  startDate: Date
-  endDate: Date
+  column: string;
+  startDate: Date;
+  endDate: Date;
 }
 
 export async function getUTM(
@@ -17,15 +17,15 @@ export async function getUTM(
   return runQuery({
     [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  })
+  });
 }
 
 async function relationalQuery(
   websiteId: string,
   parameters: UTMParameters,
-  filters: QueryFilters
+  filters: QueryFilters,
 ) {
-  const { column, startDate, endDate } = parameters
+  const { column, startDate, endDate } = parameters;
   // Using rawQuery FROM analytics-utils
 
   const { filterQuery, joinSessionQuery, cohortQuery, queryParams } = parseFilters({
@@ -34,7 +34,7 @@ async function relationalQuery(
     startDate,
     endDate,
     eventType: EVENT_TYPE.pageView,
-  })
+  });
 
   return rawQuery(
     `
@@ -49,24 +49,24 @@ async function relationalQuery(
     GROUP BY 1
     ORDER BY 2 desc
     `,
-    queryParams
-  )
+    queryParams,
+  );
 }
 
 async function clickhouseQuery(
   websiteId: string,
   parameters: UTMParameters,
-  filters: QueryFilters
+  filters: QueryFilters,
 ) {
-  const { column, startDate, endDate } = parameters
-  const { parseFilters, rawQuery } = clickhouse
+  const { column, startDate, endDate } = parameters;
+  const { parseFilters, rawQuery } = clickhouse;
   const { filterQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
     startDate,
     endDate,
     eventType: EVENT_TYPE.pageView,
-  })
+  });
 
   return rawQuery(
     `
@@ -80,6 +80,6 @@ async function clickhouseQuery(
     GROUP BY 1
     ORDER BY 2 desc
     `,
-    queryParams
-  )
+    queryParams,
+  );
 }

@@ -1,22 +1,22 @@
-'use client'
-import { Column } from '@entro314labs/entro-zen'
-import { Retention } from './Retention'
-import { WebsiteControls } from '@/app/(main)/websites/[websiteId]/WebsiteControls'
-import { useDateRange } from '@/components/hooks'
-import { endOfMonth, startOfMonth } from 'date-fns'
+'use client';
+import { Column } from '@entro314labs/entro-zen';
+import { endOfMonth, startOfMonth } from 'date-fns';
+import { WebsiteControls } from '@/app/(main)/websites/[websiteId]/WebsiteControls';
+import { useDateRange } from '@/components/hooks';
+import { Retention } from './Retention';
 
 export function RetentionPage({ websiteId }: { websiteId: string }) {
   const {
     dateRange: { startDate },
-  } = useDateRange({ ignoreOffset: true })
+  } = useDateRange({ ignoreOffset: true });
 
-  const monthStartDate = startOfMonth(startDate)
-  const monthEndDate = endOfMonth(startDate)
+  const monthStartDate = startOfMonth(startDate);
+  const monthEndDate = endOfMonth(startDate);
 
   return (
     <Column gap>
       <WebsiteControls websiteId={websiteId} allowDateFilter={false} allowMonthFilter />
       <Retention websiteId={websiteId} startDate={monthStartDate} endDate={monthEndDate} />
     </Column>
-  )
+  );
 }

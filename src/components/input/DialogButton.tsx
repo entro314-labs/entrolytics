@@ -1,24 +1,24 @@
-import { CSSProperties, ReactNode } from 'react'
 import {
   Button,
-  ButtonProps,
-  Modal,
+  type ButtonProps,
   Dialog,
+  type DialogProps,
   DialogTrigger,
-  DialogProps,
   IconLabel,
-} from '@entro314labs/entro-zen'
-import { useMobile } from '@/components/hooks'
+  Modal,
+} from '@entro314labs/entro-zen';
+import type { CSSProperties, ReactNode } from 'react';
+import { useMobile } from '@/components/hooks';
 
 export interface DialogButtonProps extends Omit<ButtonProps, 'children'> {
-  icon?: ReactNode
-  label?: ReactNode
-  title?: ReactNode
-  width?: string
-  height?: string
-  minWidth?: string
-  minHeight?: string
-  children?: DialogProps['children']
+  icon?: ReactNode;
+  label?: ReactNode;
+  title?: ReactNode;
+  width?: string;
+  height?: string;
+  minWidth?: string;
+  minHeight?: string;
+  children?: DialogProps['children'];
 }
 
 export function DialogButton({
@@ -32,7 +32,7 @@ export function DialogButton({
   children,
   ...props
 }: DialogButtonProps) {
-  const { isMobile } = useMobile()
+  const { isMobile } = useMobile();
   const style: CSSProperties = {
     width,
     height,
@@ -40,13 +40,13 @@ export function DialogButton({
     minHeight,
     maxHeight: 'calc(100dvh - 40px)',
     padding: '32px',
-  }
+  };
 
   if (isMobile) {
-    style.width = '100%'
-    style.height = '100%'
-    style.maxHeight = '100%'
-    style.overflowY = 'auto'
+    style.width = '100%';
+    style.height = '100%';
+    style.maxHeight = '100%';
+    style.overflowY = 'auto';
   }
 
   return (
@@ -60,5 +60,5 @@ export function DialogButton({
         </Dialog>
       </Modal>
     </DialogTrigger>
-  )
+  );
 }

@@ -1,48 +1,48 @@
-import { Key, useState } from 'react'
 import {
   Button,
   Form,
   FormButtons,
   FormField,
   FormSubmitButton,
+  ListItem,
   Loading,
   Select,
-  ListItem,
   Text,
-} from '@entro314labs/entro-zen'
+} from '@entro314labs/entro-zen';
+import { type Key, useState } from 'react';
 import {
   useLoginQuery,
   useMessages,
   useUpdateQuery,
   useUserOrgsQuery,
   useWebsite,
-} from '@/components/hooks'
-import { ROLES } from '@/lib/constants'
+} from '@/components/hooks';
+import { ROLES } from '@/lib/constants';
 
 export function WebsiteTransferForm({
   websiteId,
   onSave,
   onClose,
 }: {
-  websiteId: string
-  onSave?: () => void
-  onClose?: () => void
+  websiteId: string;
+  onSave?: () => void;
+  onClose?: () => void;
 }) {
-  const { user } = useLoginQuery()
-  const website = useWebsite()
-  const [orgId, setOrgId] = useState<string>(null)
-  const { formatMessage, labels, messages } = useMessages()
-  const { mutateAsync, error, isPending } = useUpdateQuery(`/websites/${websiteId}/transfer`)
-  const { data: orgs, isLoading } = useUserOrgsQuery(user.id)
-  const isOrgWebsite = !!website?.orgId
+  const { user } = useLoginQuery();
+  const website = useWebsite();
+  const [orgId, setOrgId] = useState<string>(null);
+  const { formatMessage, labels, messages } = useMessages();
+  const { mutateAsync, error, isPending } = useUpdateQuery(`/websites/${websiteId}/transfer`);
+  const { data: orgs, isLoading } = useUserOrgsQuery(user.id);
+  const isOrgWebsite = !!website?.orgId;
 
   const items =
     orgs?.data?.filter(({ orgUser }) =>
       orgUser.find(
         ({ role, userId }) =>
-          [ROLES.orgOwner, ROLES.orgManager].includes(role) && userId === user.id
-      )
-    ) || []
+          [ROLES.orgOwner, ROLES.orgManager].includes(role) && userId === user.id,
+      ),
+    ) || [];
 
   const handleSubmit = async () => {
     await mutateAsync(
@@ -52,26 +52,26 @@ export function WebsiteTransferForm({
       },
       {
         onSuccess: async () => {
-          onSave?.()
-          onClose?.()
+          onSave?.();
+          onClose?.();
         },
-      }
-    )
-  }
+      },
+    );
+  };
 
   const handleChange = (key: Key) => {
-    setOrgId(key as string)
-  }
+    setOrgId(key as string);
+  };
 
   if (isLoading) {
-    return <Loading icon="dots" placement="center" />
+    return <Loading icon="dots" placement="center" />;
   }
 
   return (
     <Form onSubmit={handleSubmit} error={error} values={{ orgId }}>
       <Text>
         {formatMessage(
-          isOrgWebsite ? messages.transferOrgWebsiteToUser : messages.transferUserWebsiteToOrg
+          isOrgWebsite ? messages.transferOrgWebsiteToUser : messages.transferUserWebsiteToOrg,
         )}
       </Text>
       <FormField name="orgId">
@@ -82,7 +82,7 @@ export function WebsiteTransferForm({
                 <ListItem key={orgId} id={orgId}>
                   {name}
                 </ListItem>
-              )
+              );
             })}
           </Select>
         )}
@@ -98,5 +98,5 @@ export function WebsiteTransferForm({
         </FormSubmitButton>
       </FormButtons>
     </Form>
-  )
+  );
 }

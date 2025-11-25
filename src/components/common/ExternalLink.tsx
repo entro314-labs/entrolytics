@@ -1,6 +1,6 @@
-import Link from 'next/link'
-import { Icon, Row, Text } from '@entro314labs/entro-zen'
-import { ExternalLink as LinkIcon } from '@/components/icons'
+import { Icon, Row, Text } from '@entro314labs/entro-zen';
+import Link from 'next/link';
+import { ExternalLink as LinkIcon } from '@/components/icons';
 
 export function ExternalLink({ href, children, ...props }) {
   return (
@@ -14,5 +14,5 @@ export function ExternalLink({ href, children, ...props }) {
         <LinkIcon />
       </Icon>
     </Row>
-  )
+  );
 }

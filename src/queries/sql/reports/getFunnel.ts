@@ -1,26 +1,26 @@
-import clickhouse from '@/lib/clickhouse'
-import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
 import {
-  getTimestampDiffSQL,
+  getAddIntervalQuery,
   getDateSQL,
+  getTimestampDiffSQL,
   parseFilters,
   rawQuery,
-  getAddIntervalQuery,
-} from '@/lib/analytics-utils'
+} from '@/lib/analytics-utils';
+import clickhouse from '@/lib/clickhouse';
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db';
 
-import { QueryFilters } from '@/lib/types'
+import type { QueryFilters } from '@/lib/types';
 
 export interface FunnelParameters {
-  startDate: Date
-  endDate: Date
-  window: number
-  steps: { type: string; value: string }[]
+  startDate: Date;
+  endDate: Date;
+  window: number;
+  steps: { type: string; value: string }[];
 }
 
 export interface FunnelResult {
-  value: string
-  visitors: number
-  dropoff: number
+  value: string;
+  visitors: number;
+  dropoff: number;
 }
 
 export async function getFunnel(
@@ -29,47 +29,47 @@ export async function getFunnel(
   return runQuery({
     [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  })
+  });
 }
 
 async function relationalQuery(
   websiteId: string,
   parameters: FunnelParameters,
-  filters: QueryFilters
+  filters: QueryFilters,
 ): Promise<FunnelResult[]> {
-  const { startDate, endDate, window, steps } = parameters
+  const { startDate, endDate, window, steps } = parameters;
   // Using rawQuery FROM analytics-utils
-  const { levelOneQuery, levelQuery, sumQuery, params } = getFunnelQuery(steps, window)
+  const { levelOneQuery, levelQuery, sumQuery, params } = getFunnelQuery(steps, window);
 
   const { filterQuery, joinSessionQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
     startDate,
     endDate,
-  })
+  });
 
   function getFunnelQuery(
     steps: { type: string; value: string }[],
-    window: number
+    window: number,
   ): {
-    levelOneQuery: string
-    levelQuery: string
-    sumQuery: string
-    params: string[]
+    levelOneQuery: string;
+    levelQuery: string;
+    sumQuery: string;
+    params: string[];
   } {
     return steps.reduce(
       (pv, cv, i) => {
-        const levelNumber = i + 1
-        const startSum = i > 0 ? 'union ' : ''
-        const isURL = cv.type === 'path'
-        const column = isURL ? 'url_path' : 'event_name'
+        const levelNumber = i + 1;
+        const startSum = i > 0 ? 'union ' : '';
+        const isURL = cv.type === 'path';
+        const column = isURL ? 'url_path' : 'event_name';
 
-        let operator = '='
-        let paramValue = cv.value
+        let operator = '=';
+        let paramValue = cv.value;
 
         if (cv.value.startsWith('*') || cv.value.endsWith('*')) {
-          operator = 'like'
-          paramValue = cv.value.replace(/^\*|\*$/g, '%')
+          operator = 'like';
+          paramValue = cv.value.replace(/^\*|\*$/g, '%');
         }
 
         if (levelNumber === 1) {
@@ -83,7 +83,7 @@ async function relationalQuery(
               AND website_event.created_at between {{startDate}} AND {{endDate}}
               AND ${column} ${operator} {{${i}}}
               ${filterQuery}
-          )`
+          )`;
         } else {
           pv.levelQuery += `
           , level${levelNumber} AS (
@@ -95,25 +95,25 @@ async function relationalQuery(
                 AND we.created_at between l.created_at AND ${getAddIntervalQuery(
                   'l.created_at',
                   window,
-                  'minute'
+                  'minute',
                 )}
                 AND we.${column} ${operator} {{${i}}}
                 AND we.created_at <= {{endDate}}
-          )`
+          )`;
         }
 
-        pv.sumQuery += `\n${startSum}SELECT ${levelNumber} as level, COUNT(DISTINCT(session_id)) as COUNT FROM level${levelNumber}`
-        pv.params.push(paramValue)
+        pv.sumQuery += `\n${startSum}SELECT ${levelNumber} as level, COUNT(DISTINCT(session_id)) as COUNT FROM level${levelNumber}`;
+        pv.params.push(paramValue);
 
-        return pv
+        return pv;
       },
       {
         levelOneQuery: '',
         levelQuery: '',
         sumQuery: '',
         params: [],
-      }
-    )
+      },
+    );
   }
 
   return rawQuery(
@@ -126,58 +126,58 @@ async function relationalQuery(
     {
       ...params,
       ...queryParams,
-    }
-  ).then(formatResults(steps))
+    },
+  ).then(formatResults(steps));
 }
 
 async function clickhouseQuery(
   websiteId: string,
   parameters: FunnelParameters,
-  filters: QueryFilters
+  filters: QueryFilters,
 ): Promise<
   {
-    value: string
-    visitors: number
-    dropoff: number
+    value: string;
+    visitors: number;
+    dropoff: number;
   }[]
 > {
-  const { startDate, endDate, window, steps } = parameters
-  const { rawQuery, parseFilters } = clickhouse
+  const { startDate, endDate, window, steps } = parameters;
+  const { rawQuery, parseFilters } = clickhouse;
   const { levelOneQuery, levelQuery, sumQuery, stepFilterQuery, params } = getFunnelQuery(
     steps,
-    window
-  )
+    window,
+  );
   const { filterQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
     startDate,
     endDate,
-  })
+  });
 
   function getFunnelQuery(
     steps: { type: string; value: string }[],
-    window: number
+    window: number,
   ): {
-    levelOneQuery: string
-    levelQuery: string
-    sumQuery: string
-    stepFilterQuery: string
-    params: Record<string, string>
+    levelOneQuery: string;
+    levelQuery: string;
+    sumQuery: string;
+    stepFilterQuery: string;
+    params: Record<string, string>;
   } {
     return steps.reduce(
       (pv, cv, i) => {
-        const levelNumber = i + 1
-        const startSum = i > 0 ? 'union all ' : ''
-        const startFilter = i > 0 ? 'OR' : ''
-        const isURL = cv.type === 'path'
-        const column = isURL ? 'url_path' : 'event_name'
+        const levelNumber = i + 1;
+        const startSum = i > 0 ? 'union all ' : '';
+        const startFilter = i > 0 ? 'OR' : '';
+        const isURL = cv.type === 'path';
+        const column = isURL ? 'url_path' : 'event_name';
 
-        let operator = '='
-        let paramValue = cv.value
+        let operator = '=';
+        let paramValue = cv.value;
 
         if (cv.value.startsWith('*') || cv.value.endsWith('*')) {
-          operator = 'like'
-          paramValue = cv.value.replace(/^\*|\*$/g, '%')
+          operator = 'like';
+          paramValue = cv.value.replace(/^\*|\*$/g, '%');
         }
 
         if (levelNumber === 1) {
@@ -186,7 +186,7 @@ async function clickhouseQuery(
             SELECT *
             FROM level0
             WHERE ${column} ${operator} {param${i}:String}
-          )`
+          )`;
         } else {
           pv.levelQuery += `\n
           , level${levelNumber} AS (
@@ -200,14 +200,14 @@ async function clickhouseQuery(
             on x.session_id = y.session_id
             WHERE y.created_at between x.created_at AND x.created_at + interval ${window} minute
                 AND y.${column} ${operator} {param${i}:String}
-          )`
+          )`;
         }
 
-        pv.sumQuery += `\n${startSum}SELECT ${levelNumber} as level, COUNT(DISTINCT(session_id)) as COUNT FROM level${levelNumber}`
-        pv.stepFilterQuery += `${startFilter} ${column} ${operator} {param${i}:String} `
-        pv.params[`param${i}`] = paramValue
+        pv.sumQuery += `\n${startSum}SELECT ${levelNumber} as level, COUNT(DISTINCT(session_id)) as COUNT FROM level${levelNumber}`;
+        pv.stepFilterQuery += `${startFilter} ${column} ${operator} {param${i}:String} `;
+        pv.params[`param${i}`] = paramValue;
 
-        return pv
+        return pv;
       },
       {
         levelOneQuery: '',
@@ -215,8 +215,8 @@ async function clickhouseQuery(
         sumQuery: '',
         stepFilterQuery: '',
         params: {},
-      }
-    )
+      },
+    );
   }
 
   return rawQuery(
@@ -240,17 +240,17 @@ async function clickhouseQuery(
     {
       ...params,
       ...queryParams,
-    }
-  ).then(formatResults(steps))
+    },
+  ).then(formatResults(steps));
 }
 
 const formatResults = (steps: { type: string; value: string }[]) => (results: unknown) => {
   return steps.map((step: { type: string; value: string }, i: number) => {
-    const visitors = Number(results[i]?.COUNT) || 0
-    const previous = Number(results[i - 1]?.COUNT) || 0
-    const dropped = previous > 0 ? previous - visitors : 0
-    const dropoff = 1 - visitors / previous
-    const remaining = visitors / Number(results[0].COUNT)
+    const visitors = Number(results[i]?.COUNT) || 0;
+    const previous = Number(results[i - 1]?.COUNT) || 0;
+    const dropped = previous > 0 ? previous - visitors : 0;
+    const dropoff = 1 - visitors / previous;
+    const remaining = visitors / Number(results[0].COUNT);
 
     return {
       ...step,
@@ -259,6 +259,6 @@ const formatResults = (steps: { type: string; value: string }[]) => (results: un
       dropped,
       dropoff,
       remaining,
-    }
-  })
-}
+    };
+  });
+};

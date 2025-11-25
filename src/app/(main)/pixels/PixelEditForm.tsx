@@ -1,24 +1,23 @@
 import {
+  Button,
+  Column,
   Form,
   FormField,
   FormSubmitButton,
+  Icon,
+  Label,
+  Loading,
   Row,
   TextField,
-  Button,
-  Label,
-  Column,
-  Icon,
-  Loading,
-} from '@entro314labs/entro-zen'
-import { useConfig, usePixelQuery } from '@/components/hooks'
-import { useMessages } from '@/components/hooks'
-import { RefreshCw as Refresh } from '@/components/icons'
-import { getRandomChars } from '@/lib/crypto'
-import { useUpdateQuery } from '@/components/hooks/queries/useUpdateQuery'
-import { useEffect, useState } from 'react'
-import { PIXELS_URL } from '@/lib/constants'
+} from '@entro314labs/entro-zen';
+import { useEffect, useState } from 'react';
+import { useConfig, useMessages, usePixelQuery } from '@/components/hooks';
+import { useUpdateQuery } from '@/components/hooks/queries/useUpdateQuery';
+import { RefreshCw as Refresh } from '@/components/icons';
+import { PIXELS_URL } from '@/lib/constants';
+import { getRandomChars } from '@/lib/crypto';
 
-const generateId = () => getRandomChars(9)
+const generateId = () => getRandomChars(9);
 
 export function PixelEditForm({
   pixelId,
@@ -26,51 +25,51 @@ export function PixelEditForm({
   onSave,
   onClose,
 }: {
-  pixelId?: string
-  orgId?: string
-  onSave?: () => void
-  onClose?: () => void
+  pixelId?: string;
+  orgId?: string;
+  onSave?: () => void;
+  onClose?: () => void;
 }) {
-  const { formatMessage, labels, messages } = useMessages()
+  const { formatMessage, labels, messages } = useMessages();
   const { mutateAsync, error, isPending, touch, toast } = useUpdateQuery(
     pixelId ? `/pixels/${pixelId}` : '/pixels',
     {
       id: pixelId,
       orgId,
-    }
-  )
-  const { pixelsUrl } = useConfig()
-  const hostUrl = pixelsUrl || PIXELS_URL
-  const { data, isLoading } = usePixelQuery(pixelId)
-  const [slug, setSlug] = useState(generateId())
+    },
+  );
+  const { pixelsUrl } = useConfig();
+  const hostUrl = pixelsUrl || PIXELS_URL;
+  const { data, isLoading } = usePixelQuery(pixelId);
+  const [slug, setSlug] = useState(generateId());
 
   const handleSubmit = async (data: any) => {
     await mutateAsync(data, {
       onSuccess: async () => {
-        toast(formatMessage(messages.saved))
-        touch('pixels')
-        onSave?.()
-        onClose?.()
+        toast(formatMessage(messages.saved));
+        touch('pixels');
+        onSave?.();
+        onClose?.();
       },
-    })
-  }
+    });
+  };
 
   const handleSlug = () => {
-    const slug = generateId()
+    const slug = generateId();
 
-    setSlug(slug)
+    setSlug(slug);
 
-    return slug
-  }
+    return slug;
+  };
 
   useEffect(() => {
     if (data) {
-      setSlug(data.slug)
+      setSlug(data.slug);
     }
-  }, [data])
+  }, [data]);
 
   if (pixelId && isLoading) {
-    return <Loading placement="absolute" />
+    return <Loading placement="absolute" />;
   }
 
   return (
@@ -126,8 +125,8 @@ export function PixelEditForm({
               <FormSubmitButton isDisabled={false}>{formatMessage(labels.save)}</FormSubmitButton>
             </Row>
           </>
-        )
+        );
       }}
     </Form>
-  )
+  );
 }

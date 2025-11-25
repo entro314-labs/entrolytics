@@ -1,23 +1,24 @@
 import {
   arSA,
   be,
-  bn,
   bg,
+  bn,
   bs,
+  ca,
   cs,
-  sk,
   da,
   de,
   el,
-  enUS,
   enGB,
+  enUS,
   es,
+  faIR,
   fi,
   fr,
-  faIR,
   he,
   hi,
   hr,
+  hu,
   id,
   it,
   ja,
@@ -33,18 +34,17 @@ import {
   ptBR,
   ro,
   ru,
+  sk,
   sl,
   sv,
   ta,
   th,
   tr,
   uk,
+  vi,
   zhCN,
   zhTW,
-  ca,
-  hu,
-  vi,
-} from 'date-fns/locale'
+} from 'date-fns/locale';
 
 export const languages = {
   'ar-SA': { label: 'العربية', dateLocale: arSA, dir: 'rtl' },
@@ -98,12 +98,12 @@ export const languages = {
   'vi-VN': { label: 'Tiếng Việt', dateLocale: vi },
   'zh-CN': { label: '中文', dateLocale: zhCN },
   'zh-TW': { label: '中文(繁體)', dateLocale: zhTW },
-}
+};
 
 export function getDateLocale(locale: string) {
-  return languages[locale]?.dateLocale || enUS
+  return languages[locale]?.dateLocale || enUS;
 }
 
 export function getTextDirection(locale: string) {
-  return languages[locale]?.dir || 'ltr'
+  return languages[locale]?.dir || 'ltr';
 }

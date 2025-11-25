@@ -1,22 +1,21 @@
-import { LoadingButton, Icon, Tooltip, TooltipTrigger } from '@entro314labs/entro-zen'
-import { setWebsiteDateRange } from '@/store/websites'
-import { useDateRange } from '@/components/hooks'
-import { RefreshCw as Refresh } from '@/components/icons'
-import { useMessages } from '@/components/hooks'
+import { Icon, LoadingButton, Tooltip, TooltipTrigger } from '@entro314labs/entro-zen';
+import { useDateRange, useMessages } from '@/components/hooks';
+import { RefreshCw as Refresh } from '@/components/icons';
+import { setWebsiteDateRange } from '@/store/websites';
 
 export function RefreshButton({
   websiteId,
   isLoading,
 }: {
-  websiteId: string
-  isLoading?: boolean
+  websiteId: string;
+  isLoading?: boolean;
 }) {
-  const { formatMessage, labels } = useMessages()
-  const { dateRange } = useDateRange()
+  const { formatMessage, labels } = useMessages();
+  const { dateRange } = useDateRange();
 
   function handleClick() {
     if (!isLoading && dateRange) {
-      setWebsiteDateRange(websiteId, dateRange)
+      setWebsiteDateRange(websiteId, dateRange);
     }
   }
 
@@ -29,5 +28,5 @@ export function RefreshButton({
       </LoadingButton>
       <Tooltip>{formatMessage(labels.refresh)}</Tooltip>
     </TooltipTrigger>
-  )
+  );
 }

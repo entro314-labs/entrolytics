@@ -1,38 +1,38 @@
-export const CURRENT_VERSION = process.env.currentVersion
-export const AUTH_TOKEN = 'entrolytics.auth'
-export const LOCALE_CONFIG = 'entrolytics.locale'
-export const TIMEZONE_CONFIG = 'entrolytics.timezone'
-export const DATE_RANGE_CONFIG = 'entrolytics.date-range'
-export const THEME_CONFIG = 'entrolytics.theme'
-export const DASHBOARD_CONFIG = 'entrolytics.dashboard'
-export const LAST_ORG_CONFIG = 'entrolytics.last-org'
-export const VERSION_CHECK = 'entrolytics.version-check'
-export const SHARE_TOKEN_HEADER = 'x-entrolytics-share-token'
-export const HOMEPAGE_URL = 'https://entrolytics.click'
-export const REPO_URL = 'https://github.com/entro314-labs/entrolytics'
-export const UPDATES_URL = 'https://api.entrolytics.click/v1/updates'
-export const TELEMETRY_PIXEL = 'https://i.entrolytics.click/a.png'
-export const DOCS_URL = 'https://docs.entrolytics.click'
+export const CURRENT_VERSION = process.env.currentVersion;
+export const AUTH_TOKEN = 'entrolytics.auth';
+export const LOCALE_CONFIG = 'entrolytics.locale';
+export const TIMEZONE_CONFIG = 'entrolytics.timezone';
+export const DATE_RANGE_CONFIG = 'entrolytics.date-range';
+export const THEME_CONFIG = 'entrolytics.theme';
+export const DASHBOARD_CONFIG = 'entrolytics.dashboard';
+export const LAST_ORG_CONFIG = 'entrolytics.last-org';
+export const VERSION_CHECK = 'entrolytics.version-check';
+export const SHARE_TOKEN_HEADER = 'x-entrolytics-share-token';
+export const HOMEPAGE_URL = 'https://entrolytics.click';
+export const REPO_URL = 'https://github.com/entro314-labs/entrolytics';
+export const UPDATES_URL = 'https://api.entrolytics.click/v1/updates';
+export const TELEMETRY_PIXEL = 'https://i.entrolytics.click/a.png';
+export const DOCS_URL = 'https://docs.entrolytics.click';
 
 // Edge mode (paid tier) limits
-export const EDGE_WEBSITE_LIMIT = 3
-export const FAVICON_URL = 'https://icons.duckduckgo.com/ip3/{{domain}}.ico'
-export const LINKS_URL = `${globalThis?.location?.origin}/q`
-export const PIXELS_URL = `${globalThis?.location?.origin}/p`
+export const EDGE_WEBSITE_LIMIT = 3;
+export const FAVICON_URL = 'https://icons.duckduckgo.com/ip3/{{domain}}.ico';
+export const LINKS_URL = `${globalThis?.location?.origin}/q`;
+export const PIXELS_URL = `${globalThis?.location?.origin}/p`;
 
-export const DEFAULT_LOCALE = 'en-US'
-export const DEFAULT_THEME = 'light'
-export const DEFAULT_ANIMATION_DURATION = 300
-export const DEFAULT_DATE_RANGE_VALUE = '24hour'
-export const DEFAULT_WEBSITE_LIMIT = 10
-export const DEFAULT_RESET_DATE = '2000-01-01'
-export const DEFAULT_PAGE_SIZE = 20
-export const DEFAULT_DATE_COMPARE = 'prev'
+export const DEFAULT_LOCALE = 'en-US';
+export const DEFAULT_THEME = 'light';
+export const DEFAULT_ANIMATION_DURATION = 300;
+export const DEFAULT_DATE_RANGE_VALUE = '24hour';
+export const DEFAULT_WEBSITE_LIMIT = 10;
+export const DEFAULT_RESET_DATE = '2000-01-01';
+export const DEFAULT_PAGE_SIZE = 20;
+export const DEFAULT_DATE_COMPARE = 'prev';
 
-export const REALTIME_RANGE = 30
-export const REALTIME_INTERVAL = 10000
+export const REALTIME_RANGE = 30;
+export const REALTIME_INTERVAL = 10000;
 
-export const UNIT_TYPES = ['year', 'month', 'hour', 'day', 'minute']
+export const UNIT_TYPES = ['year', 'month', 'hour', 'day', 'minute'];
 
 export const EVENT_COLUMNS = [
   'path',
@@ -45,7 +45,7 @@ export const EVENT_COLUMNS = [
   'event',
   'tag',
   'hostname',
-]
+];
 
 export const SESSION_COLUMNS = [
   'browser',
@@ -56,12 +56,12 @@ export const SESSION_COLUMNS = [
   'country',
   'city',
   'region',
-]
+];
 
 export const SEGMENT_TYPES = {
   segment: 'segment',
   cohort: 'cohort',
-}
+};
 
 export const FILTER_COLUMNS = {
   path: 'url_path',
@@ -82,19 +82,19 @@ export const FILTER_COLUMNS = {
   event: 'event_name',
   tag: 'tag',
   eventType: 'event_type',
-}
+};
 
 export const COLLECTION_TYPE = {
   event: 'event',
   identify: 'identify',
-} as const
+} as const;
 
 export const EVENT_TYPE = {
   pageView: 1,
   customEvent: 2,
   linkEvent: 3,
   pixelEvent: 4,
-} as const
+} as const;
 
 export const DATA_TYPE = {
   string: 1,
@@ -102,7 +102,7 @@ export const DATA_TYPE = {
   boolean: 3,
   date: 4,
   array: 5,
-} as const
+} as const;
 
 export const OPERATORS = {
   equals: 'eq',
@@ -119,7 +119,7 @@ export const OPERATORS = {
   lessThanEquals: 'lte',
   before: 'bf',
   after: 'af',
-} as const
+} as const;
 
 export const DATA_TYPES = {
   [DATA_TYPE.string]: 'string',
@@ -127,7 +127,7 @@ export const DATA_TYPES = {
   [DATA_TYPE.boolean]: 'boolean',
   [DATA_TYPE.date]: 'date',
   [DATA_TYPE.array]: 'array',
-} as const
+} as const;
 
 export const ROLES = {
   admin: 'admin',
@@ -137,7 +137,7 @@ export const ROLES = {
   orgManager: 'org-manager',
   orgMember: 'org-member',
   orgViewOnly: 'org-view-only',
-} as const
+} as const;
 
 export const PERMISSIONS = {
   all: 'all',
@@ -149,7 +149,7 @@ export const PERMISSIONS = {
   orgCreate: 'org:create',
   orgUpdate: 'org:update',
   orgDelete: 'org:delete',
-} as const
+} as const;
 
 export const ROLE_PERMISSIONS = {
   [ROLES.admin]: [PERMISSIONS.all],
@@ -182,7 +182,7 @@ export const ROLE_PERMISSIONS = {
     PERMISSIONS.websiteDelete,
   ],
   [ROLES.orgViewOnly]: [],
-} as const
+} as const;
 
 export const THEME_COLORS = {
   light: {
@@ -197,7 +197,7 @@ export const THEME_COLORS = {
     line: '#3a3a3a',
     fill: '#191919',
   },
-} as const
+} as const;
 
 export const CHART_COLORS = [
   '#2680eb',
@@ -212,19 +212,19 @@ export const CHART_COLORS = [
   '#ffc301',
   '#ec1562',
   '#ffec16',
-]
+];
 
 export const DOMAIN_REGEX =
-  /^(localhost(:[1-9]\d{0,4})?|((?=[a-z0-9-_]{1,63}\.)(xn--)?[a-z0-9-_]+(-[a-z0-9-_]+)*\.)+(xn--)?[a-z0-9-_]{2,63})$/
-export const SHARE_ID_REGEX = /^[a-zA-Z0-9]{8,50}$/
+  /^(localhost(:[1-9]\d{0,4})?|((?=[a-z0-9-_]{1,63}\.)(xn--)?[a-z0-9-_]+(-[a-z0-9-_]+)*\.)+(xn--)?[a-z0-9-_]{2,63})$/;
+export const SHARE_ID_REGEX = /^[a-zA-Z0-9]{8,50}$/;
 export const DATETIME_REGEX =
-  /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]{3}(Z|\+[0-9]{2}:[0-9]{2})?)?$/
+  /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]{3}(Z|\+[0-9]{2}:[0-9]{2})?)?$/;
 
-export const URL_LENGTH = 500
-export const PAGE_TITLE_LENGTH = 500
-export const EVENT_NAME_LENGTH = 50
+export const URL_LENGTH = 500;
+export const PAGE_TITLE_LENGTH = 500;
+export const EVENT_NAME_LENGTH = 50;
 
-export const UTM_PARAMS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content']
+export const UTM_PARAMS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
 
 export const OS_NAMES = {
   'Android OS': 'Android',
@@ -232,7 +232,7 @@ export const OS_NAMES = {
   'Mac OS': 'macOS',
   'Sun OS': 'SunOS',
   'Windows 10': 'Windows 10/11',
-} as const
+} as const;
 
 export const BROWSERS = {
   android: 'Android',
@@ -263,7 +263,7 @@ export const BROWSERS = {
   silk: 'Silk',
   searchbot: 'Searchbot',
   yandexbrowser: 'Yandex',
-} as const
+} as const;
 
 export const SOCIAL_DOMAINS = [
   'facebook.com',
@@ -281,7 +281,7 @@ export const SOCIAL_DOMAINS = [
   'news.ycombinator.com',
   'snapchat.',
   'pinterest.',
-]
+];
 
 export const SEARCH_DOMAINS = [
   'google.',
@@ -294,7 +294,7 @@ export const SEARCH_DOMAINS = [
   'ecosia.org',
   'chatgpt.com',
   'perplexity.ai',
-]
+];
 
 export const SHOPPING_DOMAINS = [
   'amazon.',
@@ -306,7 +306,7 @@ export const SHOPPING_DOMAINS = [
   'bestbuy.com',
   'target.com',
   'newegg.com',
-]
+];
 
 export const EMAIL_DOMAINS = [
   'gmail.',
@@ -315,9 +315,9 @@ export const EMAIL_DOMAINS = [
   'hotmail.',
   'protonmail.',
   'proton.me',
-]
+];
 
-export const VIDEO_DOMAINS = ['youtube.', 'twitch.']
+export const VIDEO_DOMAINS = ['youtube.', 'twitch.'];
 
 export const PAID_AD_PARAMS = [
   'utm_source=google',
@@ -338,7 +338,7 @@ export const PAID_AD_PARAMS = [
   'utm_medium=cpc',
   'utm_medium=paid',
   'utm_medium=paid_social',
-]
+];
 
 export const GROUPED_DOMAINS = [
   { name: 'Google', domain: 'google.com', match: 'google.' },
@@ -370,9 +370,9 @@ export const GROUPED_DOMAINS = [
   { name: 'Yahoo', domain: 'yahoo.com', match: 'yahoo.' },
   { name: 'Yandex', domain: 'yandex.ru', match: 'yandex.' },
   { name: 'Baidu', domain: 'baidu.com', match: 'baidu.' },
-]
+];
 
-export const MAP_FILE = '/datamaps.world.json'
+export const MAP_FILE = '/datamaps.world.json';
 
 export const ISO_COUNTRIES = {
   AFG: 'AF',
@@ -623,7 +623,7 @@ export const ISO_COUNTRIES = {
   ZMB: 'ZM',
   ZWE: 'ZW',
   XKX: 'XK',
-}
+};
 
 export const CURRENCIES = [
   { id: 'USD', name: 'US Dollar' },
@@ -676,4 +676,4 @@ export const CURRENCIES = [
   { id: 'TND', name: 'Tunisian Dinar' },
   { id: 'OMR', name: 'Omani Rial' },
   { id: 'GHS', name: 'Ghanaian Cedi' },
-]
+];

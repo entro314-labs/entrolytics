@@ -1,19 +1,19 @@
-import { ReactNode, Key } from 'react'
-import { DialogTrigger, Button, Menu, Popover, Icon } from '@entro314labs/entro-zen'
-import { Ellipsis } from '@/components/icons'
+import { Button, DialogTrigger, Icon, Menu, Popover } from '@entro314labs/entro-zen';
+import type { Key, ReactNode } from 'react';
+import { Ellipsis } from '@/components/icons';
 
 export function MenuButton({
   children,
   onAction,
   isDisabled,
 }: {
-  children: ReactNode
-  onAction?: (action: string) => void
-  isDisabled?: boolean
+  children: ReactNode;
+  onAction?: (action: string) => void;
+  isDisabled?: boolean;
 }) {
   const handleAction = (key: Key) => {
-    onAction?.(key.toString())
-  }
+    onAction?.(key.toString());
+  };
 
   return (
     <DialogTrigger>
@@ -28,5 +28,5 @@ export function MenuButton({
         </Menu>
       </Popover>
     </DialogTrigger>
-  )
+  );
 }

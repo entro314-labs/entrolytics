@@ -9,20 +9,20 @@
  * Phase 2 will implement native edge-compatible crypto/jwt for full edge-native support.
  */
 
-export const runtime = 'edge'
-export const dynamic = 'force-dynamic'
-export const preferredRegion = 'auto'
+export const runtime = 'edge';
+export const dynamic = 'force-dynamic';
+export const preferredRegion = 'auto';
 
-const INGEST_URL = process.env.ENTROLYTICS_INGEST_URL || process.env.EDGE_URL
+const INGEST_URL = process.env.ENTROLYTICS_INGEST_URL || process.env.EDGE_URL;
 
 export async function POST(request: Request) {
   const targetUrl = INGEST_URL
     ? `${INGEST_URL.replace(/\/$/, '')}/api/send`
-    : new URL('/api/send', request.url).toString().replace('/send-edge', '/send')
+    : new URL('/api/send', request.url).toString().replace('/send-edge', '/send');
 
   try {
     // Clone request body for forwarding
-    const body = await request.text()
+    const body = await request.text();
 
     // Forward request preserving critical headers
     const response = await fetch(targetUrl, {
@@ -53,10 +53,10 @@ export async function POST(request: Request) {
         Referer: request.headers.get('referer') || '',
       },
       body,
-    })
+    });
 
     // Return response with CORS headers
-    const responseBody = await response.text()
+    const responseBody = await response.text();
 
     return new Response(responseBody, {
       status: response.status,
@@ -69,9 +69,9 @@ export async function POST(request: Request) {
         // Indicate this came through edge proxy for debugging
         'X-Entrolytics-Edge': 'proxy',
       },
-    })
+    });
   } catch (error) {
-    console.error('[Edge Proxy] Error forwarding request:', error)
+    console.error('[Edge Proxy] Error forwarding request:', error);
 
     return new Response(
       JSON.stringify({
@@ -85,8 +85,8 @@ export async function POST(request: Request) {
           'Access-Control-Allow-Origin': '*',
           'X-Entrolytics-Edge': 'proxy-error',
         },
-      }
-    )
+      },
+    );
   }
 }
 
@@ -99,5 +99,5 @@ export async function OPTIONS() {
       'Access-Control-Allow-Headers': 'Content-Type, X-Entrolytics-Cache',
       'Access-Control-Max-Age': '86400',
     },
-  })
+  });
 }

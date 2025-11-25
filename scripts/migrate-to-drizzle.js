@@ -1,40 +1,40 @@
 #!/usr/bin/env node
 
-import fs from 'fs'
-import path from 'path'
-import { fileURLToPath } from 'url'
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Simple glob-like function for finding TypeScript files
 function findTsFiles(dir) {
-  const files = []
+  const files = [];
 
   function walkDir(currentDir) {
-    const entries = fs.readdirSync(currentDir)
+    const entries = fs.readdirSync(currentDir);
 
     for (const entry of entries) {
-      const fullPath = path.join(currentDir, entry)
-      const stat = fs.statSync(fullPath)
+      const fullPath = path.join(currentDir, entry);
+      const stat = fs.statSync(fullPath);
 
       if (stat.isDirectory()) {
-        walkDir(fullPath)
+        walkDir(fullPath);
       } else if (entry.endsWith('.ts')) {
-        files.push(fullPath)
+        files.push(fullPath);
       }
     }
   }
 
-  walkDir(dir)
-  return files
+  walkDir(dir);
+  return files;
 }
 
 /**
  * Script to automatically migrate SQL query files from Prisma to Drizzle
  */
 
-const QUERIES_DIR = path.join(__dirname, '../src/queries/sql')
+const QUERIES_DIR = path.join(__dirname, '../src/queries/sql');
 
 // Transformation rules
 const transformations = [
@@ -45,7 +45,7 @@ const transformations = [
   },
   {
     pattern: /import.*?PRISMA.*?from '@\/lib\/db'/g,
-    replacement: (match) => match.replace('PRISMA', 'DRIZZLE'),
+    replacement: match => match.replace('PRISMA', 'DRIZZLE'),
   },
   {
     pattern: /\[PRISMA\]/g,
@@ -61,12 +61,12 @@ const transformations = [
         string.includes('parseFilters') ||
         string.includes('getTimestampDiffSQL') ||
         string.includes('getDateSQL') ||
-        string.includes('rawQuery')
+        string.includes('rawQuery');
 
       if (needsUtilsImport && !string.includes('@/lib/analytics-utils')) {
-        return `${importStatement}\nimport { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'`
+        return `${importStatement}\nimport { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'`;
       }
-      return importStatement
+      return importStatement;
     },
   },
 
@@ -165,32 +165,32 @@ const transformations = [
     pattern: /\bend\b/gi,
     replacement: 'END',
   },
-]
+];
 
 function transformFile(filePath) {
-  console.log(`Processing: ${filePath}`)
+  console.log(`Processing: ${filePath}`);
 
-  let content = fs.readFileSync(filePath, 'utf8')
-  let modified = false
+  let content = fs.readFileSync(filePath, 'utf8');
+  let modified = false;
 
   // Check if file needs migration (contains PRISMA references)
   if (!content.includes('PRISMA') && !content.includes('prisma from')) {
-    console.log(`  Skipping (already migrated): ${filePath}`)
-    return
+    console.log(`  Skipping (already migrated): ${filePath}`);
+    return;
   }
 
   // Apply transformations
   transformations.forEach(({ pattern, replacement }) => {
-    const originalContent = content
+    const originalContent = content;
     if (typeof replacement === 'function') {
-      content = content.replace(pattern, replacement)
+      content = content.replace(pattern, replacement);
     } else {
-      content = content.replace(pattern, replacement)
+      content = content.replace(pattern, replacement);
     }
     if (content !== originalContent) {
-      modified = true
+      modified = true;
     }
-  })
+  });
 
   // Additional specific transformations based on file content
   if (
@@ -203,42 +203,42 @@ function transformFile(filePath) {
       // Find the existing db import line and add the utils import after it
       content = content.replace(
         /(import.*?from '@\/lib\/db')/,
-        "$1\nimport { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'"
-      )
-      modified = true
+        "$1\nimport { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'",
+      );
+      modified = true;
     }
   }
 
   if (modified) {
-    fs.writeFileSync(filePath, content, 'utf8')
-    console.log(`  ✅ Updated: ${filePath}`)
+    fs.writeFileSync(filePath, content, 'utf8');
+    console.log(`  ✅ Updated: ${filePath}`);
   } else {
-    console.log(`  ⏭️  No changes needed: ${filePath}`)
+    console.log(`  ⏭️  No changes needed: ${filePath}`);
   }
 }
 
 function main() {
-  console.log('🔄 Starting Prisma to Drizzle migration...')
-  console.log(`📁 Searching in: ${QUERIES_DIR}`)
+  console.log('🔄 Starting Prisma to Drizzle migration...');
+  console.log(`📁 Searching in: ${QUERIES_DIR}`);
 
   // Find all TypeScript files in the queries/sql directory
-  const files = findTsFiles(QUERIES_DIR)
+  const files = findTsFiles(QUERIES_DIR);
 
-  console.log(`📄 Found ${files.length} files to process`)
+  console.log(`📄 Found ${files.length} files to process`);
 
-  files.forEach(transformFile)
+  files.forEach(transformFile);
 
-  console.log('\n✅ Migration completed!')
-  console.log('\n📋 Next steps:')
-  console.log('1. Review the changes with `git diff`')
-  console.log('2. Test the application to ensure everything works')
-  console.log('3. Run linting with `pnpm lint`')
-  console.log('4. Commit the changes')
+  console.log('\n✅ Migration completed!');
+  console.log('\n📋 Next steps:');
+  console.log('1. Review the changes with `git diff`');
+  console.log('2. Test the application to ensure everything works');
+  console.log('3. Run linting with `pnpm lint`');
+  console.log('4. Commit the changes');
 }
 
 // Run if this is the main module
 if (import.meta.url === `file://${process.argv[1]}`) {
-  main()
+  main();
 }
 
-export { transformFile, transformations }
+export { transformFile, transformations };

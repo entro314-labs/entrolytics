@@ -1,32 +1,32 @@
 import {
-  Select,
-  ListItem,
   Form,
-  FormField,
   FormButtons,
-  TextField,
+  FormField,
   FormSubmitButton,
-} from '@entro314labs/entro-zen'
-import { useLoginQuery, useMessages, useUpdateQuery, useUser } from '@/components/hooks'
-import { ROLES } from '@/lib/constants'
+  ListItem,
+  Select,
+  TextField,
+} from '@entro314labs/entro-zen';
+import { useLoginQuery, useMessages, useUpdateQuery, useUser } from '@/components/hooks';
+import { ROLES } from '@/lib/constants';
 
 export function UserEditForm({ userId, onSave }: { userId: string; onSave?: () => void }) {
-  const { formatMessage, labels, messages, getMessage } = useMessages()
-  const user = useUser()
-  const { user: login } = useLoginQuery()
+  const { formatMessage, labels, messages, getMessage } = useMessages();
+  const user = useUser();
+  const { user: login } = useLoginQuery();
 
-  const { mutateAsync, error, toast, touch } = useUpdateQuery(`/users/${userId}`)
+  const { mutateAsync, error, toast, touch } = useUpdateQuery(`/users/${userId}`);
 
   const handleSubmit = async (data: any) => {
     await mutateAsync(data, {
       onSuccess: async () => {
-        toast(formatMessage(messages.saved))
-        touch('users')
-        touch(`user:${user.id}`)
-        onSave?.()
+        toast(formatMessage(messages.saved));
+        touch('users');
+        touch(`user:${user.id}`);
+        onSave?.();
       },
-    })
-  }
+    });
+  };
 
   return (
     <Form onSubmit={handleSubmit} error={getMessage(error?.message)} values={user}>
@@ -62,5 +62,5 @@ export function UserEditForm({ userId, onSave }: { userId: string; onSave?: () =
         </FormSubmitButton>
       </FormButtons>
     </Form>
-  )
+  );
 }

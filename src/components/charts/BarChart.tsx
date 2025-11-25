@@ -1,12 +1,12 @@
-import { useMemo, useState } from 'react'
-import { useTheme } from '@entro314labs/entro-zen'
-import { ChartTooltip } from '@/components/charts/ChartTooltip'
-import { Chart, ChartProps } from '@/components/charts/Chart'
-import { useLocale } from '@/components/hooks'
-import { renderNumberLabels } from '@/lib/charts'
-import { getThemeColors } from '@/lib/colors'
-import { formatDate, DATE_FORMATS } from '@/lib/date'
-import { formatLongCurrency, formatLongNumber } from '@/lib/format'
+import { useTheme } from '@entro314labs/entro-zen';
+import { useMemo, useState } from 'react';
+import { Chart, type ChartProps } from '@/components/charts/Chart';
+import { ChartTooltip } from '@/components/charts/ChartTooltip';
+import { useLocale } from '@/components/hooks';
+import { renderNumberLabels } from '@/lib/charts';
+import { getThemeColors } from '@/lib/colors';
+import { DATE_FORMATS, formatDate } from '@/lib/date';
+import { formatLongCurrency, formatLongNumber } from '@/lib/format';
 
 const dateFormats = {
   millisecond: 'T',
@@ -18,18 +18,18 @@ const dateFormats = {
   month: 'LLLL yyyy',
   quarter: 'qqq',
   year: 'yyyy',
-}
+};
 
 export interface BarChartProps extends ChartProps {
-  unit?: string
-  stacked?: boolean
-  currency?: string
-  renderXLabel?: (label: string, index: number, values: any[]) => string
-  renderYLabel?: (label: string, index: number, values: any[]) => string
-  XAxisType?: string
-  YAxisType?: string
-  minDate?: Date
-  maxDate?: Date
+  unit?: string;
+  stacked?: boolean;
+  currency?: string;
+  renderXLabel?: (label: string, index: number, values: any[]) => string;
+  renderYLabel?: (label: string, index: number, values: any[]) => string;
+  XAxisType?: string;
+  YAxisType?: string;
+  minDate?: Date;
+  maxDate?: Date;
 }
 
 export function BarChart({
@@ -45,10 +45,10 @@ export function BarChart({
   currency,
   ...props
 }: BarChartProps) {
-  const [tooltip, setTooltip] = useState(null)
-  const { theme } = useTheme()
-  const { locale } = useLocale()
-  const { colors } = useMemo(() => getThemeColors(theme), [theme])
+  const [tooltip, setTooltip] = useState(null);
+  const { theme } = useTheme();
+  const { locale } = useLocale();
+  const { colors } = useMemo(() => getThemeColors(theme), [theme]);
 
   const chartOptions: any = useMemo(() => {
     return {
@@ -93,11 +93,11 @@ export function BarChart({
           },
         },
       },
-    }
-  }, [chartData, colors, unit, stacked, renderXLabel, renderYLabel])
+    };
+  }, [chartData, colors, unit, stacked, renderXLabel, renderYLabel]);
 
   const handleTooltip = ({ tooltip }: { tooltip: any }) => {
-    const { opacity, labelColors, dataPoints } = tooltip
+    const { opacity, labelColors, dataPoints } = tooltip;
 
     setTooltip(
       opacity
@@ -105,16 +105,16 @@ export function BarChart({
             title: formatDate(
               new Date(dataPoints[0].raw?.d || dataPoints[0].raw?.x || dataPoints[0].raw),
               dateFormats[unit],
-              locale
+              locale,
             ),
             color: labelColors?.[0]?.backgroundColor,
             value: currency
               ? formatLongCurrency(dataPoints[0].raw.y, currency)
               : `${formatLongNumber(dataPoints[0].raw.y)} ${dataPoints[0].dataset.label}`,
           }
-        : null
-    )
-  }
+        : null,
+    );
+  };
 
   return (
     <>
@@ -127,5 +127,5 @@ export function BarChart({
       />
       {tooltip && <ChartTooltip {...tooltip} />}
     </>
-  )
+  );
 }

@@ -1,13 +1,13 @@
-import Link from 'next/link'
-import { IconLabel, Row } from '@entro314labs/entro-zen'
-import { PageHeader } from '@/components/common/PageHeader'
-import { Globe, ArrowLeft } from '@/components/icons'
-import { useMessages, useNavigation, useWebsite } from '@/components/hooks'
+import { IconLabel, Row } from '@entro314labs/entro-zen';
+import Link from 'next/link';
+import { PageHeader } from '@/components/common/PageHeader';
+import { useMessages, useNavigation, useWebsite } from '@/components/hooks';
+import { ArrowLeft, Globe } from '@/components/icons';
 
 export function WebsiteSettingsHeader() {
-  const website = useWebsite()
-  const { formatMessage, labels } = useMessages()
-  const { renderUrl } = useNavigation()
+  const website = useWebsite();
+  const { formatMessage, labels } = useMessages();
+  const { renderUrl } = useNavigation();
 
   return (
     <>
@@ -18,5 +18,5 @@ export function WebsiteSettingsHeader() {
       </Row>
       <PageHeader title={website?.name} description={website?.domain} icon={<Globe />} />
     </>
-  )
+  );
 }

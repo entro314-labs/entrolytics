@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { CliTokenService } from '@/lib/cli-tokens'
-import { db } from '@/lib/db'
-import { website } from '@/lib/db/schema'
-import { eq } from 'drizzle-orm'
+import { eq } from 'drizzle-orm';
+import { type NextRequest, NextResponse } from 'next/server';
+import { CliTokenService } from '@/lib/cli-tokens';
+import { db } from '@/lib/db';
+import { website } from '@/lib/db/schema';
 
 /**
  * POST /api/cli/validate
@@ -13,24 +13,22 @@ import { eq } from 'drizzle-orm'
  */
 export async function POST(request: NextRequest) {
   try {
-    const { token } = await request.json()
+    const { token } = await request.json();
 
     if (!token || typeof token !== 'string') {
-      return NextResponse.json({ error: 'Token required' }, { status: 400 })
+      return NextResponse.json({ error: 'Token required' }, { status: 400 });
     }
 
     // Extract client info for audit
     const ipAddress =
-      request.headers.get('x-forwarded-for') ||
-      request.headers.get('x-real-ip') ||
-      'unknown'
-    const userAgent = request.headers.get('user-agent') || 'unknown'
+      request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
+    const userAgent = request.headers.get('user-agent') || 'unknown';
 
     // Validate token
-    const result = await CliTokenService.validateToken(token, ipAddress, userAgent)
+    const result = await CliTokenService.validateToken(token, ipAddress, userAgent);
 
     if (!result.valid) {
-      return NextResponse.json({ error: result.error }, { status: 401 })
+      return NextResponse.json({ error: result.error }, { status: 401 });
     }
 
     // Get website details
@@ -38,10 +36,10 @@ export async function POST(request: NextRequest) {
       .select()
       .from(website)
       .where(eq(website.websiteId, result.token!.websiteId))
-      .limit(1)
+      .limit(1);
 
     if (!websiteData) {
-      return NextResponse.json({ error: 'Website not found' }, { status: 404 })
+      return NextResponse.json({ error: 'Website not found' }, { status: 404 });
     }
 
     return NextResponse.json({
@@ -52,14 +50,10 @@ export async function POST(request: NextRequest) {
         domain: websiteData.domain,
         shareId: websiteData.shareId,
       },
-      apiHost:
-        process.env.NEXT_PUBLIC_API_URL || 'https://edge.entrolytics.click',
-    })
+      apiHost: process.env.NEXT_PUBLIC_API_URL || 'https://edge.entrolytics.click',
+    });
   } catch (error) {
-    console.error('Error validating CLI token:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    console.error('Error validating CLI token:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

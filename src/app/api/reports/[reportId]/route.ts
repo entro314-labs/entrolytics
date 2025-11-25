@@ -1,48 +1,48 @@
-import { parseRequest } from '@/lib/request'
-import { json, notFound, ok, unauthorized } from '@/lib/response'
-import { reportSchema } from '@/lib/schema'
-import { canDeleteWebsite, canUpdateWebsite, canViewReport } from '@/validations'
-import { deleteReport, getReport, updateReport } from '@/queries/drizzle'
+import { parseRequest } from '@/lib/request';
+import { json, notFound, ok, unauthorized } from '@/lib/response';
+import { reportSchema } from '@/lib/schema';
+import { deleteReport, getReport, updateReport } from '@/queries/drizzle';
+import { canDeleteWebsite, canUpdateWebsite, canViewReport } from '@/validations';
 
 export async function GET(request: Request, { params }: { params: Promise<{ reportId: string }> }) {
-  const { auth, error } = await parseRequest(request)
+  const { auth, error } = await parseRequest(request);
 
   if (error) {
-    return error()
+    return error();
   }
 
-  const { reportId } = await params
+  const { reportId } = await params;
 
-  const report = await getReport(reportId)
+  const report = await getReport(reportId);
 
   if (!(await canViewReport(auth, report))) {
-    return unauthorized()
+    return unauthorized();
   }
 
-  return json(report)
+  return json(report);
 }
 
 export async function POST(
   request: Request,
-  { params }: { params: Promise<{ reportId: string }> }
+  { params }: { params: Promise<{ reportId: string }> },
 ) {
-  const { auth, body, error } = await parseRequest(request, reportSchema)
+  const { auth, body, error } = await parseRequest(request, reportSchema);
 
   if (error) {
-    return error()
+    return error();
   }
 
-  const { reportId } = await params
-  const { websiteId, type, name, description, parameters } = body
+  const { reportId } = await params;
+  const { websiteId, type, name, description, parameters } = body;
 
-  const report = await getReport(reportId)
+  const report = await getReport(reportId);
 
   if (!report) {
-    return notFound()
+    return notFound();
   }
 
   if (!(await canUpdateWebsite(auth, websiteId))) {
-    return unauthorized()
+    return unauthorized();
   }
 
   const result = await updateReport(reportId, {
@@ -52,29 +52,29 @@ export async function POST(
     name,
     description,
     parameters,
-  } as any)
+  } as any);
 
-  return json(result)
+  return json(result);
 }
 
 export async function DELETE(
   request: Request,
-  { params }: { params: Promise<{ reportId: string }> }
+  { params }: { params: Promise<{ reportId: string }> },
 ) {
-  const { auth, error } = await parseRequest(request)
+  const { auth, error } = await parseRequest(request);
 
   if (error) {
-    return error()
+    return error();
   }
 
-  const { reportId } = await params
-  const report = await getReport(reportId)
+  const { reportId } = await params;
+  const report = await getReport(reportId);
 
   if (!(await canDeleteWebsite(auth, report.websiteId))) {
-    return unauthorized()
+    return unauthorized();
   }
 
-  await deleteReport(reportId)
+  await deleteReport(reportId);
 
-  return ok()
+  return ok();
 }

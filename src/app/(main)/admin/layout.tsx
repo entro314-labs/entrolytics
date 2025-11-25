@@ -1,12 +1,12 @@
-import { Metadata } from 'next'
-import { AdminLayout } from './AdminLayout'
+import type { Metadata } from 'next';
+import { AdminLayout } from './AdminLayout';
 
 export default function ({ children }) {
   if (process.env.EDGE_MODE) {
-    return null
+    return null;
   }
 
-  return <AdminLayout>{children}</AdminLayout>
+  return <AdminLayout>{children}</AdminLayout>;
 }
 
 export const metadata: Metadata = {
@@ -14,4 +14,4 @@ export const metadata: Metadata = {
     template: '%s | Admin | Entrolytics',
     default: 'Admin | Entrolytics',
   },
-}
+};

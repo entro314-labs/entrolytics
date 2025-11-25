@@ -1,24 +1,24 @@
-import { Component, ErrorInfo, ReactNode } from 'react'
-import { Column, Text } from '@entro314labs/entro-zen'
+import { Column, Text } from '@entro314labs/entro-zen';
+import { Component, type ErrorInfo, type ReactNode } from 'react';
 
 interface Props {
-  children: ReactNode
-  fallback?: ReactNode
+  children: ReactNode;
+  fallback?: ReactNode;
 }
 
 interface State {
-  hasError: boolean
-  error?: Error
+  hasError: boolean;
+  error?: Error;
 }
 
 export class TableErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {
-    super(props)
-    this.state = { hasError: false }
+    super(props);
+    this.state = { hasError: false };
   }
 
   static getDerivedStateFromError(error: Error): State {
-    return { hasError: true, error }
+    return { hasError: true, error };
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
@@ -27,10 +27,10 @@ export class TableErrorBoundary extends Component<Props, State> {
       stack: error.stack,
       componentStack: errorInfo.componentStack,
       props: this.props,
-    })
+    });
 
     // Store error info for debugging
-    this.setState({ error })
+    this.setState({ error });
   }
 
   render() {
@@ -65,9 +65,9 @@ export class TableErrorBoundary extends Component<Props, State> {
             )}
           </Column>
         )
-      )
+      );
     }
 
-    return this.props.children
+    return this.props.children;
   }
 }

@@ -1,33 +1,33 @@
-import clickhouse from '@/lib/clickhouse'
-import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
 import {
-  getTimestampDiffSQL,
   getDateSQL,
+  getTimestampDiffSQL,
+  pagedRawQuery,
   parseFilters,
   rawQuery,
-  pagedRawQuery,
-} from '@/lib/analytics-utils'
-import { EVENT_COLUMNS } from '@/lib/constants'
+} from '@/lib/analytics-utils';
+import clickhouse from '@/lib/clickhouse';
+import { EVENT_COLUMNS } from '@/lib/constants';
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db';
 
-import { QueryFilters } from '@/lib/types'
+import type { QueryFilters } from '@/lib/types';
 
-const FUNCTION_NAME = 'getWebsiteSessions'
+const FUNCTION_NAME = 'getWebsiteSessions';
 
 export async function getWebsiteSessions(...args: [websiteId: string, filters: QueryFilters]) {
   return runQuery({
     [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  })
+  });
 }
 
 async function relationalQuery(websiteId: string, filters: QueryFilters) {
   // Using pagedRawQuery and parseFilters from analytics-utils
-  const { search } = filters
+  const { search } = filters;
   const { filterQuery, dateQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
     search: search ? `%${search}%` : undefined,
-  })
+  });
 
   const searchQuery = search
     ? `AND (distinct_id ilike {{search}}
@@ -35,7 +35,7 @@ async function relationalQuery(websiteId: string, filters: QueryFilters) {
            OR browser ilike {{search}}
            OR os ilike {{search}}
            OR device ilike {{search}})`
-    : ''
+    : '';
 
   return pagedRawQuery(
     `
@@ -79,17 +79,17 @@ async function relationalQuery(websiteId: string, filters: QueryFilters) {
     `,
     queryParams,
     filters,
-    FUNCTION_NAME
-  )
+    FUNCTION_NAME,
+  );
 }
 
 async function clickhouseQuery(websiteId: string, filters: QueryFilters) {
-  const { pagedRawQuery, parseFilters, getDateStringSQL } = clickhouse
-  const { search } = filters
+  const { pagedRawQuery, parseFilters, getDateStringSQL } = clickhouse;
+  const { search } = filters;
   const { filterQuery, dateQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
-  })
+  });
 
   const searchQuery = search
     ? `AND ((positionCaseInsensitive(distinct_id, {search:String}) > 0)
@@ -97,14 +97,14 @@ async function clickhouseQuery(websiteId: string, filters: QueryFilters) {
            OR (positionCaseInsensitive(browser, {search:String}) > 0)
            OR (positionCaseInsensitive(os, {search:String}) > 0)
            OR (positionCaseInsensitive(device, {search:String}) > 0))`
-    : ''
+    : '';
 
-  let sql = ''
+  let sql = '';
 
   if (
     filters &&
     typeof filters === 'object' &&
-    EVENT_COLUMNS.some((item) => Object.keys(filters).includes(item))
+    EVENT_COLUMNS.some(item => Object.keys(filters).includes(item))
   ) {
     sql = `
     SELECT
@@ -131,7 +131,7 @@ async function clickhouseQuery(websiteId: string, filters: QueryFilters) {
     ${searchQuery}
     GROUP BY session_id, website_id, browser, os, device, screen, language, country, region, city
     ORDER BY lastAt desc
-    `
+    `;
   } else {
     sql = `
     SELECT
@@ -159,8 +159,8 @@ async function clickhouseQuery(websiteId: string, filters: QueryFilters) {
     ${searchQuery}
     GROUP BY session_id, website_id, hostname, browser, os, device, screen, language, country, region, city
     ORDER BY lastAt desc
-    `
+    `;
   }
 
-  return pagedRawQuery(sql, queryParams, filters, FUNCTION_NAME)
+  return pagedRawQuery(sql, queryParams, filters, FUNCTION_NAME);
 }

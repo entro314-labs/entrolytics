@@ -1,9 +1,9 @@
-import { Dialog } from '@entro314labs/entro-zen'
-import { ActionButton } from '@/components/input/ActionButton'
-import { Trash } from '@/components/icons'
-import { ConfirmationForm } from '@/components/common/ConfirmationForm'
-import { messages } from '@/components/messages'
-import { useDeleteQuery, useMessages } from '@/components/hooks'
+import { Dialog } from '@entro314labs/entro-zen';
+import { ConfirmationForm } from '@/components/common/ConfirmationForm';
+import { useDeleteQuery, useMessages } from '@/components/hooks';
+import { Trash } from '@/components/icons';
+import { ActionButton } from '@/components/input/ActionButton';
+import { messages } from '@/components/messages';
 
 export function CohortDeleteButton({
   cohortId,
@@ -11,15 +11,15 @@ export function CohortDeleteButton({
   name,
   onSave,
 }: {
-  cohortId: string
-  websiteId: string
-  name: string
-  onSave?: () => void
+  cohortId: string;
+  websiteId: string;
+  name: string;
+  onSave?: () => void;
 }) {
-  const { formatMessage, labels, getErrorMessage, FormattedMessage } = useMessages()
+  const { formatMessage, labels, getErrorMessage, FormattedMessage } = useMessages();
   const { mutateAsync, isPending, error, touch } = useDeleteQuery(
-    `/websites/${websiteId}/segments/${cohortId}`
-  )
+    `/websites/${websiteId}/segments/${cohortId}`,
+  );
 
   return (
     <ActionButton title={formatMessage(labels.delete)} icon={<Trash />}>
@@ -28,12 +28,12 @@ export function CohortDeleteButton({
           const handleConfirm = async () => {
             await mutateAsync(null, {
               onSuccess: () => {
-                touch('cohorts')
-                onSave?.()
-                close()
+                touch('cohorts');
+                onSave?.();
+                close();
               },
-            })
-          }
+            });
+          };
 
           return (
             <ConfirmationForm
@@ -52,9 +52,9 @@ export function CohortDeleteButton({
               buttonLabel={formatMessage(labels.delete)}
               buttonVariant="danger"
             />
-          )
+          );
         }}
       </Dialog>
     </ActionButton>
-  )
+  );
 }

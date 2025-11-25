@@ -1,12 +1,12 @@
-import { useApp, setUser } from '@/store/app'
-import { useUser } from '@clerk/nextjs'
-import { useEffect } from 'react'
+import { useUser } from '@clerk/nextjs';
+import { useEffect } from 'react';
+import { setUser, useApp } from '@/store/app';
 
-const selector = (state: { user: any }) => state.user
+const selector = (state: { user: any }) => state.user;
 
 export function useLoginQuery() {
-  const { user: clerkUser, isLoaded: isClerkLoaded, isSignedIn } = useUser()
-  const user = useApp(selector)
+  const { user: clerkUser, isLoaded: isClerkLoaded, isSignedIn } = useUser();
+  const user = useApp(selector);
 
   useEffect(() => {
     if (isClerkLoaded && isSignedIn && clerkUser && !user) {
@@ -19,17 +19,17 @@ export function useLoginQuery() {
         lastName: clerkUser.lastName,
         role: 'user', // Default role, could be enhanced with Clerk metadata
         ...clerkUser.publicMetadata,
-      }
-      setUser(appUser)
+      };
+      setUser(appUser);
     } else if (isClerkLoaded && !isSignedIn && user) {
-      setUser(null)
+      setUser(null);
     }
-  }, [isClerkLoaded, isSignedIn, clerkUser, user])
+  }, [isClerkLoaded, isSignedIn, clerkUser, user]);
 
   return {
     user,
     setUser,
     isLoading: !isClerkLoaded,
     error: null,
-  }
+  };
 }

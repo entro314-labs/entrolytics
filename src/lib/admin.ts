@@ -1,7 +1,7 @@
-import { ROLES } from '@/lib/constants'
-import { getUserByEmail, getUsers, updateUser } from '@/queries/drizzle'
-import { eq, sql } from 'drizzle-orm'
-import { db, user } from '@/lib/db'
+import { eq, sql } from 'drizzle-orm';
+import { ROLES } from '@/lib/constants';
+import { db, user } from '@/lib/db';
+import { getUserByEmail, getUsers, updateUser } from '@/queries/drizzle';
 
 /**
  * Admin bootstrap utilities for Entrolytics
@@ -9,8 +9,8 @@ import { db, user } from '@/lib/db'
  */
 
 export interface AdminSetupConfig {
-  initialAdminEmail?: string
-  autoPromoteFirstUser?: boolean
+  initialAdminEmail?: string;
+  autoPromoteFirstUser?: boolean;
 }
 
 /**
@@ -20,7 +20,7 @@ export function getAdminSetupConfig(): AdminSetupConfig {
   return {
     initialAdminEmail: process.env.INITIAL_ADMIN_EMAIL?.toLowerCase(),
     autoPromoteFirstUser: process.env.AUTO_PROMOTE_FIRST_USER === 'true',
-  }
+  };
 }
 
 /**
@@ -31,12 +31,12 @@ export async function hasAdminUsers(): Promise<boolean> {
     const [result] = await db
       .select({ count: sql<number>`count(*)` })
       .from(user)
-      .where(eq(user.role, ROLES.admin))
+      .where(eq(user.role, ROLES.admin));
 
-    return result.count > 0
+    return result.count > 0;
   } catch (error) {
-    console.error('Error checking for admin users:', error)
-    return false
+    console.error('Error checking for admin users:', error);
+    return false;
   }
 }
 
@@ -45,12 +45,12 @@ export async function hasAdminUsers(): Promise<boolean> {
  */
 export async function getTotalUserCount(): Promise<number> {
   try {
-    const [result] = await db.select({ count: sql<number>`count(*)` }).from(user)
+    const [result] = await db.select({ count: sql<number>`count(*)` }).from(user);
 
-    return result.count
+    return result.count;
   } catch (error) {
-    console.error('Error getting total user count:', error)
-    return 0
+    console.error('Error getting total user count:', error);
+    return 0;
   }
 }
 
@@ -61,30 +61,30 @@ export async function getTotalUserCount(): Promise<number> {
  * 2. AUTO_PROMOTE_FIRST_USER is true and no admin users exist and this is the first user
  */
 export async function shouldPromoteToAdmin(userEmail: string): Promise<boolean> {
-  const config = getAdminSetupConfig()
-  const normalizedEmail = userEmail.toLowerCase()
+  const config = getAdminSetupConfig();
+  const normalizedEmail = userEmail.toLowerCase();
 
   // Check if email matches initial admin email
   if (config.initialAdminEmail && normalizedEmail === config.initialAdminEmail) {
     console.log(
-      `🔐 Auto-promoting user with email ${userEmail} to admin (matches INITIAL_ADMIN_EMAIL)`
-    )
-    return true
+      `🔐 Auto-promoting user with email ${userEmail} to admin (matches INITIAL_ADMIN_EMAIL)`,
+    );
+    return true;
   }
 
   // Check if this should be auto-promoted as first user
   if (config.autoPromoteFirstUser) {
-    const [hasAdmins, totalUsers] = await Promise.all([hasAdminUsers(), getTotalUserCount()])
+    const [hasAdmins, totalUsers] = await Promise.all([hasAdminUsers(), getTotalUserCount()]);
 
     if (!hasAdmins && totalUsers <= 1) {
       console.log(
-        `🔐 Auto-promoting first user ${userEmail} to admin (AUTO_PROMOTE_FIRST_USER enabled)`
-      )
-      return true
+        `🔐 Auto-promoting first user ${userEmail} to admin (AUTO_PROMOTE_FIRST_USER enabled)`,
+      );
+      return true;
     }
   }
 
-  return false
+  return false;
 }
 
 /**
@@ -92,18 +92,18 @@ export async function shouldPromoteToAdmin(userEmail: string): Promise<boolean> 
  */
 export async function promoteUserToAdmin(userId: string): Promise<boolean> {
   try {
-    const updatedUser = await updateUser(userId, { role: ROLES.admin })
+    const updatedUser = await updateUser(userId, { role: ROLES.admin });
 
     if (updatedUser) {
-      console.log(`✅ Successfully promoted user ${userId} to admin`)
-      return true
+      console.log(`✅ Successfully promoted user ${userId} to admin`);
+      return true;
     }
 
-    console.error(`❌ Failed to promote user ${userId} to admin - user not found`)
-    return false
+    console.error(`❌ Failed to promote user ${userId} to admin - user not found`);
+    return false;
   } catch (error) {
-    console.error(`❌ Error promoting user ${userId} to admin:`, error)
-    return false
+    console.error(`❌ Error promoting user ${userId} to admin:`, error);
+    return false;
   }
 }
 
@@ -112,17 +112,17 @@ export async function promoteUserToAdmin(userId: string): Promise<boolean> {
  */
 export async function promoteUserToAdminByEmail(email: string): Promise<boolean> {
   try {
-    const existingUser = await getUserByEmail(email)
+    const existingUser = await getUserByEmail(email);
 
     if (!existingUser) {
-      console.error(`❌ User with email ${email} not found`)
-      return false
+      console.error(`❌ User with email ${email} not found`);
+      return false;
     }
 
-    return await promoteUserToAdmin(existingUser.userId)
+    return await promoteUserToAdmin(existingUser.userId);
   } catch (error) {
-    console.error(`❌ Error promoting user with email ${email} to admin:`, error)
-    return false
+    console.error(`❌ Error promoting user with email ${email} to admin:`, error);
+    return false;
   }
 }
 
@@ -132,13 +132,13 @@ export async function promoteUserToAdminByEmail(email: string): Promise<boolean>
  */
 export async function bootstrapAdminSetup(userEmail: string, userId: string): Promise<void> {
   try {
-    const shouldPromote = await shouldPromoteToAdmin(userEmail)
+    const shouldPromote = await shouldPromoteToAdmin(userEmail);
 
     if (shouldPromote) {
-      await promoteUserToAdmin(userId)
+      await promoteUserToAdmin(userId);
     }
   } catch (error) {
-    console.error('Error during admin bootstrap setup:', error)
+    console.error('Error during admin bootstrap setup:', error);
     // Don't throw - this should not block user creation
   }
 }
@@ -147,42 +147,42 @@ export async function bootstrapAdminSetup(userEmail: string, userId: string): Pr
  * Validate admin setup configuration
  */
 export function validateAdminSetupConfig(): {
-  valid: boolean
-  errors: string[]
+  valid: boolean;
+  errors: string[];
 } {
-  const config = getAdminSetupConfig()
-  const errors: string[] = []
+  const config = getAdminSetupConfig();
+  const errors: string[] = [];
 
   if (config.initialAdminEmail) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(config.initialAdminEmail)) {
-      errors.push('INITIAL_ADMIN_EMAIL is not a valid email address')
+      errors.push('INITIAL_ADMIN_EMAIL is not a valid email address');
     }
   }
 
   if (!config.initialAdminEmail && !config.autoPromoteFirstUser) {
     errors.push(
-      'Either INITIAL_ADMIN_EMAIL or AUTO_PROMOTE_FIRST_USER should be configured to ensure admin access'
-    )
+      'Either INITIAL_ADMIN_EMAIL or AUTO_PROMOTE_FIRST_USER should be configured to ensure admin access',
+    );
   }
 
   return {
     valid: errors.length === 0,
     errors,
-  }
+  };
 }
 
 /**
  * Get admin setup status for diagnostics
  */
 export async function getAdminSetupStatus() {
-  const config = getAdminSetupConfig()
-  const [hasAdmins, totalUsers] = await Promise.all([hasAdminUsers(), getTotalUserCount()])
+  const config = getAdminSetupConfig();
+  const [hasAdmins, totalUsers] = await Promise.all([hasAdminUsers(), getTotalUserCount()]);
 
   return {
     config,
     hasAdminUsers: hasAdmins,
     totalUsers,
     setupComplete: hasAdmins || config.initialAdminEmail || config.autoPromoteFirstUser,
-  }
+  };
 }

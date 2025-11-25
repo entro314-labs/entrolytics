@@ -1,18 +1,18 @@
-import { DataTable, DataColumn, Row } from '@entro314labs/entro-zen'
-import { useMessages, useNavigation } from '@/components/hooks'
-import { Empty } from '@/components/common/Empty'
-import { DateDistance } from '@/components/common/DateDistance'
-import { filtersObjectToArray } from '@/lib/params'
-import { CohortEditButton } from '@/app/(main)/websites/[websiteId]/cohorts/CohortEditButton'
-import { CohortDeleteButton } from '@/app/(main)/websites/[websiteId]/cohorts/CohortDeleteButton'
-import Link from 'next/link'
+import { DataColumn, DataTable, Row } from '@entro314labs/entro-zen';
+import Link from 'next/link';
+import { CohortDeleteButton } from '@/app/(main)/websites/[websiteId]/cohorts/CohortDeleteButton';
+import { CohortEditButton } from '@/app/(main)/websites/[websiteId]/cohorts/CohortEditButton';
+import { DateDistance } from '@/components/common/DateDistance';
+import { Empty } from '@/components/common/Empty';
+import { useMessages, useNavigation } from '@/components/hooks';
+import { filtersObjectToArray } from '@/lib/params';
 
 export function CohortsTable({ data = [] }) {
-  const { formatMessage, labels } = useMessages()
-  const { websiteId, renderUrl } = useNavigation()
+  const { formatMessage, labels } = useMessages();
+  const { websiteId, renderUrl } = useNavigation();
 
   if (data.length === 0) {
-    return <Empty />
+    return <Empty />;
   }
 
   return (
@@ -27,7 +27,7 @@ export function CohortsTable({ data = [] }) {
       </DataColumn>
       <DataColumn id="action" align="end" width="100px">
         {(row: any) => {
-          const { id, name, parameters } = row
+          const { id, name, parameters } = row;
 
           return (
             <Row>
@@ -38,9 +38,9 @@ export function CohortsTable({ data = [] }) {
               />
               <CohortDeleteButton cohortId={id} websiteId={websiteId} name={name} />
             </Row>
-          )
+          );
         }}
       </DataColumn>
     </DataTable>
-  )
+  );
 }

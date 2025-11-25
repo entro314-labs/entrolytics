@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
 /**
@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
         error_description: 'Missing or invalid parameters',
         details: parseResult.error.flatten(),
       },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -67,13 +67,13 @@ export async function GET(request: NextRequest) {
     const returnUrl = `/integrations/wordpress/select?data=${connectDataEncoded}`;
 
     return NextResponse.redirect(
-      new URL(`/sign-in?redirect_url=${encodeURIComponent(returnUrl)}`, request.url)
+      new URL(`/sign-in?redirect_url=${encodeURIComponent(returnUrl)}`, request.url),
     );
   }
 
   // User is authenticated, redirect to website selection page
   const connectDataEncoded = encodeURIComponent(JSON.stringify(connectData));
   return NextResponse.redirect(
-    new URL(`/integrations/wordpress/select?data=${connectDataEncoded}`, request.url)
+    new URL(`/integrations/wordpress/select?data=${connectDataEncoded}`, request.url),
   );
 }

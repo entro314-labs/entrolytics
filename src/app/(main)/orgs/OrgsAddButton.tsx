@@ -1,19 +1,27 @@
-import { Button, Icon, Modal, DialogTrigger, Dialog, Text, useToast } from '@entro314labs/entro-zen'
-import { Plus } from '@/components/icons'
-import { useMessages, useModified } from '@/components/hooks'
-import { OrgAddForm } from './OrgAddForm'
-import { messages } from '@/components/messages'
+import {
+  Button,
+  Dialog,
+  DialogTrigger,
+  Icon,
+  Modal,
+  Text,
+  useToast,
+} from '@entro314labs/entro-zen';
+import { useMessages, useModified } from '@/components/hooks';
+import { Plus } from '@/components/icons';
+import { messages } from '@/components/messages';
+import { OrgAddForm } from './OrgAddForm';
 
 export function OrgsAddButton({ onSave }: { onSave?: () => void }) {
-  const { formatMessage, labels } = useMessages()
-  const { toast } = useToast()
-  const { touch } = useModified()
+  const { formatMessage, labels } = useMessages();
+  const { toast } = useToast();
+  const { touch } = useModified();
 
   const handleSave = async () => {
-    toast(formatMessage(messages.saved))
-    touch('orgs')
-    onSave?.()
-  }
+    toast(formatMessage(messages.saved));
+    touch('orgs');
+    onSave?.();
+  };
 
   return (
     <DialogTrigger>
@@ -29,5 +37,5 @@ export function OrgsAddButton({ onSave }: { onSave?: () => void }) {
         </Dialog>
       </Modal>
     </DialogTrigger>
-  )
+  );
 }

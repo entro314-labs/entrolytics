@@ -1,17 +1,17 @@
-'use client'
+'use client';
 import {
+  Button,
+  Column,
   Form,
   FormField,
   FormSubmitButton,
-  Row,
-  TextField,
-  Button,
-  Select,
-  ListItem,
   Label,
-  Column,
-} from '@entro314labs/entro-zen'
-import { useUpdateQuery, useModified, useMessages, useWebsitesQuery } from '@/components/hooks'
+  ListItem,
+  Row,
+  Select,
+  TextField,
+} from '@entro314labs/entro-zen';
+import { useMessages, useModified, useUpdateQuery, useWebsitesQuery } from '@/components/hooks';
 
 const WIDGET_TYPES = [
   { value: 'stats', label: 'Statistics' },
@@ -19,7 +19,7 @@ const WIDGET_TYPES = [
   { value: 'list', label: 'Top List' },
   { value: 'map', label: 'World Map' },
   { value: 'heatmap', label: 'Weekly Heatmap' },
-]
+];
 
 const LIST_TYPES = [
   { value: 'path', label: 'Pages' },
@@ -31,29 +31,29 @@ const LIST_TYPES = [
   { value: 'channel', label: 'Channels' },
   { value: 'entry', label: 'Entry Pages' },
   { value: 'exit', label: 'Exit Pages' },
-]
+];
 
 export function WidgetAddForm({
   boardId,
   onSave,
   onClose,
 }: {
-  boardId: string
-  onSave?: () => void
-  onClose?: () => void
+  boardId: string;
+  onSave?: () => void;
+  onClose?: () => void;
 }) {
-  const { formatMessage, labels, messages } = useMessages()
-  const { touch } = useModified()
-  const { data: websitesData } = useWebsitesQuery({})
-  const websites = websitesData?.data || []
-  const { mutateAsync, error, isPending, toast } = useUpdateQuery(`/boards/${boardId}/widgets`)
+  const { formatMessage, labels, messages } = useMessages();
+  const { touch } = useModified();
+  const { data: websitesData } = useWebsitesQuery({});
+  const websites = websitesData?.data || [];
+  const { mutateAsync, error, isPending, toast } = useUpdateQuery(`/boards/${boardId}/widgets`);
 
   const handleSubmit = async (data: any) => {
-    const config: any = {}
+    const config: any = {};
 
     if (data.type === 'list' && data.listType) {
-      config.type = data.listType
-      config.limit = 10
+      config.type = data.listType;
+      config.limit = 10;
     }
 
     await mutateAsync(
@@ -65,14 +65,14 @@ export function WidgetAddForm({
       },
       {
         onSuccess: async () => {
-          toast(formatMessage(messages.saved))
-          touch(`board-widgets:${boardId}`)
-          onSave?.()
-          onClose?.()
+          toast(formatMessage(messages.saved));
+          touch(`board-widgets:${boardId}`);
+          onSave?.();
+          onClose?.();
         },
-      }
-    )
-  }
+      },
+    );
+  };
 
   return (
     <Form
@@ -81,16 +81,13 @@ export function WidgetAddForm({
       defaultValues={{ type: 'stats', listType: 'path' }}
     >
       {({ watch }) => {
-        const selectedType = watch('type')
+        const selectedType = watch('type');
 
         return (
           <>
             <Column gap="1">
               <Label>{formatMessage(labels.website)}</Label>
-              <FormField
-                name="websiteId"
-                rules={{ required: formatMessage(labels.required) }}
-              >
+              <FormField name="websiteId" rules={{ required: formatMessage(labels.required) }}>
                 <Select placeholder={formatMessage(labels.selectWebsite)}>
                   {websites.map((website: any) => (
                     <ListItem key={website.websiteId} id={website.websiteId}>
@@ -103,12 +100,9 @@ export function WidgetAddForm({
 
             <Column gap="1">
               <Label>{formatMessage(labels.type)}</Label>
-              <FormField
-                name="type"
-                rules={{ required: formatMessage(labels.required) }}
-              >
+              <FormField name="type" rules={{ required: formatMessage(labels.required) }}>
                 <Select>
-                  {WIDGET_TYPES.map((type) => (
+                  {WIDGET_TYPES.map(type => (
                     <ListItem key={type.value} id={type.value}>
                       {type.label}
                     </ListItem>
@@ -122,7 +116,7 @@ export function WidgetAddForm({
                 <Label>{formatMessage(labels.field)}</Label>
                 <FormField name="listType">
                   <Select>
-                    {LIST_TYPES.map((type) => (
+                    {LIST_TYPES.map(type => (
                       <ListItem key={type.value} id={type.value}>
                         {type.label}
                       </ListItem>
@@ -147,8 +141,8 @@ export function WidgetAddForm({
               </FormSubmitButton>
             </Row>
           </>
-        )
+        );
       }}
     </Form>
-  )
+  );
 }

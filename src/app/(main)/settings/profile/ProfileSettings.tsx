@@ -1,31 +1,31 @@
-import { Row, Column, Label } from '@entro314labs/entro-zen'
-import { useLoginQuery, useMessages } from '@/components/hooks'
-import { ROLES } from '@/lib/constants'
-import { PasswordChangeButton } from './PasswordChangeButton'
+import { Column, Label, Row } from '@entro314labs/entro-zen';
+import { useLoginQuery, useMessages } from '@/components/hooks';
+import { ROLES } from '@/lib/constants';
+import { PasswordChangeButton } from './PasswordChangeButton';
 
 export function ProfileSettings() {
-  const { user } = useLoginQuery()
-  const { formatMessage, labels } = useMessages()
+  const { user } = useLoginQuery();
+  const { formatMessage, labels } = useMessages();
 
   if (!user) {
-    return null
+    return null;
   }
 
-  const { displayName, email, role } = user
+  const { displayName, email, role } = user;
 
   const renderRole = (value: string) => {
     if (value === ROLES.user) {
-      return formatMessage(labels.user)
+      return formatMessage(labels.user);
     }
     if (value === ROLES.admin) {
-      return formatMessage(labels.admin)
+      return formatMessage(labels.admin);
     }
     if (value === ROLES.viewOnly) {
-      return formatMessage(labels.viewOnly)
+      return formatMessage(labels.viewOnly);
     }
 
-    return formatMessage(labels.unknown)
-  }
+    return formatMessage(labels.unknown);
+  };
 
   return (
     <Column width="400px" gap="6">
@@ -48,5 +48,5 @@ export function ProfileSettings() {
         </Row>
       </Column>
     </Column>
-  )
+  );
 }

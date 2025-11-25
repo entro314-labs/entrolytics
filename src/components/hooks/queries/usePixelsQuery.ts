@@ -1,17 +1,17 @@
-import { useApi } from '../useApi'
-import { usePagedQuery } from '../usePagedQuery'
-import { useModified } from '../useModified'
-import { ReactQueryOptions } from '@/lib/types'
+import type { ReactQueryOptions } from '@/lib/types';
+import { useApi } from '../useApi';
+import { useModified } from '../useModified';
+import { usePagedQuery } from '../usePagedQuery';
 
 export function usePixelsQuery({ orgId }: { orgId?: string }, options?: ReactQueryOptions) {
-  const { modified } = useModified('pixels')
-  const { get } = useApi()
+  const { modified } = useModified('pixels');
+  const { get } = useApi();
 
   return usePagedQuery({
     queryKey: ['pixels', { orgId, modified }],
-    queryFn: (pageParams) => {
-      return get(orgId ? `/orgs/${orgId}/pixels` : '/pixels', pageParams)
+    queryFn: pageParams => {
+      return get(orgId ? `/orgs/${orgId}/pixels` : '/pixels', pageParams);
     },
     ...options,
-  })
+  });
 }

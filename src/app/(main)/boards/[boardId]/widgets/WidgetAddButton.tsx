@@ -1,11 +1,11 @@
-'use client'
-import { Button, Modal, DialogTrigger, Dialog, Icon, Text } from '@entro314labs/entro-zen'
-import { Plus } from '@/components/icons'
-import { useMessages } from '@/components/hooks'
-import { WidgetAddForm } from './WidgetAddForm'
+'use client';
+import { Button, Dialog, DialogTrigger, Icon, Modal, Text } from '@entro314labs/entro-zen';
+import { useMessages } from '@/components/hooks';
+import { Plus } from '@/components/icons';
+import { WidgetAddForm } from './WidgetAddForm';
 
 export function WidgetAddButton({ boardId }: { boardId: string }) {
-  const { formatMessage, labels } = useMessages()
+  const { formatMessage, labels } = useMessages();
 
   return (
     <DialogTrigger>
@@ -21,5 +21,5 @@ export function WidgetAddButton({ boardId }: { boardId: string }) {
         </Dialog>
       </Modal>
     </DialogTrigger>
-  )
+  );
 }

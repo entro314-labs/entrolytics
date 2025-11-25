@@ -1,10 +1,10 @@
-import { SideMenu } from '@/components/common/SideMenu'
-import { useMessages, useNavigation } from '@/components/hooks'
-import { UserCircle, Users, SlidersHorizontal as Knobs } from '@/components/icons'
+import { SideMenu } from '@/components/common/SideMenu';
+import { useMessages, useNavigation } from '@/components/hooks';
+import { SlidersHorizontal as Knobs, UserCircle, Users } from '@/components/icons';
 
 export function SettingsNav({ onItemClick }: { onItemClick?: () => void }) {
-  const { formatMessage, labels } = useMessages()
-  const { renderUrl, pathname } = useNavigation()
+  const { formatMessage, labels } = useMessages();
+  const { renderUrl, pathname } = useNavigation();
 
   const items = [
     {
@@ -35,11 +35,11 @@ export function SettingsNav({ onItemClick }: { onItemClick?: () => void }) {
         },
       ],
     },
-  ]
+  ];
 
   const selectedKey = items
-    .flatMap((e) => e.items)
-    .find(({ path }) => path && pathname.includes(path.split('?')[0]))?.id
+    .flatMap(e => e.items)
+    .find(({ path }) => path && pathname.includes(path.split('?')[0]))?.id;
 
   return (
     <SideMenu
@@ -49,5 +49,5 @@ export function SettingsNav({ onItemClick }: { onItemClick?: () => void }) {
       allowMinimize={false}
       onItemClick={onItemClick}
     />
-  )
+  );
 }

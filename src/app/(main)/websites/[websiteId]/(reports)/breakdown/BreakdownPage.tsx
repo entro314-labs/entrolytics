@@ -1,20 +1,20 @@
-'use client'
-import { useState } from 'react'
-import { Column, Row } from '@entro314labs/entro-zen'
-import { useDateRange, useMessages, useMobile } from '@/components/hooks'
-import { ListCheck } from '@/components/icons'
-import { Panel } from '@/components/common/Panel'
-import { Breakdown } from './Breakdown'
-import { WebsiteControls } from '@/app/(main)/websites/[websiteId]/WebsiteControls'
-import { FieldSelectForm } from '@/app/(main)/websites/[websiteId]/(reports)/breakdown/FieldSelectForm'
-import { DialogButton } from '@/components/input/DialogButton'
+'use client';
+import { Column, Row } from '@entro314labs/entro-zen';
+import { useState } from 'react';
+import { FieldSelectForm } from '@/app/(main)/websites/[websiteId]/(reports)/breakdown/FieldSelectForm';
+import { WebsiteControls } from '@/app/(main)/websites/[websiteId]/WebsiteControls';
+import { Panel } from '@/components/common/Panel';
+import { useDateRange, useMessages, useMobile } from '@/components/hooks';
+import { ListCheck } from '@/components/icons';
+import { DialogButton } from '@/components/input/DialogButton';
+import { Breakdown } from './Breakdown';
 
 export function BreakdownPage({ websiteId }: { websiteId: string }) {
   const {
     dateRange: { startDate, endDate },
-  } = useDateRange()
-  const [fields, setFields] = useState(['path'])
-  const { isMobile } = useMobile()
+  } = useDateRange();
+  const [fields, setFields] = useState(['path']);
+  const { isMobile } = useMobile();
 
   return (
     <Column gap>
@@ -31,11 +31,11 @@ export function BreakdownPage({ websiteId }: { websiteId: string }) {
         />
       </Panel>
     </Column>
-  )
+  );
 }
 
 const FieldsButton = ({ value, onChange }) => {
-  const { formatMessage, labels } = useMessages()
+  const { formatMessage, labels } = useMessages();
 
   return (
     <DialogButton
@@ -45,8 +45,8 @@ const FieldsButton = ({ value, onChange }) => {
       minHeight="300px"
     >
       {({ close }) => {
-        return <FieldSelectForm selectedFields={value} onChange={onChange} onClose={close} />
+        return <FieldSelectForm selectedFields={value} onChange={onChange} onClose={close} />;
       }}
     </DialogButton>
-  )
-}
+  );
+};

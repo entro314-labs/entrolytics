@@ -1,34 +1,34 @@
-import { useEffect } from 'react'
-import { useApp, setConfig } from '@/store/app'
-import { useApi } from '@/components/hooks/useApi'
+import { useEffect } from 'react';
+import { useApi } from '@/components/hooks/useApi';
+import { setConfig, useApp } from '@/store/app';
 
 export type Config = {
-  edgeMode: boolean
-  edgeUrl?: string
-  faviconUrl?: string
-  linksUrl?: string
-  pixelsUrl?: string
-  privateMode: boolean
-  telemetryDisabled: boolean
-  trackerScriptName?: string
-  updatesDisabled: boolean
-}
+  edgeMode: boolean;
+  edgeUrl?: string;
+  faviconUrl?: string;
+  linksUrl?: string;
+  pixelsUrl?: string;
+  privateMode: boolean;
+  telemetryDisabled: boolean;
+  trackerScriptName?: string;
+  updatesDisabled: boolean;
+};
 
 export function useConfig(): Config {
-  const { config } = useApp()
-  const { get } = useApi()
+  const { config } = useApp();
+  const { get } = useApi();
 
   async function loadConfig() {
-    const data = await get(`/config`)
+    const data = await get(`/config`);
 
-    setConfig(data)
+    setConfig(data);
   }
 
   useEffect(() => {
     if (!config) {
-      loadConfig()
+      loadConfig();
     }
-  }, [])
+  }, []);
 
-  return config
+  return config;
 }

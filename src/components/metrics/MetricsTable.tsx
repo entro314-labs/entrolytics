@@ -1,22 +1,22 @@
-import { useEffect, useMemo } from 'react'
-import { Icon, Text, Row } from '@entro314labs/entro-zen'
-import { LinkButton } from '@/components/common/LinkButton'
-import { LoadingPanel } from '@/components/common/LoadingPanel'
-import { useMessages, useNavigation, useWebsiteMetricsQuery } from '@/components/hooks'
-import { Maximize } from '@/components/icons'
-import { percentFilter } from '@/lib/filters'
-import { ListTable, ListTableProps } from './ListTable'
-import { MetricLabel } from '@/components/metrics/MetricLabel'
+import { Icon, Row, Text } from '@entro314labs/entro-zen';
+import { useEffect, useMemo } from 'react';
+import { LinkButton } from '@/components/common/LinkButton';
+import { LoadingPanel } from '@/components/common/LoadingPanel';
+import { useMessages, useNavigation, useWebsiteMetricsQuery } from '@/components/hooks';
+import { Maximize } from '@/components/icons';
+import { MetricLabel } from '@/components/metrics/MetricLabel';
+import { percentFilter } from '@/lib/filters';
+import { ListTable, type ListTableProps } from './ListTable';
 
 export interface MetricsTableProps extends ListTableProps {
-  websiteId: string
-  type: string
-  dataFilter?: (data: any) => any
-  limit?: number
-  showMore?: boolean
-  filterLink?: boolean
-  params?: Record<string, any>
-  onDataLoad?: (data: any) => void
+  websiteId: string;
+  type: string;
+  dataFilter?: (data: any) => any;
+  limit?: number;
+  showMore?: boolean;
+  filterLink?: boolean;
+  params?: Record<string, any>;
+  onDataLoad?: (data: any) => void;
 }
 
 export function MetricsTable({
@@ -30,36 +30,36 @@ export function MetricsTable({
   onDataLoad,
   ...props
 }: MetricsTableProps) {
-  const { updateParams } = useNavigation()
-  const { formatMessage, labels } = useMessages()
+  const { updateParams } = useNavigation();
+  const { formatMessage, labels } = useMessages();
   const { data, isLoading, isFetching, error } = useWebsiteMetricsQuery(websiteId, {
     type,
     limit,
     ...params,
-  })
+  });
 
   const filteredData = useMemo(() => {
     if (data && Array.isArray(data)) {
-      let items = data as any[]
+      let items = data as any[];
 
       if (dataFilter) {
         if (Array.isArray(dataFilter)) {
           items = dataFilter.reduce((arr, filter) => {
-            const result = filter(arr)
-            return Array.isArray(result) ? result : []
-          }, items)
+            const result = filter(arr);
+            return Array.isArray(result) ? result : [];
+          }, items);
         } else {
-          const result = dataFilter(items)
-          items = Array.isArray(result) ? result : []
+          const result = dataFilter(items);
+          items = Array.isArray(result) ? result : [];
         }
       }
 
-      items = percentFilter(items)
+      items = percentFilter(items);
 
       // Ensure items is still an array after percentFilter
       if (!Array.isArray(items)) {
-        console.warn('MetricsTable: percentFilter returned non-array:', items)
-        return []
+        console.warn('MetricsTable: percentFilter returned non-array:', items);
+        return [];
       }
 
       return items.map(({ x, y, z, ...props }, index) => ({
@@ -67,20 +67,20 @@ export function MetricsTable({
         count: typeof y === 'number' ? y : 0,
         percent: typeof z === 'number' ? z : 0,
         ...props,
-      }))
+      }));
     }
-    return []
-  }, [data, dataFilter, limit, type])
+    return [];
+  }, [data, dataFilter, limit, type]);
 
   useEffect(() => {
     if (data) {
-      onDataLoad?.(data)
+      onDataLoad?.(data);
     }
-  }, [data])
+  }, [data]);
 
   const renderLabel = (row: any) => {
-    return filterLink ? <MetricLabel type={type} data={row} /> : row.label
-  }
+    return filterLink ? <MetricLabel type={type} data={row} /> : row.label;
+  };
 
   return (
     <LoadingPanel
@@ -106,5 +106,5 @@ export function MetricsTable({
         </div>
       </div>
     </LoadingPanel>
-  )
+  );
 }

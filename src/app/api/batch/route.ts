@@ -1,33 +1,33 @@
-import { z } from 'zod'
-import * as send from '@/app/api/send/route'
-import { parseRequest } from '@/lib/request'
-import { json, serverError } from '@/lib/response'
-import { anyObjectParam } from '@/lib/schema'
+import { z } from 'zod';
+import * as send from '@/app/api/send/route';
+import { parseRequest } from '@/lib/request';
+import { json, serverError } from '@/lib/response';
+import { anyObjectParam } from '@/lib/schema';
 
-const schema = z.array(anyObjectParam)
+const schema = z.array(anyObjectParam);
 
 export async function POST(request: Request) {
   try {
     const { body, error } = await parseRequest(request, schema, {
       skipAuth: true,
-    })
+    });
 
     if (error) {
-      return error()
+      return error();
     }
 
-    const errors = []
+    const errors = [];
 
-    let index = 0
+    let index = 0;
     for (const data of body) {
-      const newRequest = new Request(request, { body: JSON.stringify(data) })
-      const response = await send.POST(newRequest)
+      const newRequest = new Request(request, { body: JSON.stringify(data) });
+      const response = await send.POST(newRequest);
 
       if (!response.ok) {
-        errors.push({ index, response: await response.json() })
+        errors.push({ index, response: await response.json() });
       }
 
-      index++
+      index++;
     }
 
     return json({
@@ -35,8 +35,8 @@ export async function POST(request: Request) {
       processed: body.length - errors.length,
       errors: errors.length,
       details: errors,
-    })
+    });
   } catch (e) {
-    return serverError(e)
+    return serverError(e);
   }
 }

@@ -1,30 +1,30 @@
-import { useApi } from '../useApi'
-import { useFilterParameters } from '../useFilterParameters'
-import { useDateParameters } from '../useDateParameters'
-import { usePagedQuery } from '../usePagedQuery'
-import { ReactQueryOptions } from '@/lib/types'
-import { isValidUuid } from '@/lib/uuid'
+import type { ReactQueryOptions } from '@/lib/types';
+import { isValidUuid } from '@/lib/uuid';
+import { useApi } from '../useApi';
+import { useDateParameters } from '../useDateParameters';
+import { useFilterParameters } from '../useFilterParameters';
+import { usePagedQuery } from '../usePagedQuery';
 
 const EVENT_TYPES = {
   views: 1,
   events: 2,
-}
+};
 
 export function useWebsiteEventsQuery(
   websiteId: string,
   params?: Record<string, any>,
-  options?: ReactQueryOptions
+  options?: ReactQueryOptions,
 ) {
-  const { get } = useApi()
-  const { startAt, endAt, unit, timezone } = useDateParameters()
-  const filters = useFilterParameters()
+  const { get } = useApi();
+  const { startAt, endAt, unit, timezone } = useDateParameters();
+  const filters = useFilterParameters();
 
   return usePagedQuery({
     queryKey: [
       'websites:events',
       { websiteId, startAt, endAt, unit, timezone, ...filters, ...params },
     ],
-    queryFn: (pageParams) =>
+    queryFn: pageParams =>
       get(`/websites/${websiteId}/events`, {
         startAt,
         endAt,
@@ -36,5 +36,5 @@ export function useWebsiteEventsQuery(
       }),
     enabled: !!websiteId && isValidUuid(websiteId),
     ...options,
-  })
+  });
 }

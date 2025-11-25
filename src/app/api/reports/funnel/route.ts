@@ -1,26 +1,26 @@
-import { canViewWebsite } from '@/validations'
-import { unauthorized, json } from '@/lib/response'
-import { parseRequest, getQueryFilters, setWebsiteDate } from '@/lib/request'
-import { FunnelParameters, getFunnel } from '@/queries/sql'
-import { reportResultSchema } from '@/lib/schema'
+import { getQueryFilters, parseRequest, setWebsiteDate } from '@/lib/request';
+import { json, unauthorized } from '@/lib/response';
+import { reportResultSchema } from '@/lib/schema';
+import { type FunnelParameters, getFunnel } from '@/queries/sql';
+import { canViewWebsite } from '@/validations';
 
 export async function POST(request: Request) {
-  const { auth, body, error } = await parseRequest(request, reportResultSchema)
+  const { auth, body, error } = await parseRequest(request, reportResultSchema);
 
   if (error) {
-    return error()
+    return error();
   }
 
-  const { websiteId } = body
+  const { websiteId } = body;
 
   if (!(await canViewWebsite(auth, websiteId))) {
-    return unauthorized()
+    return unauthorized();
   }
 
-  const parameters = await setWebsiteDate(websiteId, body.parameters)
-  const filters = await getQueryFilters(body.filters, websiteId)
+  const parameters = await setWebsiteDate(websiteId, body.parameters);
+  const filters = await getQueryFilters(body.filters, websiteId);
 
-  const data = await getFunnel(websiteId, parameters as FunnelParameters, filters)
+  const data = await getFunnel(websiteId, parameters as FunnelParameters, filters);
 
-  return json(data)
+  return json(data);
 }

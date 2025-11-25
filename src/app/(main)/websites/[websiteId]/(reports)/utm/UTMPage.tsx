@@ -1,18 +1,18 @@
-'use client'
-import { Column } from '@entro314labs/entro-zen'
-import { useDateRange } from '@/components/hooks'
-import { UTM } from './UTM'
-import { WebsiteControls } from '@/app/(main)/websites/[websiteId]/WebsiteControls'
+'use client';
+import { Column } from '@entro314labs/entro-zen';
+import { WebsiteControls } from '@/app/(main)/websites/[websiteId]/WebsiteControls';
+import { useDateRange } from '@/components/hooks';
+import { UTM } from './UTM';
 
 export function UTMPage({ websiteId }: { websiteId: string }) {
   const {
     dateRange: { startDate, endDate },
-  } = useDateRange()
+  } = useDateRange();
 
   return (
     <Column gap>
       <WebsiteControls websiteId={websiteId} />
       <UTM websiteId={websiteId} startDate={startDate} endDate={endDate} />
     </Column>
-  )
+  );
 }

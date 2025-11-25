@@ -1,11 +1,11 @@
-import { Tabs, TabList, Tab, Icon, Text, Row } from '@entro314labs/entro-zen'
-import { useMessages, useNavigation, useWebsite } from '@/components/hooks'
-import { Clock, Eye, LightningSvg as Lightning, User, ChartPie } from '@/components/icons'
+import { Icon, Row, Tab, TabList, Tabs, Text } from '@entro314labs/entro-zen';
+import { useMessages, useNavigation, useWebsite } from '@/components/hooks';
+import { ChartPie, Clock, Eye, LightningSvg as Lightning, User } from '@/components/icons';
 
 export function WebsiteTabs() {
-  const website = useWebsite()
-  const { pathname, renderUrl } = useNavigation()
-  const { formatMessage, labels } = useMessages()
+  const website = useWebsite();
+  const { pathname, renderUrl } = useNavigation();
+  const { formatMessage, labels } = useMessages();
 
   const links = [
     {
@@ -38,9 +38,9 @@ export function WebsiteTabs() {
       icon: <ChartPie />,
       path: '/reports',
     },
-  ]
+  ];
 
-  const selectedKey = links.find(({ path }) => path && pathname.includes(path))?.id || 'overview'
+  const selectedKey = links.find(({ path }) => path && pathname.includes(path))?.id || 'overview';
 
   return (
     <Row marginBottom="6">
@@ -54,10 +54,10 @@ export function WebsiteTabs() {
                   <Text>{label}</Text>
                 </Row>
               </Tab>
-            )
+            );
           })}
         </TabList>
       </Tabs>
     </Row>
-  )
+  );
 }

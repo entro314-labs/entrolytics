@@ -1,33 +1,33 @@
-'use client'
-import { Dialog } from '@entro314labs/entro-zen'
-import { Trash } from '@/components/icons'
-import { useMessages, useModified, useDeleteQuery } from '@/components/hooks'
-import { ConfirmationForm } from '@/components/common/ConfirmationForm'
-import { ActionButton } from '@/components/input/ActionButton'
-import { messages } from '@/components/messages'
+'use client';
+import { Dialog } from '@entro314labs/entro-zen';
+import { ConfirmationForm } from '@/components/common/ConfirmationForm';
+import { useDeleteQuery, useMessages, useModified } from '@/components/hooks';
+import { Trash } from '@/components/icons';
+import { ActionButton } from '@/components/input/ActionButton';
+import { messages } from '@/components/messages';
 
 export interface WidgetDeleteButtonProps {
-  widgetId: string
-  boardId: string
-  title?: string
+  widgetId: string;
+  boardId: string;
+  title?: string;
 }
 
 export function WidgetDeleteButton({ widgetId, boardId, title }: WidgetDeleteButtonProps) {
-  const { formatMessage, labels, getErrorMessage, FormattedMessage } = useMessages()
-  const { touch } = useModified()
+  const { formatMessage, labels, getErrorMessage, FormattedMessage } = useMessages();
+  const { touch } = useModified();
   const { mutateAsync, isPending, error, toast } = useDeleteQuery(
-    `/boards/${boardId}/widgets/${widgetId}`
-  )
+    `/boards/${boardId}/widgets/${widgetId}`,
+  );
 
   const handleConfirm = async (close: () => void) => {
     await mutateAsync(null, {
       onSuccess: () => {
-        toast(formatMessage(messages.deleted))
-        touch(`board-widgets:${boardId}`)
-        close()
+        toast(formatMessage(messages.deleted));
+        touch(`board-widgets:${boardId}`);
+        close();
       },
-    })
-  }
+    });
+  };
 
   return (
     <ActionButton title={formatMessage(labels.delete)} icon={<Trash />}>
@@ -52,5 +52,5 @@ export function WidgetDeleteButton({ widgetId, boardId, title }: WidgetDeleteBut
         )}
       </Dialog>
     </ActionButton>
-  )
+  );
 }

@@ -1,24 +1,24 @@
-'use client'
-import { Key, useState } from 'react'
-import { TabList, Tab, Tabs, TabPanel, Column } from '@entro314labs/entro-zen'
-import { SessionsDataTable } from './SessionsDataTable'
-import { SessionProperties } from './SessionProperties'
-import { useMessages } from '@/components/hooks'
-import { Panel } from '@/components/common/Panel'
-import { WebsiteControls } from '@/app/(main)/websites/[websiteId]/WebsiteControls'
-import { getItem, setItem } from '@/lib/storage'
-import { SessionModal } from '@/app/(main)/websites/[websiteId]/sessions/SessionModal'
+'use client';
+import { Column, Tab, TabList, TabPanel, Tabs } from '@entro314labs/entro-zen';
+import { type Key, useState } from 'react';
+import { SessionModal } from '@/app/(main)/websites/[websiteId]/sessions/SessionModal';
+import { WebsiteControls } from '@/app/(main)/websites/[websiteId]/WebsiteControls';
+import { Panel } from '@/components/common/Panel';
+import { useMessages } from '@/components/hooks';
+import { getItem, setItem } from '@/lib/storage';
+import { SessionProperties } from './SessionProperties';
+import { SessionsDataTable } from './SessionsDataTable';
 
-const KEY_NAME = 'entrolytics.sessions.tab'
+const KEY_NAME = 'entrolytics.sessions.tab';
 
 export function SessionsPage({ websiteId }) {
-  const [tab, setTab] = useState(getItem(KEY_NAME) || 'activity')
-  const { formatMessage, labels } = useMessages()
+  const [tab, setTab] = useState(getItem(KEY_NAME) || 'activity');
+  const { formatMessage, labels } = useMessages();
 
   const handleSelect = (value: Key) => {
-    setItem(KEY_NAME, value)
-    setTab(value)
-  }
+    setItem(KEY_NAME, value);
+    setTab(value);
+  };
 
   return (
     <Column gap="3">
@@ -39,5 +39,5 @@ export function SessionsPage({ websiteId }) {
       </Panel>
       <SessionModal websiteId={websiteId} />
     </Column>
-  )
+  );
 }

@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
-import { useEffect, useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
-import { Shield, Zap, Globe, Lock, BarChart3, Users } from 'lucide-react'
-import styles from './FeaturesSection.module.css'
+import { motion, useInView } from 'framer-motion';
+import { BarChart3, Globe, Lock, Shield, Users, Zap } from 'lucide-react';
+import { useEffect, useRef } from 'react';
+import styles from './FeaturesSection.module.css';
 
 const features = [
   {
@@ -42,11 +42,11 @@ const features = [
     description: 'Invite your team, share reports, and collaborate on insights.',
     size: 'small',
   },
-]
+];
 
 export function FeaturesSection() {
-  const sectionRef = useRef<HTMLElement>(null)
-  const isInView = useInView(sectionRef, { once: true, margin: '-20%' })
+  const sectionRef = useRef<HTMLElement>(null);
+  const isInView = useInView(sectionRef, { once: true, margin: '-20%' });
 
   return (
     <section id="features" ref={sectionRef} className={styles.features}>
@@ -93,5 +93,5 @@ export function FeaturesSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

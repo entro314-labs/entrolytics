@@ -1,9 +1,9 @@
-import { Column, Row } from '@entro314labs/entro-zen'
-import { WebsiteFilterButton } from '@/components/input/WebsiteFilterButton'
-import { WebsiteDateFilter } from '@/components/input/WebsiteDateFilter'
-import { FilterBar } from '@/components/input/FilterBar'
-import { WebsiteMonthSelect } from '@/components/input/WebsiteMonthSelect'
-import { ExportButton } from '@/components/input/ExportButton'
+import { Column, Row } from '@entro314labs/entro-zen';
+import { ExportButton } from '@/components/input/ExportButton';
+import { FilterBar } from '@/components/input/FilterBar';
+import { WebsiteDateFilter } from '@/components/input/WebsiteDateFilter';
+import { WebsiteFilterButton } from '@/components/input/WebsiteFilterButton';
+import { WebsiteMonthSelect } from '@/components/input/WebsiteMonthSelect';
 
 export function LinkControls({
   linkId: websiteId,
@@ -12,11 +12,11 @@ export function LinkControls({
   allowMonthFilter,
   allowDownload = false,
 }: {
-  linkId: string
-  allowFilter?: boolean
-  allowDateFilter?: boolean
-  allowMonthFilter?: boolean
-  allowDownload?: boolean
+  linkId: string;
+  allowFilter?: boolean;
+  allowDateFilter?: boolean;
+  allowMonthFilter?: boolean;
+  allowDownload?: boolean;
 }) {
   return (
     <Column gap>
@@ -28,5 +28,5 @@ export function LinkControls({
       </Row>
       {allowFilter && <FilterBar websiteId={websiteId} />}
     </Column>
-  )
+  );
 }

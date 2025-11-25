@@ -1,32 +1,32 @@
-import { ListFilter } from '@/components/icons'
-import { FilterEditForm } from '@/components/input/FilterEditForm'
-import { DialogButton } from '@/components/input/DialogButton'
-import { useMessages, useNavigation } from '@/components/hooks'
-import { filtersArrayToObject } from '@/lib/params'
+import { useMessages, useNavigation } from '@/components/hooks';
+import { ListFilter } from '@/components/icons';
+import { DialogButton } from '@/components/input/DialogButton';
+import { FilterEditForm } from '@/components/input/FilterEditForm';
+import { filtersArrayToObject } from '@/lib/params';
 
 export function WebsiteFilterButton({
   websiteId,
 }: {
-  websiteId: string
-  position?: 'bottom' | 'top' | 'left' | 'right'
-  alignment?: 'end' | 'center' | 'start'
+  websiteId: string;
+  position?: 'bottom' | 'top' | 'left' | 'right';
+  alignment?: 'end' | 'center' | 'start';
 }) {
-  const { formatMessage, labels } = useMessages()
-  const { replaceParams, router } = useNavigation()
+  const { formatMessage, labels } = useMessages();
+  const { replaceParams, router } = useNavigation();
 
   const handleChange = ({ filters, segment, cohort }: any) => {
-    const params = filtersArrayToObject(filters)
+    const params = filtersArrayToObject(filters);
 
-    const url = replaceParams({ ...params, segment, cohort })
+    const url = replaceParams({ ...params, segment, cohort });
 
-    router.push(url)
-  }
+    router.push(url);
+  };
 
   return (
     <DialogButton icon={<ListFilter />} label={formatMessage(labels.filter)} variant="outline">
       {({ close }) => {
-        return <FilterEditForm websiteId={websiteId} onChange={handleChange} onClose={close} />
+        return <FilterEditForm websiteId={websiteId} onChange={handleChange} onClose={close} />;
       }}
     </DialogButton>
-  )
+  );
 }

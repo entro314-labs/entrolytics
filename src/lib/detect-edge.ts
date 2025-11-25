@@ -10,9 +10,9 @@
  * - Uses TextDecoder instead of Buffer for header decoding
  */
 
-import { UAParser } from 'ua-parser-js'
-import { browserName, detectOS } from 'detect-browser'
-import { safeDecodeURIComponent } from '@/lib/url'
+import { browserName, detectOS } from 'detect-browser';
+import { UAParser } from 'ua-parser-js';
+import { safeDecodeURIComponent } from '@/lib/url';
 
 // The order here is important and influences how IPs are detected
 export const IP_ADDRESS_HEADERS = [
@@ -28,7 +28,7 @@ export const IP_ADDRESS_HEADERS = [
   'forwarded',
   'x-appengine-user-ip',
   'x-nf-client-connection-ip',
-]
+];
 
 const PROVIDER_HEADERS = [
   // Cloudflare headers
@@ -55,42 +55,42 @@ const PROVIDER_HEADERS = [
     regionHeader: 'x-country-region',
     cityHeader: 'x-city',
   },
-]
+];
 
 export function getIpAddress(headers: Headers): string | null {
-  const customHeader = process.env.CLIENT_IP_HEADER
+  const customHeader = process.env.CLIENT_IP_HEADER;
 
   if (customHeader && headers.get(customHeader)) {
-    return headers.get(customHeader)
+    return headers.get(customHeader);
   }
 
-  const header = IP_ADDRESS_HEADERS.find((name) => headers.get(name))
-  const ip = header ? headers.get(header) : null
+  const header = IP_ADDRESS_HEADERS.find(name => headers.get(name));
+  const ip = header ? headers.get(header) : null;
 
   if (header === 'x-forwarded-for' && ip) {
-    return ip.split(',')[0]?.trim() || null
+    return ip.split(',')[0]?.trim() || null;
   }
 
   if (header === 'forwarded' && ip) {
-    const match = ip.match(/for=(\[?[0-9a-fA-F:.]+\]?)/)
+    const match = ip.match(/for=(\[?[0-9a-fA-F:.]+\]?)/);
     if (match) {
-      return match[1]
+      return match[1];
     }
   }
 
-  return ip
+  return ip;
 }
 
 export function getDevice(userAgent: string): string {
-  const { device } = UAParser(userAgent)
-  return device?.type || 'desktop'
+  const { device } = UAParser(userAgent);
+  return device?.type || 'desktop';
 }
 
 function getRegionCode(country: string, region: string): string | undefined {
   if (!country || !region) {
-    return undefined
+    return undefined;
   }
-  return region.includes('-') ? region : `${country}-${region}`
+  return region.includes('-') ? region : `${country}-${region}`;
 }
 
 /**
@@ -99,19 +99,19 @@ function getRegionCode(country: string, region: string): string | undefined {
  */
 function decodeHeader(s: string | undefined | null): string | undefined | null {
   if (s === undefined || s === null) {
-    return s
+    return s;
   }
 
   // Convert latin1 encoded string to UTF-8
-  const bytes = new Uint8Array([...s].map((c) => c.charCodeAt(0)))
-  return new TextDecoder('utf-8').decode(bytes)
+  const bytes = new Uint8Array([...s].map(c => c.charCodeAt(0)));
+  return new TextDecoder('utf-8').decode(bytes);
 }
 
 /**
  * Check if IP is localhost (simplified for edge)
  */
 function isLocalhostIp(ip: string): boolean {
-  if (!ip) return true
+  if (!ip) return true;
 
   const localhostPatterns = [
     '127.0.0.1',
@@ -120,11 +120,11 @@ function isLocalhostIp(ip: string): boolean {
     '0.0.0.0',
     '127.0.0.0',
     '::ffff:127.0.0.1',
-  ]
+  ];
 
   return localhostPatterns.some(
-    (pattern) => ip === pattern || ip.startsWith('127.') || ip.startsWith('::ffff:127.')
-  )
+    pattern => ip === pattern || ip.startsWith('127.') || ip.startsWith('::ffff:127.'),
+  );
 }
 
 /**
@@ -133,33 +133,33 @@ function isLocalhostIp(ip: string): boolean {
 export async function getLocation(
   ip: string = '',
   headers: Headers,
-  hasPayloadIP: boolean
+  hasPayloadIP: boolean,
 ): Promise<{ country?: string; region?: string; city?: string } | null> {
   // Ignore local IPs
   if (!ip || isLocalhostIp(ip)) {
-    return null
+    return null;
   }
 
   // On edge, we only use provider headers (no MaxMind)
   if (!hasPayloadIP && !process.env.SKIP_LOCATION_HEADERS) {
     for (const provider of PROVIDER_HEADERS) {
-      const countryHeader = headers.get(provider.countryHeader)
+      const countryHeader = headers.get(provider.countryHeader);
       if (countryHeader) {
-        const country = decodeHeader(countryHeader) || undefined
-        const region = decodeHeader(headers.get(provider.regionHeader)) || undefined
-        const city = decodeHeader(headers.get(provider.cityHeader)) || undefined
+        const country = decodeHeader(countryHeader) || undefined;
+        const region = decodeHeader(headers.get(provider.regionHeader)) || undefined;
+        const city = decodeHeader(headers.get(provider.cityHeader)) || undefined;
 
         return {
           country,
           region: getRegionCode(country || '', region || ''),
           city,
-        }
+        };
       }
     }
   }
 
   // No fallback to MaxMind on edge - return null
-  return null
+  return null;
 }
 
 /**
@@ -167,42 +167,42 @@ export async function getLocation(
  */
 export async function getClientInfo(
   request: Request,
-  payload: Record<string, unknown>
+  payload: Record<string, unknown>,
 ): Promise<{
-  userAgent: string
-  browser: string | null
-  os: string | null
-  ip: string | null
-  country: string | undefined
-  region: string | undefined
-  city: string | undefined
-  device: string
+  userAgent: string;
+  browser: string | null;
+  os: string | null;
+  ip: string | null;
+  country: string | undefined;
+  region: string | undefined;
+  city: string | undefined;
+  device: string;
 }> {
-  const userAgent = (payload?.userAgent as string) || request.headers.get('user-agent') || ''
-  const ip = (payload?.ip as string) || getIpAddress(request.headers)
-  const location = await getLocation(ip || '', request.headers, !!payload?.ip)
-  const country = safeDecodeURIComponent(location?.country)
-  const region = safeDecodeURIComponent(location?.region)
-  const city = safeDecodeURIComponent(location?.city)
-  const browser = browserName(userAgent)
-  const os = detectOS(userAgent) as string | null
-  const device = getDevice(userAgent)
+  const userAgent = (payload?.userAgent as string) || request.headers.get('user-agent') || '';
+  const ip = (payload?.ip as string) || getIpAddress(request.headers);
+  const location = await getLocation(ip || '', request.headers, !!payload?.ip);
+  const country = safeDecodeURIComponent(location?.country);
+  const region = safeDecodeURIComponent(location?.region);
+  const city = safeDecodeURIComponent(location?.city);
+  const browser = browserName(userAgent);
+  const os = detectOS(userAgent) as string | null;
+  const device = getDevice(userAgent);
 
-  return { userAgent, browser, os, ip, country, region, city, device }
+  return { userAgent, browser, os, ip, country, region, city, device };
 }
 
 /**
  * Check if IP is blocked (simplified for edge - no CIDR support)
  */
 export function hasBlockedIp(clientIp: string): boolean {
-  const ignoreIps = process.env.IGNORE_IP
+  const ignoreIps = process.env.IGNORE_IP;
 
   if (!ignoreIps || !clientIp) {
-    return false
+    return false;
   }
 
-  const ips = ignoreIps.split(',').map((n) => n.trim())
+  const ips = ignoreIps.split(',').map(n => n.trim());
 
   // Simple exact match only on edge (no CIDR support without ipaddr.js)
-  return ips.includes(clientIp)
+  return ips.includes(clientIp);
 }

@@ -1,5 +1,5 @@
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
-import { NextResponse } from 'next/server'
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
+import { NextResponse } from 'next/server';
 
 // Define public routes that don't require authentication
 const isPublicRoute = createRouteMatcher([
@@ -30,7 +30,7 @@ const isPublicRoute = createRouteMatcher([
   '/security',
   '/accessibility',
   '/sitemap',
-])
+]);
 
 // Define protected routes that require authentication
 const isProtectedRoute = createRouteMatcher([
@@ -44,7 +44,7 @@ const isProtectedRoute = createRouteMatcher([
   '/links(.*)',
   '/pixels(.*)',
   '/console(.*)',
-])
+]);
 
 const isProtectedApiRoute = createRouteMatcher([
   '/api/me(.*)',
@@ -55,38 +55,38 @@ const isProtectedApiRoute = createRouteMatcher([
   '/api/reports(.*)',
   '/api/links(.*)',
   '/api/pixels(.*)',
-])
+]);
 
-const isOnboardingRoute = createRouteMatcher(['/onboarding(.*)'])
+const isOnboardingRoute = createRouteMatcher(['/onboarding(.*)']);
 
 export default clerkMiddleware(async (auth, req) => {
   // Allow public routes to proceed without authentication
   if (isPublicRoute(req)) {
-    return
+    return;
   }
 
   // Protect onboarding routes - must be authenticated
   if (isOnboardingRoute(req)) {
-    await auth.protect()
-    return
+    await auth.protect();
+    return;
   }
 
   // For protected page routes, check authentication
   // Note: Onboarding redirect is handled client-side in App.tsx for better UX
   if (isProtectedRoute(req)) {
-    await auth.protect()
-    return
+    await auth.protect();
+    return;
   }
 
   // Protect API routes (return 401 for unauthenticated requests)
   if (isProtectedApiRoute(req)) {
-    await auth.protect()
+    await auth.protect();
   }
-})
+});
 
 export const config = {
   matcher: [
     '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
     '/(api|trpc)(.*)',
   ],
-}
+};

@@ -1,13 +1,13 @@
-import { useLink, useMessages, useSlug } from '@/components/hooks'
-import { PageHeader } from '@/components/common/PageHeader'
-import { Icon, Text } from '@entro314labs/entro-zen'
-import { ExternalLink, Link } from '@/components/icons'
-import { LinkButton } from '@/components/common/LinkButton'
+import { Icon, Text } from '@entro314labs/entro-zen';
+import { LinkButton } from '@/components/common/LinkButton';
+import { PageHeader } from '@/components/common/PageHeader';
+import { useLink, useMessages, useSlug } from '@/components/hooks';
+import { ExternalLink, Link } from '@/components/icons';
 
 export function LinkHeader() {
-  const { formatMessage, labels } = useMessages()
-  const { getSlugUrl } = useSlug('link')
-  const link = useLink()
+  const { formatMessage, labels } = useMessages();
+  const { getSlugUrl } = useSlug('link');
+  const link = useLink();
 
   return (
     <PageHeader title={link.name} description={link.url} icon={<Link />}>
@@ -18,5 +18,5 @@ export function LinkHeader() {
         <Text>{formatMessage(labels.view)}</Text>
       </LinkButton>
     </PageHeader>
-  )
+  );
 }

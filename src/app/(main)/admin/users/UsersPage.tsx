@@ -1,15 +1,15 @@
-'use client'
-import { UsersDataTable } from './UsersDataTable'
-import { Column } from '@entro314labs/entro-zen'
-import { useMessages } from '@/components/hooks'
-import { UserAddButton } from './UserAddButton'
-import { PageHeader } from '@/components/common/PageHeader'
-import { Panel } from '@/components/common/Panel'
+'use client';
+import { Column } from '@entro314labs/entro-zen';
+import { PageHeader } from '@/components/common/PageHeader';
+import { Panel } from '@/components/common/Panel';
+import { useMessages } from '@/components/hooks';
+import { UserAddButton } from './UserAddButton';
+import { UsersDataTable } from './UsersDataTable';
 
 export function UsersPage() {
-  const { formatMessage, labels } = useMessages()
+  const { formatMessage, labels } = useMessages();
 
-  const handleSave = () => {}
+  const handleSave = () => {};
 
   return (
     <Column gap="6">
@@ -20,5 +20,5 @@ export function UsersPage() {
         <UsersDataTable />
       </Panel>
     </Column>
-  )
+  );
 }

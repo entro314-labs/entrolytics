@@ -1,40 +1,40 @@
+import { SideMenu } from '@/components/common/SideMenu';
+import { useMessages, useNavigation } from '@/components/hooks';
 import {
-  Eye,
-  LightningSvg as Lightning,
-  User,
+  ChartPie,
   Clock,
-  Sheet,
-  Target,
+  CompareSvg as Compare,
+  Eye,
   Funnel,
-  PathSvg as Path,
+  LightningSvg as Lightning,
   Magnet,
-  Tag,
   MoneySvg as Money,
   Network,
-  ChartPie,
+  PathSvg as Path,
+  Sheet,
+  Tag,
+  Target,
+  User,
   UserPlus,
-  CompareSvg as Compare,
-} from '@/components/icons'
-import { useMessages, useNavigation } from '@/components/hooks'
-import { SideMenu } from '@/components/common/SideMenu'
-import { WebsiteSelect } from '@/components/input/WebsiteSelect'
+} from '@/components/icons';
+import { WebsiteSelect } from '@/components/input/WebsiteSelect';
 
 export function WebsiteNav({
   websiteId,
   onItemClick,
 }: {
-  websiteId: string
-  onItemClick?: () => void
+  websiteId: string;
+  onItemClick?: () => void;
 }) {
-  const { formatMessage, labels } = useMessages()
-  const { pathname, renderUrl, orgId } = useNavigation()
+  const { formatMessage, labels } = useMessages();
+  const { pathname, renderUrl, orgId } = useNavigation();
 
   const renderPath = (path: string) =>
     renderUrl(`/websites/${websiteId}${path}`, {
       event: undefined,
       compare: undefined,
       view: undefined,
-    })
+    });
 
   const items = [
     {
@@ -147,15 +147,20 @@ export function WebsiteNav({
         },
       ],
     },
-  ]
+  ];
 
   const selectedKey =
-    items.flatMap((e) => e.items).find(({ path }) => path && pathname.endsWith(path.split('?')[0]))
-      ?.id || 'overview'
+    items.flatMap(e => e.items).find(({ path }) => path && pathname.endsWith(path.split('?')[0]))
+      ?.id || 'overview';
 
   return (
-    <SideMenu items={items} selectedKey={selectedKey} allowMinimize={false} onItemClick={onItemClick}>
+    <SideMenu
+      items={items}
+      selectedKey={selectedKey}
+      allowMinimize={false}
+      onItemClick={onItemClick}
+    >
       <WebsiteSelect websiteId={websiteId} orgId={orgId} />
     </SideMenu>
-  )
+  );
 }

@@ -1,5 +1,12 @@
-import { Dialog, DialogTrigger, Button, Icon, Modal, DialogProps } from '@entro314labs/entro-zen'
-import { Menu } from '@/components/icons'
+import {
+  Button,
+  Dialog,
+  type DialogProps,
+  DialogTrigger,
+  Icon,
+  Modal,
+} from '@entro314labs/entro-zen';
+import { Menu } from '@/components/icons';
 
 export function MobileMenuButton(props: DialogProps) {
   return (
@@ -13,5 +20,5 @@ export function MobileMenuButton(props: DialogProps) {
         <Dialog variant="sheet" {...props} />
       </Modal>
     </DialogTrigger>
-  )
+  );
 }

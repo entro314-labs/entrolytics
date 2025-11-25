@@ -1,20 +1,20 @@
-import { useState } from 'react'
-import { Row } from '@entro314labs/entro-zen'
-import thenby from 'thenby'
-import { percentFilter } from '@/lib/filters'
-import { ListTable } from '@/components/metrics/ListTable'
-import { useMessages, useWebsite } from '@/components/hooks'
-import { FilterButtons } from '@/components/input/FilterButtons'
+import { Row } from '@entro314labs/entro-zen';
+import { useState } from 'react';
+import thenby from 'thenby';
+import { useMessages, useWebsite } from '@/components/hooks';
+import { FilterButtons } from '@/components/input/FilterButtons';
+import { ListTable } from '@/components/metrics/ListTable';
+import { percentFilter } from '@/lib/filters';
 
-const FILTER_REFERRERS = 'filter-referrers'
-const FILTER_PAGES = 'filter-pages'
+const FILTER_REFERRERS = 'filter-referrers';
+const FILTER_PAGES = 'filter-pages';
 
 export function RealtimeUrls({ data }: { data: any }) {
-  const website = useWebsite()
-  const { formatMessage, labels } = useMessages()
-  const { referrers, urls } = data || {}
-  const [filter, setFilter] = useState(FILTER_REFERRERS)
-  const limit = 15
+  const website = useWebsite();
+  const { formatMessage, labels } = useMessages();
+  const { referrers, urls } = data || {};
+  const [filter, setFilter] = useState(FILTER_REFERRERS);
+  const limit = 15;
 
   const buttons = [
     {
@@ -25,40 +25,40 @@ export function RealtimeUrls({ data }: { data: any }) {
       id: FILTER_PAGES,
       label: formatMessage(labels.pages),
     },
-  ]
+  ];
 
-  const renderLink = (data) => {
-    const domain = data.label.startsWith('/') ? website?.domain : ''
+  const renderLink = data => {
+    const domain = data.label.startsWith('/') ? website?.domain : '';
     return (
       <a href={`//${domain}${data.label}`} target="_blank" rel="noreferrer noopener">
         {data.label}
       </a>
-    )
-  }
+    );
+  };
 
   const domains = percentFilter(
     Object.keys(referrers)
-      .map((key) => {
+      .map(key => {
         return {
           x: key,
           y: referrers[key],
-        }
+        };
       })
       .sort(thenby.firstBy('y', -1))
-      .slice(0, limit)
-  )
+      .slice(0, limit),
+  );
 
   const pages = percentFilter(
     Object.keys(urls)
-      .map((key) => {
+      .map(key => {
         return {
           x: key,
           y: urls[key],
-        }
+        };
       })
       .sort(thenby.firstBy('y', -1))
-      .slice(0, limit)
-  )
+      .slice(0, limit),
+  );
 
   return (
     <>
@@ -90,5 +90,5 @@ export function RealtimeUrls({ data }: { data: any }) {
         />
       )}
     </>
-  )
+  );
 }

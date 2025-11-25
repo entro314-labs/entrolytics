@@ -1,7 +1,7 @@
-import clickhouse from '@/lib/clickhouse'
-import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
-import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
-import { QueryFilters } from '@/lib/types'
+import { getDateSQL, getTimestampDiffSQL, parseFilters, rawQuery } from '@/lib/analytics-utils';
+import clickhouse from '@/lib/clickhouse';
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db';
+import type { QueryFilters } from '@/lib/types';
 
 export async function getSessionDataValues(
   ...args: [websiteId: string, filters: QueryFilters & { propertyName?: string }]
@@ -9,18 +9,18 @@ export async function getSessionDataValues(
   return runQuery({
     [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  })
+  });
 }
 
 async function relationalQuery(
   websiteId: string,
-  filters: QueryFilters & { propertyName?: string }
+  filters: QueryFilters & { propertyName?: string },
 ) {
   // Using rawQuery FROM analytics-utils
   const { filterQuery, joinSessionQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
-  })
+  });
 
   return rawQuery(
     `
@@ -45,26 +45,26 @@ async function relationalQuery(
     ORDER BY 2 desc
     limit 100
     `,
-    queryParams
-  )
+    queryParams,
+  );
 }
 
 async function clickhouseQuery(
   websiteId: string,
-  filters: QueryFilters & { propertyName?: string }
+  filters: QueryFilters & { propertyName?: string },
 ): Promise<
   {
-    propertyName: string
-    dataType: number
-    propertyValue: string
-    total: number
+    propertyName: string;
+    dataType: number;
+    propertyValue: string;
+    total: number;
   }[]
 > {
-  const { rawQuery, parseFilters } = clickhouse
+  const { rawQuery, parseFilters } = clickhouse;
   const { filterQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
-  })
+  });
 
   return rawQuery(
     `
@@ -85,6 +85,6 @@ async function clickhouseQuery(
     ORDER BY 2 desc
     limit 100
     `,
-    queryParams
-  )
+    queryParams,
+  );
 }

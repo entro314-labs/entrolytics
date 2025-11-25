@@ -1,10 +1,10 @@
-import { Button, DialogTrigger, Dialog, Icon, Text, Modal } from '@entro314labs/entro-zen'
-import { useMessages } from '@/components/hooks'
-import { GoalEditForm } from './GoalEditForm'
-import { Plus } from '@/components/icons'
+import { Button, Dialog, DialogTrigger, Icon, Modal, Text } from '@entro314labs/entro-zen';
+import { useMessages } from '@/components/hooks';
+import { Plus } from '@/components/icons';
+import { GoalEditForm } from './GoalEditForm';
 
 export function GoalAddButton({ websiteId }: { websiteId: string }) {
-  const { formatMessage, labels } = useMessages()
+  const { formatMessage, labels } = useMessages();
 
   return (
     <DialogTrigger>
@@ -24,5 +24,5 @@ export function GoalAddButton({ websiteId }: { websiteId: string }) {
         </Dialog>
       </Modal>
     </DialogTrigger>
-  )
+  );
 }

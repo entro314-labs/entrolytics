@@ -3,8 +3,8 @@
  * Hybrid marketing + dashboard design
  * ======================================== */
 
-@import '@fontsource/geologica/600.css';
-@import '@fontsource/geologica/700.css';
+@import "@fontsource/geologica/600.css";
+@import "@fontsource/geologica/700.css";
 
 :root {
   /* Colors */
@@ -81,26 +81,16 @@
   position: absolute;
   width: 100%;
   height: 100%;
-  background: radial-gradient(
-    circle at 20% 50%,
-    rgba(20, 122, 243, 0.08) 0%,
-    transparent 50%
-  ),
-  radial-gradient(
-    circle at 80% 80%,
-    rgba(6, 182, 212, 0.08) 0%,
-    transparent 50%
-  ),
-  radial-gradient(
-    circle at 40% 20%,
-    rgba(20, 184, 166, 0.06) 0%,
-    transparent 50%
-  );
+  background:
+    radial-gradient(circle at 20% 50%, rgba(20, 122, 243, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(6, 182, 212, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 40% 20%, rgba(20, 184, 166, 0.06) 0%, transparent 50%);
   animation: meshFloat 20s ease-in-out infinite;
 }
 
 @keyframes meshFloat {
-  0%, 100% {
+  0%,
+  100% {
     transform: translate(0, 0) scale(1);
   }
   50% {
@@ -133,7 +123,9 @@
   border: 1px solid var(--onboarding-border);
   border-radius: 16px;
   padding: 3rem;
-  box-shadow: 0 20px 25px rgba(0, 0, 0, 0.05), 0 8px 10px rgba(0, 0, 0, 0.03);
+  box-shadow:
+    0 20px 25px rgba(0, 0, 0, 0.05),
+    0 8px 10px rgba(0, 0, 0, 0.03);
   animation: fadeInUp 0.6s ease-out;
 }
 
@@ -196,7 +188,7 @@
  * ======================================== */
 
 .onboarding-title {
-  font-family: 'Geologica', sans-serif;
+  font-family: "Geologica", sans-serif;
   font-weight: 700;
   font-size: 2rem;
   line-height: 1.2;
@@ -206,7 +198,7 @@
 }
 
 .onboarding-subtitle {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-weight: 400;
   font-size: 1.125rem;
   line-height: 1.6;
@@ -231,12 +223,14 @@
   color: white;
   padding: 14px 32px;
   border-radius: 12px;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-weight: 600;
   font-size: 16px;
   border: none;
   cursor: pointer;
-  box-shadow: 0 4px 6px rgba(20, 122, 243, 0.2), 0 10px 20px rgba(20, 122, 243, 0.1);
+  box-shadow:
+    0 4px 6px rgba(20, 122, 243, 0.2),
+    0 10px 20px rgba(20, 122, 243, 0.1);
   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   display: inline-flex;
   align-items: center;
@@ -247,7 +241,9 @@
 
 .onboarding-btn-primary:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(20, 122, 243, 0.3), 0 15px 30px rgba(20, 122, 243, 0.15);
+  box-shadow:
+    0 6px 12px rgba(20, 122, 243, 0.3),
+    0 15px 30px rgba(20, 122, 243, 0.15);
 }
 
 .onboarding-btn-primary:active:not(:disabled) {
@@ -264,7 +260,7 @@
   color: var(--onboarding-text-secondary);
   padding: 14px 32px;
   border-radius: 12px;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-weight: 500;
   font-size: 16px;
   border: 2px solid var(--onboarding-border);
@@ -325,7 +321,7 @@
 }
 
 .onboarding-label {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-weight: 500;
   font-size: 14px;
   color: var(--onboarding-text-primary);
@@ -338,7 +334,7 @@
   padding: 14px 16px;
   border: 2px solid var(--onboarding-border);
   border-radius: 10px;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 16px;
   color: var(--onboarding-text-primary);
   background: var(--onboarding-bg-surface);
@@ -359,7 +355,7 @@
 }
 
 .onboarding-hint {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 13px;
   color: var(--onboarding-text-muted);
   display: flex;
@@ -368,7 +364,7 @@
 }
 
 .error-message {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 13px;
   color: #ef4444;
 }
@@ -378,7 +374,8 @@
  * ======================================== */
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
     opacity: 1;
   }

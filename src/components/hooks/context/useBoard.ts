@@ -1,6 +1,6 @@
-import { BoardContext } from '@/app/(main)/boards/BoardProvider'
-import { useContext } from 'react'
+import { useContext } from 'react';
+import { BoardContext } from '@/app/(main)/boards/BoardProvider';
 
 export function useBoard() {
-  return useContext(BoardContext)
+  return useContext(BoardContext);
 }

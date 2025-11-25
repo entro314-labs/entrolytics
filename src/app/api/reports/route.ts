@@ -1,60 +1,60 @@
-import { z } from 'zod'
-import { eq, and } from 'drizzle-orm'
-import { uuid } from '@/lib/crypto'
-import { pagingParams, reportSchema, reportTypeParam } from '@/lib/schema'
-import { parseRequest } from '@/lib/request'
-import { canViewWebsite, canUpdateWebsite } from '@/validations'
-import { unauthorized, json } from '@/lib/response'
-import { getReports, createReport } from '@/queries/drizzle'
-import { report } from '@/lib/db'
+import { and, eq } from 'drizzle-orm';
+import { z } from 'zod';
+import { uuid } from '@/lib/crypto';
+import { report } from '@/lib/db';
+import { parseRequest } from '@/lib/request';
+import { json, unauthorized } from '@/lib/response';
+import { pagingParams, reportSchema, reportTypeParam } from '@/lib/schema';
+import { createReport, getReports } from '@/queries/drizzle';
+import { canUpdateWebsite, canViewWebsite } from '@/validations';
 
 export async function GET(request: Request) {
   const schema = z.object({
     websiteId: z.string().uuid().optional(),
     type: reportTypeParam.optional(),
     ...pagingParams,
-  })
+  });
 
-  const { auth, query, error } = await parseRequest(request, schema)
+  const { auth, query, error } = await parseRequest(request, schema);
 
   if (error) {
-    return error()
+    return error();
   }
 
-  const { page, search, pageSize, websiteId, type } = query
+  const { page, search, pageSize, websiteId, type } = query;
   const filters = {
     page,
     pageSize,
     search,
-  }
+  };
 
   if (websiteId && !(await canViewWebsite(auth, websiteId))) {
-    return unauthorized()
+    return unauthorized();
   }
 
   // Build Drizzle ORM conditions
-  const conditions = []
-  if (websiteId) conditions.push(eq(report.websiteId, websiteId))
-  if (type) conditions.push(eq(report.type, type))
+  const conditions = [];
+  if (websiteId) conditions.push(eq(report.websiteId, websiteId));
+  if (type) conditions.push(eq(report.type, type));
 
-  const whereClause = conditions.length > 0 ? and(...conditions) : undefined
+  const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
 
-  const data = await getReports(whereClause, filters)
+  const data = await getReports(whereClause, filters);
 
-  return json(data)
+  return json(data);
 }
 
 export async function POST(request: Request) {
-  const { auth, body, error } = await parseRequest(request, reportSchema)
+  const { auth, body, error } = await parseRequest(request, reportSchema);
 
   if (error) {
-    return error()
+    return error();
   }
 
-  const { websiteId, type, name, description, parameters } = body
+  const { websiteId, type, name, description, parameters } = body;
 
   if (!(await canUpdateWebsite(auth, websiteId))) {
-    return unauthorized()
+    return unauthorized();
   }
 
   const result = await createReport({
@@ -65,7 +65,7 @@ export async function POST(request: Request) {
     name,
     description: description || '',
     parameters,
-  })
+  });
 
-  return json(result)
+  return json(result);
 }

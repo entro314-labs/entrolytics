@@ -1,12 +1,12 @@
-import { Metadata } from 'next'
-import { WebsitesSettingsPage } from './WebsitesSettingsPage'
+import type { Metadata } from 'next';
+import { WebsitesSettingsPage } from './WebsitesSettingsPage';
 
 export default async function ({ params }: { params: Promise<{ orgId: string }> }) {
-  const { orgId } = await params
+  const { orgId } = await params;
 
-  return <WebsitesSettingsPage orgId={orgId} />
+  return <WebsitesSettingsPage orgId={orgId} />;
 }
 
 export const metadata: Metadata = {
   title: 'Websites',
-}
+};

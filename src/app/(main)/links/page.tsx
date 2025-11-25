@@ -1,10 +1,10 @@
-import { LinksPage } from './LinksPage'
-import { Metadata } from 'next'
+import type { Metadata } from 'next';
+import { LinksPage } from './LinksPage';
 
 export default function () {
-  return <LinksPage />
+  return <LinksPage />;
 }
 
 export const metadata: Metadata = {
   title: 'Links',
-}
+};

@@ -1,10 +1,10 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import styles from './MarketingFooter.module.css'
+import Link from 'next/link';
+import styles from './MarketingFooter.module.css';
 
 export function MarketingFooter() {
-  const currentYear = new Date().getFullYear()
+  const currentYear = new Date().getFullYear();
 
   return (
     <footer className={styles.footer}>
@@ -14,8 +14,8 @@ export function MarketingFooter() {
             Entrolytics
           </Link>
           <p className={styles.footerText}>
-            First-party growth analytics for the edge. Privacy-focused, lightning fast, and built for
-            the modern web.
+            First-party growth analytics for the edge. Privacy-focused, lightning fast, and built
+            for the modern web.
           </p>
           <div className={styles.socialLinks}>
             <a
@@ -159,5 +159,5 @@ export function MarketingFooter() {
         </div>
       </div>
     </footer>
-  )
+  );
 }

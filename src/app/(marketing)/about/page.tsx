@@ -1,14 +1,14 @@
-import { Metadata } from 'next'
-import { MarketingLayout } from '@/components/marketing'
-import styles from './about.module.css'
-import contentStyles from '@/components/marketing/ContentPage.module.css'
-import Link from 'next/link'
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { MarketingLayout } from '@/components/marketing';
+import contentStyles from '@/components/marketing/ContentPage.module.css';
+import styles from './about.module.css';
 
 export const metadata: Metadata = {
   title: 'About Us | Entrolytics',
   description:
     'Learn about Entrolytics - the privacy-first analytics platform built for the modern web. Our mission is to provide powerful insights while respecting user privacy.',
-}
+};
 
 export default function AboutPage() {
   return (
@@ -188,5 +188,5 @@ export default function AboutPage() {
         </div>
       </div>
     </MarketingLayout>
-  )
+  );
 }

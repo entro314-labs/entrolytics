@@ -1,6 +1,5 @@
-export * from 'lucide-react'
+export * from 'lucide-react';
 export {
-  Logo as LogoSvg,
   Bolt as BoltSvg,
   Change as ChangeSvg,
   Compare as CompareSvg,
@@ -8,10 +7,11 @@ export {
   Lightbulb as LightbulbSvg,
   Lightning as LightningSvg,
   Location as LocationSvg,
+  Logo as LogoSvg,
   Magnet as MagnetSvg,
   Money as MoneySvg,
   Network as NetworkSvg,
   Path as PathSvg,
   Tag as TagSvg,
   Target as TargetSvg,
-} from '@/components/svg'
+} from '@/components/svg';

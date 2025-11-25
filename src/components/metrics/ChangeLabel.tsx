@@ -1,8 +1,8 @@
-import classNames from 'classnames'
-import { Icon, Text } from '@entro314labs/entro-zen'
-import { HTMLAttributes, ReactNode } from 'react'
-import { ArrowRight } from '@/components/icons'
-import styles from './ChangeLabel.module.css'
+import { Icon, Text } from '@entro314labs/entro-zen';
+import classNames from 'classnames';
+import type { HTMLAttributes, ReactNode } from 'react';
+import { ArrowRight } from '@/components/icons';
+import styles from './ChangeLabel.module.css';
 
 export function ChangeLabel({
   value,
@@ -12,18 +12,18 @@ export function ChangeLabel({
   children,
   ...props
 }: {
-  value: number
-  size?: 'xs' | 'sm' | 'md' | 'lg'
-  title?: string
-  reverseColors?: boolean
-  showPercentage?: boolean
-  className?: string
-  children?: ReactNode
+  value: number;
+  size?: 'xs' | 'sm' | 'md' | 'lg';
+  title?: string;
+  reverseColors?: boolean;
+  showPercentage?: boolean;
+  className?: string;
+  children?: ReactNode;
 } & HTMLAttributes<HTMLDivElement>) {
-  const positive = value >= 0
-  const negative = value < 0
-  const neutral = value === 0 || isNaN(value)
-  const good = reverseColors ? negative : positive
+  const positive = value >= 0;
+  const negative = value < 0;
+  const neutral = value === 0 || isNaN(value);
+  const good = reverseColors ? negative : positive;
 
   return (
     <div
@@ -41,5 +41,5 @@ export function ChangeLabel({
       )}
       <Text>{children || value}</Text>
     </div>
-  )
+  );
 }

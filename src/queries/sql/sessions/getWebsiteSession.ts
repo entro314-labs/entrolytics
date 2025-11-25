@@ -1,12 +1,12 @@
-import clickhouse from '@/lib/clickhouse'
-import { runQuery, DRIZZLE, CLICKHOUSE } from '@/lib/db'
-import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
+import { getDateSQL, getTimestampDiffSQL, parseFilters, rawQuery } from '@/lib/analytics-utils';
+import clickhouse from '@/lib/clickhouse';
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db';
 
 export async function getWebsiteSession(...args: [websiteId: string, sessionId: string]) {
   return runQuery({
     [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  })
+  });
 }
 
 async function relationalQuery(websiteId: string, sessionId: string) {
@@ -55,12 +55,12 @@ async function relationalQuery(websiteId: string, sessionId: string) {
     GROUP BY session.session_id, session.distinct_id, visit_id, session.website_id, session.browser, session.os, session.device, session.screen, session.language, session.country, session.region, session.city) t
     GROUP BY id, distinct_id, website_id, browser, os, device, screen, language, country, region, city;
     `,
-    { websiteId, sessionId }
-  ).then((result) => result?.[0])
+    { websiteId, sessionId },
+  ).then(result => result?.[0]);
 }
 
 async function clickhouseQuery(websiteId: string, sessionId: string) {
-  const { rawQuery, getDateStringSQL } = clickhouse
+  const { rawQuery, getDateStringSQL } = clickhouse;
 
   return rawQuery(
     `
@@ -104,6 +104,6 @@ async function clickhouseQuery(websiteId: string, sessionId: string) {
         GROUP BY session_id, distinct_id, visit_id, website_id, browser, os, device, screen, language, country, region, city) t
     GROUP BY id, websiteId, distinctId, browser, os, device, screen, language, country, region, city;
     `,
-    { websiteId, sessionId }
-  ).then((result) => result?.[0])
+    { websiteId, sessionId },
+  ).then(result => result?.[0]);
 }

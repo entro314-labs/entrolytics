@@ -1,18 +1,26 @@
-import { Button, Icon, Text, Modal, DialogTrigger, Dialog, useToast } from '@entro314labs/entro-zen'
-import { UserAddForm } from './UserAddForm'
-import { useMessages, useModified } from '@/components/hooks'
-import { Plus } from '@/components/icons'
+import {
+  Button,
+  Dialog,
+  DialogTrigger,
+  Icon,
+  Modal,
+  Text,
+  useToast,
+} from '@entro314labs/entro-zen';
+import { useMessages, useModified } from '@/components/hooks';
+import { Plus } from '@/components/icons';
+import { UserAddForm } from './UserAddForm';
 
 export function UserAddButton({ onSave }: { onSave?: () => void }) {
-  const { formatMessage, labels, messages } = useMessages()
-  const { toast } = useToast()
-  const { touch } = useModified()
+  const { formatMessage, labels, messages } = useMessages();
+  const { toast } = useToast();
+  const { touch } = useModified();
 
   const handleSave = () => {
-    toast(formatMessage(messages.saved))
-    touch('users')
-    onSave?.()
-  }
+    toast(formatMessage(messages.saved));
+    touch('users');
+    onSave?.();
+  };
 
   return (
     <DialogTrigger>
@@ -28,5 +36,5 @@ export function UserAddButton({ onSave }: { onSave?: () => void }) {
         </Dialog>
       </Modal>
     </DialogTrigger>
-  )
+  );
 }

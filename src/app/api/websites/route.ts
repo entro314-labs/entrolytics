@@ -1,33 +1,33 @@
-import { z } from 'zod'
-import { canCreateOrgWebsite, canCreateWebsite, canViewAllWebsites } from '@/validations'
-import { json, unauthorized, forbidden } from '@/lib/response'
-import { uuid } from '@/lib/crypto'
-import { parseRequest, getQueryFilters } from '@/lib/request'
-import { createWebsite, getWebsites, getUserWebsites, getWebsiteCount } from '@/queries/drizzle'
-import { pagingParams, searchParams } from '@/lib/schema'
-import { EDGE_WEBSITE_LIMIT } from '@/lib/constants'
+import { z } from 'zod';
+import { EDGE_WEBSITE_LIMIT } from '@/lib/constants';
+import { uuid } from '@/lib/crypto';
+import { getQueryFilters, parseRequest } from '@/lib/request';
+import { forbidden, json, unauthorized } from '@/lib/response';
+import { pagingParams, searchParams } from '@/lib/schema';
+import { createWebsite, getUserWebsites, getWebsiteCount, getWebsites } from '@/queries/drizzle';
+import { canCreateOrgWebsite, canCreateWebsite, canViewAllWebsites } from '@/validations';
 
 export async function GET(request: Request) {
   const schema = z.object({
     ...pagingParams,
     ...searchParams,
-  })
+  });
 
-  const { auth, query, error } = await parseRequest(request, schema)
+  const { auth, query, error } = await parseRequest(request, schema);
 
   if (error) {
-    return error()
+    return error();
   }
 
-  const filters = await getQueryFilters(query)
+  const filters = await getQueryFilters(query);
 
   // If user is admin, return all websites, otherwise return user's websites
   if (await canViewAllWebsites(auth)) {
-    const websites = await getWebsites({}, filters)
-    return json(websites)
+    const websites = await getWebsites({}, filters);
+    return json(websites);
   } else {
-    const websites = await getUserWebsites(auth?.user?.userId, filters)
-    return json(websites)
+    const websites = await getUserWebsites(auth?.user?.userId, filters);
+    return json(websites);
   }
 }
 
@@ -38,26 +38,26 @@ export async function POST(request: Request) {
     shareId: z.string().max(50).nullable().optional(),
     orgId: z.string().nullable().optional(),
     id: z.string().uuid().nullable().optional(),
-  })
+  });
 
-  const { auth, body, error } = await parseRequest(request, schema)
+  const { auth, body, error } = await parseRequest(request, schema);
 
   if (error) {
-    return error()
+    return error();
   }
 
-  const { id, name, domain, shareId, orgId } = body
+  const { id, name, domain, shareId, orgId } = body;
 
   if ((orgId && !(await canCreateOrgWebsite(auth, orgId))) || !(await canCreateWebsite(auth))) {
-    return unauthorized()
+    return unauthorized();
   }
 
   // Check website limit for edge mode (free tier)
   if (process.env.EDGE_MODE && !orgId) {
-    const websiteCount = await getWebsiteCount(auth.user.userId)
+    const websiteCount = await getWebsiteCount(auth.user.userId);
 
     if (websiteCount >= EDGE_WEBSITE_LIMIT) {
-      return forbidden({ message: 'Website limit reached. Upgrade to add more websites.' })
+      return forbidden({ message: 'Website limit reached. Upgrade to add more websites.' });
     }
   }
 
@@ -68,13 +68,13 @@ export async function POST(request: Request) {
     domain,
     share_id: shareId,
     org_id: orgId,
-  }
+  };
 
   if (!orgId) {
-    data.user_id = auth.user.userId
+    data.user_id = auth.user.userId;
   }
 
-  const website = await createWebsite(data)
+  const website = await createWebsite(data);
 
-  return json(website)
+  return json(website);
 }

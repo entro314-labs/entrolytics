@@ -1,35 +1,35 @@
-import clickhouse from '@/lib/clickhouse'
-import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
 import {
-  getTimestampDiffSQL,
   getDateSQL,
+  getTimestampDiffSQL,
+  pagedRawQuery,
   parseFilters,
   rawQuery,
-  pagedRawQuery,
-} from '@/lib/analytics-utils'
+} from '@/lib/analytics-utils';
+import clickhouse from '@/lib/clickhouse';
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db';
 
-import { QueryFilters } from '@/lib/types'
+import type { QueryFilters } from '@/lib/types';
 
 export function getWebsiteEvents(...args: [websiteId: string, filters: QueryFilters]) {
   return runQuery({
     [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  })
+  });
 }
 
 async function relationalQuery(websiteId: string, filters: QueryFilters) {
   // Using pagedRawQuery and parseFilters from analytics-utils
-  const { search } = filters
+  const { search } = filters;
   const { filterQuery, dateQuery, cohortQuery, queryParams } = parseFilters({
     ...filters,
     websiteId,
     search: `%${search}%`,
-  })
+  });
 
   const searchQuery = search
     ? `AND ((event_name ilike {{search}} AND event_type = 2)
            OR (url_path ilike {{search}} AND event_type = 1))`
-    : ''
+    : '';
 
   return pagedRawQuery(
     `
@@ -63,22 +63,22 @@ async function relationalQuery(websiteId: string, filters: QueryFilters) {
     ORDER BY website_event.created_at desc
     `,
     queryParams,
-    filters
-  )
+    filters,
+  );
 }
 
 async function clickhouseQuery(websiteId: string, filters: QueryFilters) {
-  const { pagedRawQuery, parseFilters } = clickhouse
-  const { search } = filters
+  const { pagedRawQuery, parseFilters } = clickhouse;
+  const { search } = filters;
   const { queryParams, dateQuery, cohortQuery, filterQuery } = parseFilters({
     ...filters,
     websiteId,
-  })
+  });
 
   const searchQuery = search
     ? `AND ((positionCaseInsensitive(event_name, {search:String}) > 0 AND event_type = 2)
            OR (positionCaseInsensitive(url_path, {search:String}) > 0 AND event_type = 1))`
-    : ''
+    : '';
 
   return pagedRawQuery(
     `
@@ -114,6 +114,6 @@ async function clickhouseQuery(websiteId: string, filters: QueryFilters) {
     ORDER BY created_at desc
     `,
     queryParams,
-    filters
-  )
+    filters,
+  );
 }

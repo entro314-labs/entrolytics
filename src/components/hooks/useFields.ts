@@ -1,7 +1,7 @@
-import { useMessages } from './useMessages'
+import { useMessages } from './useMessages';
 
 export function useFields() {
-  const { formatMessage, labels } = useMessages()
+  const { formatMessage, labels } = useMessages();
 
   const fields = [
     { name: 'path', type: 'string', label: formatMessage(labels.path) },
@@ -17,7 +17,7 @@ export function useFields() {
     { name: 'hostname', type: 'string', label: formatMessage(labels.hostname) },
     { name: 'tag', type: 'string', label: formatMessage(labels.tag) },
     { name: 'event', type: 'string', label: formatMessage(labels.event) },
-  ]
+  ];
 
-  return { fields }
+  return { fields };
 }

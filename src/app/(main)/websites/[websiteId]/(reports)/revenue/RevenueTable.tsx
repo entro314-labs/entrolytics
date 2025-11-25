@@ -1,9 +1,9 @@
-import { DataColumn, DataTable } from '@entro314labs/entro-zen'
-import { useMessages } from '@/components/hooks'
-import { formatLongCurrency } from '@/lib/format'
+import { DataColumn, DataTable } from '@entro314labs/entro-zen';
+import { useMessages } from '@/components/hooks';
+import { formatLongCurrency } from '@/lib/format';
 
 export function RevenueTable({ data = [] }) {
-  const { formatMessage, labels } = useMessages()
+  const { formatMessage, labels } = useMessages();
 
   return (
     <DataTable data={data} rowKey={(row, index) => row?.currency || `revenue-${index}`}>
@@ -17,5 +17,5 @@ export function RevenueTable({ data = [] }) {
       <DataColumn id="count" label={formatMessage(labels.transactions)} align="end" />
       <DataColumn id="unique_count" label={formatMessage(labels.uniqueCustomers)} align="end" />
     </DataTable>
-  )
+  );
 }

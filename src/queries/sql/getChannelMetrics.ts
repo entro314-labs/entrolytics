@@ -1,4 +1,5 @@
-import clickhouse from '@/lib/clickhouse'
+import { getDateSQL, getTimestampDiffSQL, parseFilters, rawQuery } from '@/lib/analytics-utils';
+import clickhouse from '@/lib/clickhouse';
 import {
   EMAIL_DOMAINS,
   PAID_AD_PARAMS,
@@ -6,17 +7,16 @@ import {
   SHOPPING_DOMAINS,
   SOCIAL_DOMAINS,
   VIDEO_DOMAINS,
-} from '@/lib/constants'
-import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db'
-import { getTimestampDiffSQL, getDateSQL, parseFilters, rawQuery } from '@/lib/analytics-utils'
+} from '@/lib/constants';
+import { CLICKHOUSE, DRIZZLE, runQuery } from '@/lib/db';
 
-import { QueryFilters } from '@/lib/types'
+import type { QueryFilters } from '@/lib/types';
 
 export async function getChannelMetrics(...args: [websiteId: string, filters?: QueryFilters]) {
   return runQuery({
     [DRIZZLE]: () => relationalQuery(...args),
     [CLICKHOUSE]: () => clickhouseQuery(...args),
-  })
+  });
 }
 
 async function relationalQuery(websiteId: string, filters: QueryFilters) {
@@ -24,7 +24,7 @@ async function relationalQuery(websiteId: string, filters: QueryFilters) {
   const { queryParams, filterQuery, joinSessionQuery, cohortQuery, dateQuery } = parseFilters({
     ...filters,
     websiteId,
-  })
+  });
 
   return rawQuery(
     `
@@ -69,19 +69,19 @@ async function relationalQuery(websiteId: string, filters: QueryFilters) {
     GROUP BY x
     ORDER BY y desc;
     `,
-    queryParams
-  ).then((results) => results.map((item) => ({ ...item, y: Number(item.y) })))
+    queryParams,
+  ).then(results => results.map(item => ({ ...item, y: Number(item.y) })));
 }
 
 async function clickhouseQuery(
   websiteId: string,
-  filters: QueryFilters
+  filters: QueryFilters,
 ): Promise<{ x: string; y: number }[]> {
-  const { rawQuery, parseFilters } = clickhouse
+  const { rawQuery, parseFilters } = clickhouse;
   const { queryParams, filterQuery, cohortQuery, dateQuery } = parseFilters({
     ...filters,
     websiteId,
-  })
+  });
 
   const sql = `
     WITH channels as (
@@ -89,25 +89,25 @@ async function clickhouseQuery(
           CASE
           WHEN referrer_domain = '' AND url_query = '' THEN 'direct'
           WHEN multiSearchAny(url_query, [${toClickHouseStringArray(
-            PAID_AD_PARAMS
+            PAID_AD_PARAMS,
           )}]) != 0 THEN 'paidAds'
           WHEN multiSearchAny(utm_medium, ['referral', 'app','link']) != 0 THEN 'referral'
           WHEN position(utm_medium, 'affiliate') > 0 THEN 'affiliate'
           WHEN position(utm_medium, 'sms') > 0 OR position(utm_source, 'sms') > 0 THEN 'sms'
           WHEN multiSearchAny(referrer_domain, [${toClickHouseStringArray(
-            SEARCH_DOMAINS
+            SEARCH_DOMAINS,
           )}]) != 0 OR position(utm_medium, 'organic') > 0 THEN concat(prefix, 'Search')
           WHEN multiSearchAny(referrer_domain, [${toClickHouseStringArray(
-            SOCIAL_DOMAINS
+            SOCIAL_DOMAINS,
           )}]) != 0 THEN concat(prefix, 'Social')
           WHEN multiSearchAny(referrer_domain, [${toClickHouseStringArray(
-            EMAIL_DOMAINS
+            EMAIL_DOMAINS,
           )}]) != 0 OR position(utm_medium, 'mail') > 0 THEN 'email'
           WHEN multiSearchAny(referrer_domain, [${toClickHouseStringArray(
-            SHOPPING_DOMAINS
+            SHOPPING_DOMAINS,
           )}]) != 0 OR position(utm_medium, 'shop') > 0 THEN concat(prefix, 'Shopping')
           WHEN multiSearchAny(referrer_domain, [${toClickHouseStringArray(
-            VIDEO_DOMAINS
+            VIDEO_DOMAINS,
           )}]) != 0 OR position(utm_medium, 'video') > 0 THEN concat(prefix, 'Video')
           ELSE '' END AS x,
         COUNT(DISTINCT session_id) y
@@ -125,15 +125,15 @@ async function clickhouseQuery(
     WHERE x != ''
     GROUP BY x
     ORDER BY y desc;
-  `
+  `;
 
-  return rawQuery(sql, queryParams)
+  return rawQuery(sql, queryParams);
 }
 
 function toClickHouseStringArray(arr: string[]): string {
-  return arr.map((p) => `'${p.replace(/'/g, "\\'")}'`).join(', ')
+  return arr.map(p => `'${p.replace(/'/g, "\\'")}'`).join(', ');
 }
 
 function toPostgresPositionClause(column: string, arr: string[]) {
-  return arr.map((val) => `${column} ilike '%${val.replace(/'/g, "''")}%'`).join(' OR\n  ')
+  return arr.map(val => `${column} ilike '%${val.replace(/'/g, "''")}%'`).join(' OR\n  ');
 }

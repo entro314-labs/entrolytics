@@ -1,19 +1,19 @@
-import { Text, DataTable, DataColumn, Column } from '@entro314labs/entro-zen'
-import { useMessages, useResultQuery, useFormat, useFields } from '@/components/hooks'
-import { LoadingPanel } from '@/components/common/LoadingPanel'
-import { formatShortTime } from '@/lib/format'
+import { Column, DataColumn, DataTable, Text } from '@entro314labs/entro-zen';
+import { LoadingPanel } from '@/components/common/LoadingPanel';
+import { useFields, useFormat, useMessages, useResultQuery } from '@/components/hooks';
+import { formatShortTime } from '@/lib/format';
 
 export interface BreakdownProps {
-  websiteId: string
-  startDate: Date
-  endDate: Date
-  selectedFields: string[]
+  websiteId: string;
+  startDate: Date;
+  endDate: Date;
+  selectedFields: string[];
 }
 
 export function Breakdown({ websiteId, selectedFields = [], startDate, endDate }: BreakdownProps) {
-  const { formatMessage, labels } = useMessages()
-  const { formatValue } = useFormat()
-  const { fields } = useFields()
+  const { formatMessage, labels } = useMessages();
+  const { formatValue } = useFormat();
+  const { fields } = useFields();
   const { data, error, isLoading } = useResultQuery<any>(
     'breakdown',
     {
@@ -22,8 +22,8 @@ export function Breakdown({ websiteId, selectedFields = [], startDate, endDate }
       endDate,
       fields: selectedFields,
     },
-    { enabled: !!selectedFields.length }
-  )
+    { enabled: !!selectedFields.length },
+  );
 
   return (
     <LoadingPanel data={data} isLoading={isLoading} error={error}>
@@ -31,28 +31,28 @@ export function Breakdown({ websiteId, selectedFields = [], startDate, endDate }
         <DataTable
           data={data}
           rowKey={(row, index) =>
-            `breakdown-${selectedFields.map((f) => row?.[f]).join('-')}-${index}`
+            `breakdown-${selectedFields.map(f => row?.[f]).join('-')}-${index}`
           }
           style={{ tableLayout: 'fixed' }}
         >
-          {selectedFields.map((field) => {
+          {selectedFields.map(field => {
             return (
               <DataColumn
                 key={field}
                 id={field}
-                label={fields.find((f) => f.name === field)?.label}
+                label={fields.find(f => f.name === field)?.label}
                 width="minmax(120px, 1fr)"
               >
-                {(row) => {
-                  const value = formatValue(row[field], field)
+                {row => {
+                  const value = formatValue(row[field], field);
                   return (
                     <Text truncate title={value}>
                       {value}
                     </Text>
-                  )
+                  );
                 }}
               </DataColumn>
-            )
+            );
           })}
           <DataColumn
             id="visitors"
@@ -60,13 +60,13 @@ export function Breakdown({ websiteId, selectedFields = [], startDate, endDate }
             align="end"
             width="120px"
           >
-            {(row) => row?.['visitors']?.toLocaleString()}
+            {row => row?.['visitors']?.toLocaleString()}
           </DataColumn>
           <DataColumn id="visits" label={formatMessage(labels.visits)} align="end" width="120px">
-            {(row) => row?.['visits']?.toLocaleString()}
+            {row => row?.['visits']?.toLocaleString()}
           </DataColumn>
           <DataColumn id="views" label={formatMessage(labels.views)} align="end" width="120px">
-            {(row) => row?.['views']?.toLocaleString()}
+            {row => row?.['views']?.toLocaleString()}
           </DataColumn>
           <DataColumn
             id="bounceRate"
@@ -74,9 +74,9 @@ export function Breakdown({ websiteId, selectedFields = [], startDate, endDate }
             align="end"
             width="120px"
           >
-            {(row) => {
-              const n = (Math.min(row?.['visits'], row?.['bounces']) / row?.['visits']) * 100
-              return Math.round(+n) + '%'
+            {row => {
+              const n = (Math.min(row?.['visits'], row?.['bounces']) / row?.['visits']) * 100;
+              return Math.round(+n) + '%';
             }}
           </DataColumn>
           <DataColumn
@@ -85,13 +85,13 @@ export function Breakdown({ websiteId, selectedFields = [], startDate, endDate }
             align="end"
             width="120px"
           >
-            {(row) => {
-              const n = row?.['totaltime'] / row?.['visits']
-              return `${+n < 0 ? '-' : ''}${formatShortTime(Math.abs(~~n), ['m', 's'], ' ')}`
+            {row => {
+              const n = row?.['totaltime'] / row?.['visits'];
+              return `${+n < 0 ? '-' : ''}${formatShortTime(Math.abs(~~n), ['m', 's'], ' ')}`;
             }}
           </DataColumn>
         </DataTable>
       </Column>
     </LoadingPanel>
-  )
+  );
 }

@@ -1,16 +1,16 @@
+import { sql } from 'drizzle-orm';
 import {
+  char,
+  decimal,
+  index,
+  integer,
+  json,
   pgTable,
+  timestamp,
+  uniqueIndex,
   uuid,
   varchar,
-  timestamp,
-  integer,
-  decimal,
-  json,
-  char,
-  index,
-  uniqueIndex,
-} from 'drizzle-orm/pg-core'
-import { sql } from 'drizzle-orm'
+} from 'drizzle-orm/pg-core';
 
 export const board = pgTable(
   'board',
@@ -25,14 +25,14 @@ export const board = pgTable(
     updatedAt: timestamp('updated_at', { withTimezone: true }),
     deletedAt: timestamp('deleted_at', { withTimezone: true }),
   },
-  (table) => {
+  table => {
     return {
       createdAtIdx: index('board_created_at_idx').on(table.createdAt),
       orgIdIdx: index('board_org_id_idx').on(table.orgId),
       userIdIdx: index('board_user_id_idx').on(table.userId),
-    }
-  }
-)
+    };
+  },
+);
 
 export const boardWidget = pgTable(
   'board_widget',
@@ -47,14 +47,17 @@ export const boardWidget = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }),
   },
-  (table) => {
+  table => {
     return {
       boardIdIdx: index('board_widget_board_id_idx').on(table.boardId),
       websiteIdIdx: index('board_widget_website_id_idx').on(table.websiteId),
-      boardIdPositionIdx: index('board_widget_board_id_position_idx').on(table.boardId, table.position),
-    }
-  }
-)
+      boardIdPositionIdx: index('board_widget_board_id_position_idx').on(
+        table.boardId,
+        table.position,
+      ),
+    };
+  },
+);
 
 export const eventData = pgTable(
   'event_data',
@@ -69,23 +72,23 @@ export const eventData = pgTable(
     dataType: integer('data_type').notNull(),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   },
-  (table) => {
+  table => {
     return {
       createdAtIdx: index('event_data_created_at_idx').on(table.createdAt),
       websiteEventIdIdx: index('event_data_website_event_id_idx').on(table.websiteEventId),
       websiteIdCreatedAtDataKeyIdx: index('event_data_website_id_created_at_data_key_idx').on(
         table.websiteId,
         table.createdAt,
-        table.dataKey
+        table.dataKey,
       ),
       websiteIdCreatedAtIdx: index('event_data_website_id_created_at_idx').on(
         table.websiteId,
-        table.createdAt
+        table.createdAt,
       ),
       websiteIdIdx: index('event_data_website_id_idx').on(table.websiteId),
-    }
-  }
-)
+    };
+  },
+);
 
 export const link = pgTable(
   'link',
@@ -100,15 +103,15 @@ export const link = pgTable(
     updatedAt: timestamp('updated_at', { withTimezone: true }),
     deletedAt: timestamp('deleted_at', { withTimezone: true }),
   },
-  (table) => {
+  table => {
     return {
       createdAtIdx: index('link_created_at_idx').on(table.createdAt),
       orgIdIdx: index('link_org_id_idx').on(table.orgId),
       slugIdx: index('link_slug_idx').on(table.slug),
       userIdIdx: index('link_user_id_idx').on(table.userId),
-    }
-  }
-)
+    };
+  },
+);
 
 export const org = pgTable(
   'org',
@@ -121,12 +124,12 @@ export const org = pgTable(
     deletedAt: timestamp('deleted_at', { withTimezone: true }),
     logoUrl: varchar('logo_url', { length: 2183 }),
   },
-  (table) => {
+  table => {
     return {
       accessCodeIdx: index('org_access_code_idx').on(table.accessCode),
-    }
-  }
-)
+    };
+  },
+);
 
 export const orgUser = pgTable(
   'org_user',
@@ -138,13 +141,13 @@ export const orgUser = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }),
   },
-  (table) => {
+  table => {
     return {
       orgIdIdx: index('org_user_org_id_idx').on(table.orgId),
       userIdIdx: index('org_user_user_id_idx').on(table.userId),
-    }
-  }
-)
+    };
+  },
+);
 
 export const pixel = pgTable(
   'pixel',
@@ -158,15 +161,15 @@ export const pixel = pgTable(
     updatedAt: timestamp('updated_at', { withTimezone: true }),
     deletedAt: timestamp('deleted_at', { withTimezone: true }),
   },
-  (table) => {
+  table => {
     return {
       createdAtIdx: index('pixel_created_at_idx').on(table.createdAt),
       orgIdIdx: index('pixel_org_id_idx').on(table.orgId),
       slugIdx: index('pixel_slug_idx').on(table.slug),
       userIdIdx: index('pixel_user_id_idx').on(table.userId),
-    }
-  }
-)
+    };
+  },
+);
 
 export const report = pgTable(
   'report',
@@ -181,15 +184,15 @@ export const report = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }),
   },
-  (table) => {
+  table => {
     return {
       nameIdx: index('report_name_idx').on(table.name),
       typeIdx: index('report_type_idx').on(table.type),
       userIdIdx: index('report_user_id_idx').on(table.userId),
       websiteIdIdx: index('report_website_id_idx').on(table.websiteId),
-    }
-  }
-)
+    };
+  },
+);
 
 export const revenue = pgTable(
   'revenue',
@@ -203,22 +206,22 @@ export const revenue = pgTable(
     revenue: decimal('revenue', { precision: 19, scale: 4 }),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   },
-  (table) => {
+  table => {
     return {
       sessionIdIdx: index('revenue_session_id_idx').on(table.sessionId),
       websiteIdCreatedAtIdx: index('revenue_website_id_created_at_idx').on(
         table.websiteId,
-        table.createdAt
+        table.createdAt,
       ),
       websiteIdIdx: index('revenue_website_id_idx').on(table.websiteId),
       websiteIdSessionIdCreatedAtIdx: index('revenue_website_id_session_id_created_at_idx').on(
         table.websiteId,
         table.sessionId,
-        table.createdAt
+        table.createdAt,
       ),
-    }
-  }
-)
+    };
+  },
+);
 
 export const segment = pgTable(
   'segment',
@@ -231,12 +234,12 @@ export const segment = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }),
   },
-  (table) => {
+  table => {
     return {
       websiteIdIdx: index('segment_website_id_idx').on(table.websiteId),
-    }
-  }
-)
+    };
+  },
+);
 
 export const session = pgTable(
   'session',
@@ -254,57 +257,57 @@ export const session = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
     distinctId: varchar('distinct_id', { length: 50 }),
   },
-  (table) => {
+  table => {
     return {
       createdAtIdx: index('session_created_at_idx').on(table.createdAt),
       websiteIdCreatedAtBrowserIdx: index('session_website_id_created_at_browser_idx').on(
         table.websiteId,
         table.createdAt,
-        table.browser
+        table.browser,
       ),
       websiteIdCreatedAtCityIdx: index('session_website_id_created_at_city_idx').on(
         table.websiteId,
         table.createdAt,
-        table.city
+        table.city,
       ),
       websiteIdCreatedAtCountryIdx: index('session_website_id_created_at_country_idx').on(
         table.websiteId,
         table.createdAt,
-        table.country
+        table.country,
       ),
       websiteIdCreatedAtDeviceIdx: index('session_website_id_created_at_device_idx').on(
         table.websiteId,
         table.createdAt,
-        table.device
+        table.device,
       ),
       websiteIdCreatedAtIdx: index('session_website_id_created_at_idx').on(
         table.websiteId,
-        table.createdAt
+        table.createdAt,
       ),
       websiteIdCreatedAtLanguageIdx: index('session_website_id_created_at_language_idx').on(
         table.websiteId,
         table.createdAt,
-        table.language
+        table.language,
       ),
       websiteIdCreatedAtOsIdx: index('session_website_id_created_at_os_idx').on(
         table.websiteId,
         table.createdAt,
-        table.os
+        table.os,
       ),
       websiteIdCreatedAtRegionIdx: index('session_website_id_created_at_region_idx').on(
         table.websiteId,
         table.createdAt,
-        table.region
+        table.region,
       ),
       websiteIdCreatedAtScreenIdx: index('session_website_id_created_at_screen_idx').on(
         table.websiteId,
         table.createdAt,
-        table.screen
+        table.screen,
       ),
       websiteIdIdx: index('session_website_id_idx').on(table.websiteId),
-    }
-  }
-)
+    };
+  },
+);
 
 export const sessionData = pgTable(
   'session_data',
@@ -320,23 +323,23 @@ export const sessionData = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
     distinctId: varchar('distinct_id', { length: 50 }),
   },
-  (table) => {
+  table => {
     return {
       createdAtIdx: index('session_data_created_at_idx').on(table.createdAt),
       sessionIdCreatedAtIdx: index('session_data_session_id_created_at_idx').on(
         table.sessionId,
-        table.createdAt
+        table.createdAt,
       ),
       sessionIdIdx: index('session_data_session_id_idx').on(table.sessionId),
       websiteIdCreatedAtDataKeyIdx: index('session_data_website_id_created_at_data_key_idx').on(
         table.websiteId,
         table.createdAt,
-        table.dataKey
+        table.dataKey,
       ),
       websiteIdIdx: index('session_data_website_id_idx').on(table.websiteId),
-    }
-  }
-)
+    };
+  },
+);
 
 export const cliSetupToken = pgTable(
   'cli_setup_token',
@@ -358,16 +361,16 @@ export const cliSetupToken = pgTable(
     // Status
     status: varchar('status', { length: 20 }).default('pending').notNull(),
   },
-  (table) => {
+  table => {
     return {
       tokenIdx: uniqueIndex('cli_setup_token_token_idx').on(table.token),
       userIdIdx: index('cli_setup_token_user_id_idx').on(table.userId),
       statusIdx: index('cli_setup_token_status_idx').on(table.status),
       expiresAtIdx: index('cli_setup_token_expires_at_idx').on(table.expiresAt),
       websiteIdIdx: index('cli_setup_token_website_id_idx').on(table.websiteId),
-    }
-  }
-)
+    };
+  },
+);
 
 export const onboardingStep = pgTable(
   'onboarding_step',
@@ -379,13 +382,13 @@ export const onboardingStep = pgTable(
     metadata: json('metadata'),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   },
-  (table) => {
+  table => {
     return {
       userIdIdx: index('onboarding_step_user_id_idx').on(table.userId),
       createdAtIdx: index('onboarding_step_created_at_idx').on(table.createdAt),
-    }
-  }
-)
+    };
+  },
+);
 
 export const user = pgTable(
   'user',
@@ -412,13 +415,13 @@ export const user = pgTable(
     useCase: varchar('use_case', { length: 500 }),
     referralSource: varchar('referral_source', { length: 100 }),
   },
-  (table) => {
+  table => {
     return {
       emailIdx: index('user_email_idx').on(table.email),
       onboardingCompletedIdx: index('user_onboarding_completed_idx').on(table.onboardingCompleted),
-    }
-  }
-)
+    };
+  },
+);
 
 export const website = pgTable(
   'website',
@@ -435,16 +438,16 @@ export const website = pgTable(
     createdBy: uuid('created_by'),
     orgId: uuid('org_id'),
   },
-  (table) => {
+  table => {
     return {
       createdAtIdx: index('website_created_at_idx').on(table.createdAt),
       createdByIdx: index('website_created_by_idx').on(table.createdBy),
       orgIdIdx: index('website_org_id_idx').on(table.orgId),
       shareIdIdx: index('website_share_id_idx').on(table.shareId),
       userIdIdx: index('website_user_id_idx').on(table.userId),
-    }
-  }
-)
+    };
+  },
+);
 
 export const websiteEvent = pgTable(
   'website_event',
@@ -476,105 +479,105 @@ export const websiteEvent = pgTable(
     utmTerm: varchar('utm_term', { length: 255 }),
     hostname: varchar('hostname', { length: 100 }),
   },
-  (table) => {
+  table => {
     return {
       createdAtIdx: index('website_event_created_at_idx').on(table.createdAt),
       sessionIdIdx: index('website_event_session_id_idx').on(table.sessionId),
       visitIdIdx: index('website_event_visit_id_idx').on(table.visitId),
       websiteIdCreatedAtEventNameIdx: index(
-        'website_event_website_id_created_at_event_name_idx'
+        'website_event_website_id_created_at_event_name_idx',
       ).on(table.websiteId, table.createdAt, table.eventName),
       websiteIdCreatedAtHostnameIdx: index('website_event_website_id_created_at_hostname_idx').on(
         table.websiteId,
         table.createdAt,
-        table.hostname
+        table.hostname,
       ),
       websiteIdCreatedAtIdx: index('website_event_website_id_created_at_idx').on(
         table.websiteId,
-        table.createdAt
+        table.createdAt,
       ),
       websiteIdCreatedAtPageTitleIdx: index(
-        'website_event_website_id_created_at_page_title_idx'
+        'website_event_website_id_created_at_page_title_idx',
       ).on(table.websiteId, table.createdAt, table.pageTitle),
       websiteIdCreatedAtReferrerDomainIdx: index(
-        'website_event_website_id_created_at_referrer_domain_idx'
+        'website_event_website_id_created_at_referrer_domain_idx',
       ).on(table.websiteId, table.createdAt, table.referrerDomain),
       websiteIdCreatedAtTagIdx: index('website_event_website_id_created_at_tag_idx').on(
         table.websiteId,
         table.createdAt,
-        table.tag
+        table.tag,
       ),
       websiteIdCreatedAtUrlPathIdx: index('website_event_website_id_created_at_url_path_idx').on(
         table.websiteId,
         table.createdAt,
-        table.urlPath
+        table.urlPath,
       ),
       websiteIdCreatedAtUrlQueryIdx: index('website_event_website_id_created_at_url_query_idx').on(
         table.websiteId,
         table.createdAt,
-        table.urlQuery
+        table.urlQuery,
       ),
       websiteIdIdx: index('website_event_website_id_idx').on(table.websiteId),
       websiteIdSessionIdCreatedAtIdx: index(
-        'website_event_website_id_session_id_created_at_idx'
+        'website_event_website_id_session_id_created_at_idx',
       ).on(table.websiteId, table.sessionId, table.createdAt),
       websiteIdVisitIdCreatedAtIdx: index('website_event_website_id_visit_id_created_at_idx').on(
         table.websiteId,
         table.visitId,
-        table.createdAt
+        table.createdAt,
       ),
-    }
-  }
-)
+    };
+  },
+);
 
 // Type exports for TypeScript inference
-export type Board = typeof board.$inferSelect
-export type NewBoard = typeof board.$inferInsert
+export type Board = typeof board.$inferSelect;
+export type NewBoard = typeof board.$inferInsert;
 
-export type BoardWidget = typeof boardWidget.$inferSelect
-export type NewBoardWidget = typeof boardWidget.$inferInsert
+export type BoardWidget = typeof boardWidget.$inferSelect;
+export type NewBoardWidget = typeof boardWidget.$inferInsert;
 
-export type CliSetupToken = typeof cliSetupToken.$inferSelect
-export type NewCliSetupToken = typeof cliSetupToken.$inferInsert
+export type CliSetupToken = typeof cliSetupToken.$inferSelect;
+export type NewCliSetupToken = typeof cliSetupToken.$inferInsert;
 
-export type OnboardingStep = typeof onboardingStep.$inferSelect
-export type NewOnboardingStep = typeof onboardingStep.$inferInsert
+export type OnboardingStep = typeof onboardingStep.$inferSelect;
+export type NewOnboardingStep = typeof onboardingStep.$inferInsert;
 
-export type EventData = typeof eventData.$inferSelect
-export type NewEventData = typeof eventData.$inferInsert
+export type EventData = typeof eventData.$inferSelect;
+export type NewEventData = typeof eventData.$inferInsert;
 
-export type Link = typeof link.$inferSelect
-export type NewLink = typeof link.$inferInsert
+export type Link = typeof link.$inferSelect;
+export type NewLink = typeof link.$inferInsert;
 
-export type Org = typeof org.$inferSelect
-export type NewOrg = typeof org.$inferInsert
+export type Org = typeof org.$inferSelect;
+export type NewOrg = typeof org.$inferInsert;
 
-export type OrgUser = typeof orgUser.$inferSelect
-export type NewOrgUser = typeof orgUser.$inferInsert
+export type OrgUser = typeof orgUser.$inferSelect;
+export type NewOrgUser = typeof orgUser.$inferInsert;
 
-export type Pixel = typeof pixel.$inferSelect
-export type NewPixel = typeof pixel.$inferInsert
+export type Pixel = typeof pixel.$inferSelect;
+export type NewPixel = typeof pixel.$inferInsert;
 
-export type Report = typeof report.$inferSelect
-export type NewReport = typeof report.$inferInsert
+export type Report = typeof report.$inferSelect;
+export type NewReport = typeof report.$inferInsert;
 
-export type Revenue = typeof revenue.$inferSelect
-export type NewRevenue = typeof revenue.$inferInsert
+export type Revenue = typeof revenue.$inferSelect;
+export type NewRevenue = typeof revenue.$inferInsert;
 
-export type Segment = typeof segment.$inferSelect
-export type NewSegment = typeof segment.$inferInsert
+export type Segment = typeof segment.$inferSelect;
+export type NewSegment = typeof segment.$inferInsert;
 
-export type Session = typeof session.$inferSelect
-export type NewSession = typeof session.$inferInsert
+export type Session = typeof session.$inferSelect;
+export type NewSession = typeof session.$inferInsert;
 
-export type SessionData = typeof sessionData.$inferSelect
-export type NewSessionData = typeof sessionData.$inferInsert
+export type SessionData = typeof sessionData.$inferSelect;
+export type NewSessionData = typeof sessionData.$inferInsert;
 
-export type User = typeof user.$inferSelect
-export type NewUser = typeof user.$inferInsert
+export type User = typeof user.$inferSelect;
+export type NewUser = typeof user.$inferInsert;
 
-export type Website = typeof website.$inferSelect
-export type NewWebsite = typeof website.$inferInsert
+export type Website = typeof website.$inferSelect;
+export type NewWebsite = typeof website.$inferInsert;
 
-export type WebsiteEvent = typeof websiteEvent.$inferSelect
-export type NewWebsiteEvent = typeof websiteEvent.$inferInsert
+export type WebsiteEvent = typeof websiteEvent.$inferSelect;
+export type NewWebsiteEvent = typeof websiteEvent.$inferInsert;

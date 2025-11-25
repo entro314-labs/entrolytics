@@ -1,21 +1,21 @@
-import { canViewWebsite } from '@/validations'
-import { EVENT_COLUMNS, EVENT_TYPE, FILTER_COLUMNS, SESSION_COLUMNS } from '@/lib/constants'
-import { getQueryFilters, parseRequest } from '@/lib/request'
-import { badRequest, json, unauthorized, serverError } from '@/lib/response'
+import { z } from 'zod';
+import { EVENT_COLUMNS, EVENT_TYPE, FILTER_COLUMNS, SESSION_COLUMNS } from '@/lib/constants';
+import { getQueryFilters, parseRequest } from '@/lib/request';
+import { badRequest, json, serverError, unauthorized } from '@/lib/response';
+import { dateRangeParams, filterParams, searchParams } from '@/lib/schema';
 import {
   getChannelMetrics,
   getEventMetrics,
   getPageviewMetrics,
   getSessionMetrics,
-} from '@/queries/sql'
-import { z } from 'zod'
-import { dateRangeParams, filterParams, searchParams } from '@/lib/schema'
+} from '@/queries/sql';
+import { canViewWebsite } from '@/validations';
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ websiteId: string }> }
+  { params }: { params: Promise<{ websiteId: string }> },
 ) {
-  console.log('[metrics] GET request started')
+  console.log('[metrics] GET request started');
   try {
     const schema = z.object({
       type: z.string(),
@@ -24,68 +24,68 @@ export async function GET(
       ...dateRangeParams,
       ...searchParams,
       ...filterParams,
-    })
+    });
 
-    const { auth, query, error } = await parseRequest(request, schema)
+    const { auth, query, error } = await parseRequest(request, schema);
 
     if (error) {
-      return error()
+      return error();
     }
 
-    const { websiteId } = await params
+    const { websiteId } = await params;
 
     if (!(await canViewWebsite(auth, websiteId))) {
-      return unauthorized()
+      return unauthorized();
     }
 
-    const { type, limit, offset, search } = query
+    const { type, limit, offset, search } = query;
 
     try {
-      const filters = await getQueryFilters(query, websiteId)
+      const filters = await getQueryFilters(query, websiteId);
 
       if (search) {
-        filters[type] = `c.${search}`
+        filters[type] = `c.${search}`;
       }
 
       if (SESSION_COLUMNS.includes(type)) {
-        const data = await getSessionMetrics(websiteId, { type, limit, offset }, filters)
+        const data = await getSessionMetrics(websiteId, { type, limit, offset }, filters);
 
-        return json(data)
+        return json(data);
       }
 
       if (EVENT_COLUMNS.includes(type)) {
-        const column = FILTER_COLUMNS[type] || type
+        const column = FILTER_COLUMNS[type] || type;
 
         if (column === 'event_name') {
-          filters.eventType = EVENT_TYPE.customEvent
+          filters.eventType = EVENT_TYPE.customEvent;
         }
 
         if (type === 'event') {
-          return json(await getEventMetrics(websiteId, { type, limit, offset }, filters))
+          return json(await getEventMetrics(websiteId, { type, limit, offset }, filters));
         } else {
-          return json(await getPageviewMetrics(websiteId, { type, limit, offset }, filters))
+          return json(await getPageviewMetrics(websiteId, { type, limit, offset }, filters));
         }
       }
 
       if (type === 'channel') {
-        return json(await getChannelMetrics(websiteId, filters))
+        return json(await getChannelMetrics(websiteId, filters));
       }
 
-      return badRequest()
+      return badRequest();
     } catch (err) {
-      const error = err as Error
+      const error = err as Error;
       console.error('[API Error] /api/websites/[websiteId]/metrics:', {
         websiteId,
         type,
         query,
         error: error.message,
         stack: error.stack,
-      })
-      return serverError({ message: error.message, stack: error.stack })
+      });
+      return serverError({ message: error.message, stack: error.stack });
     }
   } catch (err) {
-    const error = err as Error
-    console.error('[FATAL] Unhandled error in metrics route:', error)
-    return serverError({ message: error.message, stack: error.stack })
+    const error = err as Error;
+    console.error('[FATAL] Unhandled error in metrics route:', error);
+    return serverError({ message: error.message, stack: error.stack });
   }
 }

@@ -1,32 +1,32 @@
-import { PieChart } from '@/components/charts/PieChart'
-import { LoadingPanel } from '@/components/common/LoadingPanel'
-import { Panel } from '@/components/common/Panel'
-import { useMessages, useResultQuery } from '@/components/hooks'
-import { ListTable } from '@/components/metrics/ListTable'
-import { CHART_COLORS, UTM_PARAMS } from '@/lib/constants'
-import { Column, Grid, Heading, Text } from '@entro314labs/entro-zen'
+import { Column, Grid, Heading, Text } from '@entro314labs/entro-zen';
+import { PieChart } from '@/components/charts/PieChart';
+import { LoadingPanel } from '@/components/common/LoadingPanel';
+import { Panel } from '@/components/common/Panel';
+import { useMessages, useResultQuery } from '@/components/hooks';
+import { ListTable } from '@/components/metrics/ListTable';
+import { CHART_COLORS, UTM_PARAMS } from '@/lib/constants';
 
 export interface UTMProps {
-  websiteId: string
-  startDate: Date
-  endDate: Date
+  websiteId: string;
+  startDate: Date;
+  endDate: Date;
 }
 
 export function UTM({ websiteId, startDate, endDate }: UTMProps) {
-  const { formatMessage, labels } = useMessages()
+  const { formatMessage, labels } = useMessages();
   const { data, error, isLoading } = useResultQuery<any>('utm', {
     websiteId,
     startDate,
     endDate,
-  })
+  });
 
   return (
     <LoadingPanel data={data} isLoading={isLoading} error={error} minHeight="300px">
       {data && (
         <Column gap>
-          {UTM_PARAMS.map((param) => {
-            const items = data?.[param]
-            if (!Array.isArray(items)) return null
+          {UTM_PARAMS.map(param => {
+            const items = data?.[param];
+            if (!Array.isArray(items)) return null;
             const chartData = {
               labels: items.map(({ utm }) => utm),
               datasets: [
@@ -36,10 +36,10 @@ export function UTM({ websiteId, startDate, endDate }: UTMProps) {
                   borderWidth: 0,
                 },
               ],
-            }
+            };
             const total = items.reduce((sum, { views }) => {
-              return +sum + +views
-            }, 0)
+              return +sum + +views;
+            }, 0);
 
             return (
               <Panel key={param}>
@@ -62,10 +62,10 @@ export function UTM({ websiteId, startDate, endDate }: UTMProps) {
                   </Column>
                 </Grid>
               </Panel>
-            )
+            );
           })}
         </Column>
       )}
     </LoadingPanel>
-  )
+  );
 }

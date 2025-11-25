@@ -1,24 +1,24 @@
-'use client'
-import { Button, Grid, Column, Heading } from '@entro314labs/entro-zen'
-import Link from 'next/link'
-import Script from 'next/script'
-import { Panel } from '@/components/common/Panel'
-import { PageBody } from '@/components/common/PageBody'
-import { EventsChart } from '@/components/metrics/EventsChart'
-import { WebsiteChart } from '@/app/(main)/websites/[websiteId]/WebsiteChart'
-import { useWebsiteQuery } from '@/components/hooks'
-import { PageHeader } from '@/components/common/PageHeader'
+'use client';
+import { Button, Column, Grid, Heading } from '@entro314labs/entro-zen';
+import Link from 'next/link';
+import Script from 'next/script';
+import { WebsiteChart } from '@/app/(main)/websites/[websiteId]/WebsiteChart';
+import { PageBody } from '@/components/common/PageBody';
+import { PageHeader } from '@/components/common/PageHeader';
+import { Panel } from '@/components/common/Panel';
+import { useWebsiteQuery } from '@/components/hooks';
+import { EventsChart } from '@/components/metrics/EventsChart';
 
 export function TestConsolePage({ websiteId }: { websiteId: string }) {
-  const { data } = useWebsiteQuery(websiteId)
+  const { data } = useWebsiteQuery(websiteId);
 
   function handleRunScript() {
-    window['entrolytics'].track((props) => ({
+    window['entrolytics'].track(props => ({
       ...props,
       url: '/page-view',
       referrer: 'https://www.google.com',
-    }))
-    window['entrolytics'].track('track-event-no-data')
+    }));
+    window['entrolytics'].track('track-event-no-data');
     window['entrolytics'].track('track-event-with-data', {
       test: 'test-data',
       boolean: true,
@@ -36,35 +36,35 @@ export function TestConsolePage({ websiteId }: { websiteId: string }) {
         },
       },
       array: [1, 2, 3],
-    })
+    });
   }
 
   function handleRunRevenue() {
-    window['entrolytics'].track((props) => ({
+    window['entrolytics'].track(props => ({
       ...props,
       url: '/checkout-cart',
       referrer: 'https://www.google.com',
-    }))
+    }));
     window['entrolytics'].track('checkout-cart', {
       revenue: parseFloat((Math.random() * 1000).toFixed(2)),
       currency: 'USD',
-    })
+    });
     window['entrolytics'].track('affiliate-link', {
       revenue: parseFloat((Math.random() * 1000).toFixed(2)),
       currency: 'USD',
-    })
+    });
     window['entrolytics'].track('promotion-link', {
       revenue: parseFloat((Math.random() * 1000).toFixed(2)),
       currency: 'USD',
-    })
+    });
     window['entrolytics'].track('checkout-cart', {
       revenue: parseFloat((Math.random() * 1000).toFixed(2)),
       currency: 'EUR',
-    })
+    });
     window['entrolytics'].track('promotion-link', {
       revenue: parseFloat((Math.random() * 1000).toFixed(2)),
       currency: 'EUR',
-    })
+    });
     window['entrolytics'].track('affiliate-link', {
       item1: {
         productIdentity: 'ABC424',
@@ -76,7 +76,7 @@ export function TestConsolePage({ websiteId }: { websiteId: string }) {
         revenue: parseFloat((Math.random() * 10000).toFixed(2)),
         currency: 'JPY',
       },
-    })
+    });
   }
 
   function handleRunIdentify() {
@@ -97,11 +97,11 @@ export function TestConsolePage({ websiteId }: { websiteId: string }) {
         },
       },
       array: [1, 2, 3],
-    })
+    });
   }
 
   if (!data) {
-    return null
+    return null;
   }
 
   return (
@@ -207,5 +207,5 @@ export function TestConsolePage({ websiteId }: { websiteId: string }) {
         </Panel>
       </Column>
     </PageBody>
-  )
+  );
 }

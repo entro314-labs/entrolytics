@@ -1,5 +1,5 @@
-import { useDeleteQuery, useMessages, useModified } from '@/components/hooks'
-import { ConfirmationForm } from '@/components/common/ConfirmationForm'
+import { ConfirmationForm } from '@/components/common/ConfirmationForm';
+import { useDeleteQuery, useMessages, useModified } from '@/components/hooks';
 
 export function OrgLeaveForm({
   orgId,
@@ -8,25 +8,25 @@ export function OrgLeaveForm({
   onSave,
   onClose,
 }: {
-  orgId: string
-  userId: string
-  orgName: string
-  onSave: () => void
-  onClose: () => void
+  orgId: string;
+  userId: string;
+  orgName: string;
+  onSave: () => void;
+  onClose: () => void;
 }) {
-  const { formatMessage, labels, messages, getErrorMessage, FormattedMessage } = useMessages()
-  const { mutateAsync, error, isPending } = useDeleteQuery(`/orgs/${orgId}/users/${userId}`)
-  const { touch } = useModified()
+  const { formatMessage, labels, messages, getErrorMessage, FormattedMessage } = useMessages();
+  const { mutateAsync, error, isPending } = useDeleteQuery(`/orgs/${orgId}/users/${userId}`);
+  const { touch } = useModified();
 
   const handleConfirm = async () => {
     await mutateAsync(null, {
       onSuccess: async () => {
-        touch('orgs:members')
-        onSave()
-        onClose()
+        touch('orgs:members');
+        onSave();
+        onClose();
       },
-    })
-  }
+    });
+  };
 
   return (
     <ConfirmationForm
@@ -44,5 +44,5 @@ export function OrgLeaveForm({
       isLoading={isPending}
       error={getErrorMessage(error)}
     />
-  )
+  );
 }

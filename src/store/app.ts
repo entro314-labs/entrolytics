@@ -1,4 +1,4 @@
-import { create } from 'zustand'
+import { create } from 'zustand';
 import {
   DATE_RANGE_CONFIG,
   DEFAULT_DATE_RANGE_VALUE,
@@ -7,9 +7,9 @@ import {
   LOCALE_CONFIG,
   THEME_CONFIG,
   TIMEZONE_CONFIG,
-} from '@/lib/constants'
-import { getItem } from '@/lib/storage'
-import { getTimezone } from '@/lib/date'
+} from '@/lib/constants';
+import { getTimezone } from '@/lib/date';
+import { getItem } from '@/lib/storage';
 
 const initialState = {
   locale: getItem(LOCALE_CONFIG) || process.env.defaultLocale || DEFAULT_LOCALE,
@@ -19,32 +19,32 @@ const initialState = {
   shareToken: null,
   user: null,
   config: null,
-}
+};
 
-const store = create(() => ({ ...initialState }))
+const store = create(() => ({ ...initialState }));
 
 export function setTimezone(timezone: string) {
-  store.setState({ timezone })
+  store.setState({ timezone });
 }
 
 export function setLocale(locale: string) {
-  store.setState({ locale })
+  store.setState({ locale });
 }
 
 export function setShareToken(shareToken: string) {
-  store.setState({ shareToken })
+  store.setState({ shareToken });
 }
 
 export function setUser(user: object) {
-  store.setState({ user })
+  store.setState({ user });
 }
 
 export function setConfig(config: object) {
-  store.setState({ config })
+  store.setState({ config });
 }
 
 export function setDateRangeValue(dateRangeValue: string) {
-  store.setState({ dateRangeValue })
+  store.setState({ dateRangeValue });
 }
 
-export const useApp = store
+export const useApp = store;

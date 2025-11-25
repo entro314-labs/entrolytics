@@ -1,94 +1,94 @@
-import { Auth } from '@/lib/types'
-import { getBoard, getOrgUser } from '@/queries/drizzle'
-import { hasPermission } from '@/lib/auth'
-import { PERMISSIONS } from '@/lib/constants'
+import { hasPermission } from '@/lib/auth';
+import { PERMISSIONS } from '@/lib/constants';
+import type { Auth } from '@/lib/types';
+import { getBoard, getOrgUser } from '@/queries/drizzle';
 
 export async function canViewBoard({ user }: Auth, boardId: string) {
   if (user?.isAdmin) {
-    return true
+    return true;
   }
 
-  const board = await getBoard(boardId)
+  const board = await getBoard(boardId);
 
   if (!board) {
-    return false
+    return false;
   }
 
   if (board.userId) {
-    return user?.userId === board.userId
+    return user?.userId === board.userId;
   }
 
   if (board.orgId) {
-    const orgUser = await getOrgUser(board.orgId, user?.userId)
+    const orgUser = await getOrgUser(board.orgId, user?.userId);
 
-    return !!orgUser
+    return !!orgUser;
   }
 
-  return false
+  return false;
 }
 
 export async function canCreateBoard({ user }: Auth) {
   if (user?.isAdmin) {
-    return true
+    return true;
   }
 
-  return !!user?.userId
+  return !!user?.userId;
 }
 
 export async function canCreateOrgBoard({ user }: Auth, orgId: string) {
   if (user?.isAdmin) {
-    return true
+    return true;
   }
 
-  const orgUser = await getOrgUser(orgId, user?.userId)
+  const orgUser = await getOrgUser(orgId, user?.userId);
 
-  return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteCreate)
+  return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteCreate);
 }
 
 export async function canUpdateBoard({ user }: Auth, boardId: string) {
   if (user?.isAdmin) {
-    return true
+    return true;
   }
 
-  const board = await getBoard(boardId)
+  const board = await getBoard(boardId);
 
   if (!board) {
-    return false
+    return false;
   }
 
   if (board.userId) {
-    return user?.userId === board.userId
+    return user?.userId === board.userId;
   }
 
   if (board.orgId) {
-    const orgUser = await getOrgUser(board.orgId, user?.userId)
+    const orgUser = await getOrgUser(board.orgId, user?.userId);
 
-    return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteUpdate)
+    return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteUpdate);
   }
 
-  return false
+  return false;
 }
 
 export async function canDeleteBoard({ user }: Auth, boardId: string) {
   if (user?.isAdmin) {
-    return true
+    return true;
   }
 
-  const board = await getBoard(boardId)
+  const board = await getBoard(boardId);
 
   if (!board) {
-    return false
+    return false;
   }
 
   if (board.userId) {
-    return user?.userId === board.userId
+    return user?.userId === board.userId;
   }
 
   if (board.orgId) {
-    const orgUser = await getOrgUser(board.orgId, user?.userId)
+    const orgUser = await getOrgUser(board.orgId, user?.userId);
 
-    return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteDelete)
+    return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteDelete);
   }
 
-  return false
+  return false;
 }

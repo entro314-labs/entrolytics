@@ -1,6 +1,6 @@
-import { ThemeButton, Row } from '@entro314labs/entro-zen'
-import { LanguageButton } from '@/components/input/LanguageButton'
-import { ProfileButton } from '@/components/input/ProfileButton'
+import { Row, ThemeButton } from '@entro314labs/entro-zen';
+import { LanguageButton } from '@/components/input/LanguageButton';
+import { ProfileButton } from '@/components/input/ProfileButton';
 
 export function TopNav() {
   return (
@@ -22,5 +22,5 @@ export function TopNav() {
         <ProfileButton />
       </Row>
     </Row>
-  )
+  );
 }

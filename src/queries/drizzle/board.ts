@@ -1,6 +1,6 @@
-import { eq, and, or, ilike, isNull, sql, desc, asc } from 'drizzle-orm'
-import { db, board } from '@/lib/db'
-import { PageResult, QueryFilters } from '@/lib/types'
+import { and, asc, desc, eq, ilike, isNull, or, sql } from 'drizzle-orm';
+import { board, db } from '@/lib/db';
+import type { PageResult, QueryFilters } from '@/lib/types';
 
 export async function findBoard(boardId: string) {
   return db
@@ -8,48 +8,46 @@ export async function findBoard(boardId: string) {
     .from(board)
     .where(eq(board.boardId, boardId))
     .limit(1)
-    .then((rows) => rows[0] || null)
+    .then(rows => rows[0] || null);
 }
 
 export async function getBoard(boardId: string) {
-  return findBoard(boardId)
+  return findBoard(boardId);
 }
 
 export async function getBoards(
   whereClause: any = {},
-  filters: QueryFilters = {}
+  filters: QueryFilters = {},
 ): Promise<PageResult<any[]>> {
-  const { search, page = 1, pageSize = 20, orderBy = 'createdAt', sortDescending = true } = filters
+  const { search, page = 1, pageSize = 20, orderBy = 'createdAt', sortDescending = true } = filters;
 
-  const conditions = [isNull(board.deletedAt)]
+  const conditions = [isNull(board.deletedAt)];
 
   if (search) {
-    conditions.push(
-      or(ilike(board.name, `%${search}%`), ilike(board.description, `%${search}%`))
-    )
+    conditions.push(or(ilike(board.name, `%${search}%`), ilike(board.description, `%${search}%`)));
   }
 
   if (whereClause && Object.keys(whereClause).length > 0) {
-    conditions.push(whereClause)
+    conditions.push(whereClause);
   }
 
   const query = db
     .select()
     .from(board)
-    .where(and(...conditions))
+    .where(and(...conditions));
 
   const countQuery = db
     .select({ count: sql<number>`count(*)` })
     .from(board)
-    .where(and(...conditions))
+    .where(and(...conditions));
 
-  const [{ count }] = await countQuery
+  const [{ count }] = await countQuery;
 
-  const offset = (page - 1) * pageSize
+  const offset = (page - 1) * pageSize;
   const data = await query
     .orderBy(sortDescending ? desc(board[orderBy]) : asc(board[orderBy]))
     .limit(pageSize)
-    .offset(offset)
+    .offset(offset);
 
   return {
     data,
@@ -58,21 +56,21 @@ export async function getBoards(
     pageSize,
     orderBy,
     search,
-  }
+  };
 }
 
 export async function getUserBoards(
   userId: string,
-  filters?: QueryFilters
+  filters?: QueryFilters,
 ): Promise<PageResult<any[]>> {
-  return getBoards(eq(board.userId, userId), filters)
+  return getBoards(eq(board.userId, userId), filters);
 }
 
 export async function getOrgBoards(
   orgId: string,
-  filters?: QueryFilters
+  filters?: QueryFilters,
 ): Promise<PageResult<any[]>> {
-  return getBoards(eq(board.orgId, orgId), filters)
+  return getBoards(eq(board.orgId, orgId), filters);
 }
 
 export async function createBoard(data: any) {
@@ -86,45 +84,45 @@ export async function createBoard(data: any) {
       userId: data.user_id,
       orgId: data.org_id,
     })
-    .returning()
+    .returning();
 
-  return newBoard
+  return newBoard;
 }
 
 export async function updateBoard(boardId: string, data: any) {
   const updateData: any = {
     updatedAt: new Date(),
-  }
+  };
 
-  if (data.name) updateData.name = data.name
-  if (data.description !== undefined) updateData.description = data.description
-  if (data.config !== undefined) updateData.config = data.config
-  if (data.user_id) updateData.userId = data.user_id
-  if (data.org_id) updateData.orgId = data.org_id
+  if (data.name) updateData.name = data.name;
+  if (data.description !== undefined) updateData.description = data.description;
+  if (data.config !== undefined) updateData.config = data.config;
+  if (data.user_id) updateData.userId = data.user_id;
+  if (data.org_id) updateData.orgId = data.org_id;
 
   const [updatedBoard] = await db
     .update(board)
     .set(updateData)
     .where(eq(board.boardId, boardId))
-    .returning()
+    .returning();
 
-  return updatedBoard
+  return updatedBoard;
 }
 
 export async function deleteBoard(boardId: string) {
-  const edgeMode = !!process.env.EDGE_MODE
+  const edgeMode = !!process.env.EDGE_MODE;
 
   if (edgeMode) {
     const [deletedBoard] = await db
       .update(board)
       .set({ deletedAt: new Date() })
       .where(eq(board.boardId, boardId))
-      .returning()
+      .returning();
 
-    return deletedBoard
+    return deletedBoard;
   }
 
-  const [deletedBoard] = await db.delete(board).where(eq(board.boardId, boardId)).returning()
+  const [deletedBoard] = await db.delete(board).where(eq(board.boardId, boardId)).returning();
 
-  return deletedBoard
+  return deletedBoard;
 }

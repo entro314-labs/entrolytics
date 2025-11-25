@@ -1,6 +1,6 @@
-import { SignIn } from '@clerk/nextjs'
-import { Column, Heading, Icon } from '@entro314labs/entro-zen'
-import { LogoSvg as Logo } from '@/components/icons'
+import { SignIn } from '@clerk/nextjs';
+import { Column, Heading, Icon } from '@entro314labs/entro-zen';
+import { LogoSvg as Logo } from '@/components/icons';
 
 /**
  * Clerk Sign In Page
@@ -27,5 +27,5 @@ export default function SignInPage() {
         signUpUrl="/sign-up"
       />
     </Column>
-  )
+  );
 }

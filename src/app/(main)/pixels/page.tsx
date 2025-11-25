@@ -1,10 +1,10 @@
-import { PixelsPage } from './PixelsPage'
-import { Metadata } from 'next'
+import type { Metadata } from 'next';
+import { PixelsPage } from './PixelsPage';
 
 export default function () {
-  return <PixelsPage />
+  return <PixelsPage />;
 }
 
 export const metadata: Metadata = {
   title: 'Pixels',
-}
+};

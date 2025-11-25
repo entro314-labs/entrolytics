@@ -1,13 +1,13 @@
-import { useMessages } from '@/components/hooks'
-import { useWebsiteSessionStatsQuery } from '@/components/hooks/queries/useWebsiteSessionStatsQuery'
-import { MetricCard } from '@/components/metrics/MetricCard'
-import { MetricsBar } from '@/components/metrics/MetricsBar'
-import { formatLongNumber } from '@/lib/format'
-import { LoadingPanel } from '@/components/common/LoadingPanel'
+import { LoadingPanel } from '@/components/common/LoadingPanel';
+import { useMessages } from '@/components/hooks';
+import { useWebsiteSessionStatsQuery } from '@/components/hooks/queries/useWebsiteSessionStatsQuery';
+import { MetricCard } from '@/components/metrics/MetricCard';
+import { MetricsBar } from '@/components/metrics/MetricsBar';
+import { formatLongNumber } from '@/lib/format';
 
 export function EventsMetricsBar({ websiteId }: { websiteId: string }) {
-  const { formatMessage, labels } = useMessages()
-  const { data, isLoading, isFetching, error } = useWebsiteSessionStatsQuery(websiteId)
+  const { formatMessage, labels } = useMessages();
+  const { data, isLoading, isFetching, error } = useWebsiteSessionStatsQuery(websiteId);
 
   return (
     <LoadingPanel data={data} isLoading={isLoading} isFetching={isFetching} error={error}>
@@ -36,5 +36,5 @@ export function EventsMetricsBar({ websiteId }: { websiteId: string }) {
         </MetricsBar>
       )}
     </LoadingPanel>
-  )
+  );
 }

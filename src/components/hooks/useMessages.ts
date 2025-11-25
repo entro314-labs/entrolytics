@@ -1,45 +1,45 @@
-import { useIntl, FormattedMessage, type MessageDescriptor } from 'react-intl'
-import { messages, labels } from '@/components/messages'
+import { FormattedMessage, type MessageDescriptor, useIntl } from 'react-intl';
+import { labels, messages } from '@/components/messages';
 
 type FormatMessage = (
   descriptor: MessageDescriptor,
   values?: Record<string, string | number | boolean | null | undefined>,
-  opts?: any
-) => string | null
+  opts?: any,
+) => string | null;
 
 interface UseMessages {
-  formatMessage: FormatMessage
-  messages: typeof messages
-  labels: typeof labels
-  getMessage: (id: string) => string
-  getErrorMessage: (error: unknown) => string | undefined
-  FormattedMessage: typeof FormattedMessage
+  formatMessage: FormatMessage;
+  messages: typeof messages;
+  labels: typeof labels;
+  getMessage: (id: string) => string;
+  getErrorMessage: (error: unknown) => string | undefined;
+  FormattedMessage: typeof FormattedMessage;
 }
 
 export function useMessages(): UseMessages {
-  const intl = useIntl()
+  const intl = useIntl();
 
   const getMessage = (id: string) => {
-    const message = Object.values(messages).find((value) => value.id === `message.${id}`)
+    const message = Object.values(messages).find(value => value.id === `message.${id}`);
 
-    return message ? formatMessage(message) : id
-  }
+    return message ? formatMessage(message) : id;
+  };
 
   const getErrorMessage = (error: unknown): string | undefined => {
     if (error && typeof error === 'object' && 'message' in error) {
-      const errorMessage = (error as { message: string }).message
-      return getMessage(errorMessage) || errorMessage
+      const errorMessage = (error as { message: string }).message;
+      return getMessage(errorMessage) || errorMessage;
     }
-    return undefined
-  }
+    return undefined;
+  };
 
   const formatMessage = (
     descriptor: MessageDescriptor,
     values?: Record<string, string | number | boolean | null | undefined>,
-    opts?: any
+    opts?: any,
   ) => {
-    return descriptor ? intl.formatMessage(descriptor, values, opts) : null
-  }
+    return descriptor ? intl.formatMessage(descriptor, values, opts) : null;
+  };
 
-  return { formatMessage, messages, labels, getMessage, getErrorMessage, FormattedMessage }
+  return { formatMessage, messages, labels, getMessage, getErrorMessage, FormattedMessage };
 }

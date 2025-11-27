@@ -1,4 +1,4 @@
-import { Column, Text, TextField } from '@entro314labs/entro-zen';
+import { Column, Label, Text, TextField } from '@entro314labs/entro-zen';
 import { useConfig, useMessages } from '@/components/hooks';
 
 const SCRIPT_NAME = 'script.js';
@@ -10,7 +10,7 @@ export function WebsiteTrackingCode({
   websiteId: string;
   hostUrl?: string;
 }) {
-  const { formatMessage, messages } = useMessages();
+  const { formatMessage, labels, messages } = useMessages();
   const config = useConfig();
 
   const trackerScriptName =
@@ -26,7 +26,8 @@ export function WebsiteTrackingCode({
 
   return (
     <Column gap>
-      <Text>{formatMessage(messages.trackingCode)}</Text>
+      <Label>{formatMessage(labels.trackingCode)}</Label>
+      <Text color="muted">{formatMessage(messages.trackingCode)}</Text>
       <TextField value={code} isReadOnly allowCopy asTextArea resize="none" />
     </Column>
   );

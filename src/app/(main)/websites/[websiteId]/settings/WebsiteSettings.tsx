@@ -1,5 +1,6 @@
-import { Tab, TabList, TabPanel, Tabs } from '@entro314labs/entro-zen';
-import { useMessages, useWebsite } from '@/components/hooks';
+import { Column } from '@entro314labs/entro-zen';
+import { useWebsite } from '@/components/hooks';
+import { Panel } from '@/components/common/Panel';
 import { WebsiteData } from './WebsiteData';
 import { WebsiteEditForm } from './WebsiteEditForm';
 import { WebsiteShareForm } from './WebsiteShareForm';
@@ -7,28 +8,21 @@ import { WebsiteTrackingCode } from './WebsiteTrackingCode';
 
 export function WebsiteSettings({ websiteId }: { websiteId: string; openExternal?: boolean }) {
   const website = useWebsite();
-  const { formatMessage, labels } = useMessages();
 
   return (
-    <Tabs>
-      <TabList>
-        <Tab id="details">{formatMessage(labels.details)}</Tab>
-        <Tab id="tracking">{formatMessage(labels.trackingCode)}</Tab>
-        <Tab id="share"> {formatMessage(labels.shareUrl)}</Tab>
-        <Tab id="manage">{formatMessage(labels.manage)}</Tab>
-      </TabList>
-      <TabPanel id="details" style={{ width: 500 }}>
+    <Column gap="6">
+      <Panel>
         <WebsiteEditForm websiteId={websiteId} />
-      </TabPanel>
-      <TabPanel id="tracking">
+      </Panel>
+      <Panel>
         <WebsiteTrackingCode websiteId={websiteId} />
-      </TabPanel>
-      <TabPanel id="share" style={{ width: 500 }}>
+      </Panel>
+      <Panel>
         <WebsiteShareForm websiteId={websiteId} shareId={website.shareId} />
-      </TabPanel>
-      <TabPanel id="manage">
+      </Panel>
+      <Panel>
         <WebsiteData websiteId={websiteId} />
-      </TabPanel>
-    </Tabs>
+      </Panel>
+    </Column>
   );
 }

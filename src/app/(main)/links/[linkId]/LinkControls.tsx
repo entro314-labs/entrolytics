@@ -3,7 +3,7 @@ import { ExportButton } from '@/components/input/ExportButton';
 import { FilterBar } from '@/components/input/FilterBar';
 import { WebsiteDateFilter } from '@/components/input/WebsiteDateFilter';
 import { WebsiteFilterButton } from '@/components/input/WebsiteFilterButton';
-import { WebsiteMonthSelect } from '@/components/input/WebsiteMonthSelect';
+import { MonthFilter } from '@/components/input/MonthFilter';
 
 export function LinkControls({
   linkId: websiteId,
@@ -24,7 +24,7 @@ export function LinkControls({
         {allowFilter ? <WebsiteFilterButton websiteId={websiteId} /> : <div />}
         {allowDateFilter && <WebsiteDateFilter websiteId={websiteId} showAllTime={false} />}
         {allowDownload && <ExportButton websiteId={websiteId} />}
-        {allowMonthFilter && <WebsiteMonthSelect websiteId={websiteId} />}
+        {allowMonthFilter && <MonthFilter websiteId={websiteId} />}
       </Row>
       {allowFilter && <FilterBar websiteId={websiteId} />}
     </Column>

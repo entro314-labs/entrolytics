@@ -1,22 +1,20 @@
-import { Column, Tab, TabList, TabPanel, Tabs } from '@entro314labs/entro-zen';
-import { useState } from 'react';
+import { Column, Icon, Row, Text } from '@entro314labs/entro-zen';
+import Link from 'next/link';
 import { OrgLeaveButton } from '@/app/(main)/orgs/OrgLeaveButton';
 import { PageHeader } from '@/components/common/PageHeader';
 import { Panel } from '@/components/common/Panel';
 import { useLoginQuery, useMessages, useNavigation, useOrg } from '@/components/hooks';
-import { Users } from '@/components/icons';
+import { ArrowLeft, Users } from '@/components/icons';
 import { ROLES } from '@/lib/constants';
 import { OrgEditForm } from './OrgEditForm';
 import { OrgManage } from './OrgManage';
 import { OrgMembersDataTable } from './OrgMembersDataTable';
-import { OrgWebsitesDataTable } from './OrgWebsitesDataTable';
 
 export function OrgSettings({ orgId }: { orgId: string }) {
   const org = useOrg();
-  const { formatMessage, labels } = useMessages();
   const { user } = useLoginQuery();
-  const { query, pathname } = useNavigation();
-  const [tab, setTab] = useState(query?.tab || 'details');
+  const { formatMessage, labels } = useMessages();
+  const { pathname } = useNavigation();
 
   const isAdmin = pathname.includes('/admin');
 
@@ -33,32 +31,32 @@ export function OrgSettings({ orgId }: { orgId: string }) {
       user.role !== ROLES.viewOnly);
 
   return (
-    <Column gap="6">
-      <PageHeader title={org?.name} icon={<Users />}>
-        {!isOrgOwner && !isAdmin && <OrgLeaveButton orgId={org.id} orgName={org.name} />}
-      </PageHeader>
-      <Panel>
-        <Tabs selectedKey={tab} onSelectionChange={(value: any) => setTab(value)}>
-          <TabList>
-            <Tab id="details">{formatMessage(labels.details)}</Tab>
-            <Tab id="members">{formatMessage(labels.members)}</Tab>
-            <Tab id="websites">{formatMessage(labels.websites)}</Tab>
-            {isOrgOwner && <Tab id="manage">{formatMessage(labels.manage)}</Tab>}
-          </TabList>
-          <TabPanel id="details" style={{ width: 500 }}>
-            <OrgEditForm orgId={orgId} allowEdit={canEdit} />
-          </TabPanel>
-          <TabPanel id="members">
-            <OrgMembersDataTable orgId={orgId} allowEdit />
-          </TabPanel>
-          <TabPanel id="websites">
-            <OrgWebsitesDataTable orgId={orgId} allowEdit />
-          </TabPanel>
-          <TabPanel id="manage">
+    <>
+      <Link href="/settings/orgs">
+        <Row marginTop="2" alignItems="center" gap>
+          <Icon rotate={180}>
+            <ArrowLeft />
+          </Icon>
+          <Text>{formatMessage(labels.orgs)}</Text>
+        </Row>
+      </Link>
+
+      <Column gap="6">
+        <PageHeader title={org?.name} icon={<Users />}>
+          {!isOrgOwner && !isAdmin && <OrgLeaveButton orgId={org.id} orgName={org.name} />}
+        </PageHeader>
+        <Panel>
+          <OrgEditForm orgId={orgId} allowEdit={canEdit} />
+        </Panel>
+        <Panel>
+          <OrgMembersDataTable orgId={orgId} allowEdit={canEdit} />
+        </Panel>
+        {isOrgOwner && (
+          <Panel>
             <OrgManage orgId={orgId} />
-          </TabPanel>
-        </Tabs>
-      </Panel>
-    </Column>
+          </Panel>
+        )}
+      </Column>
+    </>
   );
 }

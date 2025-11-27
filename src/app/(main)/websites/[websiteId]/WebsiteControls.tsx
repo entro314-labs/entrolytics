@@ -3,7 +3,7 @@ import { ExportButton } from '@/components/input/ExportButton';
 import { FilterBar } from '@/components/input/FilterBar';
 import { WebsiteDateFilter } from '@/components/input/WebsiteDateFilter';
 import { WebsiteFilterButton } from '@/components/input/WebsiteFilterButton';
-import { WebsiteMonthSelect } from '@/components/input/WebsiteMonthSelect';
+import { MonthFilter } from '@/components/input/MonthFilter';
 
 export function WebsiteControls({
   websiteId,
@@ -31,7 +31,7 @@ export function WebsiteControls({
             <WebsiteDateFilter websiteId={websiteId} allowCompare={allowCompare} />
           )}
           {allowDownload && <ExportButton websiteId={websiteId} />}
-          {allowMonthFilter && <WebsiteMonthSelect websiteId={websiteId} />}
+          {allowMonthFilter && <MonthFilter websiteId={websiteId} />}
         </Row>
       </Grid>
       {allowFilter && <FilterBar websiteId={websiteId} />}

@@ -1,7 +1,7 @@
 import { hasPermission } from '@/lib/auth';
 import { PERMISSIONS } from '@/lib/constants';
 import type { Auth } from '@/lib/types';
-import { getOrgUser, getWebsite } from '@/queries/drizzle';
+import { getLink, getOrgUser, getPixel, getWebsite } from '@/queries/drizzle';
 
 const edgeMode = !!process.env.EDGE_MODE;
 
@@ -14,18 +14,23 @@ export async function canViewWebsite({ user, shareToken }: Auth, websiteId: stri
     return true;
   }
 
+  // Look up website, link, or pixel - entityId could be any of these
   const website = await getWebsite(websiteId);
+  const link = await getLink(websiteId);
+  const pixel = await getPixel(websiteId);
 
-  if (!website) {
+  const entity = website || link || pixel;
+
+  if (!entity) {
     return false;
   }
 
-  if (website.userId) {
-    return user?.userId === website.userId;
+  if (entity.userId) {
+    return user?.userId === entity.userId;
   }
 
-  if (website.orgId) {
-    const orgUser = await getOrgUser(website.orgId, user?.userId);
+  if (entity.orgId) {
+    const orgUser = await getOrgUser(entity.orgId, user?.userId);
 
     return !!orgUser;
   }
@@ -54,18 +59,23 @@ export async function canUpdateWebsite({ user }: Auth, websiteId: string) {
     return true;
   }
 
+  // Look up website, link, or pixel - entityId could be any of these
   const website = await getWebsite(websiteId);
+  const link = await getLink(websiteId);
+  const pixel = await getPixel(websiteId);
 
-  if (!website) {
+  const entity = website || link || pixel;
+
+  if (!entity) {
     return false;
   }
 
-  if (website.userId) {
-    return user?.userId === website.userId;
+  if (entity.userId) {
+    return user?.userId === entity.userId;
   }
 
-  if (website.orgId) {
-    const orgUser = await getOrgUser(website.orgId, user?.userId);
+  if (entity.orgId) {
+    const orgUser = await getOrgUser(entity.orgId, user?.userId);
 
     return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteUpdate);
   }
@@ -78,18 +88,23 @@ export async function canDeleteWebsite({ user }: Auth, websiteId: string) {
     return true;
   }
 
+  // Look up website, link, or pixel - entityId could be any of these
   const website = await getWebsite(websiteId);
+  const link = await getLink(websiteId);
+  const pixel = await getPixel(websiteId);
 
-  if (!website) {
+  const entity = website || link || pixel;
+
+  if (!entity) {
     return false;
   }
 
-  if (website.userId) {
-    return user?.userId === website.userId;
+  if (entity.userId) {
+    return user?.userId === entity.userId;
   }
 
-  if (website.orgId) {
-    const orgUser = await getOrgUser(website.orgId, user?.userId);
+  if (entity.orgId) {
+    const orgUser = await getOrgUser(entity.orgId, user?.userId);
 
     return orgUser && hasPermission(orgUser.role, PERMISSIONS.websiteDelete);
   }

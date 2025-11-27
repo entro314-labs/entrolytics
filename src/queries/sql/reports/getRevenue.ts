@@ -15,12 +15,6 @@ export interface RevenueResult {
   chart: { x: string; t: string; y: number }[];
   country: { name: string; value: number }[];
   total: { SUM: number; COUNT: number; average: number; unique_count: number };
-  table: {
-    currency: string;
-    SUM: number;
-    COUNT: number;
-    unique_count: number;
-  }[];
 }
 
 export async function getRevenue(
@@ -48,6 +42,16 @@ async function relationalQuery(
     currency,
   });
 
+  // Conditional JOIN - only include when filters are applied for better performance
+  const joinQuery = filterQuery
+    ? `JOIN website_event
+      on website_event.website_id = revenue.website_id
+        AND website_event.session_id = revenue.session_id
+        AND website_event.event_id = revenue.event_id
+        AND website_event.website_id = {{websiteId::uuid}}
+        AND website_event.created_at between {{startDate}} AND {{endDate}}`
+    : '';
+
   const chart = await rawQuery(
     `
     SELECT
@@ -55,12 +59,7 @@ async function relationalQuery(
       ${getDateSQL('revenue.created_at', unit, timezone)} t,
       SUM(revenue.revenue) y
     FROM revenue
-    JOIN website_event
-      on website_event.website_id = revenue.website_id
-        AND website_event.session_id = revenue.session_id
-        AND website_event.event_id = revenue.event_id
-        AND website_event.website_id = {{websiteId::uuid}}
-        AND website_event.created_at between {{startDate}} AND {{endDate}}
+    ${joinQuery}
     ${cohortQuery}
     ${joinSessionQuery}
     WHERE revenue.website_id = {{websiteId::uuid}}
@@ -79,12 +78,7 @@ async function relationalQuery(
       session.country as name,
       SUM(revenue.revenue) value
     FROM revenue
-    JOIN website_event
-      on website_event.website_id = revenue.website_id
-        AND website_event.session_id = revenue.session_id
-        AND website_event.event_id = revenue.event_id
-        AND website_event.website_id = {{websiteId::uuid}}
-        AND website_event.created_at between {{startDate}} AND {{endDate}}
+    ${joinQuery}
     JOIN session
       on session.website_id = revenue.website_id
         AND session.session_id = revenue.session_id
@@ -105,12 +99,7 @@ async function relationalQuery(
       COUNT(DISTINCT revenue.event_id) as COUNT,
       COUNT(DISTINCT revenue.session_id) as unique_count
     FROM revenue
-    JOIN website_event
-      on website_event.website_id = revenue.website_id
-        AND website_event.session_id = revenue.session_id
-        AND website_event.event_id = revenue.event_id
-        AND website_event.website_id = {{websiteId::uuid}}
-        AND website_event.created_at between {{startDate}} AND {{endDate}}
+    ${joinQuery}
     ${cohortQuery}
     ${joinSessionQuery}
     WHERE revenue.website_id = {{websiteId::uuid}}
@@ -123,32 +112,7 @@ async function relationalQuery(
 
   total.average = total.COUNT > 0 ? Number(total.SUM) / Number(total.COUNT) : 0;
 
-  const table = await rawQuery(
-    `
-    SELECT
-      revenue.currency,
-      SUM(revenue.revenue) as SUM,
-      COUNT(DISTINCT revenue.event_id) as COUNT,
-      COUNT(DISTINCT revenue.session_id) as unique_count
-    FROM revenue
-    JOIN website_event
-      on website_event.website_id = revenue.website_id
-        AND website_event.session_id = revenue.session_id
-        AND website_event.event_id = revenue.event_id
-        AND website_event.website_id = {{websiteId::uuid}}
-        AND website_event.created_at between {{startDate}} AND {{endDate}}
-    ${cohortQuery}
-    ${joinSessionQuery}
-    WHERE revenue.website_id = {{websiteId::uuid}}
-      AND revenue.created_at between {{startDate}} AND {{endDate}}
-      ${filterQuery}
-    GROUP BY revenue.currency
-    ORDER BY SUM desc
-    `,
-    queryParams,
-  );
-
-  return { chart, country, table, total };
+  return { chart, country, total };
 }
 
 async function clickhouseQuery(
@@ -252,36 +216,5 @@ async function clickhouseQuery(
 
   total.average = total.COUNT > 0 ? Number(total.SUM) / Number(total.COUNT) : 0;
 
-  const table = await rawQuery<
-    {
-      currency: string;
-      SUM: number;
-      COUNT: number;
-      unique_count: number;
-    }[]
-  >(
-    `
-    SELECT
-      website_revenue.currency,
-      SUM(website_revenue.revenue) as SUM,
-      uniqExact(website_revenue.event_id) as COUNT,
-      uniqExact(website_revenue.session_id) as unique_count
-    FROM website_revenue
-    JOIN website_event
-          on website_event.website_id = website_revenue.website_id
-            AND website_event.session_id = website_revenue.session_id
-            AND website_event.event_id = website_revenue.event_id
-            AND website_event.website_id = {websiteId:UUID}
-            AND website_event.created_at between {startDate:DateTime64} AND {endDate:DateTime64}
-    ${cohortQuery}
-    WHERE website_revenue.website_id = {websiteId:UUID}
-      AND website_revenue.created_at between {startDate:DateTime64} AND {endDate:DateTime64}
-      ${filterQuery}
-    GROUP BY website_revenue.currency
-    ORDER BY SUM desc
-    `,
-    queryParams,
-  );
-
-  return { chart, country, table, total };
+  return { chart, country, total };
 }

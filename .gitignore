@@ -46,30 +46,3 @@ yarn-error.log*
 *.dev.yml
 
 .vercel
-CLERK_MIGRATION_COMPLETE.md
-FINAL_CLERK_MIGRATION_REPORT.md
-clerk.txt
-AUTHENTICATION.md
-Untitled-1.md
-CLAUDE.md
-clerk_nextjs_reference.md
-.github/copilot-instructions.md
-entrolytics-integration.md
-MIGRATION_HISTORY.md
-ADMIN_SETUP.md
-AUTHENTICATION.md
-CLERK_MIGRATION_FIXES.md
-CLERK_RBAC_GUIDE.md
-FINAL_CLERK_CLEANUP.md
-dashboard-crashes.md
-issues.md
-.claude/settings.local.json
-neon-drizzle.md
-umami patches
-UPSTREAM_COMMITS.md
-CODE_CLEANUP_AUDIT.md
-EDGE_IMPLEMENTATION_CHECKLIST.md
-EDGE_SUPPORT_SPECIFICATION.md
-entrolytics-edge-implementation-plan.md
-AUDIT_IMPLEMENTATION.md
-Entrolytics System Context.md

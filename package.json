@@ -143,7 +143,7 @@
     "npm-run-all": "^4.1.5",
     "papaparse": "^5.5.3",
     "pg": "^8.16.3",
-    "prettier": "^3.6.2",
+    "prettier": "^3.7.1",
     "pure-rand": "^7.0.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
@@ -164,10 +164,10 @@
     "zustand": "^5.0.8"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.3.7",
+    "@biomejs/biome": "2.3.8",
     "@clerk/testing": "^1.13.19",
     "@formatjs/cli": "^6.7.4",
-    "@netlify/plugin-nextjs": "^5.15.0",
+    "@netlify/plugin-nextjs": "^5.15.1",
     "@rollup/plugin-alias": "^6.0.0",
     "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-json": "^6.1.0",

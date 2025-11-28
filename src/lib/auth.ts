@@ -1,5 +1,6 @@
 import { auth, clerkClient, currentUser } from '@clerk/nextjs/server';
 import debug from 'debug';
+import { headers } from 'next/headers';
 import { ROLE_PERMISSIONS, ROLES, SHARE_TOKEN_HEADER } from '@/lib/constants';
 import { secret, uuid } from '@/lib/crypto';
 import type { User } from '@/lib/db';
@@ -20,15 +21,84 @@ type EnhancedUser = User & {
 const log = debug('entrolytics:auth');
 
 /**
+ * CLI Token payload structure
+ */
+interface CliTokenPayload {
+  type: 'cli_access_token';
+  userId: string;
+  clerkId: string;
+  email: string;
+  iat: number;
+  exp: number;
+}
+
+/**
+ * Try to authenticate via CLI Bearer token
+ * Returns user if valid CLI token, null otherwise
+ */
+async function authenticateCliToken(): Promise<EnhancedUser | null> {
+  try {
+    const headersList = await headers();
+    const authHeader = headersList.get('authorization');
+
+    if (!authHeader?.startsWith('Bearer ')) {
+      return null;
+    }
+
+    const token = authHeader.slice(7);
+    const payload = parseToken(token, secret()) as CliTokenPayload | null;
+
+    if (!payload || payload.type !== 'cli_access_token') {
+      return null;
+    }
+
+    // Check expiry
+    if (payload.exp < Math.floor(Date.now() / 1000)) {
+      log('CLI token expired');
+      return null;
+    }
+
+    // Get user from database
+    const user = await getUser(payload.userId);
+
+    if (!user) {
+      log('CLI token user not found:', payload.userId);
+      return null;
+    }
+
+    log('Authenticated via CLI token:', user.email);
+
+    return {
+      ...user,
+      isAdmin: user.role === ROLES.admin,
+      platformRole: user.role as PlatformRole,
+      orgId: null,
+      orgRole: null,
+    } as EnhancedUser;
+  } catch (error) {
+    log('CLI token auth error:', error);
+    return null;
+  }
+}
+
+/**
  * Get current authenticated user with enhanced role information
  *
- * Uses Clerk's auth() function, syncs user to local database,
- * and enriches with role data from Clerk's publicMetadata.
+ * Supports both:
+ * 1. Clerk session authentication (browser/web)
+ * 2. CLI Bearer token authentication (CLI tools)
  *
  * @returns Enhanced user object with role information or null if not authenticated
  */
 export async function getCurrentUser(): Promise<EnhancedUser | null> {
   try {
+    // First, try CLI token authentication
+    const cliUser = await authenticateCliToken();
+    if (cliUser) {
+      return cliUser;
+    }
+
+    // Fall back to Clerk session authentication
     const { userId: clerkUserId, orgId, orgRole } = await auth();
 
     if (!clerkUserId) {

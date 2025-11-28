@@ -11,6 +11,10 @@ const isPublicRoute = createRouteMatcher([
   '/api/webhooks/(.*)',
   '/script.js',
   '/telemetry.js',
+  // CLI OAuth routes
+  '/cli(.*)',
+  '/api/cli/(.*)',
+  '/api/auth/cli/(.*)',
   // Marketing/public pages
   '/privacy',
   '/terms',
@@ -59,9 +63,24 @@ const isProtectedApiRoute = createRouteMatcher([
 
 const isOnboardingRoute = createRouteMatcher(['/onboarding(.*)']);
 
+/**
+ * Check if request has a Bearer token (CLI authentication)
+ * These requests should bypass Clerk middleware and be validated in the route handler
+ */
+function hasBearerToken(req: Request): boolean {
+  const authHeader = req.headers.get('authorization');
+  return authHeader?.startsWith('Bearer ') || false;
+}
+
 export default clerkMiddleware(async (auth, req) => {
   // Allow public routes to proceed without authentication
   if (isPublicRoute(req)) {
+    return;
+  }
+
+  // Allow Bearer token requests to proceed - they will be validated in route handlers
+  // This enables CLI tools to authenticate without Clerk sessions
+  if (hasBearerToken(req)) {
     return;
   }
 

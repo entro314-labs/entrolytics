@@ -372,6 +372,33 @@ export const cliSetupToken = pgTable(
   },
 );
 
+export const cliAccessToken = pgTable(
+  'cli_access_token',
+  {
+    jti: uuid('jti').primaryKey().default(sql`gen_random_uuid()`),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => user.userId),
+    clerkId: varchar('clerk_id', { length: 255 }).notNull(),
+    // Token lifecycle
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+    revokedAt: timestamp('revoked_at', { withTimezone: true }),
+    // Metadata
+    ipAddress: varchar('ip_address', { length: 45 }),
+    userAgent: varchar('user_agent', { length: 500 }),
+    lastUsedAt: timestamp('last_used_at', { withTimezone: true }),
+  },
+  table => {
+    return {
+      userIdIdx: index('cli_access_token_user_id_idx').on(table.userId),
+      clerkIdIdx: index('cli_access_token_clerk_id_idx').on(table.clerkId),
+      expiresAtIdx: index('cli_access_token_expires_at_idx').on(table.expiresAt),
+      revokedAtIdx: index('cli_access_token_revoked_at_idx').on(table.revokedAt),
+    };
+  },
+);
+
 export const onboardingStep = pgTable(
   'onboarding_step',
   {

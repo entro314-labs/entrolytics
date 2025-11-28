@@ -1,5 +1,7 @@
+import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { uuid } from '@/lib/crypto';
+import { rateLimit, RATE_LIMITS } from '@/lib/rate-limit';
 import { getQueryFilters, parseRequest } from '@/lib/request';
 import { json, unauthorized } from '@/lib/response';
 import { pagingParams, searchParams } from '@/lib/schema';
@@ -36,9 +38,43 @@ export async function POST(request: Request) {
     return new Response('Build time', { status: 200 });
   }
 
+  // Rate limit: 20 link creations per minute
+  const rateLimitResult = await rateLimit(RATE_LIMITS.LINK_CREATION);
+
+  if (!rateLimitResult.success) {
+    return NextResponse.json(
+      {
+        error: 'Too many link creations. Please try again later.',
+        retryAfter: rateLimitResult.reset - Math.floor(Date.now() / 1000),
+      },
+      {
+        status: 429,
+        headers: {
+          'X-RateLimit-Limit': rateLimitResult.limit.toString(),
+          'X-RateLimit-Remaining': '0',
+          'X-RateLimit-Reset': rateLimitResult.reset.toString(),
+        },
+      },
+    );
+  }
+
   const schema = z.object({
     name: z.string().max(100),
-    url: z.string().max(500),
+    url: z
+      .string()
+      .max(500)
+      .url('Must be a valid URL')
+      .refine(
+        urlString => {
+          try {
+            const url = new URL(urlString);
+            return ['http:', 'https:'].includes(url.protocol);
+          } catch {
+            return false;
+          }
+        },
+        { message: 'URL must use http or https protocol' },
+      ),
     slug: z.string().max(100),
     orgId: z.string().nullable().optional(),
     id: z.string().uuid().nullable().optional(),

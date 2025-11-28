@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { secret } from '@/lib/crypto';
+import { secret, uuid } from '@/lib/crypto';
 import { createToken, parseToken } from '@/lib/jwt';
-import { getUser } from '@/queries/drizzle';
+import { rateLimit, RATE_LIMITS } from '@/lib/rate-limit';
+import { getUser, createCliAccessToken } from '@/queries/drizzle';
 
 const tokenSchema = z.object({
   code: z.string(),
@@ -25,6 +26,27 @@ interface AuthCodePayload {
  */
 export async function POST(request: NextRequest) {
   try {
+    // Rate limit: 5 requests per minute
+    const rateLimitResult = await rateLimit(RATE_LIMITS.CLI_TOKEN_EXCHANGE);
+
+    if (!rateLimitResult.success) {
+      return NextResponse.json(
+        {
+          error: 'Too many requests',
+          retryAfter: rateLimitResult.reset - Math.floor(Date.now() / 1000),
+        },
+        {
+          status: 429,
+          headers: {
+            'X-RateLimit-Limit': rateLimitResult.limit.toString(),
+            'X-RateLimit-Remaining': '0',
+            'X-RateLimit-Reset': rateLimitResult.reset.toString(),
+            'Retry-After': (rateLimitResult.reset - Math.floor(Date.now() / 1000)).toString(),
+          },
+        },
+      );
+    }
+
     const body = await request.json();
     const validation = tokenSchema.safeParse(body);
 
@@ -52,11 +74,24 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate access token (long-lived for CLI)
+    const jti = uuid(); // JWT ID for revocation tracking
     const expiresAt = Date.now() + 30 * 24 * 60 * 60 * 1000; // 30 days
+    const expiresAtDate = new Date(expiresAt);
+
+    // Persist token in database for revocation tracking
+    await createCliAccessToken({
+      jti,
+      user_id: payload.userId,
+      clerk_id: payload.clerkId,
+      expires_at: expiresAtDate,
+      ip_address: request.headers.get('x-forwarded-for') || undefined,
+      user_agent: request.headers.get('user-agent') || undefined,
+    });
 
     const accessToken = createToken(
       {
         type: 'cli_access_token',
+        jti, // Include JTI in token payload
         userId: payload.userId,
         clerkId: payload.clerkId,
         email: payload.email,

@@ -1,5 +1,6 @@
 export * from './board';
 export * from './boardWidget';
+export * from './cli-token';
 export * from './link';
 export * from './org';
 export * from './orgUser';

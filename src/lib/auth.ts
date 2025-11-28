@@ -7,7 +7,12 @@ import type { User } from '@/lib/db';
 import { parseToken } from '@/lib/jwt';
 import type { Role } from '@/lib/types';
 import { ensureArray } from '@/lib/utils';
+import {
+  isCliAccessTokenRevoked,
+  updateCliAccessTokenLastUsed,
+} from '@/queries/drizzle/cli-token';
 import { createUser, getUser, getUserByClerkId } from '@/queries/drizzle/user';
+import { getSharedWebsite } from '@/queries/drizzle/website';
 import type { AuthContext, PlatformRole } from '@/types/clerk';
 
 // Enhanced user type with computed properties
@@ -25,6 +30,7 @@ const log = debug('entrolytics:auth');
  */
 interface CliTokenPayload {
   type: 'cli_access_token';
+  jti: string; // JWT ID for revocation tracking
   userId: string;
   clerkId: string;
   email: string;
@@ -35,6 +41,9 @@ interface CliTokenPayload {
 /**
  * Try to authenticate via CLI Bearer token
  * Returns user if valid CLI token, null otherwise
+ *
+ * SECURITY: Validates token against both database AND Clerk to prevent
+ * stale tokens from being used after account disable/role change
  */
 async function authenticateCliToken(): Promise<EnhancedUser | null> {
   try {
@@ -58,6 +67,18 @@ async function authenticateCliToken(): Promise<EnhancedUser | null> {
       return null;
     }
 
+    // SECURITY: Check if token has been revoked
+    if (!payload.jti) {
+      log('CLI token missing JTI - legacy token, rejecting');
+      return null;
+    }
+
+    const isRevoked = await isCliAccessTokenRevoked(payload.jti);
+    if (isRevoked) {
+      log('CLI token has been revoked:', payload.jti);
+      return null;
+    }
+
     // Get user from database
     const user = await getUser(payload.userId);
 
@@ -66,12 +87,42 @@ async function authenticateCliToken(): Promise<EnhancedUser | null> {
       return null;
     }
 
-    log('Authenticated via CLI token:', user.email);
+    // SECURITY: Check if user is soft-deleted
+    if (user.deletedAt) {
+      log('CLI token user is deleted:', payload.userId);
+      return null;
+    }
+
+    // SECURITY: Validate against Clerk to check if user is banned/disabled
+    // and to get the authoritative role (Clerk is source of truth)
+    const client = await clerkClient();
+    const clerkUser = await client.users.getUser(payload.clerkId);
+
+    if (!clerkUser) {
+      log('CLI token Clerk user not found:', payload.clerkId);
+      return null;
+    }
+
+    // Check if user is banned/disabled in Clerk
+    if (clerkUser.banned) {
+      log('CLI token user is banned in Clerk:', payload.clerkId);
+      return null;
+    }
+
+    // Get authoritative role from Clerk's publicMetadata
+    const platformRole = (clerkUser.publicMetadata?.role as PlatformRole) || ROLES.user;
+
+    // Update last used timestamp (fire and forget - don't await)
+    updateCliAccessTokenLastUsed(payload.jti).catch(err =>
+      log('Failed to update CLI token last used:', err),
+    );
+
+    log('Authenticated via CLI token:', user.email, 'role:', platformRole);
 
     return {
       ...user,
-      isAdmin: user.role === ROLES.admin,
-      platformRole: user.role as PlatformRole,
+      isAdmin: platformRole === ROLES.admin,
+      platformRole,
       orgId: null,
       orgRole: null,
     } as EnhancedUser;
@@ -219,15 +270,80 @@ export async function hasPermission(role: string, permission: string | string[])
 }
 
 /**
- * Parse share token from request headers
- * Maintains compatibility with existing share functionality
+ * Share token payload structure
  */
-export function parseShareToken(headers: Headers) {
+interface ShareTokenPayload {
+  type: 'share_token';
+  websiteId: string;
+  shareId: string;
+  exp: number;
+}
+
+/**
+ * Parse and validate share token from request headers
+ * SECURITY: Validates token type, expiry, and shareId binding
+ *
+ * Note: This function only parses and validates the token structure.
+ * The caller must verify that the website still has this shareId
+ * (to handle share revocation).
+ */
+export function parseShareToken(headers: Headers): ShareTokenPayload | null {
   try {
-    return parseToken(headers.get(SHARE_TOKEN_HEADER), secret());
+    const tokenString = headers.get(SHARE_TOKEN_HEADER);
+
+    if (!tokenString) {
+      return null;
+    }
+
+    const payload = parseToken(tokenString, secret()) as ShareTokenPayload | null;
+
+    if (!payload || payload.type !== 'share_token') {
+      log('Invalid share token type');
+      return null;
+    }
+
+    // Check expiry
+    if (payload.exp && payload.exp < Math.floor(Date.now() / 1000)) {
+      log('Share token expired');
+      return null;
+    }
+
+    // Validate required fields
+    if (!payload.websiteId || !payload.shareId) {
+      log('Share token missing required fields');
+      return null;
+    }
+
+    return payload;
   } catch (e) {
     log('Share token parse error:', e);
     return null;
+  }
+}
+
+/**
+ * Validate share token access by checking if the website still has the shareId
+ * SECURITY: Ensures tokens can be revoked by checking current shareId
+ *
+ * @param shareToken - The parsed share token payload
+ * @returns true if the share is still valid, false if revoked or invalid
+ */
+export async function validateShareAccess(shareToken: ShareTokenPayload): Promise<boolean> {
+  try {
+    const website = await getSharedWebsite(shareToken.shareId);
+
+    // Share has been revoked if:
+    // 1. Website with this shareId doesn't exist
+    // 2. Website ID doesn't match the token's websiteId
+    if (!website || website.websiteId !== shareToken.websiteId) {
+      log('Share token revoked or invalid:', shareToken.shareId);
+      return false;
+    }
+
+    return true;
+  } catch (e) {
+    log('Share token validation error:', e);
+    return false;
   }
 }
 

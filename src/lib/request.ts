@@ -1,5 +1,6 @@
+import { headers } from 'next/headers';
 import { z } from 'zod/v4';
-import { getCurrentUser } from '@/lib/auth';
+import { getCurrentUser, parseShareToken } from '@/lib/auth';
 import { DEFAULT_PAGE_SIZE, FILTER_COLUMNS, ROLE_PERMISSIONS } from '@/lib/constants';
 import { getAllowedUnits, getMinimumUnit, maxDate, parseDateRange } from '@/lib/date';
 import { fetchWebsite } from '@/lib/load';
@@ -71,12 +72,16 @@ export async function parseRequest(
         // Get user permissions based on platform and org roles
         const grant = getGrantsFromRoles(currentUser.role, currentUser.orgRole || undefined);
 
+        // Parse share token from headers if present
+        const headersList = await headers();
+        const shareToken = parseShareToken(headersList);
+
         // Wrap user in Auth interface structure
         auth = {
           user: currentUser,
           clerkUserId: currentUser.clerkId,
           grant,
-          shareToken: null,
+          shareToken,
         };
       }
     }

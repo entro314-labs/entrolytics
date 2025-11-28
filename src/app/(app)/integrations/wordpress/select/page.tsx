@@ -14,7 +14,7 @@ interface ConnectData {
 }
 
 interface Website {
-  id: string;
+  websiteId: string;
   name: string;
   domain: string;
   createdAt: string;
@@ -69,12 +69,12 @@ export default function WordPressSelectPage() {
   const handleConnect = async () => {
     if (!selectedWebsite || !connectData) return;
 
-    const website = websites.find(w => w.id === selectedWebsite);
+    const website = websites.find(w => w.websiteId === selectedWebsite);
     if (!website) return;
 
     // Build callback URL with website info
     const callbackUrl = new URL(connectData.callback_url);
-    callbackUrl.searchParams.set('website_id', website.id);
+    callbackUrl.searchParams.set('website_id', website.websiteId);
     callbackUrl.searchParams.set('website_name', website.name);
     callbackUrl.searchParams.set('state', connectData.state);
 
@@ -106,11 +106,11 @@ export default function WordPressSelectPage() {
         throw new Error(errorData.message || 'Failed to create website');
       }
 
-      const { data: newWebsite } = await response.json();
+      const newWebsite = await response.json();
 
       // Build callback URL with new website info
       const callbackUrl = new URL(connectData.callback_url);
-      callbackUrl.searchParams.set('website_id', newWebsite.id);
+      callbackUrl.searchParams.set('website_id', newWebsite.websiteId);
       callbackUrl.searchParams.set('website_name', newWebsite.name);
       callbackUrl.searchParams.set('state', connectData.state);
 
@@ -202,16 +202,16 @@ export default function WordPressSelectPage() {
               <div className={styles.websiteList}>
                 {websites.map(website => (
                   <div
-                    key={website.id}
-                    className={`${styles.websiteItem} ${selectedWebsite === website.id ? styles.selected : ''}`}
-                    onClick={() => handleSelectWebsite(website.id)}
+                    key={website.websiteId}
+                    className={`${styles.websiteItem} ${selectedWebsite === website.websiteId ? styles.selected : ''}`}
+                    onClick={() => handleSelectWebsite(website.websiteId)}
                   >
                     <div className={styles.websiteInfo}>
                       <span className={styles.websiteName}>{website.name}</span>
                       <span className={styles.websiteDomain}>{website.domain}</span>
                     </div>
                     <div className={styles.radioIndicator}>
-                      {selectedWebsite === website.id && (
+                      {selectedWebsite === website.websiteId && (
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                           <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
                         </svg>

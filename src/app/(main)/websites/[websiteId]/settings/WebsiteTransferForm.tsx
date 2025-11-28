@@ -38,7 +38,7 @@ export function WebsiteTransferForm({
 
   const items =
     orgs?.data?.filter(({ orgUser }) =>
-      orgUser.find(
+      orgUser?.find(
         ({ role, userId }) =>
           [ROLES.orgOwner, ROLES.orgManager].includes(role) && userId === user.id,
       ),

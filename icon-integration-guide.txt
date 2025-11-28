@@ -1,0 +1,40 @@
+# Web App Icon Integration Guide (Full)
+
+## Generated Files
+- favicon.ico (multi-resolution: 16×16, 32×32, 48×48)
+- favicon-16x16.png, favicon-32x32.png, favicon-48x48.png
+- favicon-96x96.png (Google search results)
+- android-chrome-192x192.png, android-chrome-512x512.png
+- android-chrome-maskable-512x512.png (PWA maskable)
+- apple-touch-icon.png (180×180)
+
+- site.webmanifest - PWA manifest
+
+## Add to <head>
+```html
+<!-- Favicons -->
+
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+
+<!-- Apple Touch Icon -->
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+<!-- Web App Manifest (PWA) -->
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#ffffff">
+
+
+```
+
+## robots.txt (Optional)
+Ensure Google can access favicons:
+```
+User-agent: Googlebot-Image
+Allow: /favicon
+Allow: /android-chrome
+Allow: /apple-touch-icon
+```

@@ -24,7 +24,7 @@ export function WebsiteData({ websiteId, onSave }: { websiteId: string; onSave?:
     (
       (!orgId &&
         orgs?.data?.filter(({ members }) =>
-          members.find(
+          members?.find(
             ({ role, userId }) =>
               [ROLES.orgOwner, ROLES.orgManager].includes(role) && userId === user.id,
           ),
@@ -34,7 +34,7 @@ export function WebsiteData({ websiteId, onSave }: { websiteId: string; onSave?:
     (orgId &&
       !!orgs?.data
         ?.find(({ id }) => id === orgId)
-        ?.members.find(({ role, userId }) => role === ROLES.orgOwner && userId === user.id));
+        ?.members?.find(({ role, userId }) => role === ROLES.orgOwner && userId === user.id));
 
   const handleSave = () => {
     touch('websites');
